@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserCourse {
+  user_id   Int
+  course_id Int
+  course    course @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user      user   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, course_id])
+}
+
+model asociatedSurvey {
+  user_id   Int
+  survey_id Int
+  mark      Int
+  survey    survey @relation(fields: [survey_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user      user   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, survey_id])
+}
+
+model course {
+  id             Int              @id
+  description    String           @db.VarChar
+  created_at     DateTime?        @db.Timestamp(6)
+  UserCourse     UserCourse[]
+  courseQuestion courseQuestion[]
+  courseSurvey   courseSurvey[]
+}
+
+model courseQuestion {
+  question_id Int
+  course_id   Int
+  course      course   @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  question    question @relation(fields: [question_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([question_id, course_id])
+}
+
+model courseSurvey {
+  survey_id Int
+  course_id Int
+  course    course @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  survey    survey @relation(fields: [survey_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([survey_id, course_id])
+}
+
+model question {
+  id             Int              @id
+  description    String           @db.VarChar
+  subject        String           @db.VarChar
+  type           type
+  created_at     DateTime?        @db.Timestamp(6)
+  survey_id      Int?
+  courseQuestion courseQuestion[]
+  survey         survey?          @relation(fields: [survey_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model survey {
+  id              Int               @id @default(autoincrement())
+  title           String            @db.VarChar
+  created_at      DateTime          @db.Timestamp(6)
+  end_date        DateTime          @db.Timestamp(6)
+  state           state?
+  asociatedSurvey asociatedSurvey[]
+  courseSurvey    courseSurvey[]
+  question        question[]
+}
+
+model user {
+  id              Int               @id @default(autoincrement())
+  username        String            @db.VarChar
+  password        String            @db.VarChar
+  created_at      DateTime?         @db.Timestamp(6)
+  role            role
+  UserCourse      UserCourse[]
+  asociatedSurvey asociatedSurvey[]
+}
+
+enum role {
+  student
+  professor
+  admin
+}
+
+enum state {
+  created
+  opened
+  closed
+}
+
+enum type {
+  multioption
+  true_false
+  short
+}
