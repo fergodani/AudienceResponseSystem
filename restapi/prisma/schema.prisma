@@ -16,6 +16,14 @@ model UserCourse {
   @@id([user_id, course_id])
 }
 
+model answer {
+  id          Int       @id
+  description String    @db.VarChar
+  is_correct  Boolean?
+  question_id Int?
+  question    question? @relation(fields: [question_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
 model asociatedSurvey {
   user_id   Int
   survey_id Int
@@ -53,6 +61,18 @@ model courseSurvey {
   @@id([survey_id, course_id])
 }
 
+model game {
+  id                   Int       @id @default(autoincrement())
+  host_id              Int?
+  survey_id            Int?
+  is_live              Boolean?
+  is_offline           Boolean?
+  is_questions_visible Boolean?
+  date                 DateTime? @db.Timestamp(6)
+  user                 user?     @relation(fields: [host_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  survey               survey?   @relation(fields: [survey_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
 model question {
   id             Int              @id
   description    String           @db.VarChar
@@ -60,6 +80,7 @@ model question {
   type           type
   created_at     DateTime?        @db.Timestamp(6)
   survey_id      Int?
+  answer         answer[]
   courseQuestion courseQuestion[]
   survey         survey?          @relation(fields: [survey_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -69,10 +90,13 @@ model survey {
   title           String            @db.VarChar
   created_at      DateTime          @db.Timestamp(6)
   end_date        DateTime          @db.Timestamp(6)
+  user_creator_id Int?
   state           state?
   asociatedSurvey asociatedSurvey[]
   courseSurvey    courseSurvey[]
+  game            game[]
   question        question[]
+  user            user?             @relation(fields: [user_creator_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model user {
@@ -83,6 +107,8 @@ model user {
   role            role
   UserCourse      UserCourse[]
   asociatedSurvey asociatedSurvey[]
+  game            game[]
+  survey          survey[]
 }
 
 enum role {
