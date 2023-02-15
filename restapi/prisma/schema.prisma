@@ -78,6 +78,7 @@ model question {
   description    String           @db.VarChar
   subject        String           @db.VarChar
   type           type
+  answer_time    Int
   created_at     DateTime?        @db.Timestamp(6)
   survey_id      Int?
   answer         answer[]
