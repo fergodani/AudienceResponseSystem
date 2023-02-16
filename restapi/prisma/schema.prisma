@@ -102,7 +102,7 @@ model survey {
 
 model user {
   id              Int               @id @default(autoincrement())
-  username        String            @db.VarChar
+  username        String            @db.VarChar @unique
   password        String            @db.VarChar
   created_at      DateTime?         @db.Timestamp(6)
   role            role

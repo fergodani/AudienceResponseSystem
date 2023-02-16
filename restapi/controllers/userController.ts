@@ -23,7 +23,7 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
         })
 
         if (existingUser) {
-            return res.status(400).send("Ya existe un usuario con ese email");
+            return res.status(400).send("User already exists");
         }
 
         const salt = await bcrypt.genSalt();
@@ -35,10 +35,8 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
             role: role,
         }
         await prisma.user.create({ data: savedUser })
-        
-        const token = jwt.sign({ user: savedUser }, process.env.SECRET);
 
-        return res.status(200).json({ token });
+        return res.status(200).json({ message: "User created" });
 
     } catch (error) {
         console.log(error)
@@ -48,7 +46,7 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
 
 
 
-const getUser = async (req: Request, res: Response): Promise<Response> => {
+const login = async (req: Request, res: Response): Promise<Response> => {
     try {
         const user = await prisma.user.findFirst({
             where: {
@@ -61,7 +59,7 @@ const getUser = async (req: Request, res: Response): Promise<Response> => {
         const success = await bcrypt.compare(req.body.password, user.password);
 
         if (!success) {
-            return res.status(400).send("Credenciales inválidas");
+            return res.status(400).send("Invalid credentials");
         }
         const token = jwt.sign({ user }, process.env.SECRET);
         return res.status(200).json({
@@ -72,8 +70,70 @@ const getUser = async (req: Request, res: Response): Promise<Response> => {
     }
 };
 
+const updateUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const { username, newUsername, newPassword, newRole } = req.body;
+        const user = await prisma.user.findFirst({
+            where: {
+                username: req.body.username,
+            },
+        })
+        if (user == null) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        if (newPassword) {
+            const isSamePassword = await bcrypt.compare(req.body.password, user.password);
+            if (isSamePassword) {
+                return res.status(404).json({ message: "The passwords are the same" });
+            }
+            const salt = await bcrypt.genSalt();
+            const hash = await bcrypt.hash(newPassword, salt);
+            await prisma.user.update({
+                where: {
+                    username: username,
+                },
+                data: {
+                    username: newUsername,
+                    password: hash,
+                    role: newRole
+                }
+            })
+        } else {
+            await prisma.user.update({
+                where: {
+                    username: username,
+                },
+                data: {
+                    username: newUsername,
+                    role: newRole
+                }
+            })
+        }
+        return res.status(200)
+    } catch (error) {
+        return res.status(500)
+    }
+}
+
+const deleteUser = async (req:Request, res: Response): Promise<Response> => {
+    try{
+        await prisma.user.deleteMany({
+            where: {
+              username: {
+                contains: req.body.username,
+              },
+            },
+          })
+        return res.status(200).json({message : req.body.username + " deleted"})
+    } catch(error) {
+        return res.status(500)
+    }
+}
+
 module.exports = {
     getUsers,
-    getUser,
-    createUser
+    login,
+    createUser,
+    updateUser,
+    deleteUser
 }
