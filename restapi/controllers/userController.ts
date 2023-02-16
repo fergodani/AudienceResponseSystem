@@ -56,12 +56,14 @@ const login = async (req: Request, res: Response): Promise<Response> => {
         if (user == null) {
             return res.status(404).json({ message: "User not found" });
         }
+       
         const success = await bcrypt.compare(req.body.password, user.password);
-
+        
         if (!success) {
             return res.status(400).send("Invalid credentials");
         }
         const token = jwt.sign({ user }, process.env.SECRET);
+        
         return res.status(200).json({
             token
         });
@@ -72,6 +74,7 @@ const login = async (req: Request, res: Response): Promise<Response> => {
 
 const updateUser = async (req: Request, res: Response): Promise<Response> => {
     try {
+        
         const { username, newUsername, newPassword, newRole } = req.body;
         const user = await prisma.user.findFirst({
             where: {
@@ -82,12 +85,14 @@ const updateUser = async (req: Request, res: Response): Promise<Response> => {
             return res.status(404).json({ message: "User not found" });
         }
         if (newPassword) {
-            const isSamePassword = await bcrypt.compare(req.body.password, user.password);
+            
+            const isSamePassword = await bcrypt.compare(req.body.newPassword, user.password);
             if (isSamePassword) {
                 return res.status(404).json({ message: "The passwords are the same" });
             }
             const salt = await bcrypt.genSalt();
             const hash = await bcrypt.hash(newPassword, salt);
+            
             await prisma.user.update({
                 where: {
                     username: username,
@@ -109,7 +114,8 @@ const updateUser = async (req: Request, res: Response): Promise<Response> => {
                 }
             })
         }
-        return res.status(200)
+        
+        return res.status(200).json({message: req.body.username + " updated."})
     } catch (error) {
         return res.status(500)
     }
@@ -117,14 +123,12 @@ const updateUser = async (req: Request, res: Response): Promise<Response> => {
 
 const deleteUser = async (req:Request, res: Response): Promise<Response> => {
     try{
-        await prisma.user.deleteMany({
+        await prisma.user.delete({
             where: {
-              username: {
-                contains: req.body.username,
-              },
+              username: req.body.username
             },
           })
-        return res.status(200).json({message : req.body.username + " deleted"})
+        return res.status(200).json({message : req.body.username + " user deleted"})
     } catch(error) {
         return res.status(500)
     }
