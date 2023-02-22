@@ -1,0 +1,14 @@
+<form [formGroup]="createUserForm" (ngSubmit)="onUserSubmit()">
+    <label for="username">Nombre de usuario: </label>
+
+<input id="username" type="text" formControlName="username">
+
+<label for="role">Rol del usuario: </label>
+<select id="role" formControlName="role">
+    <option *ngFor="let role of roles" [ngValue]="role">
+        {{role}}
+    </option>
+</select>
+<input type="submit" value="Aceptar" />
+
+</form>
