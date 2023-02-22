@@ -1,14 +1,15 @@
-<form [formGroup]="createUserForm" (ngSubmit)="onUserSubmit()">
+<div class="d-flex justify-content-center">
+<form  class="form-group" [formGroup]="createUserForm" (ngSubmit)="onUserSubmit()">
     <label for="username">Nombre de usuario: </label>
 
-<input id="username" type="text" formControlName="username">
+<input class="form-control" id="username" type="text" formControlName="username">
 
 <label for="role">Rol del usuario: </label>
-<select id="role" formControlName="role">
+<select class="form-control" id="role" formControlName="role">
     <option *ngFor="let role of roles" [ngValue]="role">
         {{role}}
     </option>
 </select>
-<input type="submit" value="Aceptar" />
-
+<input class="form-control" type="submit" value="Aceptar" >
 </form>
+</div>
