@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ApiService } from 'src/app/service/api.service';
+import { ApiService } from 'src/app/core/services/api.admin.service';
+import { User } from 'src/app/core/models/user.model';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -15,15 +17,28 @@ export class CreateUserFormComponent {
   ]
   createUserForm = new FormGroup({
     username: new FormControl(''),
-    role: new FormControl(this.roles[3]),
+    role: new FormControl(this.roles[0]),
   })
 
-  constructor(private apiService:ApiService){
+  constructor(private apiService:ApiService, private router:Router){
   }
 
   onUserSubmit() {
-    // TODO: hacer fichero api y llamarlo desde aquí para crear usuario
-    console.warn(this.createUserForm.value);
-    this.apiService.muestraMensaje("El usuario se ha creado correctamente")
+    const username = this.createUserForm.value.username;
+    const password = "df98734hjdasf" // TODO: generar contraseña aleatoria, hacer en el backend
+    const role = this.createUserForm.value.role;
+    const newUser = new User(username!, password, this.translate(role!));
+    this.apiService
+    .createUser(newUser)
+    .subscribe();
+    this.router.navigate(['users']);
+  }
+
+  translate(data: string): string {
+    if(data == "Estudiante"){
+      return 'student'
+    }else{
+      return 'professor'
+    }
   }
 }

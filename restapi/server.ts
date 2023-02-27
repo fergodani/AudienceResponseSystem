@@ -1,4 +1,5 @@
 import express from "express"
+import cors from 'cors';
 const bodyParser = require('body-parser')
 const app = express()
 const port = 3000
@@ -11,6 +12,7 @@ const userRoutes = require('./routes/userRoutes')
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
+app.use(cors())
 app.use(bodyParser.json())
 app.use(
     bodyParser.urlencoded({

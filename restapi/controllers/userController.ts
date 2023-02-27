@@ -25,7 +25,7 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
         if (existingUser) {
             return res.status(400).send("User already exists");
         }
-
+        // TODO: generar contraseña aleatoria
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(password, salt);
         let savedUser: Prisma.userCreateInput

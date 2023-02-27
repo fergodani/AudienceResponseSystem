@@ -1,0 +1,15 @@
+<div class="d-flex m-3 justify-content-center">
+    <form class="form-group" [formGroup]="createCourseForm" (ngSubmit)="onCourseSubmit()">
+        <div class="mb-3">
+            <label for="name">Nombre del curso: </label>
+            <input class="form-control" id="name" type="text" formControlName="name">
+        </div>
+        <div class="mb-3">
+            <label for="description">Descripción: </label>
+            <input class="form-control" id="description" type="text" formControlName="description">
+        </div>
+        <div class="mb-3">
+            <input class="form-control" type="submit" value="Aceptar">
+        </div>
+    </form>
+</div>
