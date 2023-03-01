@@ -36,10 +36,10 @@ const createCourse = async (req: Request, res: Response): Promise<Response> => {
 
 const updateCourse = async(req: Request, res: Response): Promise<Response> => {
     try{
-        const {name, newName, newDescription } = req.body
+        const {id, name, description } = req.body
         const course = await prisma.course.findFirst({
             where: {
-                name: name,
+                id: Number(id),
             }
         })
         if(course == null){
@@ -47,11 +47,11 @@ const updateCourse = async(req: Request, res: Response): Promise<Response> => {
         }
         await prisma.course.update({
             where: {
-                name: name,
+                id: Number(id),
             },
             data: {
-                name: newName,
-                description: newDescription
+                name: name,
+                description: description
             }
         })
         return res.status(404).json({message: req.body.name + " course updated"})

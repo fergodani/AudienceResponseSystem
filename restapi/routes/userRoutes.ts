@@ -24,7 +24,7 @@ api.post("/create", [
 ], createUser)
 
 api.put("/", [
-    check('username').isLength({ min: 1 }).trim().escape(),
+    check('id').isLength({ min: 1 }).trim().escape(),
 ], updateUser)
 
 api.delete("/:id", [

@@ -12,6 +12,9 @@ export class ApiService {
 
   apiUrl = "http://localhost:3000/api"
 
+  // TODO: pasar la url a un .env
+  // TODO: usar httpOptions para establecer header
+
   constructor(private http: HttpClient) { }
 
   private handleError(error: HttpErrorResponse) {
@@ -65,6 +68,20 @@ export class ApiService {
 
   deleteCourse(id: number): Observable<unknown> {
     return this.http.delete(`${this.apiUrl}/course/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  updateUser(user: User): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/user`, user)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  updateCourse(course: Course): Observable<Course> {
+    return this.http.put<Course>(`${this.apiUrl}/course`, course)
     .pipe(
       catchError(this.handleError)
     )

@@ -56,14 +56,14 @@ const login = async (req: Request, res: Response): Promise<Response> => {
         if (user == null) {
             return res.status(404).json({ message: "User not found" });
         }
-       
+
         const success = await bcrypt.compare(req.body.password, user.password);
-        
+
         if (!success) {
             return res.status(400).send("Invalid credentials");
         }
         const token = jwt.sign({ user }, process.env.SECRET);
-        
+
         return res.status(200).json({
             token
         });
@@ -75,61 +75,47 @@ const login = async (req: Request, res: Response): Promise<Response> => {
 const updateUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         
-        const { username, newUsername, newPassword, newRole } = req.body;
+        const { id, username, password, role } = req.body;
         const user = await prisma.user.findFirst({
             where: {
-                username: req.body.username,
+                id: Number(id),
             },
         })
         if (user == null) {
             return res.status(404).json({ message: "User not found" });
         }
-        if (newPassword) {
-            
-            const isSamePassword = await bcrypt.compare(req.body.newPassword, user.password);
-            if (isSamePassword) {
-                return res.status(404).json({ message: "The passwords are the same" });
-            }
-            const salt = await bcrypt.genSalt();
-            const hash = await bcrypt.hash(newPassword, salt);
-            
-            await prisma.user.update({
-                where: {
-                    username: username,
-                },
-                data: {
-                    username: newUsername,
-                    password: hash,
-                    role: newRole
-                }
-            })
-        } else {
-            await prisma.user.update({
-                where: {
-                    username: username,
-                },
-                data: {
-                    username: newUsername,
-                    role: newRole
-                }
-            })
+        const isSamePassword = await bcrypt.compare(password, user.password);
+        if (isSamePassword) {
+            console.log("Las passwords son iguales")
+            return res.status(404).json({ message: "The passwords are the same" });
         }
-        
-        return res.status(200).json({message: req.body.username + " updated."})
+        const salt = await bcrypt.genSalt();
+        const hash = await bcrypt.hash(password, salt);
+        await prisma.user.update({
+            where: {
+                id: Number(id),
+            },
+            data: {
+                username: username,
+                password: hash,
+                role: role
+            }
+        })
+        return res.status(200).json({ message: req.body.username + " updated." })
     } catch (error) {
         return res.status(500)
     }
 }
 
-const deleteUser = async (req:Request, res: Response): Promise<Response> => {
-    try{
+const deleteUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
         await prisma.user.delete({
             where: {
-              id: Number(req.params.id)
+                id: Number(req.params.id)
             },
-          })
-        return res.status(200).json({message : req.params.id + " user deleted"})
-    } catch(error) {
+        })
+        return res.status(200).json({ message: req.params.id + " user deleted" })
+    } catch (error) {
         return res.status(500)
     }
 }

@@ -16,6 +16,7 @@ import { CreateCourseFormComponent } from './admin/create-course-form/create-cou
 import { RouterModule, Routes } from '@angular/router';
 import { UserListComponent } from './admin/user-list/user-list.component';
 import { CourseListComponent } from './admin/course-list/course-list.component';
+import { UpdateUserFormComponent } from './admin/update-user-form/update-user-form.component';
 
 const appRoutes: Routes=[
   {path: '', component: HomeComponent},
@@ -23,6 +24,7 @@ const appRoutes: Routes=[
   {path: 'users/create', component: CreateUserFormComponent},
   {path: 'courses', component: CourseListComponent},
   {path: 'courses/create', component: CreateCourseFormComponent},
+  {path: 'users/update', component: UpdateUserFormComponent},
   { path: '**', component: HomeComponent }
 ];
 
@@ -35,7 +37,8 @@ const appRoutes: Routes=[
     CreateUserFormComponent,
     CreateCourseFormComponent,
     UserListComponent,
-    CourseListComponent
+    CourseListComponent,
+    UpdateUserFormComponent
   ],
   imports: [
     BrowserModule,
