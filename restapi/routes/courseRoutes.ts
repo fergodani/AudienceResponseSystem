@@ -20,8 +20,8 @@ api.put("/", [
     check('name').isLength({ min: 1 }).trim().escape(),
 ], updateCourse)
 
-api.delete("/", [
-    check('name').isLength({ min: 1 }).trim().escape()
+api.delete("/:id", [
+    check('id').isLength({ min: 1 }).trim().escape()
 ], deleteCourse)
 
 

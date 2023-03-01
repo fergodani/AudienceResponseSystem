@@ -27,8 +27,8 @@ api.put("/", [
     check('username').isLength({ min: 1 }).trim().escape(),
 ], updateUser)
 
-api.delete("/", [
-    check('username').isLength({ min: 1 }).trim().escape()
+api.delete("/:id", [
+    check('id').isLength({ min: 1 }).trim().escape()
 ], deleteUser)
 
 module.exports = api

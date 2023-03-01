@@ -14,6 +14,8 @@ export class UserListComponent implements OnInit {
 
   users: User[] = []
 
+
+
   ngOnInit(): void {
 
     this.apiService
@@ -24,6 +26,12 @@ export class UserListComponent implements OnInit {
 
   onCreateUser() {
     this.router.navigate(["/users/create"])
+  }
+
+  onDeleteUser(id: number) {
+    this.apiService
+    .deleteUser(id)
+    .subscribe()
   }
 
 }

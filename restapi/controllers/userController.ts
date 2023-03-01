@@ -125,10 +125,10 @@ const deleteUser = async (req:Request, res: Response): Promise<Response> => {
     try{
         await prisma.user.delete({
             where: {
-              username: req.body.username
+              id: Number(req.params.id)
             },
           })
-        return res.status(200).json({message : req.body.username + " user deleted"})
+        return res.status(200).json({message : req.params.id + " user deleted"})
     } catch(error) {
         return res.status(500)
     }

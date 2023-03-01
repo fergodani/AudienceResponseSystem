@@ -64,7 +64,7 @@ const deleteCourse = async (req: Request, res: Response): Promise<Response> => {
     try{
         await prisma.course.delete({
             where: {
-                name: req.body.name
+                id: Number(req.params.id)
             }
         })
         return res.status(200).json({message : req.body.name + " course deleted"})

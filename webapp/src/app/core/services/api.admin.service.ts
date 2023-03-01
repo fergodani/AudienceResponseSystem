@@ -10,6 +10,8 @@ import { Course } from '../models/course.model';
 })
 export class ApiService {
 
+  apiUrl = "http://localhost:3000/api"
+
   constructor(private http: HttpClient) { }
 
   private handleError(error: HttpErrorResponse) {
@@ -52,5 +54,19 @@ export class ApiService {
       .pipe(
         catchError(this.handleError)
       );
+  }
+
+  deleteUser(id: number): Observable<unknown> {
+    return this.http.delete(`${this.apiUrl}/user/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  deleteCourse(id: number): Observable<unknown> {
+    return this.http.delete(`${this.apiUrl}/course/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
   }
 }

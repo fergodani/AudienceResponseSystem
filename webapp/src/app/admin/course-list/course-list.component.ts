@@ -24,5 +24,11 @@ export class CourseListComponent implements OnInit {
     this.router.navigate(["/courses/create"])
   }
 
+  onDeleteCourse(id: number) {
+    this.apiService
+    .deleteCourse(id)
+    .subscribe()
+  }
+
 
 }
