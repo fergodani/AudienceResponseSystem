@@ -52,6 +52,13 @@ export class ApiService {
       );
   }
 
+  getUser(id: number): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/user/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
   getCourses(): Observable<Course[]> {
     return this.http.get<Course[]>("http://localhost:3000/api/course")
       .pipe(
@@ -74,6 +81,7 @@ export class ApiService {
   }
 
   updateUser(user: User): Observable<User> {
+    console.log(user)
     return this.http.put<User>(`${this.apiUrl}/user`, user)
     .pipe(
       catchError(this.handleError)

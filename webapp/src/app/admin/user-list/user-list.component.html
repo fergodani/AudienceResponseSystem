@@ -1,6 +1,6 @@
 <div class="d-flex flex-column gap-5 p-4 justify-content-center">
     <div class="border d-flex flex-row gap-5" *ngFor="let user of users">
-        <h5><a href="/users/update">{{ user.username}}</a></h5>
+        <h5><a [routerLink]="['/users/update', user.id]">{{ user.username}}</a></h5>
         <small>{{ user.role }}</small>
         <button type="button" class="btn btn-danger align-self-end" (click)="onDeleteUser(user.id)">Eliminar</button>
     </div>

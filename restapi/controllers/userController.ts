@@ -13,6 +13,19 @@ const getUsers = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+const getUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        let result = await prisma.user.findFirst({
+            where: {
+                id: Number(req.params.id),
+            },
+        })
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+}
+
 const createUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { username, password, role } = req.body;
@@ -74,7 +87,6 @@ const login = async (req: Request, res: Response): Promise<Response> => {
 
 const updateUser = async (req: Request, res: Response): Promise<Response> => {
     try {
-        
         const { id, username, password, role } = req.body;
         const user = await prisma.user.findFirst({
             where: {
@@ -84,24 +96,35 @@ const updateUser = async (req: Request, res: Response): Promise<Response> => {
         if (user == null) {
             return res.status(404).json({ message: "User not found" });
         }
-        const isSamePassword = await bcrypt.compare(password, user.password);
-        if (isSamePassword) {
-            console.log("Las passwords son iguales")
-            return res.status(404).json({ message: "The passwords are the same" });
+        const newUsername = username != "" ? username : user.username;
+        const newRole = role != "" ? role : user.role;
+        if (password != "") {
+            const salt = await bcrypt.genSalt();
+            const hash = await bcrypt.hash(password, salt);
+            await prisma.user.update({
+                where: {
+                    id: Number(id),
+                },
+                data: {
+                    username: newUsername,
+                    password: hash,
+                    role: newRole
+                }
+            })
+            return res.status(200).json({ message: req.body.username + " updated." })
+        } else {
+            await prisma.user.update({
+                where: {
+                    id: Number(id),
+                },
+                data: {
+                    username: newUsername,
+                    role: newRole
+                }
+            })
+            console.log(res)
+            return res.status(200).json({ message: req.body.username + " updated." })
         }
-        const salt = await bcrypt.genSalt();
-        const hash = await bcrypt.hash(password, salt);
-        await prisma.user.update({
-            where: {
-                id: Number(id),
-            },
-            data: {
-                username: username,
-                password: hash,
-                role: role
-            }
-        })
-        return res.status(200).json({ message: req.body.username + " updated." })
     } catch (error) {
         return res.status(500)
     }
@@ -125,5 +148,6 @@ module.exports = {
     login,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUser
 }

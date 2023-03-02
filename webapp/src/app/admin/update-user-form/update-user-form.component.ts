@@ -1,15 +1,29 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/core/models/user.model';
+import { ApiService } from 'src/app/core/services/api.admin.service';
 
 @Component({
   selector: 'app-update-user-form',
   templateUrl: './update-user-form.component.html',
   styleUrls: ['./update-user-form.component.css']
 })
-export class UpdateUserFormComponent {
+export class UpdateUserFormComponent implements OnInit {
 
-  @Input() user!: User;
+  constructor(private apiService: ApiService, private actRoute: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    const id = this.actRoute.snapshot.paramMap.get('id');
+    this.apiService
+    .getUser(Number(id))
+    .subscribe(
+      user => {
+        this.user = user;
+      })
+  }
+  
+  user: User = new User('', '', '');
 
   roles = [
     'Estudiante',
@@ -17,12 +31,17 @@ export class UpdateUserFormComponent {
   ]
 
   updateUserForm = new FormGroup({
-    username: new FormControl(this.user.username),
+    username: new FormControl(''),
     password: new FormControl(''),
-    role: new FormControl(this.roles.filter(rol => rol == this.user.role))
+    role: new FormControl()
   })
 
   onUserUpdateSubmit() {
-    
+    this.user.username = this.updateUserForm.value.username!
+    this.user.password = this.updateUserForm.value.password!;
+    this.user.role = this.updateUserForm.value.role!;
+    this.apiService
+    .updateUser(this.user)
+    .subscribe(it => alert("Usuario actualizado"))
   }
 }

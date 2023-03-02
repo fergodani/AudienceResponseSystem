@@ -24,7 +24,7 @@ const appRoutes: Routes=[
   {path: 'users/create', component: CreateUserFormComponent},
   {path: 'courses', component: CourseListComponent},
   {path: 'courses/create', component: CreateCourseFormComponent},
-  {path: 'users/update', component: UpdateUserFormComponent},
+  {path: 'users/update/:id', component: UpdateUserFormComponent},
   { path: '**', component: HomeComponent }
 ];
 

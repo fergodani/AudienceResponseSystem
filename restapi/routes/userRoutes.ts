@@ -4,6 +4,7 @@ const { check } = require('express-validator')
 
 const {
     getUsers,
+    getUser,
     login,
     createUser,
     updateUser,
@@ -11,6 +12,10 @@ const {
 } = require('../controllers/userController')
 
 api.get("/", getUsers)
+
+api.get("/:id", [
+    check('id').isLength( { min: 1 }).trim().escape(),
+], getUser)
 
 api.post("/login", [
     check('username').isLength({ min: 1 }).trim().escape(),
