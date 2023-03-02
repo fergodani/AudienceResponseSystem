@@ -11,6 +11,7 @@ import { Course } from '../models/course.model';
 export class ApiService {
 
   apiUrl = "http://localhost:3000/api"
+  users: User[] = []
 
   // TODO: pasar la url a un .env
   // TODO: usar httpOptions para establecer header

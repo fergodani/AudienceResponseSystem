@@ -39,9 +39,19 @@ export class UpdateUserFormComponent implements OnInit {
   onUserUpdateSubmit() {
     this.user.username = this.updateUserForm.value.username!
     this.user.password = this.updateUserForm.value.password!;
-    this.user.role = this.updateUserForm.value.role!;
+    this.user.role =  this.translate(this.updateUserForm.value.role != null ? this.updateUserForm.value.role : '')
     this.apiService
     .updateUser(this.user)
     .subscribe(it => alert("Usuario actualizado"))
+  }
+
+  translate(data: string): string {
+    if(data == "Estudiante"){
+      return 'student'
+    }else if(data == "Profesor"){
+      return 'professor'
+    }else {
+      return ""
+    }
   }
 }

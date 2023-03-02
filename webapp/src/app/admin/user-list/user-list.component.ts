@@ -20,8 +20,7 @@ export class UserListComponent implements OnInit {
 
     this.apiService
       .getUsers()
-      .subscribe(users => this.users = users)
-
+      .subscribe(users => this.apiService.users = this.users = users)
   }
 
   onCreateUser() {
@@ -29,6 +28,7 @@ export class UserListComponent implements OnInit {
   }
 
   onDeleteUser(id: number) {
+    this.users = this.users.filter( user =>  user.id != id)
     this.apiService
     .deleteUser(id)
     .subscribe()

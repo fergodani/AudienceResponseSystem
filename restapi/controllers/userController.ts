@@ -87,6 +87,7 @@ const login = async (req: Request, res: Response): Promise<Response> => {
 
 const updateUser = async (req: Request, res: Response): Promise<Response> => {
     try {
+        console.log(req.body)
         const { id, username, password, role } = req.body;
         const user = await prisma.user.findFirst({
             where: {
@@ -122,11 +123,11 @@ const updateUser = async (req: Request, res: Response): Promise<Response> => {
                     role: newRole
                 }
             })
-            console.log(res)
             return res.status(200).json({ message: req.body.username + " updated." })
         }
     } catch (error) {
-        return res.status(500)
+        console.log("The user can't be updated")
+        return res.status(500).json({ message: error })
     }
 }
 
