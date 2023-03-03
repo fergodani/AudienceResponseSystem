@@ -1,7 +1,7 @@
 <div class="d-flex flex-column m-3 justify-content-center">
     <div class="d-flex flex-column align-items-center">
-        <h3>Usuario: {{ user.username }}</h3>
-        <small>Rol: {{ user.role }}</small>
+        <h3 class="fs-2">Usuario: {{ user.username }}</h3>
+        <small class="fs-4">Rol: {{ user.role }}</small>
     </div>
     <div class="d-flex m-3 justify-content-center">
         <form class="form-group" [formGroup]="updateUserForm" (ngSubmit)="onUserUpdateSubmit()">

@@ -13,6 +13,8 @@ export class CourseListComponent implements OnInit {
   constructor(private apiService: ApiService, private router: Router,  private route: ActivatedRoute) { }
 
   courses: Course[] = [];
+  fileName: string = ''
+  requiredFileType = "text/csv";
 
   ngOnInit(): void {
     this.apiService
@@ -29,6 +31,21 @@ export class CourseListComponent implements OnInit {
     this.apiService
     .deleteCourse(id)
     .subscribe()
+  }
+
+  onFileSelected(event: Event) {
+    const file = (<HTMLInputElement>event.target).files![0];
+
+    // TODO: comprobar de otra manera, si file es null daria error esto creo
+    if (file && file.type == this.requiredFileType) {
+      this.fileName = file.name;
+      const formData: FormData = new FormData();
+      formData.append('file', file, file.name);
+      console.log(formData.get('file'))
+      this.apiService
+      .uploadCourseFile(formData)
+      .subscribe(msg => alert("Archivo subido correctamente"))
+    }
   }
 
 

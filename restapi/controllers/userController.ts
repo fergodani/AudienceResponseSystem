@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as csv from 'fast-csv';
 import * as csv_format from '@fast-csv/format';
-import { User } from '../models/userModel';
+import { User } from '../models/user.model';
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient()

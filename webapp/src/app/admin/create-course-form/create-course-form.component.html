@@ -1,5 +1,7 @@
-<div class="d-flex m-3 justify-content-center">
-    <form class="form-group" [formGroup]="createCourseForm" (ngSubmit)="onCourseSubmit()">
+
+<div class="d-flex m-3 flex-column justify-content-center">
+    <h1 class="fs-1 p-3">Crear nuevo curso</h1>
+    <form class="form-group w-50" [formGroup]="createCourseForm" (ngSubmit)="onCourseSubmit()">
         <div class="mb-3">
             <label for="name">Nombre del curso: </label>
             <input class="form-control" id="name" type="text" formControlName="name">

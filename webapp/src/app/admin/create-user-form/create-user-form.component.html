@@ -1,5 +1,6 @@
-<div class="d-flex m-3 justify-content-center">
-    <form class="form-group" [formGroup]="createUserForm" (ngSubmit)="onUserSubmit()">
+<div class="d-flex m-3 flex-column justify-content-center">
+    <h1 class="fs-1 p-3">Crear nuevo usuario</h1>
+    <form class="form-group w-50" [formGroup]="createUserForm" (ngSubmit)="onUserSubmit()">
         <div class="mb-3">
             <label for="username">Nombre de usuario: </label>
             <input class="form-control" id="username" type="text" formControlName="username">

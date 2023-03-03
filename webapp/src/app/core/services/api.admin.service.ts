@@ -109,4 +109,11 @@ export class ApiService {
         catchError(this.handleError)
       )
   }
+  
+  uploadCourseFile(formData: FormData): Observable<unknown> {
+    return this.http.post<unknown>(`${this.apiUrl}/course/file`, formData)
+      .pipe(
+        catchError(this.handleError)
+      )
+  }
 }

@@ -1,11 +1,23 @@
-<div class="d-flex flex-column gap-5 p-4 justify-content-center">
-    <div class="border d-flex flex-row gap-5" *ngFor="let course of courses">
+<div class="d-flex flex-column gap-5 p-4">
+    <h1 class="fs-1">Lista de cursos</h1>
+    <div class="border d-flex flex-row gap-5 justify-content-between align-items-center" *ngFor="let course of courses">
         <h2><a [routerLink]="['/courses/update', course.id]">{{ course.name}}</a></h2>
         <small>{{ course.description }}</small>
         <button type="button" class="btn btn-danger align-self-end" (click)="onDeleteCourse(course.id)">Eliminar</button>
     </div>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex flex-column gap-3">
         <button type="button" class="btn btn-dark w-25" (click)="onCreateCourse()">Nuevo curso</button>
+        <label for="fileUpload">Importar cursos: </label>
+        <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+
+        <div class="file-upload">
+
+            {{fileName || ""}}
+
+            <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                <mat-icon>attach_file</mat-icon>
+            </button>
+        </div>
     </div>
 </div>
 
