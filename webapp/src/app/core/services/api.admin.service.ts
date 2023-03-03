@@ -55,9 +55,9 @@ export class ApiService {
 
   getUser(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/user/${id}`)
-    .pipe(
-      catchError(this.handleError)
-    )
+      .pipe(
+        catchError(this.handleError)
+      )
   }
 
   getCourses(): Observable<Course[]> {
@@ -67,32 +67,39 @@ export class ApiService {
       );
   }
 
+  getCourse(id: number): Observable<Course> {
+    return this.http.get<Course>(`${this.apiUrl}/course/${id}`)
+      .pipe(
+        catchError(this.handleError)
+      )
+  }
+
   deleteUser(id: number): Observable<unknown> {
     return this.http.delete(`${this.apiUrl}/user/${id}`)
-    .pipe(
-      catchError(this.handleError)
-    )
+      .pipe(
+        catchError(this.handleError)
+      )
   }
 
   deleteCourse(id: number): Observable<unknown> {
     return this.http.delete(`${this.apiUrl}/course/${id}`)
-    .pipe(
-      catchError(this.handleError)
-    )
+      .pipe(
+        catchError(this.handleError)
+      )
   }
 
   updateUser(user: User): Observable<User> {
     console.log(user)
     return this.http.put<User>(`${this.apiUrl}/user`, user)
-    .pipe(
-      catchError(this.handleError)
-    )
+      .pipe(
+        catchError(this.handleError)
+      )
   }
 
   updateCourse(course: Course): Observable<Course> {
     return this.http.put<Course>(`${this.apiUrl}/course`, course)
-    .pipe(
-      catchError(this.handleError)
-    )
+      .pipe(
+        catchError(this.handleError)
+      )
   }
 }

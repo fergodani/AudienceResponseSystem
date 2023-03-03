@@ -1,6 +1,6 @@
 <div class="d-flex flex-column gap-5 p-4 justify-content-center">
     <div class="border d-flex flex-row gap-5" *ngFor="let course of courses">
-        <h2>{{ course.name}}</h2>
+        <h2><a [routerLink]="['/courses/update', course.id]">{{ course.name}}</a></h2>
         <small>{{ course.description }}</small>
         <button type="button" class="btn btn-danger align-self-end" (click)="onDeleteCourse(course.id)">Eliminar</button>
     </div>

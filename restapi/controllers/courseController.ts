@@ -11,6 +11,19 @@ const getCourses = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+const getCourse = async (req: Request, res: Response): Promise<Response> => {
+    try{
+        let result = await prisma.course.findFirst({
+            where: {
+                id: Number(req.params.id),
+            },
+        })
+        return res.status(200).json(result)
+    } catch (error) {
+        return res.status(500).send(error)
+    }
+}
+
 const createCourse = async (req: Request, res: Response): Promise<Response> => {
     try{
         const { name, description } = req.body
@@ -45,18 +58,20 @@ const updateCourse = async(req: Request, res: Response): Promise<Response> => {
         if(course == null){
             return res.status(404).json({message: "Course not found"})
         }
+        const newName = name != "" ? name : course.name;
+        const newDescription = description != "" ? description : course.description;
         await prisma.course.update({
             where: {
                 id: Number(id),
             },
             data: {
-                name: name,
-                description: description
+                name: newName,
+                description: newDescription
             }
         })
         return res.status(404).json({message: req.body.name + " course updated"})
     } catch (error) {
-        return res.status(500)
+        return res.status(500).send(error)
     }
 }
 
@@ -75,6 +90,7 @@ const deleteCourse = async (req: Request, res: Response): Promise<Response> => {
 
 module.exports = {
     getCourses,
+    getCourse,
     createCourse,
     updateCourse,
     deleteCourse

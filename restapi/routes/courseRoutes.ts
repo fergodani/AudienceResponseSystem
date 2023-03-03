@@ -4,12 +4,17 @@ const { check } = require('express-validator')
 
 const {
     getCourses,
+    getCourse,
     createCourse,
     updateCourse,
     deleteCourse
 } = require('../controllers/courseController')
 
 api.get("/", getCourses)
+
+api.get("/:id", [
+    check('id').isLength({ min: 1 }).trim().escape(),
+], getCourse)
 
 api.post("/", [
     check('name').isLength({ min: 1 }).trim().escape(),

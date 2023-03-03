@@ -31,7 +31,6 @@ export class CreateUserFormComponent {
     this.apiService
     .createUser(newUser)
     .subscribe( msg => console.log("Usuario creado"));
-    //this.router.navigate(['users']);
   }
 
   translate(data: string): string {

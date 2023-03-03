@@ -127,7 +127,7 @@ const updateUser = async (req: Request, res: Response): Promise<Response> => {
         }
     } catch (error) {
         console.log("The user can't be updated")
-        return res.status(500).json({ message: error })
+        return res.status(500).send(error)
     }
 }
 
