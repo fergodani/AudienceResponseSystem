@@ -1,5 +1,11 @@
 import { Request, Response } from 'express';
-import { Prisma, PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient, role } from '@prisma/client'
+import multiparty = require('multiparty');
+import * as fs from 'fs';
+import * as path from 'path';
+import * as csv from 'fast-csv';
+import * as csv_format from '@fast-csv/format';
+import { User } from '../models/userModel';
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient()
@@ -81,7 +87,7 @@ const login = async (req: Request, res: Response): Promise<Response> => {
             token
         });
     } catch (error) {
-        return res.status(500)
+        return res.status(500).send(error)
     }
 };
 
@@ -140,9 +146,60 @@ const deleteUser = async (req: Request, res: Response): Promise<Response> => {
         })
         return res.status(200).json({ message: req.params.id + " user deleted" })
     } catch (error) {
-        return res.status(500)
+        return res.status(500).send(error)
     }
 }
+
+const uploadUserFile = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const form = new multiparty.Form({ uploadDir: '../restapi/files' });
+        form.parse(req, function (err, fields, files) {
+            fs.rename(files.file[0].path, process.env.FILEPATH!, function (err) {
+                if (err) console.log('ERROR: ' + err);
+            });
+            fs.createReadStream(path.resolve(process.env.FILEPATH!))
+                .pipe(csv.parse({ headers: true }))
+                .on('error', error => console.error(error))
+                .on('data', row => {
+                    addUser(row)
+                })
+                .on('end', (rowCount: number) => console.log(`Parsed ${rowCount} rows`));
+        });
+
+        return res.status(200).json({ message: "File read successful" })
+    } catch (error) {
+        return res.status(500).send(error)
+    }
+}
+
+async function addUser(user: User) {
+    try {
+        const existingUser = await prisma.user.findFirst({
+            where: {
+                username: user.username,
+            },
+        })
+
+        if (existingUser) {
+            return;
+        }
+        // TODO: generar contraseña aleatoria
+        const salt = await bcrypt.genSalt();
+        const hash = await bcrypt.hash("3456g243bv5", salt);
+        let savedUser: Prisma.userCreateInput
+        savedUser = {
+            username: user.username,
+            password: hash,
+            role: user.role as role,
+        }
+        await prisma.user.create({ data: savedUser })
+
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {
     getUsers,
@@ -150,5 +207,6 @@ module.exports = {
     createUser,
     updateUser,
     deleteUser,
-    getUser
+    getUser,
+    uploadUserFile
 }

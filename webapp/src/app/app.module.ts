@@ -18,6 +18,8 @@ import { UserListComponent } from './admin/user-list/user-list.component';
 import { CourseListComponent } from './admin/course-list/course-list.component';
 import { UpdateUserFormComponent } from './admin/update-user-form/update-user-form.component';
 import { UpdateCourseFormComponent } from './admin/update-course-form/update-course-form.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatIconModule} from '@angular/material/icon';
 
 const appRoutes: Routes=[
   {path: '', component: HomeComponent},
@@ -49,7 +51,9 @@ const appRoutes: Routes=[
     HttpClientModule,
     ReactiveFormsModule,
     NgbModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    BrowserAnimationsModule,
+    MatIconModule
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]

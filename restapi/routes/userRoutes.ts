@@ -8,7 +8,8 @@ const {
     login,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    uploadUserFile
 } = require('../controllers/userController')
 
 api.get("/", getUsers)
@@ -27,6 +28,8 @@ api.post("/create", [
     check('password').isLength({ min: 1 }).trim().escape(),
     check('role').isLength({ min: 1 }).trim().escape(),
 ], createUser)
+
+api.post("/file", uploadUserFile)
 
 api.put("/", [
     check('id').isLength({ min: 1 }).trim().escape(),

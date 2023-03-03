@@ -30,7 +30,7 @@ export class CreateUserFormComponent {
     const newUser = new User(username!, password, this.translate(role!));
     this.apiService
     .createUser(newUser)
-    .subscribe( msg => console.log("Usuario creado"));
+    .subscribe( msg => alert("Usuario creado"));
   }
 
   translate(data: string): string {
