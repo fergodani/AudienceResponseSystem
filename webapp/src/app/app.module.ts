@@ -20,6 +20,11 @@ import { UpdateUserFormComponent } from './admin/update-user-form/update-user-fo
 import { UpdateCourseFormComponent } from './admin/update-course-form/update-course-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule} from '@angular/material/icon';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatNativeDateModule} from '@angular/material/core';
+import { CreateQuestionComponent } from './professor/create-question/create-question.component';
+import {MaterialExampleModule} from '../material.module';
+import { AnswersComponent } from './professor/create-question/answers/answers.component';
 
 const appRoutes: Routes=[
   {path: '', component: HomeComponent},
@@ -29,6 +34,7 @@ const appRoutes: Routes=[
   {path: 'courses/create', component: CreateCourseFormComponent},
   {path: 'users/update/:id', component: UpdateUserFormComponent},
   {path: 'courses/update/:id', component: UpdateCourseFormComponent},
+  {path: 'questions/create', component: CreateQuestionComponent},
   { path: '**', component: HomeComponent }
 ];
 
@@ -43,7 +49,9 @@ const appRoutes: Routes=[
     UserListComponent,
     CourseListComponent,
     UpdateUserFormComponent,
-    UpdateCourseFormComponent
+    UpdateCourseFormComponent,
+    CreateQuestionComponent,
+    AnswersComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,7 +61,10 @@ const appRoutes: Routes=[
     NgbModule,
     RouterModule.forRoot(appRoutes),
     BrowserAnimationsModule,
-    MatIconModule
+    MatIconModule,
+    MatSidenavModule,
+    MatNativeDateModule,
+    MaterialExampleModule
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]

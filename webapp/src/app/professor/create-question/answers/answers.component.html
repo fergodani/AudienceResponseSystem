@@ -1,0 +1,60 @@
+<div class="d-flex flex-column">
+    <div class="row" *ngIf="type == types.multioption || type == types.true_false">
+        <div class="col d-flex justify-content-center" [formGroup]="answer1FormGroup">
+            <mat-form-field>
+                <mat-label>Respuesta</mat-label>
+                <input matInput formControlName="description">
+            </mat-form-field>
+            <mat-checkbox formControlName="checked"></mat-checkbox>
+        </div>
+        <div class="col d-flex justify-content-center" [formGroup]="answer2FormGroup">
+            <mat-form-field>
+                <mat-label>Respuesta</mat-label>
+                <input matInput>
+            </mat-form-field>
+            <mat-checkbox formControlName="checked"></mat-checkbox>
+        </div>
+    </div>
+    <div class="row" *ngIf="type == types.multioption">
+        <div class="col d-flex justify-content-center" [formGroup]="answer3FormGroup">
+            <mat-form-field>
+                <mat-label>Respuesta</mat-label>
+                <input matInput>
+            </mat-form-field>
+            <mat-checkbox formControlName="checked"></mat-checkbox>
+        </div>
+        <div class="col d-flex justify-content-center" [formGroup]="answer4FormGroup">
+            <mat-form-field>
+                <mat-label>Respuesta</mat-label>
+                <input matInput>
+            </mat-form-field>
+            <mat-checkbox formControlName="checked"></mat-checkbox>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center " *ngIf="type == types.short" [formGroup]="shortAnswersFormGroup">
+        <div class="d-flex flex-column w-50 align-items-center gap-5">
+            <mat-form-field>
+                <mat-label>Respuesta</mat-label>
+                <input matInput formControlName="answer1">
+            </mat-form-field>
+            <mat-card>
+                <mat-card-content>Otras respuestas aceptadas</mat-card-content>
+            </mat-card>
+            <div class="d-flex flex-row gap-2">
+                <mat-form-field>
+                    <mat-label>Respuesta</mat-label>
+                    <input matInput formControlName="answer2">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Respuesta</mat-label>
+                    <input matInput formControlName="answer3">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Respuesta</mat-label>
+                    <input matInput formControlName="answer4">
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <button mat-raised-button (click)="submitAnswers()">Crear pregunta</button>
+</div>
