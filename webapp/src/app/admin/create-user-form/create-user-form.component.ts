@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ApiService } from 'src/app/core/services/api.admin.service';
+import { ApiService } from 'src/app/core/services/admin/api.admin.service';
 import { User } from 'src/app/core/models/user.model';
 import { Router } from '@angular/router';
 

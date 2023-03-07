@@ -24,10 +24,10 @@
         <div>
             <button class="m-3" mat-raised-button (click)="drawer.toggle()">Opciones</button>
             <div class="d-flex justify-content-center">
-                <div class="d-flex flex-column align-items-center gap-5">
+                <div class="d-flex flex-column align-items-center gap-5" [formGroup]="createQuestionForm">
                     <mat-form-field id="title">
                         <mat-label>Pregunta</mat-label>
-                        <input matInput>
+                        <input matInput formControlName="description">
                     </mat-form-field>
                     <div class="box">
                         <p>Incorpora un recurso</p>

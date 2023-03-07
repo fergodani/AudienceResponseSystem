@@ -1,18 +1,11 @@
 export class Answer {
 
-    constructor(description: string, isCorrect: boolean, id: number = 0) {
+    constructor(description: string, is_correct: boolean) {
         this.description = description;
-        this.isCorrect = isCorrect;
-        this.id = id;
+        this.is_correct = is_correct;
     }
 
-    id: number = 0;
     description: string='';
-    isCorrect: boolean=false;
+    is_correct: boolean=false;
 }
 
-export enum Type {
-    multioption,
-    true_false,
-    short
-  }

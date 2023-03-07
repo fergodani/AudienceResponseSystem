@@ -11,7 +11,7 @@ import { CreateUserFormComponent } from './admin/create-user-form/create-user-fo
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ApiService } from './core/services/api.admin.service';
+import { ApiService } from './core/services/admin/api.admin.service';
 import { CreateCourseFormComponent } from './admin/create-course-form/create-course-form.component';
 import { RouterModule, Routes } from '@angular/router';
 import { UserListComponent } from './admin/user-list/user-list.component';

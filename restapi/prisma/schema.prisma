@@ -18,10 +18,10 @@ model UserCourse {
 
 model answer {
   id          Int       @id @default(autoincrement())
+  question_id Int
   description String    @db.VarChar
   is_correct  Boolean?
-  question_id Int?
-  question    question? @relation(fields: [question_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  question    question? @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model asociatedSurvey {
@@ -36,7 +36,7 @@ model asociatedSurvey {
 
 model course {
   id             Int              @id @default(autoincrement())
-  name           String           @db.VarChar @unique
+  name           String           @unique @db.VarChar
   description    String           @db.VarChar
   created_at     DateTime?        @default(now()) @db.Timestamp(6)
   UserCourse     UserCourse[]
@@ -62,6 +62,15 @@ model courseSurvey {
   @@id([survey_id, course_id])
 }
 
+model questionSurvey {
+  question_id Int
+  survey_id   Int
+  question    question @relation(fields: [question_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  survey      survey   @relation(fields: [survey_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([question_id, survey_id])
+}
+
 model game {
   id                   Int       @id @default(autoincrement())
   host_id              Int?
@@ -69,7 +78,7 @@ model game {
   is_live              Boolean?
   is_offline           Boolean?
   is_questions_visible Boolean?
-  created_at     DateTime?        @default(now()) @db.Timestamp(6)
+  created_at           DateTime? @default(now()) @db.Timestamp(6)
   date                 DateTime? @db.Timestamp(6)
   user                 user?     @relation(fields: [host_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   survey               survey?   @relation(fields: [survey_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -82,10 +91,9 @@ model question {
   type           type
   answer_time    Int
   created_at     DateTime?        @default(now()) @db.Timestamp(6)
-  survey_id      Int?
   answer         answer[]
   courseQuestion courseQuestion[]
-  survey         survey?          @relation(fields: [survey_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  questionSurvey questionSurvey[]
 }
 
 model survey {
@@ -98,13 +106,13 @@ model survey {
   asociatedSurvey asociatedSurvey[]
   courseSurvey    courseSurvey[]
   game            game[]
-  question        question[]
   user            user?             @relation(fields: [user_creator_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  questionSurvey  questionSurvey[]
 }
 
 model user {
   id              Int               @id @default(autoincrement())
-  username        String            @db.VarChar @unique
+  username        String            @unique @db.VarChar
   password        String            @db.VarChar
   created_at      DateTime?         @default(now()) @db.Timestamp(6)
   role            role

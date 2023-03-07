@@ -35,6 +35,7 @@ const getUser = async (req: Request, res: Response): Promise<Response> => {
 const createUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { username, password, role } = req.body;
+        console.log(req.body)
         const existingUser = await prisma.user.findFirst({
             where: {
                 username: username,

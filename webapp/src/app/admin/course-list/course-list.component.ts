@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Course } from 'src/app/core/models/course.model';
-import { ApiService } from 'src/app/core/services/api.admin.service';
+import { ApiService } from 'src/app/core/services/admin/api.admin.service';
 
 @Component({
   selector: 'app-course-list',

@@ -1,6 +1,7 @@
 import { Component, Input, Output, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { Answer, Type } from 'src/app/core/models/answer.model';
+import { Answer} from 'src/app/core/models/answer.model';
+import { Type } from 'src/app/core/models/question.model';
 
 const TRUE_FALSE_ANSWERS = 2;
 const MULTIOPTION_ANSWERS = 4;
