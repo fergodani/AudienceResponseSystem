@@ -15,11 +15,12 @@ export class CourseListComponent implements OnInit {
   courses: Course[] = [];
   fileName: string = ''
   requiredFileType = "text/csv";
+  isLoading: boolean = true;
 
   ngOnInit(): void {
     this.apiService
       .getCourses()
-      .subscribe(courses => this.courses = courses)
+      .subscribe(courses => {this.courses = courses; this.isLoading = false})
   }
 
   onCreateCourse() {

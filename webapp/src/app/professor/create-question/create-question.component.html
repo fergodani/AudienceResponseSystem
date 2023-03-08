@@ -12,13 +12,6 @@
             <mat-label>Tiempo límite</mat-label>
             <input matInput type="number" formControlName="limitTime" name="given-name">
         </mat-form-field>
-        <mat-form-field class="m-3" appearance="fill">
-            <mat-label>Tipo de pregunta</mat-label>
-            <mat-select formControlName="pointType">
-                <mat-option *ngFor="let type of pointType"
-                  [value]="type">{{type}}</mat-option>
-            </mat-select>
-        </mat-form-field>
     </mat-drawer>
     <mat-drawer-content>
         <div>
@@ -27,11 +20,14 @@
                 <div class="d-flex flex-column align-items-center gap-5" [formGroup]="createQuestionForm">
                     <mat-form-field id="title">
                         <mat-label>Pregunta</mat-label>
-                        <input matInput formControlName="description">
+                        <input id="description" matInput formControlName="description">
                     </mat-form-field>
                     <div class="box">
                         <p>Incorpora un recurso</p>
                     </div>
+                    <div class="alert alert-danger" role="alert" *ngIf="error">
+                        {{ errorMessage }}
+                      </div>
                     <app-answers [typeString]="createQuestionForm.value.type!" (answers)="addAnswers($event)"></app-answers>
                 </div>
             </div>

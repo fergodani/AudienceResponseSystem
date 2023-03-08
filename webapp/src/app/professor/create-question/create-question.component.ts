@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { isEmpty } from 'rxjs';
 import { Answer } from 'src/app/core/models/answer.model';
 import { Question, Type } from 'src/app/core/models/question.model';
 import { ApiProfessorService } from 'src/app/core/services/professor/api.professor.service';
+
+const MANDATORY_FIELDS = "Debes rellenar los campos obligatorios";
+const NO_CORRECT_ANSWER = "Debe haber al menos una respuesta correcta";
 
 @Component({
   selector: 'app-create-question',
@@ -18,24 +22,24 @@ export class CreateQuestionComponent {
     'Verdadero o falso',
     'Respuesta corta'
   ]
-  pointType = [
-    'Estándar',
-    'Puntos dobles',
-    'Sin puntos'
-  ]
   createQuestionForm = new FormGroup({
     type: new FormControl(this.types[0]),
     limitTime: new FormControl(0),
-    pointType: new FormControl(this.pointType),
-    description: new FormControl('')
+    description: new FormControl('', [
+      Validators.required,
+      Validators.minLength(1)
+    ])
   })
   
 
   opened: boolean = false;
   events: string[] = [];
-  answers: Answer[] = []
+  answers: Answer[] = [];
+  error: boolean = false;
+  errorMessage: string = '';
 
   addAnswers(answers: Answer[]){
+    this.error = false;
     const question = new Question(
       this.createQuestionForm.value.description!,
       'subject',
@@ -43,9 +47,42 @@ export class CreateQuestionComponent {
       this.createQuestionForm.value.limitTime!,
       answers
     );
-    this.apiProfessorService
-    .createQuestion(question)
-    .subscribe(msg => alert("Pregunta creada"))
+    console.log(question)
+    if (question.description == '' || !this.checkAnswersDescription(answers)){
+      this.error = true;
+      this.errorMessage = MANDATORY_FIELDS;
+    } else if (!this.checkAtLeastOneCorrect(answers)) {
+      this.error = true;
+      this.errorMessage = NO_CORRECT_ANSWER;
+    } else {
+      this.error = false;
+      console.log(question)
+    }
+    //this.apiProfessorService
+    //.createQuestion(question)
+    //.subscribe(msg => alert("Pregunta creada"))
+  }
+
+  checkAnswersDescription(answers: Answer[]): boolean{
+    let allChecked = true;
+    answers.forEach( answer => {
+      if (answer.description == ''){
+        allChecked = false;
+      }
+    })
+    console.log("All answers checked: " + allChecked)
+    return allChecked;
+  }
+
+  checkAtLeastOneCorrect(answers: Answer[]): boolean {
+    let isAtLeastOneCorrect = false;
+    answers.forEach( answer => {
+      if (answer.is_correct){
+        isAtLeastOneCorrect = true;
+      }
+    })
+    console.log("At least one correct: " + isAtLeastOneCorrect)
+    return isAtLeastOneCorrect;
   }
 
   getType(type: string): string {

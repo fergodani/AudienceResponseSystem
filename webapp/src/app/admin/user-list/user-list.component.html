@@ -1,36 +1,41 @@
 <div class="d-flex flex-column gap-5 p-4 ">
     <h1 class="fs-1">Lista de usuarios</h1>
+    <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+        <span class="visually-hidden">Loading...</span>
+    </div>
     <div class="border d-flex flex-row gap-5 justify-content-between align-items-center" *ngFor="let user of users">
-        <h2><a [routerLink]="['/users/update', user.id]">{{ user.username}}</a></h2>
-        <small class="p-2">{{ user.role }}</small>
+        <div class="d-flex flex-column ps-2">
+            <h2><a [routerLink]="['/users/update', user.id]">{{ user.username}}</a></h2>
+            <small class="fs-6">{{ user.role }}</small>
+        </div>
+
         <button type="button" class="btn btn-danger" (click)="onDeleteUser(user.id)">Eliminar</button>
     </div>
-
-    <div class="d-flex flex-column gap-3">
+    <div class="m-3 d-flex justify-content-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link text-dark" href="#">Previous</a></li>
+                <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
+                <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
+                <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
+                <li class="page-item"><a class="page-link text-dark" href="#">Next</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="d-flex flex-row gap-3 mb-5 ">
         <button type="button" class="btn btn-dark w-25" (click)="onCreateUser()">Nuevo usuario</button>
-        
-        <label for="fileUpload">Importar usuarios: </label>
-        <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+        <div class="alig-self-center">
+            <label for="fileUpload">Importar usuarios: </label>
+            <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
 
-        <div class="file-upload">
+            <div class="file-upload">
 
-            {{fileName || ""}}
+                {{fileName || ""}}
 
-            <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
-                <mat-icon>attach_file</mat-icon>
-            </button>
+                <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                    <mat-icon>attach_file</mat-icon>
+                </button>
+            </div>
         </div>
     </div>
-</div>
-
-<div class="m-3 d-flex justify-content-center">
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item"><a class="page-link text-dark" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
-            <li class="page-item"><a class="page-link text-dark" href="#">Next</a></li>
-        </ul>
-    </nav>
 </div>

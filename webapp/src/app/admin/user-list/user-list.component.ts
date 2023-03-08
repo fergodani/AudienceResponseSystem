@@ -15,12 +15,13 @@ export class UserListComponent implements OnInit {
   users: User[] = []
   fileName: string = ''
   requiredFileType = "text/csv";
+  isLoading: boolean = true;
 
   ngOnInit(): void {
 
     this.apiService
       .getUsers()
-      .subscribe(users => this.apiService.users = this.users = users)
+      .subscribe(users => {this.apiService.users = this.users = users; this.isLoading = false})
   }
 
   onCreateUser() {
