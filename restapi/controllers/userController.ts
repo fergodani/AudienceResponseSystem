@@ -4,7 +4,7 @@ import multiparty = require('multiparty');
 import * as fs from 'fs';
 import * as path from 'path';
 import * as csv from 'fast-csv';
-import { User } from '../models/user.model';
+import { Role, User } from '../models/user.model';
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient()
@@ -81,14 +81,34 @@ const login = async (req: Request, res: Response): Promise<Response> => {
         if (!success) {
             return res.status(400).send("Invalid credentials");
         }
-        const token = jwt.sign({ user }, process.env.SECRET);
+        const userId = user.id;
+        const token = jwt.sign({ userId }, process.env.SECRET);
         return res.status(200).json({
+            id: userId,
+            username: user.username,
+            password: user.password,
+            role: user.role,
+            roleType: getRole(user.role),
             token
         });
     } catch (error) {
         return res.status(500).send(error)
     }
 };
+
+function getRole(role: string): Role {
+    switch (role) {
+        case 'student': {
+            return Role.Student;
+        }
+        case 'professor': {
+            return Role.Professor
+        }
+        default: {
+            return Role.Admin;
+        }
+    }
+}
 
 const updateUser = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -152,6 +172,7 @@ const deleteUser = async (req: Request, res: Response): Promise<Response> => {
 const uploadUserFile = async (req: Request, res: Response): Promise<Response> => {
     try {
         const form = new multiparty.Form({ uploadDir: '../restapi/files' });
+        console.log(form)
         form.parse(req, function (err, fields, files) {
             fs.rename(files.file[0].path, process.env.FILEPATH!, function (err) {
                 if (err) console.log('ERROR: ' + err);

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,7 +13,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from './core/services/admin/api.admin.service';
 import { CreateCourseFormComponent } from './admin/create-course-form/create-course-form.component';
-import { RouterModule, Routes } from '@angular/router';
 import { UserListComponent } from './admin/user-list/user-list.component';
 import { CourseListComponent } from './admin/course-list/course-list.component';
 import { UpdateUserFormComponent } from './admin/update-user-form/update-user-form.component';
@@ -29,23 +28,8 @@ import { QuestionListComponent } from './professor/question-list/question-list.c
 import { LoginFormComponent } from './login/login-form/login-form.component';
 import { ProfessorHomeComponent } from './professor/professor-home/professor-home.component';
 import { StudentHomeComponent } from './student/student-home/student-home.component';
-
-const appRoutes: Routes=[
-  {path: '', component: AdminHomeComponent},
-  {path: 'users', component: UserListComponent},
-  {path: 'users/create', component: CreateUserFormComponent},
-  {path: 'courses', component: CourseListComponent},
-  {path: 'courses/create', component: CreateCourseFormComponent},
-  {path: 'users/update/:id', component: UpdateUserFormComponent},
-  {path: 'courses/update/:id', component: UpdateCourseFormComponent},
-  {path: 'questions/create', component: CreateQuestionComponent},
-  {path: 'questions/list', component: QuestionListComponent},
-  {path: 'login', component: LoginFormComponent},
-  {path: 'student/home', component: StudentHomeComponent},
-  {path: 'professor/home', component: ProfessorHomeComponent},
-  {path: 'admin/home', component: AdminHomeComponent},
-  { path: '**', component: AdminHomeComponent }
-];
+import { JwtInterceptor } from './core/helpers/jwt.interceptor';
+import { ErrorInterceptor } from './core/helpers/error.interceptor';
 
 @NgModule({
   declarations: [
@@ -72,14 +56,18 @@ const appRoutes: Routes=[
     HttpClientModule,
     ReactiveFormsModule,
     NgbModule,
-    RouterModule.forRoot(appRoutes),
+    AppRoutingModule,
     BrowserAnimationsModule,
     MatIconModule,
     MatSidenavModule,
     MatNativeDateModule,
     MaterialExampleModule
   ],
-  providers: [ApiService],
+  providers: [
+    ApiService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

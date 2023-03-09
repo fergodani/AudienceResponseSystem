@@ -8,19 +8,28 @@ import { ApiAuthService } from 'src/app/core/services/auth/api.auth.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnChanges {
+export class HeaderComponent {
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes)
+  user: User | null = <User | null>{};
 
+  constructor(private authService: ApiAuthService) {
+    this.authService.user.subscribe(user => this.user = user)
   }
-  constructor(private authService: ApiAuthService){}
 
-  userLogged: User = this.authService.userLogged;
+  get isAdmin() {
+    return this.user && this.user.role === 'admin';
+  }
 
-  ngOnInit(): void {
-    this.userLogged = this.authService.userLogged;
-    console.log(this.userLogged)
+  get isProfessor() {
+    return this.user && this.user.role === 'professor';
+  }
+
+  get isStudent() {
+    return this.user && this.user.role === 'student';
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-import jwt_decode from "jwt-decode";
-import { Token, User, UserToken } from 'src/app/core/models/user.model';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { first } from 'rxjs';
+import { Role, User } from 'src/app/core/models/user.model';
 import { ApiAuthService } from 'src/app/core/services/auth/api.auth.service';
 
 @Component({
@@ -12,31 +12,58 @@ import { ApiAuthService } from 'src/app/core/services/auth/api.auth.service';
 })
 export class LoginFormComponent {
 
-  constructor(private loginService: ApiAuthService, private router: Router) {}
+  constructor(
+    private authService: ApiAuthService,
+    private router: Router,
+    private route: ActivatedRoute
+    ) {
+      if(this.authService.userValue) {
+        this.router.navigate(['/'])
+      }
+    }
 
   loginFormGroup = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl(''),
+    username: new FormControl('', [
+      Validators.required
+    ]),
+    password: new FormControl('', [
+      Validators.required
+    ]),
   })
 
+  isLoading = false;
+  submitted = false;
+  error = '';
 
 
   submitUser() {
+    this.submitted = true;
+
+    if (this.loginFormGroup.invalid) {
+      return;
+    }
+
+    this.isLoading = true;
+
     const username = this.loginFormGroup.value.username;
     const password = this.loginFormGroup.value.password;
     const user = new User(username!, password!);
-    this.loginService
+    this.authService
     .login(user)
-    .subscribe( token => {
-      // guardar en local storage
-      const token_decoded = jwt_decode<UserToken>(token.token);
-      this.loginService.setUser(token_decoded.user)
-      if (token_decoded.user.role == 'student'){
-        this.router.navigate(['/student/home'])
-      } else if (token_decoded.user.role == 'professor') {
-        this.router.navigate(['/professor/home'])
-      } else {
-        this.router.navigate(['/admin/home'])
+    .pipe(first())
+    .subscribe({
+      next: () => {     
+        if(this.authService.userValue!.role == Role.Student){
+          this.router.navigate(['student/home'])
+        }else if(this.authService.userValue!.role == Role.Admin){
+          this.router.navigate(['admin/home'])
+        }else if(this.authService.userValue!.role == Role.Professor){
+          this.router.navigate(['professor/home'])
+        }
+      },
+      error: error => {
+        this.error = error;
+        this.isLoading = false;
       }
     })
   }

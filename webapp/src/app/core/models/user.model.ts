@@ -11,6 +11,8 @@ export class User {
     username: string='';
     password: string='';
     role: string='';
+    roleType: Role=Role.Student;
+    token?:string;
 }
 
 export interface Token {
@@ -20,4 +22,10 @@ export interface Token {
 export interface UserToken {
     iat: number;
     user: User;
+}
+
+export enum Role {
+    Student = 'student',
+    Professor = 'professor',
+    Admin = 'admin'
 }
