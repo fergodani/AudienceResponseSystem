@@ -7,18 +7,20 @@ mat-drawer-container{
   height:90%;
 }
 
-#title {
-  width: 700px;
-}
 
 .box {
-  width: 200px;
-  height: 200px;
+  width: 400px;
+  height: 400px;
+  min-height: 400px;
+  max-height: auto;
   border: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
+  overflow: hidden;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 1em;
   text-align: center;
   background: #fff;
   border-radius: 4px;
@@ -38,4 +40,19 @@ mat-drawer-container{
 
 .example-container{
   background-color:#f2f2f0 ;
+}
+
+.file-input {
+  display: none;
+}
+
+.imageContainer {
+  max-width: 400px;
+    overflow: hidden;
+}
+
+img {
+  max-width: 100%;
+    max-height: 100%;
+
 }

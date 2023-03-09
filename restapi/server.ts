@@ -8,6 +8,7 @@ const courseRoutes = require('./routes/courseRoutes')
 const questionRoutes = require('./routes/questionRoutes')
 const surveyRoutes = require('./routes/surveyRoutes')
 const userRoutes = require('./routes/userRoutes')
+const answerRoutes = require('./routes/answerRoutes')
 
 import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
@@ -24,6 +25,7 @@ app.use('/api/course', courseRoutes)
 app.use('/api/question', questionRoutes)
 app.use('/api/survey', surveyRoutes)
 app.use('/api/user', userRoutes)
+app.use('/api/answer', answerRoutes)
 
 app.use(express.json({limit: '5mb'}))
 

@@ -4,7 +4,6 @@ import multiparty = require('multiparty');
 import * as fs from 'fs';
 import * as path from 'path';
 import * as csv from 'fast-csv';
-import * as csv_format from '@fast-csv/format';
 import { User } from '../models/user.model';
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -83,7 +82,6 @@ const login = async (req: Request, res: Response): Promise<Response> => {
             return res.status(400).send("Invalid credentials");
         }
         const token = jwt.sign({ user }, process.env.SECRET);
-
         return res.status(200).json({
             token
         });

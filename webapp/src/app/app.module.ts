@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './admin/home/home.component';
+import { AdminHomeComponent } from './admin/home/admin-home.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { CreateUserFormComponent } from './admin/create-user-form/create-user-form.component';
@@ -25,9 +25,13 @@ import {MatNativeDateModule} from '@angular/material/core';
 import { CreateQuestionComponent } from './professor/create-question/create-question.component';
 import {MaterialExampleModule} from '../material.module';
 import { AnswersComponent } from './professor/create-question/answers/answers.component';
+import { QuestionListComponent } from './professor/question-list/question-list.component';
+import { LoginFormComponent } from './login/login-form/login-form.component';
+import { ProfessorHomeComponent } from './professor/professor-home/professor-home.component';
+import { StudentHomeComponent } from './student/student-home/student-home.component';
 
 const appRoutes: Routes=[
-  {path: '', component: HomeComponent},
+  {path: '', component: AdminHomeComponent},
   {path: 'users', component: UserListComponent},
   {path: 'users/create', component: CreateUserFormComponent},
   {path: 'courses', component: CourseListComponent},
@@ -35,13 +39,18 @@ const appRoutes: Routes=[
   {path: 'users/update/:id', component: UpdateUserFormComponent},
   {path: 'courses/update/:id', component: UpdateCourseFormComponent},
   {path: 'questions/create', component: CreateQuestionComponent},
-  { path: '**', component: HomeComponent }
+  {path: 'questions/list', component: QuestionListComponent},
+  {path: 'login', component: LoginFormComponent},
+  {path: 'student/home', component: StudentHomeComponent},
+  {path: 'professor/home', component: ProfessorHomeComponent},
+  {path: 'admin/home', component: AdminHomeComponent},
+  { path: '**', component: AdminHomeComponent }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    AdminHomeComponent,
     HeaderComponent,
     FooterComponent,
     CreateUserFormComponent,
@@ -52,6 +61,10 @@ const appRoutes: Routes=[
     UpdateCourseFormComponent,
     CreateQuestionComponent,
     AnswersComponent,
+    QuestionListComponent,
+    LoginFormComponent,
+    ProfessorHomeComponent,
+    StudentHomeComponent,
   ],
   imports: [
     BrowserModule,

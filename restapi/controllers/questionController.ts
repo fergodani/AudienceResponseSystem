@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
 import { Prisma, PrismaClient, type } from '@prisma/client'
-import { Answer } from '../models/answer.model';
 const prisma = new PrismaClient()
 
 const getQuestions = async (req: Request, res: Response): Promise<Response> => {
     try{
-        let result = await prisma.question.findMany();
+        let result = await prisma.question.findMany({
+            include: {
+                answer: true,
+            }
+        });
         return res.status(200).json(result)
     } catch (error) {
         return res.status(500).send(error)
@@ -14,7 +17,7 @@ const getQuestions = async (req: Request, res: Response): Promise<Response> => {
 
 const createQuestion = async (req: Request, res: Response): Promise<Response> => {
     try{
-        const { description, subject, type, answer_time, answers } = req.body;
+        const { description, subject, type, answer_time, answers, resource } = req.body;
         console.log(req.body)
         let savedQuestion: Prisma.questionCreateInput
         savedQuestion = {
@@ -22,6 +25,7 @@ const createQuestion = async (req: Request, res: Response): Promise<Response> =>
             subject,
             type: type as type,
             answer_time,
+            resource,
             answer: {
                 createMany: {
                     data: answers

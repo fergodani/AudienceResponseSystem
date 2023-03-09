@@ -2,16 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { Question } from '../../models/question.model';
+import { Token, User } from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApiProfessorService {
+export class ApiAuthService {
 
-   apiUrl = "http://localhost:3000/api"
-
-  constructor(private http: HttpClient) { }
+  apiUrl = "http://localhost:3000/api"
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
@@ -27,17 +25,18 @@ export class ApiProfessorService {
     return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 
-  createQuestion(question: Question): Observable<Question> {
-    return this.http.post<Question>(`${this.apiUrl}/question`, question)
+  constructor(private http: HttpClient) { }
+
+  userLogged: User = new User('', '');
+
+  login(user: User): Observable<Token> {
+    return this.http.post<Token>(`${this.apiUrl}/user/login`, user)
     .pipe(
       catchError(this.handleError)
     )
   }
 
-  getQuestions(): Observable<Question[]> {
-    return this.http.get<Question[]>(`${this.apiUrl}/question`)
-    .pipe(
-      catchError(this.handleError)
-    )
+  setUser(user: User) {
+    this.userLogged = user;
   }
 }

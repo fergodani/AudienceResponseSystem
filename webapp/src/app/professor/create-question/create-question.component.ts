@@ -37,6 +37,7 @@ export class CreateQuestionComponent {
   answers: Answer[] = [];
   error: boolean = false;
   errorMessage: string = '';
+  resourceFile: any = '';
 
   addAnswers(answers: Answer[]){
     this.error = false;
@@ -45,7 +46,8 @@ export class CreateQuestionComponent {
       'subject',
       this.getType(this.createQuestionForm.value.type!),
       this.createQuestionForm.value.limitTime!,
-      answers
+      answers,
+      this.resourceFile
     );
     console.log(question)
     if (question.description == '' || !this.checkAnswersDescription(answers)){
@@ -58,9 +60,9 @@ export class CreateQuestionComponent {
       this.error = false;
       console.log(question)
     }
-    //this.apiProfessorService
-    //.createQuestion(question)
-    //.subscribe(msg => alert("Pregunta creada"))
+    this.apiProfessorService
+    .createQuestion(question)
+    .subscribe(msg => alert("Pregunta creada"))
   }
 
   checkAnswersDescription(answers: Answer[]): boolean{
@@ -100,6 +102,22 @@ export class CreateQuestionComponent {
         return 'multioption';
       }
     }
+  }
+
+  onFileSelected(event: Event) {
+    const file = (<HTMLInputElement>event.target).files![0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.resourceFile = reader.result;
+    }
+    reader.onerror = function (error) {
+      console.log("Error ", error)
+    }
+  }
+
+  removeFile() {
+    this.resourceFile = '';
   }
 
 }

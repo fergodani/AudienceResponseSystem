@@ -4,14 +4,14 @@
         <div class="col d-flex justify-content-center" [formGroup]="answer1FormGroup">
             <mat-form-field>
                 <mat-label>Respuesta</mat-label>
-                <input matInput formControlName="description">
+                <textarea  matInput formControlName="description"></textarea>
             </mat-form-field>
             <mat-checkbox (change)="changeCheck($event.checked, answersType.answer1)" formControlName="checked"></mat-checkbox>
         </div>
         <div class="col d-flex justify-content-center" [formGroup]="answer2FormGroup">
             <mat-form-field>
                 <mat-label>Respuesta</mat-label>
-                <input matInput formControlName="description">
+                <textarea matInput formControlName="description"></textarea>
             </mat-form-field>
             <mat-checkbox (change)="changeCheck($event.checked, answersType.answer2)" formControlName="checked"></mat-checkbox>
         </div>
@@ -21,14 +21,14 @@
         <div class="col d-flex justify-content-center" [formGroup]="answer3FormGroup">
             <mat-form-field>
                 <mat-label>Respuesta</mat-label>
-                <input matInput formControlName="description">
+                <textarea matInput formControlName="description"></textarea>
             </mat-form-field>
             <mat-checkbox formControlName="checked"></mat-checkbox>
         </div>
         <div class="col d-flex justify-content-center" [formGroup]="answer4FormGroup">
             <mat-form-field>
                 <mat-label>Respuesta</mat-label>
-                <input matInput formControlName="description">
+                <textarea matInput formControlName="description"></textarea>
             </mat-form-field>
             <mat-checkbox formControlName="checked"></mat-checkbox>
         </div>
@@ -37,7 +37,7 @@
         <div class="d-flex flex-column w-50 align-items-center gap-5">
             <mat-form-field>
                 <mat-label>Respuesta</mat-label>
-                <input matInput formControlName="answer1">
+                <textarea matInput formControlName="answer1"></textarea>
             </mat-form-field>
             <mat-card>
                 <mat-card-content>Otras respuestas aceptadas</mat-card-content>
@@ -45,18 +45,18 @@
             <div class="d-flex flex-row gap-2">
                 <mat-form-field>
                     <mat-label>Respuesta</mat-label>
-                    <input matInput formControlName="answer2">
+                    <textarea matInput formControlName="answer2"></textarea>
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Respuesta</mat-label>
-                    <input matInput formControlName="answer3">
+                    <textarea matInput formControlName="answer3"></textarea>
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Respuesta</mat-label>
-                    <input matInput formControlName="answer4">
+                    <textarea matInput formControlName="answer4"></textarea>
                 </mat-form-field>
             </div>
         </div>
     </div>
-    <button mat-raised-button (click)="submitAnswers()">Crear pregunta</button>
+    <button class="mb-5" mat-raised-button (click)="submitAnswers()">Crear pregunta</button>
 </div>

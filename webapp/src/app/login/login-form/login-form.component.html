@@ -1,0 +1,12 @@
+<form class="d-flex flex-column align-items-center" [formGroup]="loginFormGroup">
+    <h1>Iniciar sesión</h1>
+    <mat-form-field class="w-50">
+        <mat-label>Usuario</mat-label>
+        <input id="username" matInput formControlName="username">
+    </mat-form-field>
+    <mat-form-field class="w-50">
+        <mat-label>Contraseña</mat-label>
+        <input type="password" id="password" matInput formControlName="password">
+    </mat-form-field>
+    <button class="mb-5" mat-raised-button (click)="submitUser()">Aceptar</button>
+</form>

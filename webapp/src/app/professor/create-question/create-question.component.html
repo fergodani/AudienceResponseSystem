@@ -4,8 +4,7 @@
         <mat-form-field class="m-3" appearance="fill">
             <mat-label>Tipo de pregunta</mat-label>
             <mat-select formControlName="type">
-                <mat-option *ngFor="let type of types"
-                  [value]="type">{{type}}</mat-option>
+                <mat-option *ngFor="let type of types" [value]="type">{{type}}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field class="m-3" appearance="fill">
@@ -16,20 +15,34 @@
     <mat-drawer-content>
         <div>
             <button class="m-3" mat-raised-button (click)="drawer.toggle()">Opciones</button>
-            <div class="d-flex justify-content-center">
-                <div class="d-flex flex-column align-items-center gap-5" [formGroup]="createQuestionForm">
-                    <mat-form-field id="title">
-                        <mat-label>Pregunta</mat-label>
-                        <input id="description" matInput formControlName="description">
-                    </mat-form-field>
-                    <div class="box">
-                        <p>Incorpora un recurso</p>
+            <div class="d-flex flex-column align-items-center gap-4" [formGroup]="createQuestionForm">
+                <mat-form-field class="w-50">
+                    <mat-label>Pregunta</mat-label>
+                    <input id="description" matInput formControlName="description">
+                </mat-form-field>
+                <div class="box">
+                    <div class="imageContainer">
+                        <img [src]="resourceFile" *ngIf="resourceFile != ''" alt="Question image source" />
                     </div>
-                    <div class="alert alert-danger" role="alert" *ngIf="error">
-                        {{ errorMessage }}
-                      </div>
-                    <app-answers [typeString]="createQuestionForm.value.type!" (answers)="addAnswers($event)"></app-answers>
+                    <p *ngIf="resourceFile == ''">Incorpora un recurso</p>
+                    <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+
+                    <div class="d-flex gap-2">
+                        <div class="file-upload">
+                            <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                                <mat-icon>attach_file</mat-icon>
+                            </button>
+                        </div>
+                        <button mat-mini-fab color="primary" (click)="removeFile()" *ngIf="resourceFile != ''">
+                            <mat-icon>delete_forever</mat-icon>
+                        </button>
+                    </div>
                 </div>
+
+                <div class="alert alert-danger" role="alert" *ngIf="error">
+                    {{ errorMessage }}
+                </div>
+                <app-answers [typeString]="createQuestionForm.value.type!" (answers)="addAnswers($event)"></app-answers>
             </div>
         </div>
     </mat-drawer-content>
