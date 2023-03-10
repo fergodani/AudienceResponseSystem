@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { isEmpty } from 'rxjs';
 import { Answer } from 'src/app/core/models/answer.model';
 import { Question, Type } from 'src/app/core/models/question.model';
@@ -15,7 +16,10 @@ const NO_CORRECT_ANSWER = "Debe haber al menos una respuesta correcta";
 })
 export class CreateQuestionComponent {
 
-  constructor(private apiProfessorService: ApiProfessorService) {}
+  constructor(
+    private apiProfessorService: ApiProfessorService,
+    private authService: ApiAuthService
+    ) {}
 
   types = [
     'Multiopción',
@@ -47,7 +51,8 @@ export class CreateQuestionComponent {
       this.getType(this.createQuestionForm.value.type!),
       this.createQuestionForm.value.limitTime!,
       answers,
-      this.resourceFile
+      this.resourceFile,
+      this.authService.userValue!.id
     );
     console.log(question)
     if (question.description == '' || !this.checkAnswersDescription(answers)){

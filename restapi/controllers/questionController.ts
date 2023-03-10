@@ -17,8 +17,17 @@ const getQuestions = async (req: Request, res: Response): Promise<Response> => {
 
 const createQuestion = async (req: Request, res: Response): Promise<Response> => {
     try{
-        const { description, subject, type, answer_time, answers, resource } = req.body;
-        console.log(req.body)
+        const { description, subject, type, answer_time, answers, resource, user_creator_id } = req.body;
+        const user = await prisma.user.findUnique({
+            where: {
+                id: user_creator_id,
+            },
+        })
+
+        if (!user){
+            return res.status(400).json({message: "The user who is creating question does not exists"})
+        }
+
         let savedQuestion: Prisma.questionCreateInput
         savedQuestion = {
             description,
@@ -26,6 +35,9 @@ const createQuestion = async (req: Request, res: Response): Promise<Response> =>
             type: type as type,
             answer_time,
             resource,
+            user: {
+                connect: {id: user_creator_id}
+            },
             answer: {
                 createMany: {
                     data: answers

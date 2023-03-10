@@ -11,6 +11,7 @@ import { AuthGuard } from './core/helpers/auth.guard';
 import { Role } from './core/models/user.model';
 import { LoginFormComponent } from './login/login-form/login-form.component';
 import { CreateQuestionComponent } from './professor/create-question/create-question.component';
+import { CreateSurveyComponent } from './professor/create-survey/create-survey.component';
 import { ProfessorHomeComponent } from './professor/professor-home/professor-home.component';
 import { QuestionListComponent } from './professor/question-list/question-list.component';
 import { StudentHomeComponent } from './student/student-home/student-home.component';
@@ -36,7 +37,7 @@ const routes: Routes = [
     path: 'courses', 
     component: CourseListComponent,
     canActivate: [AuthGuard],
-    data: { roles: [Role.Admin]}
+    data: { roles: [Role.Admin, Role.Professor]}
   },
   {
     path: 'courses/create', 
@@ -59,6 +60,12 @@ const routes: Routes = [
   {
     path: 'questions/create', 
     component: CreateQuestionComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Professor]}
+  },
+  {
+    path: 'survey/create', 
+    component: CreateSurveyComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Professor]}
   },

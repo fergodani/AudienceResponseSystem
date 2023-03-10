@@ -91,10 +91,12 @@ model question {
   type           type
   answer_time    Int
   resource       String?
+  user_creator_id Int?
   created_at     DateTime?        @default(now()) @db.Timestamp(6)
   answer         answer[]
   courseQuestion courseQuestion[]
   questionSurvey questionSurvey[]
+  user            user?             @relation(fields: [user_creator_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model survey {
@@ -121,6 +123,7 @@ model user {
   asociatedSurvey asociatedSurvey[]
   game            game[]
   survey          survey[]
+  question        question[]
 }
 
 enum role {

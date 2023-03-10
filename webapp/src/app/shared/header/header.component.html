@@ -1,19 +1,36 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" *ngIf="user">
-    <a class="navbar-brand ps-3" href="">
-        <img src="../../assets/uniovi.png" width="50" height="50" alt="">
-      </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-item nav-link active fs-6" href="">Inicio</a>
-        <a class="nav-item nav-link fs-6" href="/users" *ngIf="isAdmin">Usuarios</a>
-        <a class="nav-item nav-link fs-6" href="/courses" *ngIf="isAdmin">Cursos</a>
-        <a class="nav-item nav-link fs-6" href="/questions/create" *ngIf="isProfessor">Crear preguntas</a>
-        <a class="nav-item nav-link fs-6" href="/questions/list" *ngIf="isProfessor">Preguntas</a>
-        <a class="nav-item nav-link fs-6" href="/login" *ngIf="!user">Login</a>
-        <a class="nav-item nav-link" (click)="logout()" *ngIf="user">Logout</a>
-      </div>
-    </div>
-  </nav>
+	<div class="container-fluid">
+		<a class="navbar-brand ps-3" href="">
+      <img src="../../assets/uniovi.png" width="50" height="50" alt="">
+    </a>
+		<button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">&#9776;</button>
+		<div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
+			<ul class="navbar-nav">
+				<li class="nav-item active">
+					<a class="nav-item nav-link active fs-6" href="" (click)="isMenuCollapsed = true">Inicio</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-item nav-link fs-6" href="/users" (click)="isMenuCollapsed = true" *ngIf="isAdmin">Usuarios</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-item nav-link fs-6" href="/courses" (click)="isMenuCollapsed = true" *ngIf="isAdmin || isProfessor">Cursos</a>
+				</li>
+        <li class="nav-item">
+					<a class="nav-item nav-link fs-6" href="/questions/create" (click)="isMenuCollapsed = true" *ngIf="isProfessor">Crear preguntas</a>
+				</li>
+        <li class="nav-item">
+					<a class="nav-item nav-link fs-6" href="/survey/create" (click)="isMenuCollapsed = true" *ngIf="isProfessor">Crear cuestionarios</a>
+				</li>
+        <li class="nav-item">
+					<a class="nav-item nav-link fs-6" href="/questions/list" (click)="isMenuCollapsed = true" *ngIf="isProfessor">Preguntas</a>
+				</li>
+        <li class="nav-item">
+					<a class="nav-item nav-link fs-6" href="/login" (click)="isMenuCollapsed = true" *ngIf="!user">Login</a>
+				</li>
+        <li class="nav-item">
+					<button class="nav-item nav-link fs-6" mat-raised-button (click)="logout()" *ngIf="user">Logout</button>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>

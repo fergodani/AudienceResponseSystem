@@ -18,7 +18,7 @@ export class LoginFormComponent {
     private route: ActivatedRoute
     ) {
       if(this.authService.userValue) {
-        this.router.navigate(['/'])
+        this.navigateToRoleHome();
       }
     }
 
@@ -53,19 +53,23 @@ export class LoginFormComponent {
     .pipe(first())
     .subscribe({
       next: () => {     
-        if(this.authService.userValue!.role == Role.Student){
-          this.router.navigate(['student/home'])
-        }else if(this.authService.userValue!.role == Role.Admin){
-          this.router.navigate(['admin/home'])
-        }else if(this.authService.userValue!.role == Role.Professor){
-          this.router.navigate(['professor/home'])
-        }
+        this.navigateToRoleHome();
       },
       error: error => {
         this.error = error;
         this.isLoading = false;
       }
     })
+  }
+
+  navigateToRoleHome(){
+    if(this.authService.userValue!.role == Role.Student){
+      this.router.navigate(['student/home'])
+    }else if(this.authService.userValue!.role == Role.Admin){
+      this.router.navigate(['admin/home'])
+    }else if(this.authService.userValue!.role == Role.Professor){
+      this.router.navigate(['professor/home'])
+    }
   }
 
 }

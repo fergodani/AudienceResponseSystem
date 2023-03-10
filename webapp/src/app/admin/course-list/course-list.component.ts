@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { User } from '@app/core/models/user.model';
+import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { Course } from 'src/app/core/models/course.model';
 import { ApiService } from 'src/app/core/services/admin/api.admin.service';
 
@@ -10,17 +12,24 @@ import { ApiService } from 'src/app/core/services/admin/api.admin.service';
 })
 export class CourseListComponent implements OnInit {
 
-  constructor(private apiService: ApiService, private router: Router,  private route: ActivatedRoute) { }
+  constructor(
+    private apiService: ApiService,
+    private router: Router,
+    private authService: ApiAuthService
+  ) {
+    this.authService.user.subscribe(user => this.user = user)
+  }
 
   courses: Course[] = [];
   fileName: string = ''
   requiredFileType = "text/csv";
   isLoading: boolean = true;
+  user: User | null = <User | null>{};
 
   ngOnInit(): void {
     this.apiService
       .getCourses()
-      .subscribe(courses => {this.courses = courses; this.isLoading = false})
+      .subscribe(courses => { this.courses = courses; this.isLoading = false })
   }
 
   onCreateCourse() {
@@ -28,10 +37,10 @@ export class CourseListComponent implements OnInit {
   }
 
   onDeleteCourse(id: number) {
-    this.courses = this.courses.filter( course => course.id != id)
+    this.courses = this.courses.filter(course => course.id != id)
     this.apiService
-    .deleteCourse(id)
-    .subscribe()
+      .deleteCourse(id)
+      .subscribe()
   }
 
   onFileSelected(event: Event) {
@@ -44,9 +53,13 @@ export class CourseListComponent implements OnInit {
       formData.append('file', file, file.name);
       console.log(formData.get('file'))
       this.apiService
-      .uploadCourseFile(formData)
-      .subscribe(msg => alert("Archivo subido correctamente"))
+        .uploadCourseFile(formData)
+        .subscribe(msg => alert("Archivo subido correctamente"))
     }
+  }
+
+  get isAdmin() {
+    return this.user && this.user.role === 'admin';
   }
 
 

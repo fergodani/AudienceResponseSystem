@@ -11,6 +11,7 @@ import { ApiAuthService } from 'src/app/core/services/auth/api.auth.service';
 export class HeaderComponent {
 
   user: User | null = <User | null>{};
+  isMenuCollapsed = true;
 
   constructor(private authService: ApiAuthService) {
     this.authService.user.subscribe(user => this.user = user)
@@ -30,6 +31,7 @@ export class HeaderComponent {
 
   logout() {
     this.authService.logout();
+    this.isMenuCollapsed = true;
   }
 
 }
