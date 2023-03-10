@@ -19,7 +19,6 @@ enum Answers {
 export class AnswersComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes)
     if (this.typeString == 'Verdadero o falso') {
       this.type = Type.true_false;
     } else if (this.typeString == 'Multiopción') {
