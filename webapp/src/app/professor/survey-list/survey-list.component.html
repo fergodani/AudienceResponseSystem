@@ -1,0 +1,13 @@
+<div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+    <span class="visually-hidden">Loading...</span>
+</div>
+<div class="d-flex gap-5 justify-content-between align-items-center" *ngFor="let survey of surveys">
+    <div class="border m-3 d-flex flex-row gap-3 bg-light w-100">
+        <div class="imageContainer">
+            <img [src]="survey.resource != '' ? survey.resource : '../../../assets/default-placeholder.png'"
+                alt="Question image source" />
+        </div>
+        <h2><strong>{{ survey.title }}</strong></h2>
+    </div>
+</div>
+<button class="m-2" mat-raised-button (click)="createNewSurvey()">Crear nuevo cuestionario</button>

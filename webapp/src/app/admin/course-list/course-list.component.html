@@ -1,5 +1,5 @@
 <div class="d-flex flex-column gap-5 p-4">
-    <h1 class="fs-1">Lista de cursos</h1>
+    <h1 class="fs-1" *ngIf="isAdmin">Lista de cursos</h1>
     <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
         <span class="visually-hidden">Loading...</span>
     </div>
@@ -9,17 +9,6 @@
             <small class="fs-6">{{ course.description }}</small>
         </div>
         <button type="button" class="btn btn-danger" (click)="onDeleteCourse(course.id)" *ngIf="isAdmin">Eliminar</button>
-    </div>
-    <div class="m-3 d-flex justify-content-center">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link text-dark" href="#">Previous</a></li>
-                <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
-                <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
-                <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
-                <li class="page-item"><a class="page-link text-dark" href="#">Next</a></li>
-            </ul>
-        </nav>
     </div>
     <div class="d-flex flex-row gap-3 mb-5" *ngIf="isAdmin">
         <button type="button" class="btn btn-dark w-25" (click)="onCreateCourse()">Nuevo curso</button>

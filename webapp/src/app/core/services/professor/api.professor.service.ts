@@ -55,4 +55,11 @@ export class ApiProfessorService {
       catchError(this.handleError)
     )
   }
+
+  getSurveysByUser(id: number): Observable<Survey[]> {
+    return this.http.get<Survey[]>(`${this.apiUrl}/survey/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
 }

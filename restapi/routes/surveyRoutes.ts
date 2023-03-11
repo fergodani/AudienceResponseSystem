@@ -3,10 +3,13 @@ const api: Router = express.Router()
 
 const {
     getSurveys,
-    createSurvey
+    createSurvey,
+    getSurveysByUser
 } = require('../controllers/surveyController')
 
 api.get("/", getSurveys)
+
+api.get("/:id", getSurveysByUser)
 
 api.post("/", createSurvey);
 

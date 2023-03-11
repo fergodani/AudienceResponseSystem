@@ -12,8 +12,10 @@ import { Role } from './core/models/user.model';
 import { LoginFormComponent } from './login/login-form/login-form.component';
 import { CreateQuestionComponent } from './professor/create-question/create-question.component';
 import { CreateSurveyComponent } from './professor/create-survey/create-survey.component';
+import { LibraryComponent } from './professor/library/library.component';
 import { ProfessorHomeComponent } from './professor/professor-home/professor-home.component';
 import { QuestionListComponent } from './professor/question-list/question-list.component';
+import { SurveyListComponent } from './professor/survey-list/survey-list.component';
 import { StudentHomeComponent } from './student/student-home/student-home.component';
 
 const routes: Routes = [
@@ -66,6 +68,18 @@ const routes: Routes = [
   {
     path: 'survey/create', 
     component: CreateSurveyComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Professor]}
+  },
+  {
+    path: 'survey/list', 
+    component: SurveyListComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Professor]}
+  },
+  {
+    path: 'library', 
+    component: LibraryComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Professor]}
   },

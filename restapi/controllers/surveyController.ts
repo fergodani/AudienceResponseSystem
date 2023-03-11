@@ -21,6 +21,31 @@ const getSurveys = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+const getSurveysByUser = async (req: Request, res: Response): Promise<Response> => {
+    try{
+        let user = await prisma.user.findUnique({
+            where: {
+                id: Number(req.params.id)
+            }
+        })
+        let result = await prisma.survey.findMany({
+            where: {
+                user
+            },
+            include: {
+                questions: {
+                    include: {
+                        answers: true
+                    }
+                }
+            }
+        });
+        return res.status(200).json(result)
+    } catch (error) {
+        return res.status(500).send(error)
+    }
+}
+
 const createSurvey = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { title, user_creator_id, questions, resource } = req.body;
@@ -54,5 +79,6 @@ const createSurvey = async (req: Request, res: Response): Promise<Response> => {
 
 module.exports = {
     getSurveys,
+    getSurveysByUser,
     createSurvey
 }

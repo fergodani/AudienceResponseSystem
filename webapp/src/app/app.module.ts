@@ -31,6 +31,8 @@ import { StudentHomeComponent } from './student/student-home/student-home.compon
 import { JwtInterceptor } from './core/helpers/jwt.interceptor';
 import { ErrorInterceptor } from './core/helpers/error.interceptor';
 import { CreateSurveyComponent } from './professor/create-survey/create-survey.component';
+import { SurveyListComponent } from './professor/survey-list/survey-list.component';
+import { LibraryComponent } from './professor/library/library.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { CreateSurveyComponent } from './professor/create-survey/create-survey.c
     ProfessorHomeComponent,
     StudentHomeComponent,
     CreateSurveyComponent,
+    SurveyListComponent,
+    LibraryComponent,
   ],
   imports: [
     BrowserModule,

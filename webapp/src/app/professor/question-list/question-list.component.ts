@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { Question } from 'src/app/core/models/question.model';
 import { ApiProfessorService } from 'src/app/core/services/professor/api.professor.service';
@@ -12,7 +13,8 @@ export class QuestionListComponent implements OnInit {
 
   constructor(
     private apiProfessorService: ApiProfessorService,
-    private authService: ApiAuthService
+    private authService: ApiAuthService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -28,6 +30,10 @@ export class QuestionListComponent implements OnInit {
 
   addQuestionToSurvey(question: Question) {
     this.questionToAdd.emit(question);
+  }
+
+  createNewQuestion() {
+    this.router.navigate(['/questions/create'])
   }
 
 }

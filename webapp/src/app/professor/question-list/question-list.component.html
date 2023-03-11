@@ -1,8 +1,8 @@
 <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
     <span class="visually-hidden">Loading...</span>
 </div>
-<div *ngIf="!isCreatingSurvey">
-    <mat-expansion-panel *ngFor="let question of questions">
+<div class="pt-3" *ngIf="!isCreatingSurvey">
+    <mat-expansion-panel class="m-1" *ngFor="let question of questions">
         <mat-expansion-panel-header>
             <mat-panel-title>
                 <h2>{{ question.description }}</h2>
@@ -17,9 +17,10 @@
 
         </div>
     </mat-expansion-panel>
+    <button class="m-2" mat-raised-button (click)="createNewQuestion()">Crear nueva pregunta</button>
 </div>
 <div *ngIf="isCreatingSurvey">
-    <div class="d-flexgap-5 justify-content-between align-items-center" *ngFor="let question of questions">
+    <div class="d-flex gap-5 justify-content-between align-items-center" *ngFor="let question of questions">
         <div class="border m-2 d-flex flex-row">
             <div class="d-flex flex-column ps-2">
                 <h1>{{ question.description }}</h1>
