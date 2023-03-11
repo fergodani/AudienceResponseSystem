@@ -62,15 +62,6 @@ model courseSurvey {
   @@id([survey_id, course_id])
 }
 
-model questionSurvey {
-  question_id Int
-  survey_id   Int
-  question    question @relation(fields: [question_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  survey      survey   @relation(fields: [survey_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([question_id, survey_id])
-}
-
 model game {
   id                   Int       @id @default(autoincrement())
   host_id              Int?
@@ -93,9 +84,9 @@ model question {
   resource       String?
   user_creator_id Int?
   created_at     DateTime?        @default(now()) @db.Timestamp(6)
-  answer         answer[]
+  answers         answer[]
   courseQuestion courseQuestion[]
-  questionSurvey questionSurvey[]
+  survey survey[]
   user            user?             @relation(fields: [user_creator_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
@@ -103,14 +94,13 @@ model survey {
   id              Int               @id @default(autoincrement())
   title           String            @db.VarChar
   created_at      DateTime          @default(now()) @db.Timestamp(6)
-  end_date        DateTime          @db.Timestamp(6)
   user_creator_id Int?
-  state           state?
+  resource       String?
   asociatedSurvey asociatedSurvey[]
   courseSurvey    courseSurvey[]
   game            game[]
   user            user?             @relation(fields: [user_creator_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  questionSurvey  questionSurvey[]
+  questions  question[]
 }
 
 model user {

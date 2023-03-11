@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Question } from '../../models/question.model';
+import { Survey } from '@app/core/models/survey.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,20 @@ export class ApiProfessorService {
 
   getQuestions(): Observable<Question[]> {
     return this.http.get<Question[]>(`${this.apiUrl}/question`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  getQuestionsByUser(id: number): Observable<Question[]> {
+    return this.http.get<Question[]>(`${this.apiUrl}/question/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  createSurvey(survey: Survey): Observable<Survey> {
+    return this.http.post<Survey>(`${this.apiUrl}/survey`, survey)
     .pipe(
       catchError(this.handleError)
     )

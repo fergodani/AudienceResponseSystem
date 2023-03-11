@@ -6,8 +6,7 @@
   "scripts": {
     "start": "npx ts-node ./server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "migrateDb": "npx prisma migrate dev --name init",
-    "pushDb": "npx prisma db push"
+    "migrateDb": "npx prisma migrate dev --name init"
   },
   "keywords": [],
   "author": "",

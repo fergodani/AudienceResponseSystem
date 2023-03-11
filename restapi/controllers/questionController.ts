@@ -6,12 +6,33 @@ const getQuestions = async (req: Request, res: Response): Promise<Response> => {
     try{
         let result = await prisma.question.findMany({
             include: {
-                answer: true,
+                answers: true,
             }
         });
         return res.status(200).json(result)
     } catch (error) {
         return res.status(500).send(error)
+    }
+}
+
+const getQuestionsByUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        let user = await prisma.user.findUnique({
+            where: {
+                id: Number(req.params.id),
+            }
+        })
+        let result = await prisma.question.findMany({
+            where: {
+                user
+            },
+            include: {
+                answers: true,
+            }
+        })
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).send(error);
     }
 }
 
@@ -38,7 +59,7 @@ const createQuestion = async (req: Request, res: Response): Promise<Response> =>
             user: {
                 connect: {id: user_creator_id}
             },
-            answer: {
+            answers: {
                 createMany: {
                     data: answers
                 }
@@ -55,5 +76,6 @@ const createQuestion = async (req: Request, res: Response): Promise<Response> =>
 
 module.exports = {
     getQuestions,
-    createQuestion
+    createQuestion,
+    getQuestionsByUser
 }

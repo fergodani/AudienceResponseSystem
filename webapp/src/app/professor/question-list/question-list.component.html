@@ -1,8 +1,33 @@
 <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
     <span class="visually-hidden">Loading...</span>
 </div>
-<div class="border d-flex flex-row gap-5 justify-content-between align-items-center" *ngFor="let question of questions">
-    <div class="d-flex flex-column ps-2">
-        <h1>{{ question.description }}</h1>
+<div *ngIf="!isCreatingSurvey">
+    <mat-expansion-panel *ngFor="let question of questions">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <h2>{{ question.description }}</h2>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div *ngFor="let answer of question.answers">
+            <div class="d-flex flex-rowalign-items-center">
+                <p class="align-self-center pe-5">{{ answer.description }}</p>
+                <mat-icon [ngStyle]="{'color':'green'}" *ngIf="answer.is_correct">check</mat-icon>
+                <mat-icon [ngStyle]="{'color':'red'}" *ngIf="!answer.is_correct">clear</mat-icon>
+            </div>
+
+        </div>
+    </mat-expansion-panel>
+</div>
+<div *ngIf="isCreatingSurvey">
+    <div class="d-flexgap-5 justify-content-between align-items-center" *ngFor="let question of questions">
+        <div class="border m-2 d-flex flex-row">
+            <div class="d-flex flex-column ps-2">
+                <h1>{{ question.description }}</h1>
+            </div>
+            <button mat-mini-fab color="primary" class="upload-btn flex-shrink-1 ms-3"
+                (click)="addQuestionToSurvey(question)" *ngIf="isCreatingSurvey">
+                <mat-icon>library_add</mat-icon>
+            </button>
+        </div>
     </div>
 </div>

@@ -3,10 +3,13 @@ const api: Router = express.Router()
 
 const {
     getQuestions,
-    createQuestion
+    createQuestion,
+    getQuestionsByUser
 } = require('../controllers/questionController')
 
 api.get("/", getQuestions)
+
+api.get('/:id', [], getQuestionsByUser);
 
 api.post("/", [
 
