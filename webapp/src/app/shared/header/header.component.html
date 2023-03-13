@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" *ngIf="user">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" *ngIf="user">
 	<div class="container-fluid">
 		<a class="navbar-brand ps-3" href="">
 			<img src="../../assets/uniovi.png" width="50" height="50" alt="">
@@ -24,11 +24,10 @@
 				<li class="nav-item">
 					<a class="nav-item nav-link fs-6" href="/login" (click)="isMenuCollapsed = true"
 						*ngIf="!user">Login</a>
-				</li>
-				<li class="nav-item">
+
 					<button class="nav-item nav-link fs-6" mat-raised-button (click)="logout()"
 						*ngIf="user">Logout</button>
-				</li>
+					</li>
 			</ul>
 		</div>
 	</div>

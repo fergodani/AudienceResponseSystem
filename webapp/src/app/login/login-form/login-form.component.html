@@ -1,16 +1,18 @@
-<form class="d-flex flex-column align-items-center justify-content-center" [formGroup]="loginFormGroup">
-    <h1>Iniciar sesión</h1>
-    <mat-form-field class="w-50">
-        <mat-label>Usuario</mat-label>
-        <input id="username" matInput formControlName="username">
-    </mat-form-field>
-    <mat-form-field class="w-50">
-        <mat-label>Contraseña</mat-label>
-        <input type="password" id="password" matInput formControlName="password">
-    </mat-form-field>
-    <button class="mb-5" mat-raised-button (click)="submitUser()">Aceptar</button>
-    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-    <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
-        <span class="visually-hidden">Loading...</span>
-    </div>
-</form>
+
+    <form class="d-flex flex-column align-items-center justify-content-center " [formGroup]="loginFormGroup">
+        <mat-icon>account_circle</mat-icon>
+        <h1>Iniciar sesión</h1>
+        <mat-form-field class="">
+            <mat-label>Usuario</mat-label>
+            <input id="username" matInput formControlName="username">
+        </mat-form-field>
+        <mat-form-field class="">
+            <mat-label>Contraseña</mat-label>
+            <input type="password" id="password" matInput formControlName="password">
+        </mat-form-field>
+        <button class="mb-5" mat-raised-button (click)="submitUser()">Aceptar</button>
+        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+        <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </form>
