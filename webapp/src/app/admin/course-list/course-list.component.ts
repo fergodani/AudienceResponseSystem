@@ -29,7 +29,7 @@ export class CourseListComponent implements OnInit {
   ngOnInit(): void {
     this.apiService
       .getCourses()
-      .subscribe(courses => { this.courses = courses; this.isLoading = false })
+      .subscribe(courses => { this.courses = courses; this.isLoading = false; console.log(courses) })
   }
 
   onCreateCourse() {
@@ -60,6 +60,10 @@ export class CourseListComponent implements OnInit {
 
   get isAdmin() {
     return this.user && this.user.role === 'admin';
+  }
+
+  get isProfessor() {
+    return this.user && this.user.role === 'professor';
   }
 
 

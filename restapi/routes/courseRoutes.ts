@@ -8,7 +8,10 @@ const {
     createCourse,
     updateCourse,
     deleteCourse,
-    uploadCourseFile
+    uploadCourseFile,
+    addUsers,
+    addSurveys,
+    getCoursesByUser
 } = require('../controllers/courseController')
 
 api.get("/", getCourses)
@@ -17,12 +20,18 @@ api.get("/:id", [
     check('id').isLength({ min: 1 }).trim().escape(),
 ], getCourse)
 
+api.get("/user/:id", getCoursesByUser)
+
 api.post("/", [
     check('name').isLength({ min: 1 }).trim().escape(),
     check('description').isLength({ min: 1 }).trim().escape(),
 ], createCourse)
 
 api.post("/file", uploadCourseFile)
+
+api.post("/addUser", addUsers)
+
+api.post("/addSurvey", addSurveys)
 
 api.put("/", [
     check('name').isLength({ min: 1 }).trim().escape(),

@@ -5,7 +5,8 @@
     </div>
     <div class="border d-flex flex-row gap-5 justify-content-between align-items-center" *ngFor="let course of courses">
         <div class="d-flex flex-column ps-2 bg-light w-100">
-            <h2><a [routerLink]="['/courses/update', course.id]">{{ course.name}}</a></h2>
+            <h2 *ngIf="isAdmin"><a [routerLink]="['/courses/update', course.id]">{{ course.name}}</a></h2>
+            <h2 *ngIf="isProfessor"><a [routerLink]="['/course/details', course.id]">{{ course.name}}</a></h2>
             <small class="fs-6">{{ course.description }}</small>
         </div>
         <button type="button" class="btn btn-danger" (click)="onDeleteCourse(course.id)" *ngIf="isAdmin">Eliminar</button>

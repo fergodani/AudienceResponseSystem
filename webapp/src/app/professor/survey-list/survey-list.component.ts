@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { Survey } from '@app/core/models/survey.model';
+import { equals, Survey } from '@app/core/models/survey.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 
@@ -28,8 +28,26 @@ export class SurveyListComponent implements OnInit{
   isLoading: boolean = false;
   surveys: Survey[] = [];
 
+  @Input() isSelecting: boolean = false;
+  @Output() surveyToAdd = new EventEmitter<Survey>
+  @Input() surveysAdded: Survey[] = [];
+
   createNewSurvey() {
     this.route.navigate(['survey/create'])
+  }
+
+  addSurveyToCourse(survey: Survey) {
+    this.surveyToAdd.emit(survey)
+    this.surveysAdded.push(survey);
+  }
+
+  isInclude(survey: Survey){
+    let value = false
+    this.surveysAdded.forEach( surveyToCompare => {
+      if(equals(survey, surveyToCompare))
+        value = true;
+    })
+    return value;
   }
 
 }

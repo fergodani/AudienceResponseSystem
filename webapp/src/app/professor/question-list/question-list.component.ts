@@ -25,6 +25,7 @@ export class QuestionListComponent implements OnInit {
 
   isLoading: boolean = true;
   @Input() isCreatingSurvey: boolean = false;
+  @Input() isSelecting: boolean = false;
   questions: Question[] = [];
   @Output() questionToAdd = new EventEmitter<Question>;
 

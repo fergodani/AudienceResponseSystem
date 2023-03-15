@@ -1,0 +1,41 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, map, retry } from 'rxjs/operators';
+import { Token, User } from '../../models/user.model';
+import { Router } from '@angular/router';
+import { Course } from '@app/core/models/course.model';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiStudentService {
+
+  constructor(
+    private http: HttpClient
+  ) {
+  }
+
+  apiUrl = "http://localhost:5000/api"
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(
+        `Backend returned code ${error.status}, body was: `, error.error);
+    }
+    // Return an observable with a user-facing error message.
+    return throwError(() => new Error('Something bad happened; please try again later.'));
+  }
+
+  getCoursesByUser(id: number): Observable<Course[]>{
+    return this.http.get<Course[]>(`${this.apiUrl}/course/user/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+}

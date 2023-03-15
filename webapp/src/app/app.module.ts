@@ -33,6 +33,12 @@ import { ErrorInterceptor } from './core/helpers/error.interceptor';
 import { CreateSurveyComponent } from './professor/create-survey/create-survey.component';
 import { SurveyListComponent } from './professor/survey-list/survey-list.component';
 import { LibraryComponent } from './professor/library/library.component';
+import { CourseDetailsComponent } from './professor/course-details/course-details.component';
+import { LinkUserCourseComponent } from './professor/dialogs/link-user-course/link-user-course.component';
+import { LinkSurveyCourseComponent } from './professor/dialogs/link-survey-course/link-survey-course.component';
+import { LinkQuestionCourseComponent } from './professor/dialogs/link-question-course/link-question-course.component';
+import { HostGameComponent } from './game/host-game/host-game.component';
+import { StudentGameComponent } from './game/student-game/student-game.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +61,12 @@ import { LibraryComponent } from './professor/library/library.component';
     CreateSurveyComponent,
     SurveyListComponent,
     LibraryComponent,
+    CourseDetailsComponent,
+    LinkUserCourseComponent,
+    LinkSurveyCourseComponent,
+    LinkQuestionCourseComponent,
+    HostGameComponent,
+    StudentGameComponent
   ],
   imports: [
     BrowserModule,

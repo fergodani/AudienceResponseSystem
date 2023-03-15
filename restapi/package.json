@@ -21,7 +21,9 @@
     "fast-csv": "^4.3.6",
     "jsonwebtoken": "^9.0.0",
     "multiparty": "^4.2.3",
-    "pg": "^8.9.0"
+    "pg": "^8.9.0",
+    "socker.io": "^0.0.0-alpha-beta",
+    "socket.io": "^4.6.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",

@@ -220,6 +220,23 @@ async function addUser(user: User) {
     }
 }
 
+const getUsersByCourse = async (req: Request, res: Response): Promise<Response> => {
+    try{
+       const userCourses = await prisma.userCourse.findMany({
+            where: {
+                course_id: Number(req.params.id)
+            },
+            select: {
+                user: true
+            }
+        })
+        const users = userCourses.map((user: any) => user.user)
+        return res.status(200).json(users)
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+}
+
 
 module.exports = {
     getUsers,
@@ -228,5 +245,6 @@ module.exports = {
     updateUser,
     deleteUser,
     getUser,
-    uploadUserFile
+    uploadUserFile,
+    getUsersByCourse
 }

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from 'src/app/core/models/user.model';
+import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
+import { equals, User } from 'src/app/core/models/user.model';
 import { ApiService } from 'src/app/core/services/admin/api.admin.service';
 
 @Component({
@@ -10,18 +11,31 @@ import { ApiService } from 'src/app/core/services/admin/api.admin.service';
 })
 export class UserListComponent implements OnInit {
 
-  constructor(private apiService: ApiService, private router: Router) { }
+  constructor(
+    private apiService: ApiService, 
+    private router: Router,
+    private authService: ApiAuthService) {
+      this.authService.user.subscribe(user => this.user = user)
+     }
 
   users: User[] = []
   fileName: string = ''
   requiredFileType = "text/csv";
   isLoading: boolean = true;
+  user: User | null = <User | null>{};
+
+  @Input() isSelecting: boolean = false;
+  @Input() usersAdded: User[] = [];
+  @Output() userToAdd = new EventEmitter<User>;
+  
 
   ngOnInit(): void {
 
     this.apiService
       .getUsers()
       .subscribe(users => {this.apiService.users = this.users = users; this.isLoading = false})
+
+      console.log(this.usersAdded)
   }
 
   onCreateUser() {
@@ -49,5 +63,28 @@ export class UserListComponent implements OnInit {
       .subscribe(msg => alert("Archivo subido correctamente"))
     }
   }
+
+  get isAdmin() {
+    return this.user && this.user.role === 'admin';
+  }
+
+  get isProfessor() {
+    return this.user && this.user.role === 'professor';
+  }
+
+  addUserToCourse(user: User) {
+    this.userToAdd.emit(user);
+    this.usersAdded.push(user);
+  }
+
+  isInclude(user: User){
+    let value = false
+    this.usersAdded.forEach( userToCompare => {
+      if(equals(user, userToCompare))
+        value = true;
+    })
+    return value;
+  }
+
 
 }

@@ -1,8 +1,11 @@
 import express from "express"
 import cors from 'cors';
+import { PrismaClient } from '@prisma/client'
+import { Server } from "socket.io";
+import { ClientToServerEvents, ServerToClientEvents } from "./models/socket.type";
 const bodyParser = require('body-parser')
 const app = express()
-const port = 3000
+const port = 5000
 
 const courseRoutes = require('./routes/courseRoutes')
 const questionRoutes = require('./routes/questionRoutes')
@@ -10,7 +13,7 @@ const surveyRoutes = require('./routes/surveyRoutes')
 const userRoutes = require('./routes/userRoutes')
 const answerRoutes = require('./routes/answerRoutes')
 
-import { PrismaClient } from '@prisma/client'
+
 const prisma = new PrismaClient()
 
 app.use(cors())
@@ -28,6 +31,23 @@ app.use('/api/user', userRoutes)
 app.use('/api/answer', answerRoutes)
 
 app.use(express.json({limit: '5mb'}))
+
+const io = new Server({
+    cors: {
+        origin: "*"
+    }
+});
+  io.on('connection', (socket) => {
+    socket.on('my message', (msg) => {
+      console.log(msg)
+      io.emit('connectUser', msg)
+    });
+    socket.on('disconnect', () => {
+      console.log('user disconnected');
+    });
+  });
+  io.listen(3333)
+
 
 
 app.listen(port, () => {

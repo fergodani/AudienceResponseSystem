@@ -8,11 +8,21 @@ export class User {
     }
 
     id: number = 0;
-    username: string='';
-    password: string='';
-    role: string='';
-    roleType: Role=Role.Student;
-    token?:string;
+    username: string = '';
+    password: string = '';
+    role: string = '';
+    roleType: Role = Role.Student;
+    token?: string;
+}
+
+export function equals(user1: User, user2: User): boolean {
+    if (user1.id != user2.id)
+        return false
+    if (user1.username != user2.username)
+        return false
+    if (user1.role != user2.role)
+        return false
+    return true;
 }
 
 export interface Token {
