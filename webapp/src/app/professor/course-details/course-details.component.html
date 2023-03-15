@@ -12,14 +12,16 @@
                     <img [src]="survey.resource != '' ? survey.resource : '../../../assets/default-placeholder.png'"
                         alt="Question image source" />
                 </div>
-                <h2><strong><a href="/professor/game/host">{{ survey.title }}</a></strong></h2>
+                <h2><strong>{{ survey.title }}</strong></h2>
+                <button mat-button >Offline</button>
+                <button (click)="openCreateOnlineGameDialog()" mat-button color="primary">Jugar</button>
             </div>
         </div>
         <button mat-raised-button (click)="openSurveyDialog()">Añadir cuestionarios</button>
         <h2>Preguntas</h2>
         <button mat-raised-button (click)="openQuestionDialog()">Añadir preguntas</button>
     </div>
-    <div class="content border">
+    <div class="content border mb-5">
         <h1>Alumnos del curso</h1>
         <button mat-raised-button (click)="openUserDialog()">Añadir alumnos</button>
         <div class="d-flex flex-column" *ngFor="let user of users">

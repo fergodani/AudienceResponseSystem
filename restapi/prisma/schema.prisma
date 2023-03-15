@@ -52,56 +52,68 @@ model courseSurvey {
   @@id([survey_id, course_id])
 }
 
+model gameResult {
+  game_id Int
+  user_id Int
+  score   Int
+  user    user  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  game    game  @relation(fields: [game_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([game_id, user_id])
+}
+
 model game {
-  id                   Int       @id @default(autoincrement())
-  host_id              Int?
-  survey_id            Int?
-  is_live              Boolean?
-  is_offline           Boolean?
-  is_questions_visible Boolean?
-  created_at           DateTime? @default(now()) @db.Timestamp(6)
-  date                 DateTime? @db.Timestamp(6)
-  user                 user?     @relation(fields: [host_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  survey               survey?   @relation(fields: [survey_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                    Int          @id @default(autoincrement())
+  host_id               Int?
+  survey_id             Int?
+  type                  game_type
+  state                 state
+  are_questions_visible Boolean?
+  game_result           gameResult[]
+  created_at            DateTime?    @default(now()) @db.Timestamp(6)
+  date                  DateTime?    @db.Timestamp(6)
+  user                  user?        @relation(fields: [host_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  survey                survey?      @relation(fields: [survey_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model question {
-  id             Int              @id @default(autoincrement())
-  description    String           @db.VarChar
-  subject        String           @db.VarChar
-  type           type
-  answer_time    Int
-  resource       String?
+  id              Int              @id @default(autoincrement())
+  description     String           @db.VarChar
+  subject         String           @db.VarChar
+  type            type
+  answer_time     Int
+  resource        String?
   user_creator_id Int?
-  created_at     DateTime?        @default(now()) @db.Timestamp(6)
+  created_at      DateTime?        @default(now()) @db.Timestamp(6)
   answers         answer[]
-  courseQuestion courseQuestion[]
-  survey survey[]
-  user            user?             @relation(fields: [user_creator_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  courseQuestion  courseQuestion[]
+  survey          survey[]
+  user            user?            @relation(fields: [user_creator_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model survey {
-  id              Int               @id @default(autoincrement())
-  title           String            @db.VarChar
-  created_at      DateTime          @default(now()) @db.Timestamp(6)
+  id              Int            @id @default(autoincrement())
+  title           String         @db.VarChar
+  created_at      DateTime       @default(now()) @db.Timestamp(6)
   user_creator_id Int?
-  resource       String?
+  resource        String?
   courseSurvey    courseSurvey[]
   game            game[]
-  user            user?             @relation(fields: [user_creator_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  questions  question[]
+  user            user?          @relation(fields: [user_creator_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  questions       question[]
 }
 
 model user {
-  id              Int               @id @default(autoincrement())
-  username        String            @unique @db.VarChar
-  password        String            @db.VarChar
-  created_at      DateTime?         @default(now()) @db.Timestamp(6)
-  role            role
-  UserCourse      UserCourse[]
-  game            game[]
-  survey          survey[]
-  question        question[]
+  id          Int          @id @default(autoincrement())
+  username    String       @unique @db.VarChar
+  password    String       @db.VarChar
+  created_at  DateTime?    @default(now()) @db.Timestamp(6)
+  role        role
+  UserCourse  UserCourse[]
+  game        game[]
+  survey      survey[]
+  question    question[]
+  game_result gameResult[]
 }
 
 enum role {
@@ -120,4 +132,9 @@ enum type {
   multioption
   true_false
   short
+}
+
+enum game_type {
+  offline
+  online
 }

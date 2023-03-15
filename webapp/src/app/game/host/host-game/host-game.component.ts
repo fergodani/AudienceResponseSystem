@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { User } from '@app/core/models/user.model';
 import { SocketioService } from '@app/core/socket/socketio.service';
 
@@ -10,7 +11,8 @@ import { SocketioService } from '@app/core/socket/socketio.service';
 export class HostGameComponent implements OnInit {
 
   constructor(
-    private socketService: SocketioService
+    private socketService: SocketioService,
+    private route: ActivatedRoute
     ) {
       this.socketService.users.subscribe( (users: User[]) => {this.users = users;})
     }
@@ -18,6 +20,12 @@ export class HostGameComponent implements OnInit {
   
   ngOnInit() {
     this.socketService.setupHostSocketConnection();
+    this.route.queryParams
+    .subscribe(params => {
+      console.log(params);
+    })
+
+    // Con esto crear el juego y subirlo al servidor
   }
 
 }

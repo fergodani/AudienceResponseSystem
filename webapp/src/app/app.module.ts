@@ -37,8 +37,11 @@ import { CourseDetailsComponent } from './professor/course-details/course-detail
 import { LinkUserCourseComponent } from './professor/dialogs/link-user-course/link-user-course.component';
 import { LinkSurveyCourseComponent } from './professor/dialogs/link-survey-course/link-survey-course.component';
 import { LinkQuestionCourseComponent } from './professor/dialogs/link-question-course/link-question-course.component';
-import { HostGameComponent } from './game/host-game/host-game.component';
-import { StudentGameComponent } from './game/student-game/student-game.component';
+import { HostGameComponent } from './game/host/host-game/host-game.component';
+import { StudentGameComponent } from './game/student/student-game/student-game.component';
+import { HostWaitRoomComponent } from './game/host/host-wait-room/host-wait-room.component';
+import { StudentWaitRoomComponent } from './game/student/student-wait-room/student-wait-room.component';
+import { CreateGameDialogComponent } from './professor/dialogs/create-game-dialog/create-game-dialog.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +69,10 @@ import { StudentGameComponent } from './game/student-game/student-game.component
     LinkSurveyCourseComponent,
     LinkQuestionCourseComponent,
     HostGameComponent,
-    StudentGameComponent
+    StudentGameComponent,
+    HostWaitRoomComponent,
+    StudentWaitRoomComponent,
+    CreateGameDialogComponent
   ],
   imports: [
     BrowserModule,

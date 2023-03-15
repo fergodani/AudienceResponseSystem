@@ -2,7 +2,8 @@ import express from "express"
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client'
 import { Server } from "socket.io";
-import { ClientToServerEvents, ServerToClientEvents } from "./models/socket.type";
+import { Constants } from './socket/constants'
+import { CANCELLED } from "dns";
 const bodyParser = require('body-parser')
 const app = express()
 const port = 5000
@@ -13,6 +14,10 @@ const surveyRoutes = require('./routes/surveyRoutes')
 const userRoutes = require('./routes/userRoutes')
 const answerRoutes = require('./routes/answerRoutes')
 
+const {
+  joinGame,
+  createGame
+} = require('./socket/game.socket')
 
 const prisma = new PrismaClient()
 
@@ -37,11 +42,13 @@ const io = new Server({
         origin: "*"
     }
 });
-  io.on('connection', (socket) => {
+  io.on(Constants.CONNECT, (socket) => {
     socket.on('my message', (msg) => {
       console.log(msg)
       io.emit('connectUser', msg)
     });
+    socket.on(Constants.CREATE_GAME, createGame)
+    socket.on(Constants.JOIN_GAME, joinGame)
     socket.on('disconnect', () => {
       console.log('user disconnected');
     });

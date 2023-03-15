@@ -9,8 +9,8 @@ import { UpdateUserFormComponent } from './admin/update-user-form/update-user-fo
 import { UserListComponent } from './admin/user-list/user-list.component';
 import { AuthGuard } from './core/helpers/auth.guard';
 import { Role } from './core/models/user.model';
-import { HostGameComponent } from './game/host-game/host-game.component';
-import { StudentGameComponent } from './game/student-game/student-game.component';
+import { HostGameComponent } from './game/host/host-game/host-game.component';
+import { StudentGameComponent } from './game/student/student-game/student-game.component';
 import { LoginFormComponent } from './login/login-form/login-form.component';
 import { CourseDetailsComponent } from './professor/course-details/course-details.component';
 import { CreateQuestionComponent } from './professor/create-question/create-question.component';
@@ -109,13 +109,13 @@ const routes: Routes = [
     data: { roles: [Role.Student]}
   },
   {
-    path: 'student/game/join', 
+    path: 'game/join', 
     component: StudentGameComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Student]}
   },
   {
-    path: 'professor/game/host', 
+    path: 'game/host/:id', 
     component: HostGameComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Professor]}

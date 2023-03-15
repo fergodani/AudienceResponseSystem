@@ -7,6 +7,7 @@ import { User } from '@app/core/models/user.model';
 import { ApiService } from '@app/core/services/admin/api.admin.service';
 import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 import { isEmpty } from 'rxjs';
+import { CreateGameDialogComponent } from '../dialogs/create-game-dialog/create-game-dialog.component';
 import { LinkQuestionCourseComponent } from '../dialogs/link-question-course/link-question-course.component';
 import { LinkSurveyCourseComponent } from '../dialogs/link-survey-course/link-survey-course.component';
 import { LinkUserCourseComponent } from '../dialogs/link-user-course/link-user-course.component';
@@ -22,7 +23,7 @@ export class CourseDetailsComponent {
     private apiService: ApiService,
     private apiProfessorService: ApiProfessorService,
     private actRoute: ActivatedRoute,
-    public userLinkCourseDialog: MatDialog) {
+    public dialog: MatDialog) {
     const id = this.actRoute.snapshot.paramMap.get('id');
     this.apiService
       .getCourse(Number(id))
@@ -42,7 +43,7 @@ export class CourseDetailsComponent {
   surveys: Survey[] = [];
 
   openUserDialog(): void {
-    const dialogRef = this.userLinkCourseDialog.open(LinkUserCourseComponent, {
+    const dialogRef = this.dialog.open(LinkUserCourseComponent, {
       data: this.users,
     });
 
@@ -67,7 +68,7 @@ export class CourseDetailsComponent {
   }
 
   openSurveyDialog(): void {
-    const dialogRef = this.userLinkCourseDialog.open(LinkSurveyCourseComponent, {
+    const dialogRef = this.dialog.open(LinkSurveyCourseComponent, {
       data: this.surveys,
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -93,6 +94,10 @@ export class CourseDetailsComponent {
   }
 
   openQuestionDialog(): void {
-    this.userLinkCourseDialog.open(LinkQuestionCourseComponent);
+    this.dialog.open(LinkQuestionCourseComponent);
+  }
+
+  openCreateOnlineGameDialog(): void {
+    this.dialog.open(CreateGameDialogComponent);
   }
 }

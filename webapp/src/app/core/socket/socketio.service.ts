@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { io } from 'socket.io-client';
-import { User } from '../models/user.model';
+import { equals, User } from '../models/user.model';
 import { ApiAuthService } from '../services/auth/api.auth.service';
 
 @Injectable({
@@ -36,10 +36,18 @@ export class SocketioService {
   setupHostSocketConnection() {
     this.socket = io('http://localhost:3333');
 
-    this.socket.on('connectUser', (data: any) => {
-      this.userList.push(data)
-      console.log(this.userList);
-      this.usersConnectedSubject.next(this.userList)
+    this.socket.on('connectUser', (data: User) => {
+      let alreadyConnected = false;
+      this.userList.forEach(u => {
+        if(equals(u, data)){
+          alreadyConnected = true;
+        }
+      })
+      if(!alreadyConnected){
+        this.userList.push(data)
+        this.usersConnectedSubject.next(this.userList)
+      }
+      
     });
   }
 

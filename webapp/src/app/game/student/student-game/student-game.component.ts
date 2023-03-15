@@ -10,8 +10,6 @@ export class StudentGameComponent implements OnInit{
 
 
   constructor(private socketService: SocketioService) {}
-
-  CHAT_ROOM = "myRandomChatRoomId";
   
   ngOnInit() {
     this.socketService.setupSocketConnection();
