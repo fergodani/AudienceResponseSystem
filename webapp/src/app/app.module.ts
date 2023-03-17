@@ -42,6 +42,7 @@ import { StudentGameComponent } from './game/student/student-game/student-game.c
 import { HostWaitRoomComponent } from './game/host/host-wait-room/host-wait-room.component';
 import { StudentWaitRoomComponent } from './game/student/student-wait-room/student-wait-room.component';
 import { CreateGameDialogComponent } from './professor/dialogs/create-game-dialog/create-game-dialog.component';
+import { HostSurveyRoomComponent } from './game/host/host-survey-room/host-survey-room.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { CreateGameDialogComponent } from './professor/dialogs/create-game-dialo
     StudentGameComponent,
     HostWaitRoomComponent,
     StudentWaitRoomComponent,
-    CreateGameDialogComponent
+    CreateGameDialogComponent,
+    HostSurveyRoomComponent
   ],
   imports: [
     BrowserModule,

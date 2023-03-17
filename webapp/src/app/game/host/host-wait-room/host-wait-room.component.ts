@@ -16,4 +16,8 @@ export class HostWaitRoomComponent {
     }
   users: User[] = [];
 
+  startGame() {
+    this.socketService.startGame()
+  }
+
 }

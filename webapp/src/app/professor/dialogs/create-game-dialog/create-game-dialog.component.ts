@@ -20,8 +20,7 @@ export class CreateGameDialogComponent {
     private apiProfessorService: ApiProfessorService,
     private socketService: SocketioService,
     private authService: ApiAuthService,
-    @Inject(MAT_DIALOG_DATA) public survey_id: number,
-    @Inject(MAT_DIALOG_DATA) public course_id: number,
+    @Inject(MAT_DIALOG_DATA) public data: Data,
   ) {
   }
 
@@ -51,7 +50,7 @@ export class CreateGameDialogComponent {
     const pointTypeString = this.createGameForm.value.pointType! as keyof typeof PointsType;
     const game = new Game(
       this.authService.userValue!.id,
-      this.survey_id,
+      this.data.survey_id,
       GameType.online,
       GameState.created,
       PointsType[pointTypeString] ,
@@ -60,11 +59,16 @@ export class CreateGameDialogComponent {
     this.apiProfessorService
       .createGame(game)
       .subscribe( game => {
-        this.socketService.createGame(game, this.course_id);
+        this.socketService.createGame(game, this.data.course_id);
       })
     this.dialogRef.close();
-    this.router.navigate(["/game/host", this.course_id])
+    this.router.navigate(["/game/host", this.data.course_id])
   }
 
 
+}
+
+interface Data {
+  course_id: number;
+  survey_id: number;
 }

@@ -31,8 +31,16 @@ export class SocketioService {
   private gameSubject: BehaviorSubject<Game> = new BehaviorSubject<Game>(<Game>{});
   public game: Observable<Game> = this.gameSubject.asObservable();
 
+  private course_id: number = 0;
+
+
+
   public get userValue(): User[]{
     return this.usersConnectedSubject.value;
+  }
+
+  public get gameValue(): Game {
+    return this.gameSubject.value;
   }
 
   setupSocketConnection() {
@@ -58,9 +66,17 @@ export class SocketioService {
   }
 
   createGame(game: Game, courseId: number) {
+    this.course_id = courseId;
     this.gameSubject.next(game);
     this.socket.emit('create_game', game, courseId + '');
+  }
 
+  startGame() {
+    this.socket.emit('start_game', this.gameValue);
+    this.socket.on('move_to_survey', (game: Game) => {
+      console.log(game)
+      this.gameSubject.next(game);
+    })
   }
 
   sendUser(id: string){
@@ -78,5 +94,9 @@ export class SocketioService {
   joinSocketCourses(courses: Course[]) {
     let coursesIds = courses.map(course => course.id + '')
     this.socket.emit('join_socket_course', coursesIds)
+    this.socket.on('move_to_survey', (game: Game) => {
+      console.log("moving to survey")
+      this.gameSubject.next(game);
+    })
   }
 }

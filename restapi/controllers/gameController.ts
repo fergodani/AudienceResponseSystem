@@ -42,7 +42,15 @@ const getOpenGamesByCourses = async (req: Request<{}, {}, {}, CoursesIds>, res: 
                 },
             },
             include: {
-                survey: true
+                survey: {
+                    include: {
+                        questions: {
+                            include: {
+                                answers: true
+                            }
+                        }
+                    }
+                }
             }
         })
         return res.status(200).json(result)
@@ -71,7 +79,15 @@ const createGame = async (req: Request, res: Response): Promise<Response> => {
         const gameSaved = await prisma.game.create({
             data: game,
             include: {
-                survey: true
+                survey: {
+                    include: {
+                        questions: {
+                            include: {
+                                answers: true
+                            }
+                        }
+                    }
+                }
             }
         })
         return res.status(200).json(gameSaved)

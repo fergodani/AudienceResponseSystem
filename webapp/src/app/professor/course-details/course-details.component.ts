@@ -97,9 +97,9 @@ export class CourseDetailsComponent {
     this.dialog.open(LinkQuestionCourseComponent);
   }
 
-  openCreateOnlineGameDialog(): void {
+  openCreateOnlineGameDialog(survey_id: number): void {
     this.dialog.open(CreateGameDialogComponent, {
-      data: this.course.id,
+      data: { course_id: this.course.id, survey_id}
     });
   }
 }

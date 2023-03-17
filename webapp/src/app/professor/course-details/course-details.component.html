@@ -14,7 +14,7 @@
                 </div>
                 <h2><strong>{{ survey.title }}</strong></h2>
                 <button mat-button >Offline</button>
-                <button (click)="openCreateOnlineGameDialog()" mat-button color="primary">Jugar</button>
+                <button (click)="openCreateOnlineGameDialog(survey.id!)" mat-button color="primary">Jugar</button>
             </div>
         </div>
         <button mat-raised-button (click)="openSurveyDialog()">Añadir cuestionarios</button>
