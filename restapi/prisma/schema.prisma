@@ -64,10 +64,11 @@ model gameResult {
 
 model game {
   id                    Int          @id @default(autoincrement())
-  host_id               Int?
-  survey_id             Int?
+  host_id               Int
+  survey_id             Int
   type                  game_type
   state                 state
+  point_type            point_type
   are_questions_visible Boolean?
   game_result           gameResult[]
   created_at            DateTime?    @default(now()) @db.Timestamp(6)
@@ -83,7 +84,7 @@ model question {
   type            type
   answer_time     Int
   resource        String?
-  user_creator_id Int?
+  user_creator_id Int
   created_at      DateTime?        @default(now()) @db.Timestamp(6)
   answers         answer[]
   courseQuestion  courseQuestion[]
@@ -124,7 +125,7 @@ enum role {
 
 enum state {
   created
-  opened
+  started
   closed
 }
 
@@ -137,4 +138,10 @@ enum type {
 enum game_type {
   offline
   online
+}
+
+enum point_type {
+  standard 
+  double 
+  no_points 
 }

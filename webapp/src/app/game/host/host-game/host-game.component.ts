@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Game, GameState } from '@app/core/models/game.model';
 import { User } from '@app/core/models/user.model';
+import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
+import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 import { SocketioService } from '@app/core/socket/socketio.service';
 
 @Component({
@@ -12,20 +15,20 @@ export class HostGameComponent implements OnInit {
 
   constructor(
     private socketService: SocketioService,
-    private route: ActivatedRoute
-    ) {
-      this.socketService.users.subscribe( (users: User[]) => {this.users = users;})
-    }
-  users: User[] = [];
-  
-  ngOnInit() {
-    this.socketService.setupHostSocketConnection();
-    this.route.queryParams
-    .subscribe(params => {
-      console.log(params);
-    })
-
-    // Con esto crear el juego y subirlo al servidor
+    private authService: ApiAuthService,
+    private route: ActivatedRoute,
+    private apiProfessorService: ApiProfessorService
+  ) {
   }
+  game: Game = <Game>{};
+  gameStateType = GameState;
+  @Input() courseId: number = 0;
+
+  ngOnInit() {
+    this.socketService.game.subscribe( (game: Game) => {this.game = game;})
+    this.socketService.setupHostSocketConnection();
+  }
+
+
 
 }

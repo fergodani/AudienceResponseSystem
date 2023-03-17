@@ -109,7 +109,7 @@ const routes: Routes = [
     data: { roles: [Role.Student]}
   },
   {
-    path: 'game/join', 
+    path: 'game/join/:id', 
     component: StudentGameComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Student]}

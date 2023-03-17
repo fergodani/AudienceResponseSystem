@@ -98,6 +98,8 @@ export class CourseDetailsComponent {
   }
 
   openCreateOnlineGameDialog(): void {
-    this.dialog.open(CreateGameDialogComponent);
+    this.dialog.open(CreateGameDialogComponent, {
+      data: this.course.id,
+    });
   }
 }

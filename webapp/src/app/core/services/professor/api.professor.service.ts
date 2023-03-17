@@ -5,6 +5,7 @@ import { catchError, retry } from 'rxjs/operators';
 import { Question } from '../../models/question.model';
 import { Survey } from '@app/core/models/survey.model';
 import { User } from '@app/core/models/user.model';
+import { Game } from '@app/core/models/game.model';
 
 @Injectable({
   providedIn: 'root'
@@ -73,6 +74,13 @@ export class ApiProfessorService {
 
   getSurveysByCourse(id: number): Observable<Survey[]> {
     return this.http.get<Survey[]>(`${this.apiUrl}/survey/courses/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  createGame(game: Game): Observable<Game> {
+    return this.http.post<Game>(`${this.apiUrl}/game`, game)
     .pipe(
       catchError(this.handleError)
     )

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { SocketioService } from '@app/core/socket/socketio.service';
 
 @Component({
@@ -9,11 +10,15 @@ import { SocketioService } from '@app/core/socket/socketio.service';
 export class StudentGameComponent implements OnInit{
 
 
-  constructor(private socketService: SocketioService) {}
+  constructor(
+    private socketService: SocketioService,
+    private route: ActivatedRoute
+    ) {}
   
   ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
     this.socketService.setupSocketConnection();
-    this.socketService.sendUser();
+    this.socketService.sendUser(id!);
   }
 
 }

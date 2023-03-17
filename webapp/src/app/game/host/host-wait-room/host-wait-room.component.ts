@@ -7,7 +7,7 @@ import { SocketioService } from '@app/core/socket/socketio.service';
   templateUrl: './host-wait-room.component.html',
   styleUrls: ['./host-wait-room.component.css']
 })
-export class HostWaitRoomComponent implements OnInit {
+export class HostWaitRoomComponent {
 
   constructor(
     private socketService: SocketioService
@@ -15,9 +15,5 @@ export class HostWaitRoomComponent implements OnInit {
       this.socketService.users.subscribe( (users: User[]) => {this.users = users;})
     }
   users: User[] = [];
-  
-  ngOnInit() {
-    this.socketService.setupHostSocketConnection();
-  }
 
 }

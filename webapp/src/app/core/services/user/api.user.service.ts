@@ -5,6 +5,7 @@ import { catchError, map, retry } from 'rxjs/operators';
 import { Token, User } from '../../models/user.model';
 import { Router } from '@angular/router';
 import { Course } from '@app/core/models/course.model';
+import { Game } from '@app/core/models/game.model';
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +38,11 @@ export class ApiStudentService {
     .pipe(
       catchError(this.handleError)
     )
+  }
+
+  getOpenGamesByCourses(courses: Course[]): Observable<Game[]>{
+    const coursesIds = courses.map(c => c.id)
+    console.log(coursesIds)
+    return this.http.get<Game[]>(`${this.apiUrl}/game/course/`, {params: {course: coursesIds}})
   }
 }

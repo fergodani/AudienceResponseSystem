@@ -9,10 +9,5 @@ import { SocketioService } from '@app/core/socket/socketio.service';
 export class StudentWaitRoomComponent {
 
   constructor(private socketService: SocketioService) {}
-  
-  ngOnInit() {
-    this.socketService.setupSocketConnection();
-    this.socketService.sendUser();
-  }
 
 }
