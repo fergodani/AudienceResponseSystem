@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { io } from 'socket.io-client';
 import { Course } from '../models/course.model';
 import { Game } from '../models/game.model';
@@ -23,10 +23,9 @@ export class SocketioService {
   public users: Observable<User[]> = this.usersConnectedSubject.asObservable();
   private userList: User[] = [];
 
-  // Juegos disponibles para jugar -- Estudiante
-  private gamesAvailableSubject: BehaviorSubject<Game[]> = new BehaviorSubject<Game[]>([]);
-  public gamesAvailable: Observable<Game[]> = this.gamesAvailableSubject.asObservable();
-  private gamesList: Game[] = [];
+  // Juego nuevo para jugar -- Estudiante
+  private newGameSubject: Subject<Game> = new Subject<Game>();
+  public newGame: Observable<Game> = this.newGameSubject.asObservable();
 
   private gameSubject: BehaviorSubject<Game> = new BehaviorSubject<Game>(<Game>{});
   public game: Observable<Game> = this.gameSubject.asObservable();
@@ -66,6 +65,7 @@ export class SocketioService {
   }
 
   createGame(game: Game, courseId: number) {
+    console.log(game)
     this.course_id = courseId;
     this.gameSubject.next(game);
     this.socket.emit('create_game', game, courseId + '');
@@ -81,13 +81,16 @@ export class SocketioService {
 
   sendUser(id: string){
     this.socket.emit('join_game', this.authService.userValue, id)
+    this.socket.on('move_to_survey', (game: Game) => {
+      console.log(game)
+      this.gameSubject.next(game);
+    })
   }
 
   waitForSurveys(){
-    this.socket.on('wait_for_surveys', (data: any) => {
+    this.socket.on('wait_for_surveys', (data: Game) => {
       console.log(data)
-      this.gamesList.push(data)
-      this.gamesAvailableSubject.next(this.gamesList)
+      this.newGameSubject.next(data)
     })
   }
 

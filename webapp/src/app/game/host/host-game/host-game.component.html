@@ -1,2 +1,34 @@
-<app-host-wait-room *ngIf="game.state == gameStateType.created"></app-host-wait-room>
-<app-host-survey-room *ngIf="game.state == gameStateType.started" [game]="game"></app-host-survey-room>
+<div *ngIf="game.state == gameStateType.created">
+    <button mat-button (click)="startGame()" *ngIf="usersConnected.length != 0">Empezar</button>
+    <app-host-wait-room (users)="addUsers($event)"></app-host-wait-room>
+</div>
+<div class="question_preview" *ngIf="isPreviewScreen">
+    <h1>{{ timeLeft }} </h1>
+</div>
+<div class="d-flex flex-column align-items-center" *ngIf="isQuestionScreen">
+    <h1>{{ timeLeft }} </h1>
+    <h1>{{ actualQuestion.description }}</h1>
+    <div class="row w-100 gap-2 ms-2 me-2" *ngIf="actualQuestion.type == 'multioption' || actualQuestion.type == 'true_false'">
+        <h2 class="col bg-white text-center">{{ actualQuestion.answers[0].description }}</h2>
+        <h2 class="col bg-white text-center">{{ actualQuestion.answers[1].description }}</h2>
+    </div>
+    <div class="row w-100 gap-2 ms-2 me-2" *ngIf="actualQuestion.type == 'multioption'">
+        <h2 class="col bg-white text-center">{{ actualQuestion.answers[2].description }}</h2>
+        <h2 class="col bg-white text-center">{{ actualQuestion.answers[3].description }}</h2>
+    </div>
+    <div class="short w-100" *ngIf="actualQuestion.type == 'short'">
+        <mat-form-field>
+            <mat-label>Respuesta</mat-label>
+            <textarea matInput></textarea>
+        </mat-form-field>
+    </div>
+</div>
+<div class="d-flex flex-column align-items-center" *ngIf="isQuestionResult">
+    <h1>La/s respuesta/s correcta/s es: </h1>
+    <h2 *ngFor="let answer of correctAnswers">
+        {{ answer.description }}
+    </h2>
+</div>
+<div *ngIf="isLeaderboardScreen">
+    LeaderBoard...
+</div>

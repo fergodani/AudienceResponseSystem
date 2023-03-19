@@ -6,6 +6,7 @@ import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 import { ApiStudentService } from '@app/core/services/user/api.user.service';
 import { SocketioService } from '@app/core/socket/socketio.service';
+import { isEmpty } from 'rxjs';
 
 @Component({
   selector: 'app-student-home',
@@ -38,15 +39,17 @@ export class StudentHomeComponent {
     this.apiStudentService
       .getOpenGamesByCourses(courses)
       .subscribe(games => {
-        this.games = this.games.concat(games);
+        this.games = games
         this.isLoadingGames = false;
       })
-    this.socketService.gamesAvailable.subscribe((games: Game[]) => {
-      this.games = this.games.concat(games)
-    })
+
     this.socketService.setupSocketConnection();
     this.socketService.joinSocketCourses(courses)
     this.socketService.waitForSurveys();
+    this.socketService.newGame.subscribe((game: Game) => {
+        console.log(game)
+        this.games.push(game)
+    })
   }
 
   courses: Course[] = [];

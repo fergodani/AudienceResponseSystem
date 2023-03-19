@@ -1,4 +1,5 @@
 import { Answer } from "./answer.model";
+import { User } from "./user.model";
 
 export interface Question{
     id: number;
@@ -9,4 +10,10 @@ export interface Question{
     answers: Answer[];
     resource: string;
     user_creator_id: number;
+}
+
+export interface QuestionResult {
+    questionIndex: number;
+    user: User;
+    user_points: number;
 }

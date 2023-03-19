@@ -1,4 +1,5 @@
 import { Answer } from "./answer.model";
+import { User } from "./user.model";
 
 export class Question {
 
@@ -27,3 +28,9 @@ export enum Type {
     true_false,
     short
   }
+
+export interface QuestionResult {
+    questionIndex: number;
+    user: User;
+    user_points: number;
+}

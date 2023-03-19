@@ -1,0 +1,16 @@
+.question_preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    height: 600px;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.question_preview h1 {
+    font-size: 90px;
+}

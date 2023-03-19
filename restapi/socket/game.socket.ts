@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import { Game, GameState } from "../models/game.model";
+import { QuestionResult } from "../models/question.model";
 import { User } from "../models/user.model";
 import { Constants } from './constants'
 
@@ -30,10 +31,19 @@ export default (io: Server) => {
             io.to(game.id + '').emit('move_to_survey', game);
         });
 
-        socket.on(Constants.START_QUESTION_TIME, () => {
+        socket.on(Constants.QUESTION_PREVIEW, (cb) => {
+            cb();
+            console.log("Question preview...")
+            socket.to(game.id + '').emit('host-start-preview');
+        })
+
+        socket.on(Constants.START_QUESTION_TIME, (time, question, cb) => {
+            cb();
+            socket.to(game.id + '').emit('host-start-question-timer', time, question);
         });
 
-        socket.on(Constants.SEND_ANSWER, () => {
+        socket.on(Constants.SEND_ANSWER, (result: QuestionResult) => {
+            socket.to(game.id + '').emit("get-answer-from-player", JSON.stringify(result))
         });
 
         socket.on(Constants.DISCONNECT, () => {
