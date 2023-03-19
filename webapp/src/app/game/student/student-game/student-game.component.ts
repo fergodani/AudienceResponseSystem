@@ -44,7 +44,7 @@ export class StudentGameComponent implements OnInit {
     this.socketService.socket.on("host-start-question-timer", (time: number, question: Question) => {
       this.timeLeft = time;
       this.actualQuestion = question;
-      this.isPreviewScreen = false;
+      
       this.startQuestionTimer(time);
     })
   }
@@ -55,6 +55,7 @@ export class StudentGameComponent implements OnInit {
   actualQuestion: Question = <Question>{};
   gameStateType = GameState;
   isStart: boolean = false;
+  result: QuestionResult = <QuestionResult>{};
 
   questionType = Type;
 
@@ -70,7 +71,7 @@ export class StudentGameComponent implements OnInit {
       } else {
         clearInterval(interval);
         
-        this.isQuestionScreen = true;
+        
         this.isPreviewScreen = false;
       }
     }, 1000)
@@ -78,6 +79,8 @@ export class StudentGameComponent implements OnInit {
 
     startQuestionTimer(seconds: number) {
     let time = seconds;
+    this.isQuestionScreen = true;
+    this.isPreviewScreen = false;
     let answerSeconds = 0;
     let interval = setInterval(() => {
       this.timeLeft = time;
@@ -89,6 +92,7 @@ export class StudentGameComponent implements OnInit {
         
         this.isQuestionScreen = false;
         this.isPreviewScreen = false;
+        this.isQuestionAnswered = false;
         this.isResultScreen = true;
       }
       answerSeconds++;
@@ -105,18 +109,32 @@ export class StudentGameComponent implements OnInit {
   score: number = 0;
 
   sendAnswer() {
-    // TODO: debería ser async?
-    let result: QuestionResult = {
+    this.result = {
       user: this.authService.userValue!,
       questionIndex: this.questionIndex,
       user_points: this.score
     }
-    this.socketService.socket.emit('send-answer', result);
+    this.socketService.socket.emit('send_answer', this.result);
+  }
+
+  displayAnswerResult() {
+    this.isQuestionScreen = false;
+    this.isQuestionAnswered = true;
+    setTimeout(() => {
+      this.isQuestionAnswered = false;
+      this.isResultScreen = true;
+    }, 5000)
   }
 
   checkAnswer(id: number) {
-    let index = this.actualQuestion.answers.findIndex(answer => answer.id === id);
-
+    let answer = this.actualQuestion.answers.find( a => a.id === id)
+    if (answer?.is_correct){
+      this.result.user_points = 10;
+    }else {
+      this.result.user_points = 0;
+    }
+    this.isQuestionAnswered = true;
+    this.displayAnswerResult();
   }
 
   
