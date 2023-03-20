@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import { Game, GameState } from "../models/game.model";
 import { QuestionResult } from "../models/question.model";
-import { User } from "../models/user.model";
+import { User, UserResult } from "../models/user.model";
 import { Constants } from './constants'
 
 let game: Game;
@@ -42,7 +42,8 @@ export default (io: Server) => {
             socket.to(game.id + '').emit('host-start-question-timer', time, question);
         });
 
-        socket.on(Constants.SEND_ANSWER, (result: QuestionResult) => {
+        socket.on(Constants.SEND_ANSWER, (result: UserResult) => {
+            console.log("Enviando respuesta...")
             socket.to(game.id + '').emit("get-answer-from-player", JSON.stringify(result))
         });
 

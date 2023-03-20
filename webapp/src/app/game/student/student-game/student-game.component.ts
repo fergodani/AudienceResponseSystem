@@ -1,7 +1,9 @@
 import { Component, OnInit, Type } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AnswerResult } from '@app/core/models/answer.model';
 import { Game, GameState } from '@app/core/models/game.model';
 import { Question, QuestionResult } from '@app/core/models/question.model';
+import { UserResult } from '@app/core/models/user.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { SocketioService } from '@app/core/socket/socketio.service';
 
@@ -55,7 +57,12 @@ export class StudentGameComponent implements OnInit {
   actualQuestion: Question = <Question>{};
   gameStateType = GameState;
   isStart: boolean = false;
-  result: QuestionResult = <QuestionResult>{};
+  result: UserResult = {
+    user: this.authService.userValue!,
+    game_id: this.game.id!,
+    answer_result: [],
+    score: 0
+  };
 
   questionType = Type;
 
@@ -108,15 +115,6 @@ export class StudentGameComponent implements OnInit {
   correctAnswerCount: number = 0;
   score: number = 0;
 
-  sendAnswer() {
-    this.result = {
-      user: this.authService.userValue!,
-      questionIndex: this.questionIndex,
-      user_points: this.score
-    }
-    this.socketService.socket.emit('send_answer', this.result);
-  }
-
   displayAnswerResult() {
     this.isQuestionScreen = false;
     this.isQuestionAnswered = true;
@@ -129,12 +127,19 @@ export class StudentGameComponent implements OnInit {
   checkAnswer(id: number) {
     let answer = this.actualQuestion.answers.find( a => a.id === id)
     if (answer?.is_correct){
-      this.result.user_points = 10;
-    }else {
-      this.result.user_points = 0;
+      // TODO: mirar cómo se puntua 
+      this.result.score += 1000 * (this.timeLeft / 1000);
     }
     this.isQuestionAnswered = true;
+
+    let answerResult: AnswerResult = {
+      question_index: this.questionIndex,
+      answer: answer!,
+      answered: true
+    }
+    this.result.answer_result.push(answerResult)
     this.displayAnswerResult();
+    this.socketService.socket.emit('send_answer', this.result);
   }
 
   

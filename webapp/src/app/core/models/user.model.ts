@@ -1,3 +1,5 @@
+import { AnswerResult } from "./answer.model";
+
 export class User {
 
     constructor(username: string, password: string, role: string = 'student', id: number = 0) {
@@ -38,4 +40,11 @@ export enum Role {
     Student = 'student',
     Professor = 'professor',
     Admin = 'admin'
+}
+
+export interface UserResult {
+    user: User;
+    game_id: number;
+    answer_result: AnswerResult[];
+    score: number;
 }

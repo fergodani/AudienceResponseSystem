@@ -3,7 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Answer } from '@app/core/models/answer.model';
 import { Game, GameState } from '@app/core/models/game.model';
 import { Question, QuestionResult } from '@app/core/models/question.model';
-import { User } from '@app/core/models/user.model';
+import { User, UserResult } from '@app/core/models/user.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 import { SocketioService } from '@app/core/socket/socketio.service';
@@ -26,7 +26,7 @@ export class HostGameComponent implements OnInit {
   actualQuestion: Question = <Question>{};
   correctAnswers: Answer[] = [];
   usersConnected: User[] = [];
-  players: User[] = [];
+  userResults: UserResult[] = [];
 
   isLeaderboardScreen: boolean = false;
   isPreviewScreen: boolean = false;
@@ -53,8 +53,8 @@ export class HostGameComponent implements OnInit {
       }
     })
     this.socketService.setupHostSocketConnection();
-    this.socketService.socket.on('get-answer-from-player', (data: QuestionResult) => {
-      this.players.push(data.user);
+    this.socketService.socket.on('get-answer-from-player', (data: UserResult) => {
+      this.userResults.push(data);
     })
   }
 
@@ -107,19 +107,23 @@ export class HostGameComponent implements OnInit {
   }
 
   displayCurrentLeaderboard(index: number) {
+    this.userResults.sort((a, b) => {
+      return b.score - a.score;
+    })
     this.isQuestionResult = false;
     this.isLeaderboardScreen = true;
     setTimeout(() => {
       this.socketService.socket.emit("question_preview", () => {
         this.startPreviewCountdown(5, index);
-        this.players = [];
+        this.userResults = [];
       })
     }, 5000)
   }
 
   displayQuestion(index: number) {
     if (index === this.questionList.length) {
-      // TODO: mostrar la tabla final y acabar el juego
+      // TODO: mostrar la tabla final, guardar todos los resultados finales
+      // y acabar el juego
       this.isQuestionResult = false;
       this.isLeaderboardScreen = true;
     } else {

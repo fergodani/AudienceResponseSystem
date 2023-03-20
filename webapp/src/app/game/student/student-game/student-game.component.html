@@ -27,11 +27,11 @@
         </mat-form-field>
     </div>
 </div>
-<div *ngIf="isQuestionAnswered">
-    <div class="p-3 mb-2 bg-success text-white w-90 h-90" *ngIf="result.user_points > 0">
+<div class="d-flex align-items-center justify-content-center" *ngIf="isQuestionAnswered">
+    <div class="p-3 mb-2 bg-success text-white w-90 h-90" *ngIf="result.score > 0">
         Eres un genio?
     </div>
-    <div class="p-3 mb-2 bg-danger text-white w-90 h-90" *ngIf="result.user_points == 0">
+    <div class="p-3 mb-2 bg-danger text-white w-90 h-90" *ngIf="result.score == 0">
         Tendrás más suerte la próxima vez
     </div>
     <div class="spinner-border text-primary" role="status">
@@ -39,5 +39,5 @@
     </div>
 </div>
 <div *ngIf="isResultScreen">
-    Puntos: ...
+    <h2>Puntos: {{ result.score }}</h2>
 </div>

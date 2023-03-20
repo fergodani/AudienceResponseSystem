@@ -11,3 +11,9 @@ export class Answer {
     is_correct: boolean=false;
 }
 
+export interface AnswerResult {
+    answer: Answer;
+    question_index: number;
+    answered: boolean;
+}
+
