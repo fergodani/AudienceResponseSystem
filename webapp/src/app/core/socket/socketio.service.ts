@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { io } from 'socket.io-client';
 import { Course } from '../models/course.model';
-import { Game } from '../models/game.model';
-import { equals, User } from '../models/user.model';
+import { Game, GameState } from '../models/game.model';
+import { equals, User, UserResult } from '../models/user.model';
 import { ApiAuthService } from '../services/auth/api.auth.service';
+import { ApiProfessorService } from '../services/professor/api.professor.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ import { ApiAuthService } from '../services/auth/api.auth.service';
 export class SocketioService {
 
   constructor(
-    private authService: ApiAuthService
+    private authService: ApiAuthService,
+    private apiProfessorService: ApiProfessorService
   ) {
    }
 
@@ -43,11 +45,11 @@ export class SocketioService {
   }
 
   setupSocketConnection() {
-    this.socket = io('http://localhost:5000');
+    this.socket = io('http://192.168.1.41:5000');
   }
 
   setupHostSocketConnection() {
-    this.socket = io('http://localhost:5000');
+    this.socket = io('http://192.168.1.41:5000');
     
     this.socket.on('connectUser', (data: User) => {
       let alreadyConnected = false;
@@ -65,18 +67,33 @@ export class SocketioService {
   }
 
   createGame(game: Game, courseId: number) {
-    console.log(game)
     this.course_id = courseId;
     this.gameSubject.next(game);
     this.socket.emit('create_game', game, courseId + '');
   }
 
   startGame() {
+    const game = this.gameValue;
+    game.state = GameState.started;
+    this.apiProfessorService
+    .updateGame(game)
+    .subscribe()
+    this.gameSubject.next(game);
     this.socket.emit('start_game', this.gameValue);
     this.socket.on('move_to_survey', (game: Game) => {
-      console.log(game)
       this.gameSubject.next(game);
     })
+  }
+
+  closeGame(userResults: UserResult[]) {
+    const game = this.gameValue;
+    game.state = GameState.closed;
+    this.apiProfessorService
+    .updateGame(game)
+    .subscribe()
+    this.apiProfessorService
+    .createUserResults(userResults)
+    .subscribe()
   }
 
   sendUser(id: string){

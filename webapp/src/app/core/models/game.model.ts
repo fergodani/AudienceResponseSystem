@@ -10,6 +10,7 @@ export class Game {
         this.type = type;
         this.state = state;
         this.are_questions_visible = are_questions_visible;
+        this.point_type = point_type;
     }
 
     id? :number;

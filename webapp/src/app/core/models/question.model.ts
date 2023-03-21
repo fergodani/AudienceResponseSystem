@@ -28,9 +28,3 @@ export enum Type {
     true_false,
     short
   }
-
-export interface QuestionResult {
-    questionIndex: number;
-    user: User;
-    user_points: number;
-}

@@ -1,6 +1,5 @@
 import { Server } from "socket.io";
 import { Game, GameState } from "../models/game.model";
-import { QuestionResult } from "../models/question.model";
 import { User, UserResult } from "../models/user.model";
 import { Constants } from './constants'
 
@@ -53,6 +52,14 @@ export default (io: Server) => {
 
         socket.on(Constants.JOIN_SOCKET_COURSE, (courseIds: string[]) => {
             socket.join(courseIds)
+        })
+
+        socket.on(Constants.FINISH_GAME, () => {
+            socket.to(game.id + '').emit('finish_game');
+        })
+
+        socket.on('leave_game', () => {
+            socket.leave(game.id + '');
         })
 
 

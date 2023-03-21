@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -17,11 +21,12 @@ model UserCourse {
 }
 
 model answer {
-  id          Int       @id @default(autoincrement())
-  question_id Int
-  description String    @db.VarChar
-  is_correct  Boolean?
-  question    question? @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id             Int            @id @default(autoincrement())
+  question_id    Int
+  description    String         @db.VarChar
+  is_correct     Boolean?
+  answer_results answerResult[]
+  question       question?      @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model course {
@@ -53,11 +58,24 @@ model courseSurvey {
 }
 
 model gameResult {
-  game_id Int
-  user_id Int
-  score   Int
-  user    user  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  game    game  @relation(fields: [game_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  game_id        Int
+  user_id        Int
+  score          Int
+  answer_results answerResult[]
+  user           user           @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  game           game           @relation(fields: [game_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([game_id, user_id])
+}
+
+model answerResult {
+  game_id        Int
+  user_id        Int
+  answer_id      Int?
+  question_index Int
+  answered       Boolean
+  game_result    gameResult? @relation(fields: [game_id, user_id], references: [game_id, user_id], onDelete: Cascade, onUpdate: NoAction)
+  answer         answer?      @relation(fields: [answer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([game_id, user_id])
 }
@@ -141,7 +159,7 @@ enum game_type {
 }
 
 enum point_type {
-  standard 
-  double 
-  no_points 
+  standard
+  double
+  no_points
 }

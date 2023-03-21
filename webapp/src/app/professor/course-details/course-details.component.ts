@@ -34,7 +34,7 @@ export class CourseDetailsComponent {
           .subscribe(users => this.users = users)
         this.apiProfessorService
           .getSurveysByCourse(this.course.id)
-          .subscribe(surveys => {this.surveys = surveys; console.log(surveys)})
+          .subscribe(surveys => {this.surveys = surveys})
       })
   }
 
@@ -75,7 +75,6 @@ export class CourseDetailsComponent {
       if(result == undefined)
         return
       if (result.length != 0) {
-        console.log(result)
         this.surveys.push(result);
         this.addSurveyToCourse(result)
       }

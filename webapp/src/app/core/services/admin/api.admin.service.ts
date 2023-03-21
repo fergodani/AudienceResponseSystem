@@ -10,7 +10,7 @@ import { Course, SurveyCourse, UserCourse } from '../../models/course.model';
 })
 export class ApiService {
 
-  apiUrl = "http://localhost:5000/api"
+  apiUrl = "http://192.168.1.41:5000/api"
   users: User[] = []
 
   // TODO: pasar la url a un .env
@@ -33,21 +33,21 @@ export class ApiService {
   }
 
   createUser(user: User): Observable<User> {
-    return this.http.post<User>("http://localhost:3000/api/user/create", user)
+    return this.http.post<User>("http://192.168.1.41:5000/api/user/create", user)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   createCourse(course: Course): Observable<Course> {
-    return this.http.post<Course>("http://localhost:5000/api/course", course)
+    return this.http.post<Course>("http://192.168.1.41:5000/api/course", course)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>("http://localhost:5000/api/user")
+    return this.http.get<User[]>("http://192.168.1.41:5000/api/user")
       .pipe(
         catchError(this.handleError)
       );
@@ -61,7 +61,7 @@ export class ApiService {
   }
 
   getCourses(): Observable<Course[]> {
-    return this.http.get<Course[]>("http://localhost:5000/api/course")
+    return this.http.get<Course[]>("http://192.168.1.41:5000/api/course")
       .pipe(
         catchError(this.handleError)
       );

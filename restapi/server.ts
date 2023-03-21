@@ -16,7 +16,7 @@ const answerRoutes = require('./routes/answerRoutes')
 const gameRoutes = require('./routes/gameRoutes')
 
 app.use(cors({
-    origin: 'http://localhost:4200'
+    origin: '*'
 }))
 app.use(bodyParser.json())
 app.use(

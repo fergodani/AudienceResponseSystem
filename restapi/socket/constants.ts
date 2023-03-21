@@ -8,4 +8,5 @@ export abstract class Constants {
     static readonly SEND_ANSWER = 'send_answer';
     static readonly JOIN_GAME = 'join_game';
     static readonly JOIN_SOCKET_COURSE = 'join_socket_course';
+    static readonly FINISH_GAME = 'finish_game';
 }

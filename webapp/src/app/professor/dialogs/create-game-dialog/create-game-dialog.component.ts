@@ -34,7 +34,7 @@ export class CreateGameDialogComponent {
     pointType: new FormControl('', [
       Validators.required
     ]),
-    areQuestionsVisible: new FormControl(0, [
+    areQuestionsVisible: new FormControl(false, [
       Validators.required
     ])
   })
@@ -47,24 +47,43 @@ export class CreateGameDialogComponent {
     if (this.createGameForm.invalid) {
       return;
     }
-    const pointTypeString = this.createGameForm.value.pointType! as keyof typeof PointsType;
+    const pointType = this.getPointType(this.createGameForm.value.pointType!);
+    console.log(pointType)
     const game = new Game(
       this.authService.userValue!.id,
       this.data.survey_id,
       GameType.online,
       GameState.created,
-      PointsType[pointTypeString] ,
-      this.createGameForm.value.areQuestionsVisible == 1 ? true : false,
+      pointType,
+      this.createGameForm.value.areQuestionsVisible!,
     );
+    console.log(game)
     this.apiProfessorService
       .createGame(game)
       .subscribe( game => {
+        console.log(game)
         this.socketService.createGame(game, this.data.course_id);
       })
     this.dialogRef.close();
     this.router.navigate(["/game/host", this.data.course_id])
   }
 
+  getPointType(type: string): PointsType{
+    switch(type){
+      case 'Estándar': {
+        return PointsType.standard;
+      }
+      case 'Doble': {
+        return PointsType.double
+      }
+      case 'Sin puntuación': {
+        return PointsType.no_points
+      }
+      default: {
+        return PointsType.standard
+      }
+    }
+  }
 
 }
 

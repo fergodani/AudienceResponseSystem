@@ -5,7 +5,9 @@ export interface Answer {
 }
 
 export interface AnswerResult {
-    answer: Answer;
+    game_id: number;
+    user_id: number;
+    answer_id?: number;
     question_index: number;
     answered: boolean;
 }

@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Question } from '../../models/question.model';
 import { Survey } from '@app/core/models/survey.model';
-import { User } from '@app/core/models/user.model';
+import { User, UserResult } from '@app/core/models/user.model';
 import { Game } from '@app/core/models/game.model';
 
 @Injectable({
@@ -12,7 +12,7 @@ import { Game } from '@app/core/models/game.model';
 })
 export class ApiProfessorService {
 
-   apiUrl = "http://localhost:5000/api"
+   apiUrl = "http://192.168.1.41:5000/api"
 
   constructor(private http: HttpClient) { }
 
@@ -81,6 +81,20 @@ export class ApiProfessorService {
 
   createGame(game: Game): Observable<Game> {
     return this.http.post<Game>(`${this.apiUrl}/game`, game)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  updateGame(game: Game): Observable<Game> {
+    return this.http.put<Game>(`${this.apiUrl}/game`, game)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  createUserResults(userResults: UserResult[]): Observable<unknown> {
+    return this.http.post(`${this.apiUrl}/game/results`, userResults)
     .pipe(
       catchError(this.handleError)
     )

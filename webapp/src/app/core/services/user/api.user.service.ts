@@ -17,7 +17,7 @@ export class ApiStudentService {
   ) {
   }
 
-  apiUrl = "http://localhost:5000/api"
+  apiUrl = "http://192.168.1.41:5000/api"
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {

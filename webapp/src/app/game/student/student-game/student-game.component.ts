@@ -1,11 +1,13 @@
 import { Component, OnInit, Type } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AnswerResult } from '@app/core/models/answer.model';
-import { Game, GameState } from '@app/core/models/game.model';
-import { Question, QuestionResult } from '@app/core/models/question.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Answer, AnswerResult } from '@app/core/models/answer.model';
+import { Game, GameState, PointsType } from '@app/core/models/game.model';
+import { Question } from '@app/core/models/question.model';
 import { UserResult } from '@app/core/models/user.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { SocketioService } from '@app/core/socket/socketio.service';
+
+const STANDARD_POINTS = 1000;
 
 @Component({
   selector: 'app-student-game',
@@ -18,16 +20,18 @@ export class StudentGameComponent implements OnInit {
   constructor(
     private authService: ApiAuthService,
     private socketService: SocketioService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
 
     this.socketService.game.subscribe((game: Game) => {
       console.log(game)
       if (game.survey != undefined) {
         this.game = game;
-        console.log(this.game.survey?.questions)
+        console.log(this.game)
         this.questionList = this.game.survey?.questions!;
         this.actualQuestion = this.questionList[this.questionIndex];
+        this.result.game_id = game.id!;
       }
     })
 
@@ -38,6 +42,7 @@ export class StudentGameComponent implements OnInit {
     this.socketService.setupSocketConnection();
     this.socketService.sendUser(id!);
     this.socketService.socket.on("host-start-preview", () => {
+      this.timeLeft = 5;
       this.isStart = true;
       this.isPreviewScreen = true;
       this.isResultScreen = false;
@@ -46,8 +51,12 @@ export class StudentGameComponent implements OnInit {
     this.socketService.socket.on("host-start-question-timer", (time: number, question: Question) => {
       this.timeLeft = time;
       this.actualQuestion = question;
-      
+
       this.startQuestionTimer(time);
+    })
+    this.socketService.socket.on("finish_game", () => {
+      this.isFinished = true;
+      this.socketService.socket.emit('leave_game');
     })
   }
 
@@ -57,12 +66,16 @@ export class StudentGameComponent implements OnInit {
   actualQuestion: Question = <Question>{};
   gameStateType = GameState;
   isStart: boolean = false;
+  isFinished: boolean = false;
   result: UserResult = {
     user: this.authService.userValue!,
+    user_id: this.authService.userValue!.id,
     game_id: this.game.id!,
-    answer_result: [],
+    answer_results: [],
     score: 0
   };
+  lastScore: number = 0;
+  haveAnswered: boolean = false;
 
   questionType = Type;
 
@@ -77,32 +90,43 @@ export class StudentGameComponent implements OnInit {
         time--;
       } else {
         clearInterval(interval);
-        
-        
+
+
         this.isPreviewScreen = false;
       }
     }, 1000)
   }
 
-    startQuestionTimer(seconds: number) {
+  startQuestionTimer(seconds: number) {
     let time = seconds;
     this.isQuestionScreen = true;
     this.isPreviewScreen = false;
-    let answerSeconds = 0;
+    this.answerTime = 0;
     let interval = setInterval(() => {
       this.timeLeft = time;
       if (time > 0) {
         time--;
-        this.answerTime = answerSeconds;
       } else {
         clearInterval(interval);
-        
+
         this.isQuestionScreen = false;
         this.isPreviewScreen = false;
         this.isQuestionAnswered = false;
         this.isResultScreen = true;
+        this.lastScore = this.result.score;
+        if (!this.haveAnswered) {
+          let answerResult: AnswerResult = {
+            user_id: this.authService.userValue!.id,
+            game_id: this.game.id!,
+            question_index: this.questionIndex,
+            answered: false
+          }
+          this.result.answer_results.push(answerResult)
+          this.socketService.socket.emit('send_answer', this.result);
+
+        }
       }
-      answerSeconds++;
+      this.answerTime++;
     }, 1000)
   }
 
@@ -125,23 +149,46 @@ export class StudentGameComponent implements OnInit {
   }
 
   checkAnswer(id: number) {
-    let answer = this.actualQuestion.answers.find( a => a.id === id)
-    if (answer?.is_correct){
-      // TODO: mirar cómo se puntua 
-      this.result.score += 1000 * (this.timeLeft / 1000);
-    }
+    this.haveAnswered = true;
+    let answer = this.actualQuestion.answers.find(a => a.id === id)
+    this.calculatePoints(answer!)
     this.isQuestionAnswered = true;
 
     let answerResult: AnswerResult = {
+      user_id: this.authService.userValue!.id,
+      game_id: this.game.id!,
       question_index: this.questionIndex,
-      answer: answer!,
+      answer_id: answer!.id,
       answered: true
     }
-    this.result.answer_result.push(answerResult)
+    this.result.answer_results.push(answerResult)
     this.displayAnswerResult();
     this.socketService.socket.emit('send_answer', this.result);
   }
 
-  
+  calculatePoints(answer: Answer) {
+    //TODO: mirar si hay más de una respuesta correcta
+    //TODO: tener en cuenta el tipo de puntuación (estándar, doble, sin puntos)
+
+    // https://support.kahoot.com/hc/es/articles/115002303908-C%C3%B3mo-funcionan-los-puntos
+    // 1. Divide el tiempo de respuesta por el temporizador de pregunta
+    // 2. Divide ese valor entre 2
+    // 3. Resta ese valor a 1
+    // 4. Multiplica los puntos posibles por ese valor
+    // 5. Redondea al número entero más cercano
+    if (answer.is_correct){
+      let points = (1 - ((this.answerTime / this.actualQuestion.answer_time) / 2)) * STANDARD_POINTS;
+      if (this.game.point_type == PointsType.double)
+        points = points * 2;
+      this.result.score += points;
+    }
+      
+  }
+
+  leaveGame(){
+    this.router.navigate(['/student/home'])
+  }
+
+
 
 }

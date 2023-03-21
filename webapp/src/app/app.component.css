@@ -1,0 +1,6 @@
+.background {
+    height: 650 px;  
+    background-image: url("../assets/grey.jpg");  
+    background-size: 100% ;  
+    background-size: cover; 
+}

@@ -1,4 +1,5 @@
 import { AnswerResult } from "./answer.model";
+import { Game } from "./game.model";
 
 export class User {
 
@@ -44,7 +45,8 @@ export enum Role {
 
 export interface UserResult {
     user: User;
+    user_id: number;
     game_id: number;
-    answer_result: AnswerResult[];
+    answer_results: AnswerResult[];
     score: number;
 }

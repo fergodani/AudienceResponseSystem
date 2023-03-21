@@ -1,0 +1,5 @@
+@media (min-width: 768px) { 
+    .library {
+        flex-direction: column;
+    }
+ }

@@ -37,3 +37,7 @@
     </div>
 
 </div>
+<div *ngIf="isFinished">
+    <h1>Juego terminado</h1>
+    <button mat-raised-button (click)="leaveGame()">Salir</button>
+</div>

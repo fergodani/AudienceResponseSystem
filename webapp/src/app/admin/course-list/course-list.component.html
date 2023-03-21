@@ -1,4 +1,4 @@
-<div class="d-flex flex-column gap-5 p-4">
+<div class="d-flex flex-column gap-3 p-4 mb-5">
     <h1 class="fs-1" *ngIf="isAdmin">Lista de cursos</h1>
     <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
         <span class="visually-hidden">Loading...</span>
@@ -7,7 +7,7 @@
         <div class="d-flex flex-column ps-2 bg-light w-100">
             <h2 *ngIf="isAdmin"><a [routerLink]="['/courses/update', course.id]">{{ course.name}}</a></h2>
             <h2 *ngIf="isProfessor"><a [routerLink]="['/course/details', course.id]">{{ course.name}}</a></h2>
-            <small class="fs-6">{{ course.description }}</small>
+            <small class="fs-6 pb-2">{{ course.description }}</small>
         </div>
         <button type="button" class="btn btn-danger" (click)="onDeleteCourse(course.id)" *ngIf="isAdmin">Eliminar</button>
     </div>

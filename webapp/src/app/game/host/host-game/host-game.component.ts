@@ -1,11 +1,9 @@
 import { Component, Input, OnInit, Type } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Router } from '@angular/router';
 import { Answer } from '@app/core/models/answer.model';
 import { Game, GameState } from '@app/core/models/game.model';
-import { Question, QuestionResult } from '@app/core/models/question.model';
+import { Question } from '@app/core/models/question.model';
 import { User, UserResult } from '@app/core/models/user.model';
-import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
-import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 import { SocketioService } from '@app/core/socket/socketio.service';
 
 @Component({
@@ -17,6 +15,7 @@ export class HostGameComponent implements OnInit {
 
   constructor(
     private socketService: SocketioService,
+    private router: Router
   ) {
   }
   game: Game = <Game>{};
@@ -27,6 +26,7 @@ export class HostGameComponent implements OnInit {
   correctAnswers: Answer[] = [];
   usersConnected: User[] = [];
   userResults: UserResult[] = [];
+  isFinished: boolean = false;
 
   isLeaderboardScreen: boolean = false;
   isPreviewScreen: boolean = false;
@@ -49,19 +49,21 @@ export class HostGameComponent implements OnInit {
         console.log(this.game.survey?.questions)
         this.questionList = this.game.survey?.questions!;
         this.actualQuestion = this.questionList[this.questionIndex];
-        this.correctAnswers = this.actualQuestion.answers.filter( a => a.is_correct);
+        this.correctAnswers = this.actualQuestion.answers.filter(a => a.is_correct);
       }
     })
     this.socketService.setupHostSocketConnection();
-    this.socketService.socket.on('get-answer-from-player', (data: UserResult) => {
-      this.userResults.push(data);
+    this.socketService.socket.on('get-answer-from-player', (data: string) => {
+      console.log(JSON.parse(data))
+      this.userResults.push(JSON.parse(data));
     })
   }
 
   startGame() {
     this.socketService.startGame()
     this.socketService.socket.emit('question_preview', () => {
-      this.startPreviewCountdown(5, this.questionIndex);
+        this.timeLeft = 5;
+        this.startPreviewCountdown(5, this.questionIndex);
     })
   }
 
@@ -86,7 +88,6 @@ export class HostGameComponent implements OnInit {
     this.isPreviewScreen = false;
     this.isQuestionScreen = true;
     let time = seconds;
-    console.log("Start question countdonw: " + time)
     let interval = setInterval(() => {
       this.timeLeft = time;
       if (time > 0) {
@@ -113,10 +114,17 @@ export class HostGameComponent implements OnInit {
     this.isQuestionResult = false;
     this.isLeaderboardScreen = true;
     setTimeout(() => {
-      this.socketService.socket.emit("question_preview", () => {
-        this.startPreviewCountdown(5, index);
-        this.userResults = [];
-      })
+      if (this.questionIndex == this.questionList.length) {
+        this.socketService.socket.emit('finish_game');
+        this.isFinished = true;
+      } else {
+        this.socketService.socket.emit("question_preview", () => {
+          this.timeLeft = 5;
+          this.startPreviewCountdown(5, index);
+          this.userResults = [];
+        })
+      }
+      
     }, 5000)
   }
 
@@ -126,9 +134,10 @@ export class HostGameComponent implements OnInit {
       // y acabar el juego
       this.isQuestionResult = false;
       this.isLeaderboardScreen = true;
+      this.socketService.socket.emit('finish_game');
     } else {
       this.actualQuestion = this.questionList[index];
-      this.correctAnswers = this.actualQuestion.answers.filter( a => a.is_correct);
+      this.correctAnswers = this.actualQuestion.answers.filter(a => a.is_correct);
       this.questionIndex++;
       let time = this.actualQuestion.answer_time;
       this.timeLeft = time;
@@ -136,5 +145,10 @@ export class HostGameComponent implements OnInit {
         this.startQuestionCountdown(time, ++index);
       })
     }
+  }
+
+  leaveGame(){
+    this.socketService.closeGame(this.userResults);
+    this.router.navigate(['/professor/home'])
   }
 }
