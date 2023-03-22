@@ -14,6 +14,7 @@
     <div class="spinner-border text-primary" role="status" *ngIf="isLoadingGames">
         <span class="visually-hidden">Loading...</span>
     </div>
+    <p *ngIf="games.length == 0">Esperando juegos...</p>
     <div class="d-flex d-flex flex-column ps-2 bg-light w-100 gap-2 mb-5">
         <div class="d-flex flex-column ps-2 bg-light w-100 gap-2" *ngFor="let game of games">
             <h2><a [routerLink]="['/game/join', game.id]">{{ game.survey!.title }}</a></h2>

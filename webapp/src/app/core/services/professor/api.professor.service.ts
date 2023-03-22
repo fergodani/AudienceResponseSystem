@@ -12,7 +12,7 @@ import { Game } from '@app/core/models/game.model';
 })
 export class ApiProfessorService {
 
-   apiUrl = "http://192.168.1.41:5000/api"
+   apiUrl = "http://localhost:5000/api"
 
   constructor(private http: HttpClient) { }
 

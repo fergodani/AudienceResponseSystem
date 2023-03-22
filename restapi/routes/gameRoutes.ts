@@ -6,12 +6,15 @@ const {
     createGame,
     getOpenGamesByCourses,
     updateGame,
-    createResults
+    createResults,
+    getGamesResultsByUser
 } = require('../controllers/gameController')
 
 api.get("/", getGames)
 
 api.get("/course", getOpenGamesByCourses)
+
+api.get("/results/:id", getGamesResultsByUser)
 
 api.post("/", createGame)
 

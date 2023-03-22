@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
-import { Token, User } from '../../models/user.model';
+import { Token, User, UserResult } from '../../models/user.model';
 import { Router } from '@angular/router';
 import { Course } from '@app/core/models/course.model';
 import { Game } from '@app/core/models/game.model';
@@ -17,7 +17,7 @@ export class ApiStudentService {
   ) {
   }
 
-  apiUrl = "http://192.168.1.41:5000/api"
+  apiUrl = "http://localhost:5000/api"
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
@@ -51,6 +51,13 @@ export class ApiStudentService {
 
   changePassword(userId: number, password: string): Observable<string> {
     return this.http.put<string>(`${this.apiUrl}/user/password/${userId}`, password)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  getGamesResultsByUser(userId: number): Observable<UserResult[]> {
+    return this.http.get<UserResult[]>(`${this.apiUrl}/game/results/${userId}`)
     .pipe(
       catchError(this.handleError)
     )

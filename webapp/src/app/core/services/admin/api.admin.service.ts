@@ -10,7 +10,7 @@ import { Course, SurveyCourse, UserCourse } from '../../models/course.model';
 })
 export class ApiService {
 
-  apiUrl = "http://192.168.1.41:5000/api"
+  apiUrl = "http://localhost:5000/api"
   users: User[] = []
 
   // TODO: pasar la url a un .env

@@ -15,6 +15,7 @@ export interface AnswerResult {
     game_id: number;
     user_id: number;
     answer_id?: number;
+    answer?: Answer
     question_index: number;
     answered: boolean;
 }

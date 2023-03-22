@@ -47,6 +47,8 @@ export interface UserResult {
     user: User;
     user_id: number;
     game_id: number;
+    game?: Game;
     answer_results: AnswerResult[];
     score: number;
+    mark?: number
 }

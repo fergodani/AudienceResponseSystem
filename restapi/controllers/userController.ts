@@ -237,6 +237,34 @@ const getUsersByCourse = async (req: Request, res: Response): Promise<Response> 
     }
 }
 
+const changePassword = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const user = prisma.user.findUnique({
+            where: {
+                id: Number(req.params.id)
+            }
+        })
+        if (!user) {
+            return res.status(404).json({message: "Usuario no encontrado"});
+        }
+        const password = req.body.params;
+        const salt = await bcrypt.genSalt();
+            const hash = await bcrypt.hash(password, salt);
+            await prisma.user.update({
+                where: {
+                    id: Number(req.params.id),
+                },
+                data: {
+                    password: hash
+                }
+            })
+        return res.status(200).json({message: "Contraseña cambiada correctamente"})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error)
+    }
+}
+
 
 module.exports = {
     getUsers,
@@ -246,5 +274,6 @@ module.exports = {
     deleteUser,
     getUser,
     uploadUserFile,
-    getUsersByCourse
+    getUsersByCourse,
+    changePassword
 }

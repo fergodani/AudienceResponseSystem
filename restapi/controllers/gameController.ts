@@ -150,10 +150,45 @@ const createResults = async (req:Request, res: Response): Promise<Response> => {
     }
 }
 
+const getGamesResultsByUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const result = await prisma.gameResult.findMany({
+            where: {
+                user_id: Number(req.params.id)
+            },
+            include: {
+                answer_results: {
+                    include: {
+                        answer: true
+                    }
+                },
+                game: {
+                    include: {
+                        survey: {
+                            include: {
+                                questions: {
+                                    include: {
+                                        answers: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        return res.status(200).json(result)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error)
+    }
+}
+
 module.exports = {
     getGames,
     createGame,
     getOpenGamesByCourses,
     updateGame,
-    createResults
+    createResults,
+    getGamesResultsByUser
 }

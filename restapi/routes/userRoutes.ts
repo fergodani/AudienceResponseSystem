@@ -10,7 +10,8 @@ const {
     updateUser,
     deleteUser,
     uploadUserFile,
-    getUsersByCourse
+    getUsersByCourse,
+    changePassword
 } = require('../controllers/userController')
 
 api.get("/", getUsers)
@@ -37,6 +38,8 @@ api.post("/file", uploadUserFile)
 api.put("/", [
     check('id').isLength({ min: 1 }).trim().escape(),
 ], updateUser)
+
+api.put("/password", changePassword)
 
 api.delete("/:id", [
     check('id').isLength({ min: 1 }).trim().escape()

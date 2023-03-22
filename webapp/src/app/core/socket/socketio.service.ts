@@ -45,11 +45,11 @@ export class SocketioService {
   }
 
   setupSocketConnection() {
-    this.socket = io('http://192.168.1.41:5000');
+    this.socket = io('http://localhost:5000');
   }
 
   setupHostSocketConnection() {
-    this.socket = io('http://192.168.1.41:5000');
+    this.socket = io('http://localhost:5000');
     
     this.socket.on('connectUser', (data: User) => {
       let alreadyConnected = false;
