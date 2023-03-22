@@ -33,21 +33,21 @@ export class ApiService {
   }
 
   createUser(user: User): Observable<User> {
-    return this.http.post<User>("http://192.168.1.41:5000/api/user/create", user)
+    return this.http.post<User>(`${this.apiUrl}/user/create`, user)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   createCourse(course: Course): Observable<Course> {
-    return this.http.post<Course>("http://192.168.1.41:5000/api/course", course)
+    return this.http.post<Course>(`${this.apiUrl}/course`, course)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>("http://192.168.1.41:5000/api/user")
+    return this.http.get<User[]>(`${this.apiUrl}/user`)
       .pipe(
         catchError(this.handleError)
       );
@@ -61,7 +61,7 @@ export class ApiService {
   }
 
   getCourses(): Observable<Course[]> {
-    return this.http.get<Course[]>("http://192.168.1.41:5000/api/course")
+    return this.http.get<Course[]>(`${this.apiUrl}/course`)
       .pipe(
         catchError(this.handleError)
       );

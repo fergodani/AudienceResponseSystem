@@ -44,5 +44,15 @@ export class ApiStudentService {
     const coursesIds = courses.map(c => c.id)
     console.log(coursesIds)
     return this.http.get<Game[]>(`${this.apiUrl}/game/course/`, {params: {course: coursesIds}})
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  changePassword(userId: number, password: string): Observable<string> {
+    return this.http.put<string>(`${this.apiUrl}/user/password/${userId}`, password)
+    .pipe(
+      catchError(this.handleError)
+    )
   }
 }

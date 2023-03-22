@@ -1,0 +1,16 @@
+<div class="d-flex flex-column gap-2 align-items-center justify-content-center">
+    <h1>{{ user!.username }}</h1>
+    <form class="d-flex flex-column align-items-center justify-content-center " [formGroup]="passwordFormGroup">
+    <h1>Modificar contraseña</h1>
+        <mat-form-field class="">
+            <mat-label>Constraseña</mat-label>
+            <input type="password" id="password" matInput formControlName="password">
+        </mat-form-field>
+        <mat-form-field class="">
+            <mat-label>Repetir contraseña</mat-label>
+            <input type="password" id="passwordBis" matInput formControlName="passwordBis">
+        </mat-form-field>
+        <button class="mb-5" mat-raised-button (click)="submitPassword()">Aceptar</button>
+        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+    </form>
+</div>

@@ -20,6 +20,7 @@ import { ProfessorHomeComponent } from './professor/professor-home/professor-hom
 import { QuestionListComponent } from './professor/question-list/question-list.component';
 import { SurveyListComponent } from './professor/survey-list/survey-list.component';
 import { StudentHomeComponent } from './student/student-home/student-home.component';
+import { StudentProfileComponent } from './student/student-profile/student-profile.component';
 
 const routes: Routes = [
   {
@@ -105,6 +106,12 @@ const routes: Routes = [
   {
     path: 'student/home', 
     component: StudentHomeComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Student]}
+  },
+  {
+    path: 'student/profile', 
+    component: StudentProfileComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Student]}
   },
