@@ -52,12 +52,9 @@ export class StudentProfileComponent implements OnInit{
     }
     const password1 = this.passwordFormGroup.value.password;
     const password2 = this.passwordFormGroup.value.passwordBis;
-    if (password1 != password2) {
-      this.error = "Las contraseñas deben coincidir";
-      return;
-    }
+
     this.studentService
-    .changePassword(this.user!.id, this.passwordFormGroup.value.password!)
+    .changePassword(this.user!.id, password1!, password2!)
     .subscribe(msg => alert("Contraseña actualizada"))
 
   }

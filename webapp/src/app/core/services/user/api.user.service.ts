@@ -49,8 +49,8 @@ export class ApiStudentService {
     )
   }
 
-  changePassword(userId: number, password: string): Observable<string> {
-    return this.http.put<string>(`${this.apiUrl}/user/password/${userId}`, password)
+  changePassword(userId: number, actualPassword: string, newPassword: string): Observable<string> {
+    return this.http.put<string>(`${this.apiUrl}/user/password/${userId}`, { actualPassword, newPassword })
     .pipe(
       catchError(this.handleError)
     )

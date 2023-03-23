@@ -39,7 +39,7 @@ api.put("/", [
     check('id').isLength({ min: 1 }).trim().escape(),
 ], updateUser)
 
-api.put("/password", changePassword)
+api.put("/password/:id", changePassword)
 
 api.delete("/:id", [
     check('id').isLength({ min: 1 }).trim().escape()

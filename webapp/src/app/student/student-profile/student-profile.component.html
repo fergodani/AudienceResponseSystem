@@ -3,11 +3,11 @@
     <form class="d-flex flex-column align-items-center justify-content-center " [formGroup]="passwordFormGroup">
         <h1>Modificar contraseña</h1>
         <mat-form-field class="">
-            <mat-label>Constraseña</mat-label>
+            <mat-label>Contraseña actual</mat-label>
             <input type="password" id="password" matInput formControlName="password">
         </mat-form-field>
         <mat-form-field class="">
-            <mat-label>Repetir contraseña</mat-label>
+            <mat-label>Contraseña nueva</mat-label>
             <input type="password" id="passwordBis" matInput formControlName="passwordBis">
         </mat-form-field>
         <button class="mb-5" mat-raised-button (click)="submitPassword()">Aceptar</button>
