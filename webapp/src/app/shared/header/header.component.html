@@ -22,6 +22,10 @@
 						*ngIf="isProfessor">Biblioteca</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-item nav-link fs-6" href="/student/profile" (click)="isMenuCollapsed = true"
+						*ngIf="isStudent">Perfil</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-item nav-link fs-6" href="/login" (click)="isMenuCollapsed = true"
 						*ngIf="!user">Login</a>
 

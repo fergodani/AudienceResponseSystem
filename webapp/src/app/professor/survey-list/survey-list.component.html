@@ -8,6 +8,10 @@
                 alt="Question image source" />
         </div>
         <h2><strong>{{ survey.title }}</strong></h2>
+        <button mat-mini-fab color="primary" class="upload-btn flex-shrink-1 ms-3" (click)="addSurveyToCourse(survey)"
+            *ngIf="isSelecting && !isInclude(survey)">
+            <mat-icon>library_add</mat-icon>
+        </button>
     </div>
 </div>
-<button class="m-2" mat-raised-button (click)="createNewSurvey()">Crear nuevo cuestionario</button>
+<button class="m-2" mat-raised-button (click)="createNewSurvey()" *ngIf="!isSelecting">Crear nuevo cuestionario</button>

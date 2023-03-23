@@ -4,13 +4,15 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Question } from '../../models/question.model';
 import { Survey } from '@app/core/models/survey.model';
+import { User, UserResult } from '@app/core/models/user.model';
+import { Game } from '@app/core/models/game.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiProfessorService {
 
-   apiUrl = "http://localhost:3000/api"
+   apiUrl = "http://localhost:5000/api"
 
   constructor(private http: HttpClient) { }
 
@@ -58,6 +60,41 @@ export class ApiProfessorService {
 
   getSurveysByUser(id: number): Observable<Survey[]> {
     return this.http.get<Survey[]>(`${this.apiUrl}/survey/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  getUsersByCourse(id: number): Observable<User[]>{
+    return this.http.get<User[]>(`${this.apiUrl}/user/courses/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  getSurveysByCourse(id: number): Observable<Survey[]> {
+    return this.http.get<Survey[]>(`${this.apiUrl}/survey/courses/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  createGame(game: Game): Observable<Game> {
+    return this.http.post<Game>(`${this.apiUrl}/game`, game)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  updateGame(game: Game): Observable<Game> {
+    return this.http.put<Game>(`${this.apiUrl}/game`, game)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  createUserResults(userResults: UserResult[]): Observable<unknown> {
+    return this.http.post(`${this.apiUrl}/game/results`, userResults)
     .pipe(
       catchError(this.handleError)
     )

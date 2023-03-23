@@ -1,4 +1,5 @@
 import { Answer } from "./answer.model";
+import { User } from "./user.model";
 
 export class Question {
 

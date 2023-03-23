@@ -1,0 +1,32 @@
+<div class="d-flex flex-column m-3 gap-4">
+    <div class="description border">
+        <h1>{{ course.name }}</h1>
+        <small>{{ course.description }}</small>
+    </div>
+    <div class="content border">
+        <h1>Contenido del curso</h1>
+        <h2>Cuestionarios</h2>
+        <div class="d-flex gap-4 justify-content-between align-items-center" *ngFor="let survey of surveys">
+            <div class="border m-3 d-flex flex-row gap-3 bg-light w-100">
+                <div class="imageContainer">
+                    <img [src]="survey.resource != '' ? survey.resource : '../../../assets/default-placeholder.png'"
+                        alt="Question image source" />
+                </div>
+                <h2><strong>{{ survey.title }}</strong></h2>
+                <button mat-button >Offline</button>
+                <button (click)="openCreateOnlineGameDialog(survey.id!)" mat-button color="primary">Jugar</button>
+            </div>
+        </div>
+        <button mat-raised-button (click)="openSurveyDialog()">Añadir cuestionarios</button>
+        <h2>Preguntas</h2>
+        <button mat-raised-button (click)="openQuestionDialog()">Añadir preguntas</button>
+    </div>
+    <div class="content border mb-5">
+        <h1>Alumnos del curso</h1>
+        <button mat-raised-button (click)="openUserDialog()">Añadir alumnos</button>
+        <div class="d-flex flex-column" *ngFor="let user of users">
+            <h2>{{ user.username }}</h2>
+            <h3>{{ user.role }}</h3>
+        </div>
+    </div>
+</div>

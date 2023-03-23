@@ -16,3 +16,13 @@ export class Survey {
     questions: Question[] = [];
     resource: string = '';
 }
+
+export function equals(survey1: Survey, survey2: Survey): boolean {
+    if (survey1.id != survey2.id)
+        return false
+    if (survey1.title != survey2.title)
+        return false
+    if (survey1.user_creator_id != survey2.user_creator_id)
+        return false
+    return true;
+}

@@ -3,14 +3,14 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { User } from '../../models/user.model';
-import { Course } from '../../models/course.model';
+import { Course, SurveyCourse, UserCourse } from '../../models/course.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  apiUrl = "http://localhost:3000/api"
+  apiUrl = "http://localhost:5000/api"
   users: User[] = []
 
   // TODO: pasar la url a un .env
@@ -33,21 +33,21 @@ export class ApiService {
   }
 
   createUser(user: User): Observable<User> {
-    return this.http.post<User>("http://localhost:3000/api/user/create", user)
+    return this.http.post<User>(`${this.apiUrl}/user/create`, user)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   createCourse(course: Course): Observable<Course> {
-    return this.http.post<Course>("http://localhost:3000/api/course", course)
+    return this.http.post<Course>(`${this.apiUrl}/course`, course)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>("http://localhost:3000/api/user")
+    return this.http.get<User[]>(`${this.apiUrl}/user`)
       .pipe(
         catchError(this.handleError)
       );
@@ -61,7 +61,7 @@ export class ApiService {
   }
 
   getCourses(): Observable<Course[]> {
-    return this.http.get<Course[]>("http://localhost:3000/api/course")
+    return this.http.get<Course[]>(`${this.apiUrl}/course`)
       .pipe(
         catchError(this.handleError)
       );
@@ -115,5 +115,19 @@ export class ApiService {
       .pipe(
         catchError(this.handleError)
       )
+  }
+
+  addUserToCourse(userCourse: UserCourse): Observable<unknown> {
+    return this.http.post<UserCourse>(`${this.apiUrl}/course/addUser`, userCourse)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  addSurveyToCourse(surveyCourse: SurveyCourse): Observable<unknown> {
+    return this.http.post<SurveyCourse>(`${this.apiUrl}/course/addSurvey`, surveyCourse)
+    .pipe(
+      catchError(this.handleError)
+    )
   }
 }

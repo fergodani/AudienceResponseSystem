@@ -21,7 +21,7 @@ export class ApiAuthService {
     this.user = this.userSubject.asObservable();
   }
 
-  apiUrl = "http://localhost:3000/api"
+  apiUrl = "http://localhost:5000/api"
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {

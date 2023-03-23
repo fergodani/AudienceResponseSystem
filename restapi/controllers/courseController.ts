@@ -7,6 +7,7 @@ import * as csv from 'fast-csv';
 import * as csv_format from '@fast-csv/format';
 import { User } from '../models/user.model';
 import { Course } from '../models/course.model';
+import { Survey } from '../models/survey.model';
 const prisma = new PrismaClient()
 
 const getCourses = async (req: Request, res: Response): Promise<Response> => {
@@ -138,11 +139,59 @@ async function addCourse(course: Course) {
     }
 }
 
+const addUsers = async (req: Request, res: Response): Promise<Response> => {
+    try{
+        const { course_id, users } = req.body;
+        const userCourses = users.map((user: User) => ({course_id, user_id: user.id}))
+        await prisma.userCourse.createMany({
+            data: userCourses
+        })
+        return res.status(200).json({message: "Usuarios añadidos"})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error);
+    }
+}
+
+const addSurveys = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const { course_id, surveys } = req.body;
+        const courseSurvey = surveys.map((survey: Survey) => ({course_id, survey_id: survey.id}))
+        await prisma.courseSurvey.createMany({
+            data: courseSurvey
+        })
+        return res.status(200).json({message: "Cuestionarios añadidos"})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error);
+    }
+}
+
+const getCoursesByUser = async (req: Request, res: Response): Promise<Response> => {
+    try{
+       const userCourses = await prisma.userCourse.findMany({
+            where: {
+                user_id: Number(req.params.id)
+            },
+            select: {
+                course: true
+            }
+        })
+        const courses = userCourses.map((course: any) => course.course)
+        return res.status(200).json(courses)
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+}
+
 module.exports = {
     getCourses,
     getCourse,
     createCourse,
     updateCourse,
     deleteCourse,
-    uploadCourseFile
+    uploadCourseFile,
+    addUsers,
+    addSurveys,
+    getCoursesByUser
 }

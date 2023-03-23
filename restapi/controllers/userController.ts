@@ -112,7 +112,6 @@ function getRole(role: string): Role {
 
 const updateUser = async (req: Request, res: Response): Promise<Response> => {
     try {
-        console.log(req.body)
         const { id, username, password, role } = req.body;
         const user = await prisma.user.findFirst({
             where: {
@@ -220,6 +219,59 @@ async function addUser(user: User) {
     }
 }
 
+const getUsersByCourse = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const userCourses = await prisma.userCourse.findMany({
+            where: {
+                course_id: Number(req.params.id)
+            },
+            select: {
+                user: true
+            }
+        })
+        const users = userCourses.map((user: any) => user.user)
+        return res.status(200).json(users)
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+}
+
+const changePassword = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const user = await prisma.user.findFirst({
+            where: {
+                id: Number(req.params.id),
+            },
+        })
+        if (user == null) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const success = await bcrypt.compare(req.body.actualPassword, user.password);
+
+        if (!success) {
+            console.log("Invalid credentials")
+            return res.status(400).send("Invalid credentials");
+        }
+        
+        const newPassword = req.body.newPassword;
+        const salt = await bcrypt.genSalt();
+        const hash = await bcrypt.hash(newPassword, salt);
+        await prisma.user.update({
+            where: {
+                id: Number(req.params.id),
+            },
+            data: {
+                password: hash
+            }
+        })
+        return res.status(200).json({ message: "Contraseña cambiada correctamente" })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error)
+    }
+}
+
 
 module.exports = {
     getUsers,
@@ -228,5 +280,7 @@ module.exports = {
     updateUser,
     deleteUser,
     getUser,
-    uploadUserFile
+    uploadUserFile,
+    getUsersByCourse,
+    changePassword
 }

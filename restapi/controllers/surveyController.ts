@@ -21,6 +21,7 @@ const getSurveys = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+// Cuestionarios dado su creador
 const getSurveysByUser = async (req: Request, res: Response): Promise<Response> => {
     try{
         let user = await prisma.user.findUnique({
@@ -77,8 +78,26 @@ const createSurvey = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+const getSurveysByCourse = async (req: Request, res: Response): Promise<Response> => {
+    try{
+       const courseSurvey = await prisma.courseSurvey.findMany({
+            where: {
+                course_id: Number(req.params.id)
+            },
+            select: {
+                survey: true
+            }
+        })
+        const survey = courseSurvey.map((survey: any) => survey.survey)
+        return res.status(200).json(survey)
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+}
+
 module.exports = {
     getSurveys,
     getSurveysByUser,
-    createSurvey
+    createSurvey,
+    getSurveysByCourse
 }

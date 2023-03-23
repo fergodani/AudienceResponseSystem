@@ -1,3 +1,6 @@
+import { Survey } from "./survey.model";
+import { User } from "./user.model";
+
 export class Course {
 
     constructor(name: string, description: string, id: number = 0) {
@@ -9,4 +12,14 @@ export class Course {
     id: number = 0;
     name: string='';
     description: string=''
+}
+
+export interface UserCourse {
+    course_id: number;
+    users: User[];
+}
+
+export interface SurveyCourse {
+    course_id: number;
+    surveys: Survey[];
 }
