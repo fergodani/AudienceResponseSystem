@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { User } from '@app/core/models/user.model';
 
 @Component({
@@ -18,11 +18,13 @@ export class LinkUserCourseComponent {
   users: User[] = [];
 
   onNoClick(): void {
+    const usersIds = this.users.map(u => u.id);
+    this.usersAdded = this.usersAdded.filter(u => !usersIds.includes(u.id))
     this.dialogRef.close();
   }
 
   addUser(user: User) {
-    if(!this.users.includes(user)){
+    if (!this.users.includes(user)) {
       this.users.push(user)
     }
   }

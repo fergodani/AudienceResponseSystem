@@ -51,7 +51,6 @@ export class CourseDetailsComponent {
       if(result == undefined)
         return
       if (result.length != 0) {
-        this.users.push(result)
         this.addUserToCourse(result);
       }
     })
@@ -75,7 +74,6 @@ export class CourseDetailsComponent {
       if(result == undefined)
         return
       if (result.length != 0) {
-        this.surveys.push(result);
         this.addSurveyToCourse(result)
       }
 
