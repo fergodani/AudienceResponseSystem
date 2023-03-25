@@ -1,4 +1,4 @@
-import { Question } from "./question.model";
+import { Question, QuestionSurvey } from "./question.model";
 
 export class Survey {
 
@@ -14,6 +14,7 @@ export class Survey {
     title: string = '';
     user_creator_id: number = -1;
     questions: Question[] = [];
+    questionsSurvey: QuestionSurvey[] = [];
     resource: string = '';
 }
 
@@ -26,3 +27,4 @@ export function equals(survey1: Survey, survey2: Survey): boolean {
         return false
     return true;
 }
+

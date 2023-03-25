@@ -59,6 +59,9 @@ export class CreateSurveyComponent {
     if (this.title.invalid) {
       return;
     }
+    for(let i = 0; i < this.questionsAdded.length ; i++){
+      this.questionsAdded[i].position = i;
+    }
     const survey = new Survey(
       this.title.value!,
       this.authService.userValue!.id,

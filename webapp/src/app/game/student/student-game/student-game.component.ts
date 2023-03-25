@@ -26,12 +26,8 @@ export class StudentGameComponent implements OnInit {
   ) {
 
     this.socketService.game.subscribe((game: Game) => {
-      console.log(game)
       if (game.survey != undefined) {
         this.game = game;
-        console.log(this.game)
-        this.questionList = this.game.survey?.questions!;
-        this.actualQuestion = this.questionList[this.questionIndex];
         this.result.game_id = game.id!;
       }
     })
@@ -195,6 +191,7 @@ export class StudentGameComponent implements OnInit {
       short_answer: answer,
       answered: true
     }
+    console.log(answerResult)
     this.result.answer_results.push(answerResult)
     this.displayAnswerResult();
     this.socketService.socket.emit('send_answer', this.result);

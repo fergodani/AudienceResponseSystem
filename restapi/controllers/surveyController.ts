@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Prisma, PrismaClient } from '@prisma/client'
-import { Question } from '../models/question.model';
+import { Question, QuestionSurvey } from '../models/question.model';
 const prisma = new PrismaClient()
 
 const getSurveys = async (req: Request, res: Response): Promise<Response> => {
@@ -8,9 +8,13 @@ const getSurveys = async (req: Request, res: Response): Promise<Response> => {
         // igual no es necesario que busque las respuestas, o si
         let result = await prisma.survey.findMany({
             include: {
-                questions: {
+                questionsSurvey: {
                     include: {
-                        answers: true
+                        question: {
+                            include: {
+                                answers: true
+                            }
+                        }
                     }
                 }
             }
@@ -34,9 +38,13 @@ const getSurveysByUser = async (req: Request, res: Response): Promise<Response> 
                 user
             },
             include: {
-                questions: {
+                questionsSurvey: {
                     include: {
-                        answers: true
+                        question: {
+                            include: {
+                                answers: true
+                            }
+                        }
                     }
                 }
             }
@@ -65,12 +73,17 @@ const createSurvey = async (req: Request, res: Response): Promise<Response> => {
             user: {
                 connect: {id: user_creator_id}
             },
-            questions: {
-                connect: questionIds,
-            },
             resource
         }
-        await prisma.survey.create({ data: savedSurvey })
+        
+        const surveyCreated = await prisma.survey.create({ data: savedSurvey })
+        const questionsWithPosition = <QuestionSurvey[]>questions.map((question:Question) => ({
+            survey_id: surveyCreated.id,
+            question_id: question.id,
+            position: question.position
+        }))
+        console.log(questionsWithPosition)
+        await prisma.questionSurvey.createMany({ data: questionsWithPosition })
         return res.status(200).json({message: "Survey created"})
     } catch (error) {
         console.log(error)

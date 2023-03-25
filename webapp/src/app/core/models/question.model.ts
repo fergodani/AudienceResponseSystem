@@ -21,10 +21,18 @@ export class Question {
     answers: Answer[] = []
     resource: string = '';
     user_creator_id: number = 0;
+    position?: number;
 }
 
 export enum Type {
     multioption,
     true_false,
     short
-  }
+}
+
+export interface QuestionSurvey {
+    question_id: number;
+    survey_id: number;
+    position: number;
+    question: Question;
+}

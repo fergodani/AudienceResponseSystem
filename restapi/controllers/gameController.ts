@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { Prisma, PrismaClient, state } from '@prisma/client'
 import { UserResult } from '../models/user.model';
 import { AnswerResult } from '../models/answer.model';
+import { QuestionSurvey } from '../models/question.model';
+import { Game } from '../models/game.model';
 const prisma = new PrismaClient()
 
 const getGames = async (req: Request, res: Response): Promise<Response> => {
@@ -46,9 +48,13 @@ const getOpenGamesByCourses = async (req: Request<{}, {}, {}, CoursesIds>, res: 
             include: {
                 survey: {
                     include: {
-                        questions: {
+                        questionsSurvey: {
                             include: {
-                                answers: true
+                                question: {
+                                    include: {
+                                        answers: true
+                                    }
+                                }
                             }
                         }
                     }
@@ -83,15 +89,20 @@ const createGame = async (req: Request, res: Response): Promise<Response> => {
             include: {
                 survey: {
                     include: {
-                        questions: {
+                        questionsSurvey: {
                             include: {
-                                answers: true
+                                question: {
+                                    include: {
+                                        answers: true
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         })
+        console.log(gameSaved)
         return res.status(200).json(gameSaved)
     } catch (error) {
         console.log(error)
@@ -168,9 +179,13 @@ const getGamesResultsByUser = async (req: Request, res: Response): Promise<Respo
                     include: {
                         survey: {
                             include: {
-                                questions: {
+                                questionsSurvey: {
                                     include: {
-                                        answers: true
+                                        question: {
+                                            include: {
+                                                answers: true
+                                            }
+                                        }
                                     }
                                 }
                             }

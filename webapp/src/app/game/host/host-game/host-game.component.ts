@@ -2,7 +2,7 @@ import { Component, Input, OnInit, Type } from '@angular/core';
 import { Router } from '@angular/router';
 import { Answer } from '@app/core/models/answer.model';
 import { Game, GameState } from '@app/core/models/game.model';
-import { Question } from '@app/core/models/question.model';
+import { Question, QuestionSurvey } from '@app/core/models/question.model';
 import { User, UserResult } from '@app/core/models/user.model';
 import { SocketioService } from '@app/core/socket/socketio.service';
 
@@ -45,18 +45,23 @@ export class HostGameComponent implements OnInit {
 
   ngOnInit() {
     this.socketService.game.subscribe((game: Game) => {
-      if (game.survey != undefined) {
+      if (game.survey != undefined && this.questionList.length == 0) {
         this.game = game;
-        console.log(this.game.survey?.questions)
-        this.questionList = this.game.survey?.questions!;
+        this.game.survey?.questionsSurvey.forEach((qS: QuestionSurvey) => {
+          qS.question.position = qS.position
+        })
+        this.game.survey?.questionsSurvey.forEach((qS: QuestionSurvey) => {
+          this.questionList.push(qS.question)
+        })
+        this.questionList.sort((q1, q2) => {return q1.position! - q2.position!})
         this.actualQuestion = this.questionList[this.questionIndex];
         this.correctAnswers = this.actualQuestion.answers.filter(a => a.is_correct);
       }
     })
     this.socketService.setupHostSocketConnection();
     this.socketService.socket.on('get-answer-from-player', (data: string) => {
-      console.log(JSON.parse(data))
       this.userResults.push(JSON.parse(data));
+      console.log(this.userResults)
     })
   }
 
@@ -122,6 +127,7 @@ export class HostGameComponent implements OnInit {
         this.socketService.socket.emit('finish_game');
         this.isFinished = true;
       } else {
+        this.isLeaderboardScreen = false;
         this.socketService.socket.emit("question_preview", () => {
           this.timeLeft = 5;
           this.startPreviewCountdown(5, index);
