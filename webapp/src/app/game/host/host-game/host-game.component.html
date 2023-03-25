@@ -11,6 +11,11 @@
 <div class="d-flex flex-column align-items-center" *ngIf="isQuestionScreen">
     <h1>{{ timeLeft }} </h1>
     <h1>{{ actualQuestion.description }}</h1>
+    <div class="image-box mb-2" *ngIf="game.are_questions_visible && actualQuestion.resource != ''">
+        <div class="imageContainer">
+            <img [src]="actualQuestion.resource" *ngIf="actualQuestion.resource != ''" alt="Question image source" />
+        </div>
+    </div>
     <div class="row w-100 gap-2 ms-2 me-2" *ngIf="actualQuestion.type == 'multioption' || actualQuestion.type == 'true_false'">
         <h2 class="col bg-white text-center">{{ actualQuestion.answers[0].description }}</h2>
         <h2 class="col bg-white text-center">{{ actualQuestion.answers[1].description }}</h2>

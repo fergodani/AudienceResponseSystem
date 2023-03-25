@@ -10,6 +10,11 @@
 <div class="d-flex flex-column align-items-center" *ngIf="isQuestionScreen">
     <h1>{{ timeLeft }}</h1>
     <h1 *ngIf="game.are_questions_visible">{{ actualQuestion.description }}</h1>
+    <div class="image-box mb-2" *ngIf="game.are_questions_visible && actualQuestion.resource != ''">
+        <div class="imageContainer">
+            <img [src]="actualQuestion.resource" *ngIf="actualQuestion.resource != ''" alt="Question image source" />
+        </div>
+    </div>
     <div class="row w-100 gap-2 m-3"
         *ngIf="actualQuestion.type == 'multioption' || actualQuestion.type == 'true_false'">
         <button mat-button class="col bg-white text-center" (click)="checkAnswer(actualQuestion.answers[0].id!)">{{
