@@ -133,7 +133,9 @@ const createResults = async (req:Request, res: Response): Promise<Response> => {
         const answerResultsMapped = answerResults.map((aR: AnswerResult) => ({
             user_id: aR.user_id,
             game_id: aR.game_id,
+            question_id: aR.question_id,
             answer_id: aR.answer_id,
+            short_answer: aR.short_answer,
             question_index: aR.question_index,
             answered: aR.answered
         }))

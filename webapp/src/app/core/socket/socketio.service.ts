@@ -80,9 +80,7 @@ export class SocketioService {
     .subscribe()
     this.gameSubject.next(game);
     this.socket.emit('start_game', this.gameValue);
-    this.socket.on('move_to_survey', (game: Game) => {
-      this.gameSubject.next(game);
-    })
+    
   }
 
   closeGame(userResults: UserResult[]) {

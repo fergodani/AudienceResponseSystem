@@ -1,4 +1,5 @@
 import { Component, OnInit, Type } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Answer, AnswerResult } from '@app/core/models/answer.model';
 import { Game, GameState, PointsType } from '@app/core/models/game.model';
@@ -44,14 +45,12 @@ export class StudentGameComponent implements OnInit {
     this.socketService.socket.on("host-start-preview", () => {
       this.timeLeft = 5;
       this.isStart = true;
-      this.isPreviewScreen = true;
-      this.isResultScreen = false;
+      this.isLoading = true;
       this.startTimerPreview(5);
     })
     this.socketService.socket.on("host-start-question-timer", (time: number, question: Question) => {
       this.timeLeft = time;
       this.actualQuestion = question;
-
       this.startQuestionTimer(time);
     })
     this.socketService.socket.on("finish_game", () => {
@@ -76,6 +75,7 @@ export class StudentGameComponent implements OnInit {
   };
   lastScore: number = 0;
   haveAnswered: boolean = false;
+  shortQuestionForm = new FormControl('');
 
   questionType = Type;
 
@@ -84,6 +84,9 @@ export class StudentGameComponent implements OnInit {
   startTimerPreview(seconds: number) {
     let time = seconds;
     let interval = setInterval(() => {
+      this.isPreviewScreen = true;
+      this.isResultScreen = false;
+      this.isLoading = false;
       this.timeLeft = time;
       if (time > 0) {
         console.log(time)
@@ -118,6 +121,7 @@ export class StudentGameComponent implements OnInit {
           let answerResult: AnswerResult = {
             user_id: this.authService.userValue!.id,
             game_id: this.game.id!,
+            question_id: this.actualQuestion.id,
             question_index: this.questionIndex,
             answered: false
           }
@@ -138,6 +142,7 @@ export class StudentGameComponent implements OnInit {
   answerTime: number = 0;
   correctAnswerCount: number = 0;
   score: number = 0;
+  isLoading = false;
 
   displayAnswerResult() {
     this.isQuestionScreen = false;
@@ -151,12 +156,13 @@ export class StudentGameComponent implements OnInit {
   checkAnswer(id: number) {
     this.haveAnswered = true;
     let answer = this.actualQuestion.answers.find(a => a.id === id)
-    this.calculatePoints(answer!)
+    this.calculatePoints(answer!.is_correct)
     this.isQuestionAnswered = true;
 
     let answerResult: AnswerResult = {
       user_id: this.authService.userValue!.id,
       game_id: this.game.id!,
+      question_id: this.actualQuestion.id,
       question_index: this.questionIndex,
       answer_id: answer!.id,
       answered: true
@@ -166,7 +172,35 @@ export class StudentGameComponent implements OnInit {
     this.socketService.socket.emit('send_answer', this.result);
   }
 
-  calculatePoints(answer: Answer) {
+  checkShortAnswer() {
+    this.haveAnswered = true;
+    this.isQuestionAnswered = true;
+    const answer = this.shortQuestionForm.value!;
+    let isCorrect = false;
+    console.log("Respues del usuario: " + answer)
+    console.log("Respuestas correctas: ")
+    this.actualQuestion.answers.forEach((a) => {
+      console.log(a.description)
+      if(answer === a.description){
+        isCorrect = true;
+      }
+    })
+    this.calculatePoints(isCorrect);
+
+    let answerResult: AnswerResult = {
+      user_id: this.authService.userValue!.id,
+      game_id: this.game.id!,
+      question_id: this.actualQuestion.id,
+      question_index: this.questionIndex,
+      short_answer: answer,
+      answered: true
+    }
+    this.result.answer_results.push(answerResult)
+    this.displayAnswerResult();
+    this.socketService.socket.emit('send_answer', this.result);
+  }
+
+  calculatePoints(isCorrect: boolean) {
     //TODO: mirar si hay más de una respuesta correcta
     //TODO: tener en cuenta el tipo de puntuación (estándar, doble, sin puntos)
 
@@ -176,7 +210,7 @@ export class StudentGameComponent implements OnInit {
     // 3. Resta ese valor a 1
     // 4. Multiplica los puntos posibles por ese valor
     // 5. Redondea al número entero más cercano
-    if (answer.is_correct){
+    if (isCorrect){
       let points = (1 - ((this.answerTime / this.actualQuestion.answer_time) / 2)) * STANDARD_POINTS;
       if (this.game.point_type == PointsType.double)
         points = points * 2;

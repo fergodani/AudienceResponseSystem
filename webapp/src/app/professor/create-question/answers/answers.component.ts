@@ -119,9 +119,12 @@ export class AnswersComponent implements OnChanges {
       }
       case Type.short: {
         answers.push(new Answer(this.shortAnswersFormGroup.value.answer1!, true));
-        answers.push(new Answer(this.shortAnswersFormGroup.value.answer2!, true));
-        answers.push(new Answer(this.shortAnswersFormGroup.value.answer3!, true));
-        answers.push(new Answer(this.shortAnswersFormGroup.value.answer4!, true));
+        if(this.shortAnswersFormGroup.value.answer2! != '')
+          answers.push(new Answer(this.shortAnswersFormGroup.value.answer2!, true));
+        if(this.shortAnswersFormGroup.value.answer3! != '')
+          answers.push(new Answer(this.shortAnswersFormGroup.value.answer3!, true));
+        if(this.shortAnswersFormGroup.value.answer4! != '')
+          answers.push(new Answer(this.shortAnswersFormGroup.value.answer4!, true));
         break;        
       }
       default: {

@@ -5,6 +5,9 @@
 <div class="question_preview" *ngIf="isPreviewScreen">
     <h1>{{ timeLeft }} </h1>
 </div>
+<div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+    <span class="visually-hidden">Loading...</span>
+</div>
 <div class="d-flex flex-column align-items-center" *ngIf="isQuestionScreen">
     <h1>{{ timeLeft }} </h1>
     <h1>{{ actualQuestion.description }}</h1>
@@ -15,12 +18,6 @@
     <div class="row w-100 gap-2 ms-2 me-2" *ngIf="actualQuestion.type == 'multioption'">
         <h2 class="col bg-white text-center">{{ actualQuestion.answers[2].description }}</h2>
         <h2 class="col bg-white text-center">{{ actualQuestion.answers[3].description }}</h2>
-    </div>
-    <div class="short w-100" *ngIf="actualQuestion.type == 'short'">
-        <mat-form-field>
-            <mat-label>Respuesta</mat-label>
-            <textarea matInput></textarea>
-        </mat-form-field>
     </div>
 </div>
 <div class="d-flex flex-column align-items-center" *ngIf="isQuestionResult">

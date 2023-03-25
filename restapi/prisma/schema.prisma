@@ -72,13 +72,16 @@ model gameResult {
 model answerResult {
   game_id        Int
   user_id        Int
+  question_id    Int
   answer_id      Int?
+  short_answer   String?
   question_index Int
   answered       Boolean
   game_result    gameResult? @relation(fields: [game_id, user_id], references: [game_id, user_id], onDelete: Cascade, onUpdate: NoAction)
   answer         answer?      @relation(fields: [answer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  question        question?      @relation(fields: [question_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@id([game_id, user_id])
+  @@id([game_id, user_id, question_id])
 }
 
 model game {
@@ -107,6 +110,7 @@ model question {
   created_at      DateTime?        @default(now()) @db.Timestamp(6)
   answers         answer[]
   courseQuestion  courseQuestion[]
+  answerResults   answerResult[]
   survey          survey[]
   user            user?            @relation(fields: [user_creator_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

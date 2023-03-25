@@ -48,7 +48,6 @@ const createQuestion = async (req: Request, res: Response): Promise<Response> =>
         if (!user){
             return res.status(400).json({message: "The user who is creating question does not exists"})
         }
-
         let savedQuestion: Prisma.questionCreateInput
         savedQuestion = {
             description,

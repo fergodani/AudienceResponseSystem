@@ -27,6 +27,7 @@ export class HostGameComponent implements OnInit {
   usersConnected: User[] = [];
   userResults: UserResult[] = [];
   isFinished: boolean = false;
+  isLoading: boolean = false;
 
   isLeaderboardScreen: boolean = false;
   isPreviewScreen: boolean = false;
@@ -62,19 +63,22 @@ export class HostGameComponent implements OnInit {
   startGame() {
     this.socketService.startGame()
     this.socketService.socket.emit('question_preview', () => {
-        this.timeLeft = 5;
-        this.startPreviewCountdown(5, this.questionIndex);
+      this.isLoading = true;
+      this.timeLeft = 5;
+      this.startPreviewCountdown(5, this.questionIndex);
     })
   }
 
   timeLeft: number = 5;
 
   startPreviewCountdown(seconds: number, index: number) {
-    this.isLeaderboardScreen = false;
-    this.isPreviewScreen = true;
+
     let time = seconds;
     let interval = setInterval(() => {
       this.timeLeft = time;
+      this.isLeaderboardScreen = false;
+      this.isPreviewScreen = true;
+      this.isLoading = false;
       if (time > 0) {
         time--;
       } else {
@@ -124,7 +128,7 @@ export class HostGameComponent implements OnInit {
           this.userResults = [];
         })
       }
-      
+
     }, 5000)
   }
 
@@ -147,7 +151,7 @@ export class HostGameComponent implements OnInit {
     }
   }
 
-  leaveGame(){
+  leaveGame() {
     this.socketService.closeGame(this.userResults);
     this.router.navigate(['/professor/home'])
   }
