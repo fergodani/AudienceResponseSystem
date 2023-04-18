@@ -1,12 +1,14 @@
-<div class="d-flex flex-row bd-highlight flex-wrap h-100">
-        <mat-button-toggle-group class="d-flex gap-3 flex-column flex-wrap bg-light" name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle [checked]="true" class="fs-5" (click)="changeState(stateType.courses)">Cursos</mat-button-toggle>
-            <mat-divider></mat-divider>
-            <mat-button-toggle class="fs-5" (click)="changeState(stateType.surveys)">Cuestionarios</mat-button-toggle>
-            <mat-button-toggle class="fs-5" (click)="changeState(stateType.questions)">Preguntas</mat-button-toggle>
-        </mat-button-toggle-group>
+<div class="d-flex flex-row h-100">
+    <mat-button-toggle-group class="d-flex gap-3 flex-column bg-light" name="fontStyle"
+        aria-label="Font Style">
+        <mat-button-toggle [checked]="true" class="fs-5"
+            (click)="changeState(stateType.courses)">Cursos</mat-button-toggle>
+        <mat-divider></mat-divider>
+        <mat-button-toggle class="fs-5" (click)="changeState(stateType.surveys)">Cuestionarios</mat-button-toggle>
+        <mat-button-toggle class="fs-5" (click)="changeState(stateType.questions)">Preguntas</mat-button-toggle>
+    </mat-button-toggle-group>
 
-    <div class="flex-fill bd-highlight">
+    <div class="w-75">
         <app-survey-list *ngIf="state == stateType.surveys"></app-survey-list>
         <app-course-list *ngIf="state == stateType.courses"></app-course-list>
         <app-question-list *ngIf="state == stateType.questions"></app-question-list>

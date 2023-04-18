@@ -1,5 +1,5 @@
 <mat-drawer-container class="example-container" [hasBackdrop]="false">
-    <mat-drawer #drawer position="end" mode="push" [disableClose]="false">
+    <mat-drawer class="w-75" #drawer position="end" mode="push" [disableClose]="false">
         <h2 class="ps-3 pt-3 pe-3">Preguntas</h2>
         <div class="d-flex flex-row m-3">
             <app-question-list [isCreatingSurvey]="true" (questionToAdd)="addQuestion($event)"></app-question-list>
@@ -36,7 +36,7 @@
                     </div>
                 </div>
             </div>
-            <div class="flex-fill bd-highlight">
+            <div class="flex-fill bd-highlight w-75">
                 <button class="answers-button" mat-button (click)="drawer.toggle()">
                     <mat-icon *ngIf="!drawer.opened">keyboard_arrow_left</mat-icon>
                     <mat-icon *ngIf="drawer.opened">keyboard_arrow_right</mat-icon>
@@ -51,19 +51,19 @@
 
                                 </mat-panel-title>
                                 <mat-panel-description class="msg-header-description">
-                                    <h1>{{ question.description }}</h1>
-                                    <button type="button" class="btn btn-danger"
-                                        (click)="removeQuestion(question)">Eliminar</button>
+                                    <h1 class="text-nowrap">{{ question.description }}</h1>
                                 </mat-panel-description>
                             </mat-expansion-panel-header>
 
                             <div *ngFor="let answer of question.answers">
                                 <div class="d-flex flex-rowalign-items-center">
-                                    <p class="align-self-center pe-5">{{ answer.description }}</p>
+                                    <p class="align-self-center pe-5 text-break w-75">{{ answer.description }}</p>
                                     <mat-icon [ngStyle]="{'color':'green'}" *ngIf="answer.is_correct">check</mat-icon>
                                     <mat-icon [ngStyle]="{'color':'red'}" *ngIf="!answer.is_correct">clear</mat-icon>
                                 </div>
                             </div>
+                            <button type="button" class="btn btn-danger"
+                                        (click)="removeQuestion(question)">Eliminar</button>
                         </mat-expansion-panel>
                     </div>
                 </mat-accordion>

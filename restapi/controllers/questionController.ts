@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
 import { Prisma, PrismaClient, type } from '@prisma/client'
+import { parse } from 'json2csv'
+
+
 const prisma = new PrismaClient()
 
 const getQuestions = async (req: Request, res: Response): Promise<Response> => {
-    try{
+    try {
         let result = await prisma.question.findMany({
             include: {
                 answers: true,
@@ -37,7 +40,7 @@ const getQuestionsByUser = async (req: Request, res: Response): Promise<Response
 }
 
 const createQuestion = async (req: Request, res: Response): Promise<Response> => {
-    try{
+    try {
         const { description, subject, type, answer_time, answers, resource, user_creator_id } = req.body;
         const user = await prisma.user.findUnique({
             where: {
@@ -45,8 +48,8 @@ const createQuestion = async (req: Request, res: Response): Promise<Response> =>
             },
         })
 
-        if (!user){
-            return res.status(400).json({message: "The user who is creating question does not exists"})
+        if (!user) {
+            return res.status(400).json({ message: "The user who is creating question does not exists" })
         }
         let savedQuestion: Prisma.questionCreateInput
         savedQuestion = {
@@ -56,7 +59,7 @@ const createQuestion = async (req: Request, res: Response): Promise<Response> =>
             answer_time,
             resource,
             user: {
-                connect: {id: user_creator_id}
+                connect: { id: user_creator_id }
             },
             answers: {
                 createMany: {
@@ -72,9 +75,34 @@ const createQuestion = async (req: Request, res: Response): Promise<Response> =>
     }
 }
 
+const exportQuestions = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        let user = await prisma.user.findUnique({
+            where: {
+                id: Number(req.params.id),
+            }
+        })
+        let result = await prisma.question.findMany({
+            where: {
+                user
+            },
+            include: {
+                answers: true,
+            }
+        })
+        const csv = parse(result)
+        console.log(csv)
+        return res.status(200).json(csv);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error)
+    }
+}
+
 
 module.exports = {
     getQuestions,
     createQuestion,
-    getQuestionsByUser
+    getQuestionsByUser,
+    exportQuestions
 }

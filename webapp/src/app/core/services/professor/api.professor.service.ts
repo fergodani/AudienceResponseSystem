@@ -99,4 +99,13 @@ export class ApiProfessorService {
       catchError(this.handleError)
     )
   }
+
+  importQuestions() {}
+
+  exportQuestions(id: number): Observable<unknown> {
+    return this.http.get(`${this.apiUrl}/question/export/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
 }

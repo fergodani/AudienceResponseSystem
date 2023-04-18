@@ -211,7 +211,7 @@ export class StudentGameComponent implements OnInit {
       let points = (1 - ((this.answerTime / this.actualQuestion.answer_time) / 2)) * STANDARD_POINTS;
       if (this.game.point_type == PointsType.double)
         points = points * 2;
-      this.result.score += points;
+      this.result.score += Math.round(points);
     }
       
   }

@@ -28,6 +28,8 @@ export class QuestionListComponent implements OnInit {
   @Input() isSelecting: boolean = false;
   questions: Question[] = [];
   @Output() questionToAdd = new EventEmitter<Question>;
+  requiredFileType = "text/csv";
+  fileName: string = ''
 
   addQuestionToSurvey(question: Question) {
     this.questionToAdd.emit(question);
@@ -35,6 +37,30 @@ export class QuestionListComponent implements OnInit {
 
   createNewQuestion() {
     this.router.navigate(['/questions/create'])
+  }
+
+  onFileSelected(event: Event) {
+    const file = (<HTMLInputElement>event.target).files![0];
+
+    // TODO: comprobar de otra manera, si file es null daria error esto creo
+    if (file && file.type == this.requiredFileType) {
+      this.fileName = file.name;
+      const formData: FormData = new FormData();
+      formData.append('file', file, file.name);
+      this.apiProfessorService
+    }
+  }
+
+  exportQuestions() {
+    this.apiProfessorService
+    .exportQuestions(this.authService.userValue!.id)
+    .subscribe(data =>this.downloadFile(data))
+  }
+
+  downloadFile(data: any) {
+    const blob = new Blob([data], { type: 'text/csv'})
+    const url = window.URL.createObjectURL(blob)
+    window.open(url)
   }
 
 }
