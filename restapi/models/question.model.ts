@@ -1,14 +1,15 @@
+import { answer } from "@prisma/client";
 import { Answer } from "./answer.model";
 
 export interface Question{
-    id: number;
+    id?: number;
     description: string;
     subject: string;
     type: string;
     answer_time: number;
-    answers: Answer[];
-    resource: string;
-    user_creator_id: number;
+    answers: Answer[] | answer[];
+    resource?: string;
+    user_creator_id?: number;
     position?: number;
 }
 
@@ -16,4 +17,19 @@ export interface QuestionSurvey {
     question_id: number;
     survey_id: number;
     position: number;
+}
+
+export interface QuestionCsv {
+    descripcion: string;
+    tema: string,
+    tipo: string;
+    tiempo: number;
+    respuesta1: string;
+    correcta1: boolean;
+    respuesta2?: string;
+    correcta2?: boolean;
+    respuesta3?: string;
+    correcta3?: boolean;
+    respuesta4?: string;
+    correcta4?: boolean;
 }

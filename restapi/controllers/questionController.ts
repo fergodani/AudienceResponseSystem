@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import { Prisma, PrismaClient, type } from '@prisma/client'
-import { parse } from 'json2csv'
+import { Options, parse, transforms } from 'json2csv'
+import { Question, QuestionCsv } from '../models/question.model';
+import { Answer } from '../models/answer.model';
+const { flatten, unwind } = transforms;
 
 
 const prisma = new PrismaClient()
@@ -90,8 +93,25 @@ const exportQuestions = async (req: Request, res: Response): Promise<Response> =
                 answers: true,
             }
         })
-        const csv = parse(result)
-        console.log(csv)
+        // Mapear las preguntas para formar el json necesario
+        let questionsCsv: QuestionCsv[] = result.map((question) => (
+            {
+                descripcion: question.description,
+                tema: question.subject,
+                tipo: question.type,
+                tiempo: question.answer_time,
+                respuesta1: question.answers[0].description,
+                correcta1: question.answers[0].is_correct,
+                respuesta2: question.answers.length >= 2 ? question.answers[1].description : undefined,
+                correcta2: question.answers.length >= 2 ? question.answers[1].is_correct : undefined,
+                respuesta3: question.answers.length >= 3 ? question.answers[2].description : undefined,
+                correcta3: question.answers.length >= 3 ? question.answers[2].is_correct : undefined,
+                respuesta4: question.answers.length >= 4 ? question.answers[3].description : undefined,
+                correcta4: question.answers.length >= 4 ? question.answers[3].is_correct : undefined,
+            }
+        ))
+        const option: Options<QuestionCsv> = {quote: 'SDFAG'}
+        const csv = parse(questionsCsv, option)
         return res.status(200).json(csv);
     } catch (error) {
         console.log(error)
@@ -105,4 +125,8 @@ module.exports = {
     createQuestion,
     getQuestionsByUser,
     exportQuestions
+}
+
+function stringFormatter(arg0: { quote: string; }) {
+    throw new Error('Function not implemented.');
 }
