@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { Message } from '@app/core/models/message.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { Question } from 'src/app/core/models/question.model';
 import { ApiProfessorService } from 'src/app/core/services/professor/api.professor.service';
@@ -44,10 +45,13 @@ export class QuestionListComponent implements OnInit {
 
     // TODO: comprobar de otra manera, si file es null daria error esto creo
     if (file && file.type == this.requiredFileType) {
+      console.log('Importando...')
       this.fileName = file.name;
       const formData: FormData = new FormData();
       formData.append('file', file, file.name);
       this.apiProfessorService
+      .importQuestions(formData, this.authService.userValue!!.id)
+      .subscribe((msg: Message) => alert(msg.message))
     }
   }
 

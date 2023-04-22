@@ -24,9 +24,6 @@
         <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
 
         <div class="file-upload d-flex gap-2">
-
-            {{fileName || ""}}
-
             <button mat-raised-button color="primary" class="upload-btn" (click)="fileUpload.click()">
                 Importar preguntas <mat-icon>attach_file</mat-icon>
             </button>

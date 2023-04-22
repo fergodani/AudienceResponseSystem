@@ -6,6 +6,7 @@ import { Question } from '../../models/question.model';
 import { Survey } from '@app/core/models/survey.model';
 import { User, UserResult } from '@app/core/models/user.model';
 import { Game } from '@app/core/models/game.model';
+import { Message } from '@app/core/models/message.model';
 
 @Injectable({
   providedIn: 'root'
@@ -100,10 +101,15 @@ export class ApiProfessorService {
     )
   }
 
-  importQuestions() {}
+  importQuestions(formData: FormData, id: number): Observable<Message> {
+    return this.http.post<Message>(`${this.apiUrl}/question/file/${id}`, formData)
+      .pipe(
+        catchError(this.handleError)
+      )
+  }
 
-  exportQuestions(id: number): Observable<unknown> {
-    return this.http.get(`${this.apiUrl}/question/export/${id}`)
+  exportQuestions(id: number): Observable<Message> {
+    return this.http.get<Message>(`${this.apiUrl}/question/export/${id}`)
     .pipe(
       catchError(this.handleError)
     )

@@ -171,7 +171,6 @@ const deleteUser = async (req: Request, res: Response): Promise<Response> => {
 const uploadUserFile = async (req: Request, res: Response): Promise<Response> => {
     try {
         const form = new multiparty.Form({ uploadDir: '../restapi/files' });
-        console.log(form)
         form.parse(req, function (err, fields, files) {
             fs.rename(files.file[0].path, process.env.FILEPATH!, function (err) {
                 if (err) console.log('ERROR: ' + err);

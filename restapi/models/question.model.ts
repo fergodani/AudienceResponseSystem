@@ -25,11 +25,11 @@ export interface QuestionCsv {
     tipo: string;
     tiempo: number;
     respuesta1: string;
-    correcta1: boolean;
+    correcta1: string;
     respuesta2?: string;
-    correcta2?: boolean;
+    correcta2?: string;
     respuesta3?: string;
-    correcta3?: boolean;
+    correcta3?: string;
     respuesta4?: string;
-    correcta4?: boolean;
+    correcta4?: string;
 }
