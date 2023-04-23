@@ -67,4 +67,13 @@ export class QuestionListComponent implements OnInit {
     window.open(url)
   }
 
+  deleteQuestion(question: Question) {
+    this.apiProfessorService
+    .deleteQuestion(question.id)
+    .subscribe((msg: Message) => {
+      alert(msg.message)
+      this.questions = this.questions.filter((q) => q.id != question.id)
+    })
+  }
+
 }

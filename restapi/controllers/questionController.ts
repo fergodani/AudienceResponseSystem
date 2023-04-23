@@ -97,6 +97,20 @@ const createQuestion = async (req: Request, res: Response): Promise<Response> =>
     }
 }
 
+const deleteQuestion = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        await prisma.question.delete({
+            where: {
+                id: Number(req.params.id)
+            }
+        })
+        return res.status(200).json({message: "Pregunta eliminada correctamente"})
+    } catch (error) {
+        console.error(error)
+        return res.status(500).send(error)
+    }
+}
+
 const exportQuestions = async (req: Request, res: Response): Promise<Response> => {
     try {
         let user = await prisma.user.findUnique({
@@ -233,5 +247,6 @@ module.exports = {
     exportQuestions,
     importQuestions,
     updateQuestion,
-    getQuestionsById
+    getQuestionsById,
+    deleteQuestion
 }

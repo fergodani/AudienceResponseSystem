@@ -128,4 +128,11 @@ export class ApiProfessorService {
       catchError(this.handleError)
     )
   }
+
+  deleteQuestion(id: number): Observable<Message> {
+    return this.http.delete<Message>(`${this.apiUrl}/question/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
 }

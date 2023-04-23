@@ -8,7 +8,8 @@ const {
     exportQuestions,
     importQuestions,
     updateQuestion,
-    getQuestionsById
+    getQuestionsById,
+    deleteQuestion
 } = require('../controllers/questionController')
 
 api.get("/", getQuestions)
@@ -26,5 +27,7 @@ api.get("/export/:id", [], exportQuestions)
 api.post("/file/:id", importQuestions)
 
 api.put("/", updateQuestion)
+
+api.delete("/:id", deleteQuestion)
 
 module.exports = api

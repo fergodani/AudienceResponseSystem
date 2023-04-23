@@ -22,6 +22,8 @@
                 Editar <mat-icon>edit</mat-icon>
             </button>
         </a>
+        <button type="button" class="btn btn-danger ms-3"
+            (click)="deleteQuestion(question)">Eliminar</button>
     </mat-expansion-panel>
     <button class="m-2" mat-raised-button (click)="createNewQuestion()" *ngIf="!isSelecting">Crear nueva
         pregunta</button>
