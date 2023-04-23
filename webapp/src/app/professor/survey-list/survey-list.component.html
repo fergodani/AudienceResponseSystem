@@ -12,6 +12,13 @@
             *ngIf="isSelecting && !isInclude(survey)">
             <mat-icon>library_add</mat-icon>
         </button>
+        <a class="m-2" [routerLink]="['/survey/edit', survey.id]">
+            <button type="button" mat-raised-button>
+                Editar <mat-icon>edit</mat-icon>
+            </button>
+        </a>
+        <button  mat-button type="button" class="btn btn-danger ms-2 mt-2"
+            (click)="deleteSurvey(survey)">Eliminar<mat-icon>delete_forever</mat-icon></button>
     </div>
 </div>
 <button class="m-2" mat-raised-button (click)="createNewSurvey()" *ngIf="!isSelecting">Crear nuevo cuestionario</button>

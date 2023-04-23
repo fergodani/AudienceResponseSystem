@@ -1,0 +1,4 @@
+<div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+    <span class="visually-hidden">Loading...</span>
+</div>
+<app-create-survey [isEditing]="true" [surveyToEdit]="survey"  *ngIf="!isLoading"></app-create-survey>

@@ -44,7 +44,7 @@
                 <h1 class="m-2">Preguntas ({{ questionsAdded.length }})</h1>
                 <mat-accordion class="example-headers-align" multi>
                     <div cdkDropList class="list m-3" (cdkDropListDropped)="drop($event)">
-                        <mat-expansion-panel class="p-2" hideToggle *ngFor="let question of questionsAdded" cdkDrag>
+                        <mat-expansion-panel class="p-2" hideToggle *ngFor="let question of questionsAdded; let indexOfElement=index" cdkDrag>
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     <mat-icon>menu</mat-icon>
@@ -63,7 +63,7 @@
                                 </div>
                             </div>
                             <button type="button" class="btn btn-danger"
-                                        (click)="removeQuestion(question)">Eliminar</button>
+                                        (click)="removeQuestion(indexOfElement)">Eliminar</button>
                         </mat-expansion-panel>
                     </div>
                 </mat-accordion>

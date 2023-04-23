@@ -55,6 +55,30 @@ const getSurveysByUser = async (req: Request, res: Response): Promise<Response> 
     }
 }
 
+const getSurveysById = async (req: Request, res: Response): Promise<Response> => {
+    try{
+        let result = await prisma.survey.findUnique({
+            where: {
+                id: Number(req.params.id)
+            },
+            include: {
+                questionsSurvey: {
+                    include: {
+                        question: {
+                            include: {
+                                answers: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        return res.status(200).json(result)
+    } catch (error) {
+        return res.status(500).send(error)
+    }
+}
+
 const createSurvey = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { title, user_creator_id, questions, resource } = req.body;
@@ -108,9 +132,73 @@ const getSurveysByCourse = async (req: Request, res: Response): Promise<Response
     }
 }
 
+const updateSurvey = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const {id, title, questions, resource} = req.body
+        const questionsWithPosition = <QuestionSurvey[]>questions.map((question:Question) => ({
+            survey_id: id,
+            question_id: question.id,
+            position: question.position
+        }))
+        await prisma.survey.update({
+            where: {
+                id: Number(id)
+            },
+            data: {
+                title,
+                resource
+            }
+        })
+        await prisma.questionSurvey.deleteMany({
+            where: {
+                survey_id: Number(id)
+            }
+        })
+        for (const question of questionsWithPosition) {
+            await prisma.questionSurvey.upsert({
+                where: {
+                    question_id_survey_id: {
+                        survey_id: Number(id),
+                        question_id: Number(question.question_id)
+                    }
+                },
+                update: {
+                    position: question.position
+                },
+                create: {
+                    survey_id: Number(id),
+                    question_id: Number(question.question_id),
+                    position: question.position
+                }
+            })
+        }
+        return res.status(200).json({message: "Cuestionario actualizado correctamente"})
+    } catch (error) {
+        console.error(error)
+        return res.status(500).send(error)
+    }
+}
+
+const deleteSurvey = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        await prisma.survey.delete({
+            where: {
+                id: Number(req.params.id)
+            }
+        })
+        return res.status(200).json({message: "Cuestionario eliminado correctamente"})
+    }catch(error){
+        console.error(error)
+        return res.status(500).send(error)
+    }
+}
+
 module.exports = {
     getSurveys,
     getSurveysByUser,
     createSurvey,
-    getSurveysByCourse
+    getSurveysByCourse,
+    getSurveysById,
+    updateSurvey,
+    deleteSurvey
 }

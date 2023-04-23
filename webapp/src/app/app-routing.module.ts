@@ -22,6 +22,7 @@ import { SurveyListComponent } from './professor/survey-list/survey-list.compone
 import { StudentHomeComponent } from './student/student-home/student-home.component';
 import { StudentProfileComponent } from './student/student-profile/student-profile.component';
 import { UpdateQuestionComponent } from './professor/update-question/update-question.component';
+import { UpdateSurveyComponent } from './professor/update-survey/update-survey.component';
 
 const routes: Routes = [
   {
@@ -101,8 +102,14 @@ const routes: Routes = [
     data: { roles: [Role.Professor]}
   },
   {
-    path: 'questions/edit/:id', 
+    path: 'question/edit/:id', 
     component: UpdateQuestionComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Professor]}
+  },
+  {
+    path: 'survey/edit/:id', 
+    component: UpdateSurveyComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Professor]}
   },

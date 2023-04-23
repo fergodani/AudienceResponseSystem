@@ -17,13 +17,13 @@
                 <mat-icon class="w-auto" [ngStyle]="{'color':'red'}" *ngIf="!answer.is_correct">clear</mat-icon>
             </div>
         </div>
-        <a [routerLink]="['/questions/edit', question.id]">
+        <a [routerLink]="['/question/edit', question.id]">
             <button type="button" mat-raised-button>
                 Editar <mat-icon>edit</mat-icon>
             </button>
         </a>
-        <button type="button" class="btn btn-danger ms-3"
-            (click)="deleteQuestion(question)">Eliminar</button>
+        <button mat-button type="button" class="btn btn-danger ms-3"
+            (click)="deleteQuestion(question)">Eliminar<mat-icon>delete_forever</mat-icon></button>
     </mat-expansion-panel>
     <button class="m-2" mat-raised-button (click)="createNewQuestion()" *ngIf="!isSelecting">Crear nueva
         pregunta</button>

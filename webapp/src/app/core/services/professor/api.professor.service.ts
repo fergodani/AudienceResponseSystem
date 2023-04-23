@@ -67,7 +67,14 @@ export class ApiProfessorService {
   }
 
   getSurveysByUser(id: number): Observable<Survey[]> {
-    return this.http.get<Survey[]>(`${this.apiUrl}/survey/${id}`)
+    return this.http.get<Survey[]>(`${this.apiUrl}/survey/user/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  getSurveyById(id: number): Observable<Survey> {
+    return this.http.get<Survey>(`${this.apiUrl}/survey/${id}`)
     .pipe(
       catchError(this.handleError)
     )
@@ -131,6 +138,21 @@ export class ApiProfessorService {
 
   deleteQuestion(id: number): Observable<Message> {
     return this.http.delete<Message>(`${this.apiUrl}/question/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  updateSurvey(survey: Survey): Observable<Message> {
+    return this.http.put<Message>(`${this.apiUrl}/survey`, survey)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  deleteSurvey(id: number): Observable<Message> {
+    console.log(id)
+    return this.http.delete<Message>(`${this.apiUrl}/survey/${id}`)
     .pipe(
       catchError(this.handleError)
     )

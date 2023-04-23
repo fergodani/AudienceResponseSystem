@@ -1,6 +1,8 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Message } from '@app/core/models/message.model';
 import { Question } from '@app/core/models/question.model';
 import { Survey } from '@app/core/models/survey.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
@@ -11,12 +13,23 @@ import { ApiProfessorService } from '@app/core/services/professor/api.professor.
   templateUrl: './create-survey.component.html',
   styleUrls: ['./create-survey.component.css']
 })
-export class CreateSurveyComponent {
+export class CreateSurveyComponent implements OnInit{
 
   constructor(
     private authService: ApiAuthService,
-    private apiProfessorService: ApiProfessorService
+    private apiProfessorService: ApiProfessorService,
+    private router: Router
     ) {}
+
+  ngOnInit(): void {
+    if (this.surveyToEdit != undefined) {
+      this.title.patchValue(this.surveyToEdit.title)
+      //console.log(this.surveyToEdit)
+      this.surveyToEdit.questionsSurvey.forEach((qS) => {
+        this.questionsAdded.push(qS.question)
+      })
+    }
+  }
 
   questions: Question[] = [];
   questionsAdded: Question[] = [];
@@ -25,14 +38,18 @@ export class CreateSurveyComponent {
     Validators.required
   ]);
 
+  @Input() isEditing = false
+  @Input() surveyToEdit: Survey | undefined
+
   addQuestion(questionToAdd: Question) {
-    if (!this.questionsAdded.includes(questionToAdd))
+    //if (!this.questionsAdded.includes(questionToAdd))
       this.questionsAdded.push(questionToAdd);
   }
 
-  removeQuestion(questionToRemove: Question) {
-    this.questionsAdded = this.questionsAdded.filter(question => question != questionToRemove);
-    this.questions.push(questionToRemove);
+  removeQuestion(index: number) {
+    //this.questionsAdded = this.questionsAdded.filter(question => question != questionToRemove);
+    this.questionsAdded = this.questionsAdded.filter((question, i) => i != index);
+    //this.questions.push(questionToRemove);
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -56,7 +73,7 @@ export class CreateSurveyComponent {
   }
 
   onSurveySubmit() {
-    if (this.title.invalid) {
+    if (this.title.invalid || this.questionsAdded.length == 0) {
       return;
     }
     for(let i = 0; i < this.questionsAdded.length ; i++){
@@ -68,10 +85,20 @@ export class CreateSurveyComponent {
       this.questionsAdded,
       this.resourceFile
     )
-    this.apiProfessorService
-    .createSurvey(survey)
-    .subscribe(() => alert("Cuestionario creado"))
-    console.log(survey)
+    if (!this.isEditing){
+      this.apiProfessorService
+      .createSurvey(survey)
+      .subscribe(() => alert("Cuestionario creado"))
+    }else {
+      survey.id = this.surveyToEdit?.id
+      this.apiProfessorService
+      .updateSurvey(survey)
+      .subscribe((msg: Message) => {
+        alert(msg.message)
+        
+      })
+    }
+    this.router.navigate(['/library'])
   }
 
 
