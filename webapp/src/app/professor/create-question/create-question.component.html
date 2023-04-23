@@ -42,7 +42,15 @@
                 <div class="alert alert-danger" role="alert" *ngIf="error">
                     {{ errorMessage }}
                 </div>
-                <app-answers [typeString]="createQuestionForm.value.type!" (answers)="addAnswers($event)"></app-answers>
+                <app-answers [typeString]="createQuestionForm.value.type!"
+                 (answers)="addAnswers($event)"
+                 *ngIf="questionToEdit == undefined"
+                 ></app-answers>
+                <app-answers [typeString]="createQuestionForm.value.type!"
+                [answersToEdit] = 'questionToEdit!!.answers'
+                 (answers)="addAnswers($event)"
+                 *ngIf="questionToEdit != undefined"
+                 ></app-answers>
             </div>
         </div>
     </mat-drawer-content>

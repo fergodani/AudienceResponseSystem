@@ -45,6 +45,22 @@ const getQuestionsByUser = async (req: Request, res: Response): Promise<Response
     }
 }
 
+const getQuestionsById = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        let result = await prisma.question.findUnique({
+            where: {
+                id: Number(req.params.id)
+            },
+            include: {
+                answers: true,
+            }
+        })
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).send(error);
+    }
+}
+
 const createQuestion = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { description, subject, type, answer_time, answers, resource, user_creator_id } = req.body;
@@ -168,11 +184,54 @@ async function addQuestion(question: QuestionCsv, user_id: number) {
         await prisma.question.create({ data: savedQuestion })
 }
 
+const updateQuestion = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const {id, description, subject, type, answer_time, answers, resource}  = req.body
+        const question = await prisma.question.findUnique({
+            where: {
+                id: Number(id)
+            }
+        })
+        if(question == null) 
+            return res.status(404).json({message: "Pregunta no encontrada"})
+        
+        await prisma.question.update({
+            where: {
+                id: Number(id)
+            },
+            data: {
+                description,
+                subject,
+                type: type as type,
+                answer_time,
+                resource,
+            }
+        })
+        for (const answer of answers) {
+            await prisma.answer.update({
+                where: {
+                    id: answer.id
+                },
+                data: {
+                    description: answer.description,
+                    is_correct: answer.is_correct
+                }
+            })
+        }
+        return res.status(200).json({message: "Pregunta actualizada correctamente"})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error)
+    }
+}
+
 
 module.exports = {
     getQuestions,
     createQuestion,
     getQuestionsByUser,
     exportQuestions,
-    importQuestions
+    importQuestions,
+    updateQuestion,
+    getQuestionsById
 }

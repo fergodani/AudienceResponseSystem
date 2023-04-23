@@ -21,6 +21,7 @@ import { QuestionListComponent } from './professor/question-list/question-list.c
 import { SurveyListComponent } from './professor/survey-list/survey-list.component';
 import { StudentHomeComponent } from './student/student-home/student-home.component';
 import { StudentProfileComponent } from './student/student-profile/student-profile.component';
+import { UpdateQuestionComponent } from './professor/update-question/update-question.component';
 
 const routes: Routes = [
   {
@@ -96,6 +97,12 @@ const routes: Routes = [
   {
     path: 'questions/list', 
     component: QuestionListComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Professor]}
+  },
+  {
+    path: 'questions/edit/:id', 
+    component: UpdateQuestionComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Professor]}
   },

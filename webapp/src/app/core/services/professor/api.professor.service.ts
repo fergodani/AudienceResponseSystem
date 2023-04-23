@@ -46,7 +46,14 @@ export class ApiProfessorService {
   }
 
   getQuestionsByUser(id: number): Observable<Question[]> {
-    return this.http.get<Question[]>(`${this.apiUrl}/question/${id}`)
+    return this.http.get<Question[]>(`${this.apiUrl}/question/user/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  getQuestionById(id: number): Observable<Question> {
+    return this.http.get<Question>(`${this.apiUrl}/question/${id}`)
     .pipe(
       catchError(this.handleError)
     )
@@ -110,6 +117,13 @@ export class ApiProfessorService {
 
   exportQuestions(id: number): Observable<Message> {
     return this.http.get<Message>(`${this.apiUrl}/question/export/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  updateQuestion(question: Question): Observable<Message> {
+    return this.http.put<Message>(`${this.apiUrl}/question`, question)
     .pipe(
       catchError(this.handleError)
     )

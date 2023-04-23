@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Message } from '@app/core/models/message.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { isEmpty } from 'rxjs';
 import { Answer } from 'src/app/core/models/answer.model';
@@ -14,12 +16,43 @@ const NO_CORRECT_ANSWER = "Debe haber al menos una respuesta correcta";
   templateUrl: './create-question.component.html',
   styleUrls: ['./create-question.component.css']
 })
-export class CreateQuestionComponent {
+export class CreateQuestionComponent implements OnInit{
 
   constructor(
     private apiProfessorService: ApiProfessorService,
-    private authService: ApiAuthService
-    ) {}
+    private authService: ApiAuthService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    if (this.questionToEdit != undefined) {
+      let type
+      if (this.questionToEdit.type == 'true_false') {
+        type = this.types[1];
+      } else if (this.questionToEdit.type == 'multioption') {
+        type = this.types[0];
+      } else {
+        type = this.types[2];
+      }
+      console.log(type)
+      this.createQuestionForm.patchValue({
+        type,
+        description: this.questionToEdit.description,
+        limitTime: this.questionToEdit.answer_time
+      })
+      if(this.questionToEdit.resource != '')
+        this.resourceFile = this.questionToEdit.resource
+    }
+  }
+
+  opened: boolean = false;
+  events: string[] = [];
+  answers: Answer[] = [];
+  error: boolean = false;
+  errorMessage: string = '';
+  resourceFile: any = '';
+  @Input() isEditing = false;
+  @Input() questionToEdit: Question | undefined
 
   types = [
     'Multiopción',
@@ -34,16 +67,8 @@ export class CreateQuestionComponent {
       Validators.minLength(1)
     ])
   })
-  
 
-  opened: boolean = false;
-  events: string[] = [];
-  answers: Answer[] = [];
-  error: boolean = false;
-  errorMessage: string = '';
-  resourceFile: any = '';
-
-  addAnswers(answers: Answer[]){
+  addAnswers(answers: Answer[]) {
     this.error = false;
     const question = new Question(
       this.createQuestionForm.value.description!,
@@ -54,8 +79,7 @@ export class CreateQuestionComponent {
       this.resourceFile,
       this.authService.userValue!.id
     );
-    console.log(question)
-    if (question.description == '' || !this.checkAnswersDescription(answers)){
+    if (question.description == '' || !this.checkAnswersDescription(answers)) {
       this.error = true;
       this.errorMessage = MANDATORY_FIELDS;
     } else if (!this.checkAtLeastOneCorrect(answers)) {
@@ -63,17 +87,24 @@ export class CreateQuestionComponent {
       this.errorMessage = NO_CORRECT_ANSWER;
     } else {
       this.error = false;
-      console.log(question)
     }
-    this.apiProfessorService
-    .createQuestion(question)
-    .subscribe(msg => alert("Pregunta creada"))
+    if (!this.isEditing) {
+      this.apiProfessorService
+      .createQuestion(question)
+      .subscribe(msg => alert("Pregunta creada"))
+    } else {
+      question.id = this.questionToEdit!.id
+      this.apiProfessorService
+      .updateQuestion(question)
+      .subscribe((msg: Message) => alert(msg.message))
+    }
+    this.router.navigate(['/library'])
   }
 
-  checkAnswersDescription(answers: Answer[]): boolean{
+  checkAnswersDescription(answers: Answer[]): boolean {
     let allChecked = true;
-    answers.forEach( answer => {
-      if (answer.description == ''){
+    answers.forEach(answer => {
+      if (answer.description == '') {
         allChecked = false;
       }
     })
@@ -83,8 +114,8 @@ export class CreateQuestionComponent {
 
   checkAtLeastOneCorrect(answers: Answer[]): boolean {
     let isAtLeastOneCorrect = false;
-    answers.forEach( answer => {
-      if (answer.is_correct){
+    answers.forEach(answer => {
+      if (answer.is_correct) {
         isAtLeastOneCorrect = true;
       }
     })
@@ -93,7 +124,7 @@ export class CreateQuestionComponent {
   }
 
   getType(type: string): string {
-    switch(type) {
+    switch (type) {
       case "Multiopción": {
         return 'multioption';
       }

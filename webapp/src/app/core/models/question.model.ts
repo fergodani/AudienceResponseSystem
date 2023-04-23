@@ -25,9 +25,9 @@ export class Question {
 }
 
 export enum Type {
-    multioption,
-    true_false,
-    short
+    multioption = 'multioption',
+    true_false = 'true_false',
+    short = 'short'
 }
 
 export interface QuestionSurvey {

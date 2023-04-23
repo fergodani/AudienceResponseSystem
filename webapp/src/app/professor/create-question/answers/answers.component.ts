@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnChanges, SimpleChanges, EventEmitter, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Answer} from 'src/app/core/models/answer.model';
 import { Type } from 'src/app/core/models/question.model';
@@ -16,7 +16,56 @@ enum Answers {
   templateUrl: './answers.component.html',
   styleUrls: ['./answers.component.css']
 })
-export class AnswersComponent implements OnChanges {
+export class AnswersComponent implements OnChanges, OnInit {
+
+  ngOnInit(): void {
+    if(this.answersToEdit.length != 0) {
+      switch(this.type) {
+        case Type.multioption: {
+          this.answer1FormGroup.patchValue({
+            description: this.answersToEdit[0].description,
+            checked: this.answersToEdit[0].is_correct
+          })
+          this.answer2FormGroup.patchValue({
+            description: this.answersToEdit[1].description,
+            checked: this.answersToEdit[1].is_correct
+          })
+          this.answer3FormGroup.patchValue({
+            description: this.answersToEdit[2].description,
+            checked: this.answersToEdit[2].is_correct
+          })
+          this.answer4FormGroup.patchValue({
+            description: this.answersToEdit[3].description,
+            checked: this.answersToEdit[3].is_correct
+          })
+          break;        
+        }
+        case Type.true_false: {
+          this.answer1FormGroup.patchValue({
+            description: this.answersToEdit[0].description,
+            checked: this.answersToEdit[0].is_correct
+          })
+          this.answer2FormGroup.patchValue({
+            description: this.answersToEdit[1].description,
+            checked: this.answersToEdit[1].is_correct
+          })
+          break;        
+        }
+        case Type.short: {
+          this.shortAnswersFormGroup.patchValue({
+            answer1: this.answersToEdit[0].description,
+            answer2: this.answersToEdit.length >= 1 ? this.answersToEdit[1].description : '',
+            answer3: this.answersToEdit.length >= 2 ? this.answersToEdit[2].description : '',
+            answer4: this.answersToEdit.length >= 3 ? this.answersToEdit[3].description : '',
+          })
+          break;        
+        }
+        default: {
+          break;
+        }
+      }
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.typeString == 'Verdadero o falso') {
@@ -28,6 +77,7 @@ export class AnswersComponent implements OnChanges {
     }
   }
 
+  @Input() answersToEdit: Answer[] = []
   @Input() typeString: string = 'Multiopción';
   @Output() answers = new EventEmitter<Answer[]>;
   type: Type = Type.multioption;
@@ -132,6 +182,40 @@ export class AnswersComponent implements OnChanges {
       }
     }
     this.answers.emit(answers)
+  }
+
+  updateAnswers() {
+    let answers: Answer[] = []
+    switch(this.type) {
+      case Type.multioption: {
+        for(let i = 0; i < MULTIOPTION_ANSWERS; i++){
+          this.answersToEdit[i].description = this.questionFormArray.controls[i].value.description!;
+          this.answersToEdit[i].is_correct = this.questionFormArray.controls[i].value.checked!;
+        }
+        break;        
+      }
+      case Type.true_false: {
+        for(let i = 0; i < TRUE_FALSE_ANSWERS; i++){
+          this.answersToEdit[i].description = this.questionFormArray.controls[i].value.description!;
+          this.answersToEdit[i].is_correct = this.questionFormArray.controls[i].value.checked!;
+        }
+        break;        
+      }
+      case Type.short: {
+        this.answersToEdit[0].description = this.shortAnswersFormGroup.value.answer1!;
+        if(this.shortAnswersFormGroup.value.answer2! != '')
+          this.answersToEdit[1].description = this.shortAnswersFormGroup.value.answer1!;
+        if(this.shortAnswersFormGroup.value.answer3! != '')
+          this.answersToEdit[2].description = this.shortAnswersFormGroup.value.answer1!;
+        if(this.shortAnswersFormGroup.value.answer4! != '')
+          this.answersToEdit[3].description = this.shortAnswersFormGroup.value.answer1!;
+        break;        
+      }
+      default: {
+        break;
+      }
+    }
+    this.answers.emit(this.answersToEdit)
   }
 
 }

@@ -17,6 +17,11 @@
                 <mat-icon class="w-auto" [ngStyle]="{'color':'red'}" *ngIf="!answer.is_correct">clear</mat-icon>
             </div>
         </div>
+        <a [routerLink]="['/questions/edit', question.id]">
+            <button type="button" mat-raised-button>
+                Editar <mat-icon>edit</mat-icon>
+            </button>
+        </a>
     </mat-expansion-panel>
     <button class="m-2" mat-raised-button (click)="createNewQuestion()" *ngIf="!isSelecting">Crear nueva
         pregunta</button>
@@ -28,7 +33,7 @@
                 Importar preguntas <mat-icon>attach_file</mat-icon>
             </button>
             <button mat-raised-button color="primary" class="upload-btn" (click)="exportQuestions()">
-                Exportar preguntas 	<mat-icon>cloud_download</mat-icon>
+                Exportar preguntas <mat-icon>cloud_download</mat-icon>
             </button>
         </div>
     </div>

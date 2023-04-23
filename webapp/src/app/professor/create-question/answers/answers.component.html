@@ -58,5 +58,6 @@
             </div>
         </div>
     </div>
-    <button class="mb-5" mat-raised-button (click)="submitAnswers()">Crear pregunta</button>
+    <button class="mb-5" mat-raised-button (click)="submitAnswers()" *ngIf="answersToEdit.length == 0">Crear pregunta</button>
+    <button class="mb-5" mat-raised-button (click)="updateAnswers()" *ngIf="answersToEdit.length != 0">Actualizar pregunta</button>
 </div>

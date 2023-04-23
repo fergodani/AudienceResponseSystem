@@ -77,7 +77,7 @@ const updateCourse = async(req: Request, res: Response): Promise<Response> => {
                 description: newDescription
             }
         })
-        return res.status(404).json({message: req.body.name + " course updated"})
+        return res.status(200).json({message: req.body.name + " course updated"})
     } catch (error) {
         return res.status(500).send(error)
     }

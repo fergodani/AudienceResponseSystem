@@ -6,12 +6,16 @@ const {
     createQuestion,
     getQuestionsByUser,
     exportQuestions,
-    importQuestions
+    importQuestions,
+    updateQuestion,
+    getQuestionsById
 } = require('../controllers/questionController')
 
 api.get("/", getQuestions)
 
-api.get('/:id', [], getQuestionsByUser);
+api.get('/user/:id', [], getQuestionsByUser);
+
+api.get('/:id', [], getQuestionsById)
 
 api.post("/", [
 
@@ -20,5 +24,7 @@ api.post("/", [
 api.get("/export/:id", [], exportQuestions)
 
 api.post("/file/:id", importQuestions)
+
+api.put("/", updateQuestion)
 
 module.exports = api
