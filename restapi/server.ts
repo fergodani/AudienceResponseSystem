@@ -18,7 +18,7 @@ const gameRoutes = require('./routes/gameRoutes')
 app.use(cors({
     origin: '*'
 }))
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '10mb'}))
 app.use(
     bodyParser.urlencoded({
         extended: true,
@@ -32,7 +32,7 @@ app.use('/api/user', userRoutes)
 app.use('/api/answer', answerRoutes)
 app.use('/api/game', gameRoutes)
 
-app.use(express.json({limit: '5mb'}))
+app.use(express.json({limit: '50mb'}))
 
 const io = new Server(httpServer,{
   cors: {

@@ -34,13 +34,13 @@ export class CreateQuestionComponent implements OnInit{
       } else {
         type = this.types[2];
       }
-      console.log(type)
       this.createQuestionForm.patchValue({
         type,
         description: this.questionToEdit.description,
         limitTime: this.questionToEdit.answer_time
       })
-      if(this.questionToEdit.resource != '')
+      console.log(this.questionToEdit)
+      if(this.questionToEdit.resource != null)
         this.resourceFile = this.questionToEdit.resource
     }
   }
@@ -50,7 +50,7 @@ export class CreateQuestionComponent implements OnInit{
   answers: Answer[] = [];
   error: boolean = false;
   errorMessage: string = '';
-  resourceFile: any = '';
+  resourceFile: string = '';
   @Input() isEditing = false;
   @Input() questionToEdit: Question | undefined
 
@@ -82,9 +82,11 @@ export class CreateQuestionComponent implements OnInit{
     if (question.description == '' || !this.checkAnswersDescription(answers)) {
       this.error = true;
       this.errorMessage = MANDATORY_FIELDS;
+      return
     } else if (!this.checkAtLeastOneCorrect(answers)) {
       this.error = true;
       this.errorMessage = NO_CORRECT_ANSWER;
+      return
     } else {
       this.error = false;
     }
@@ -142,10 +144,17 @@ export class CreateQuestionComponent implements OnInit{
 
   onFileSelected(event: Event) {
     const file = (<HTMLInputElement>event.target).files![0];
+    if (file.type.match(/image\/*/) == null) {
+      this.error = true;
+			this.errorMessage = "Solo puedes subir imágenes";
+			return;
+		} else {
+      this.error = false;
+    }
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      this.resourceFile = reader.result;
+      this.resourceFile = reader.result as string;
     }
     reader.onerror = function (error) {
       console.log("Error ", error)
