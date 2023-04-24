@@ -3,7 +3,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { User } from '../../models/user.model';
-import { Course, SurveyCourse, UserCourse } from '../../models/course.model';
+import { Course, QuestionCourse, SurveyCourse, UserCourse } from '../../models/course.model';
+import { Message } from '@app/core/models/message.model';
 
 @Injectable({
   providedIn: 'root'
@@ -126,6 +127,13 @@ export class ApiService {
 
   addSurveyToCourse(surveyCourse: SurveyCourse): Observable<unknown> {
     return this.http.post<SurveyCourse>(`${this.apiUrl}/course/addSurvey`, surveyCourse)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  addQuestionToCourse(questionCourse: QuestionCourse): Observable<Message> {
+    return this.http.post<Message>(`${this.apiUrl}/course/addQuestion`, questionCourse)
     .pipe(
       catchError(this.handleError)
     )

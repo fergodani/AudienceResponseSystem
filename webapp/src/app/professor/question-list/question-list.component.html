@@ -1,7 +1,7 @@
 <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
     <span class="visually-hidden">Loading...</span>
 </div>
-<div class="pt-3 h-auto" *ngIf="!isCreatingSurvey">
+<div class="pt-3 h-auto" *ngIf="!isCreatingSurvey && !isSelecting">
     <mat-expansion-panel class="m-1" *ngFor="let question of questions">
         <mat-expansion-panel-header>
             <mat-panel-title class="d-inline-block">
@@ -40,13 +40,26 @@
         </div>
     </div>
 </div>
+<div *ngIf="isSelecting">
+    <div class="d-flex gap-5 justify-content-between align-items-center" *ngFor="let question of questions">
+        <div class="border m-2 d-flex flex-row">
+            <div class="d-flex flex-column ps-2">
+                <h1 class="overflow-auto">{{ question.description }}</h1>
+            </div>
+            <button mat-mini-fab color="primary" class="upload-btn ms-3"
+                (click)="addQuestionToCourse(question)" *ngIf="isSelecting && !isInclude(question)">
+                <mat-icon>library_add</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>
 <div *ngIf="isCreatingSurvey">
     <div class="d-flex gap-5 justify-content-between align-items-center" *ngFor="let question of questions">
         <div class="border m-2 d-flex flex-row">
             <div class="d-flex flex-column ps-2">
                 <h1 class="overflow-auto">{{ question.description }}</h1>
             </div>
-            <button mat-mini-fab color="primary" class="upload-btn  ms-3" (click)="addQuestionToSurvey(question)"
+            <button mat-mini-fab color="primary" class="upload-btn ms-3" (click)="addQuestionToSurvey(question)"
                 *ngIf="isCreatingSurvey">
                 <mat-icon>library_add</mat-icon>
             </button>

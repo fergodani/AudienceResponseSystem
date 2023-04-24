@@ -82,7 +82,7 @@ const getSurveysById = async (req: Request, res: Response): Promise<Response> =>
 const createSurvey = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { title, user_creator_id, questions, resource } = req.body;
-        let questionIds = <Question[]>questions.map((question: Question)  => ({ id: question.id }))
+        //let questionIds = <Question[]>questions.map((question: Question)  => ({ id: question.id }))
         const user = await prisma.user.findUnique({
             where: {
                 id: user_creator_id,

@@ -8,6 +8,7 @@ import * as csv_format from '@fast-csv/format';
 import { User } from '../models/user.model';
 import { Course } from '../models/course.model';
 import { Survey } from '../models/survey.model';
+import { Question } from '../models/question.model';
 const prisma = new PrismaClient()
 
 const getCourses = async (req: Request, res: Response): Promise<Response> => {
@@ -167,6 +168,20 @@ const addSurveys = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+const addQuestions = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        const {course_id, questions} = req.body;
+        const questionSurvey = questions.map((question: Question) => ({course_id, question_id: question.id}))
+        await prisma.courseQuestion.createMany({
+            data: questionSurvey
+        })
+        return res.status(200).json({message: "Preguntas añadidas"})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error);
+    }
+}
+
 const getCoursesByUser = async (req: Request, res: Response): Promise<Response> => {
     try{
        const userCourses = await prisma.userCourse.findMany({
@@ -193,5 +208,6 @@ module.exports = {
     uploadCourseFile,
     addUsers,
     addSurveys,
-    getCoursesByUser
+    getCoursesByUser,
+    addQuestions
 }

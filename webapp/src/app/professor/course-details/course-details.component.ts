@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { Course, SurveyCourse, UserCourse } from '@app/core/models/course.model';
+import { Course, QuestionCourse, SurveyCourse, UserCourse } from '@app/core/models/course.model';
 import { Survey } from '@app/core/models/survey.model';
 import { User } from '@app/core/models/user.model';
 import { ApiService } from '@app/core/services/admin/api.admin.service';
@@ -11,6 +11,8 @@ import { CreateGameDialogComponent } from '../dialogs/create-game-dialog/create-
 import { LinkQuestionCourseComponent } from '../dialogs/link-question-course/link-question-course.component';
 import { LinkSurveyCourseComponent } from '../dialogs/link-survey-course/link-survey-course.component';
 import { LinkUserCourseComponent } from '../dialogs/link-user-course/link-user-course.component';
+import { Question } from '@app/core/models/question.model';
+import { Message } from '@app/core/models/message.model';
 
 @Component({
   selector: 'app-course-details',
@@ -35,12 +37,16 @@ export class CourseDetailsComponent {
         this.apiProfessorService
           .getSurveysByCourse(this.course.id)
           .subscribe(surveys => {this.surveys = surveys})
+        this.apiProfessorService
+          .getQuestionsByCourse(this.course.id)
+          .subscribe(questions => {this.questions = questions; console.log(questions)})
       })
   }
 
   course: Course = <Course>{};
   users: User[] = [];
   surveys: Survey[] = [];
+  questions: Question[] = []
 
   openUserDialog(): void {
     const dialogRef = this.dialog.open(LinkUserCourseComponent, {
@@ -91,7 +97,27 @@ export class CourseDetailsComponent {
   }
 
   openQuestionDialog(): void {
-    this.dialog.open(LinkQuestionCourseComponent);
+    const dialogRef = this.dialog.open(LinkQuestionCourseComponent, {
+      data: this.questions,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result == undefined)
+        return
+      if (result.length != 0) {
+        this.addQuestionsToCourse(result)
+      }
+
+    })
+  }
+
+  addQuestionsToCourse(questionsToAdd: Question[]) {
+    const questionToCourse: QuestionCourse = {
+      course_id: this.course.id,
+      questions: questionsToAdd
+    }
+    this.apiService
+    .addQuestionToCourse(questionToCourse)
+    .subscribe((msg: Message) => alert(msg.message))
   }
 
   openCreateOnlineGameDialog(survey_id: number): void {

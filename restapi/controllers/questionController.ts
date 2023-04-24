@@ -239,6 +239,27 @@ const updateQuestion = async (req: Request, res: Response): Promise<Response> =>
     }
 }
 
+const getQuestionsByCourse = async(req: Request, res: Response): Promise<Response> => {
+    try{
+        const corseQuestion = await prisma.courseQuestion.findMany({
+             where: {
+                 course_id: Number(req.params.id)
+             },
+             select: {
+                 question: {
+                    include: {
+                        answers: true
+                    }
+                 }
+             }
+         })
+         const question = corseQuestion.map((question: any) => question.question)
+         return res.status(200).json(question)
+     } catch (error) {
+         return res.status(500).send(error);
+     }
+}
+
 
 module.exports = {
     getQuestions,
@@ -248,5 +269,6 @@ module.exports = {
     importQuestions,
     updateQuestion,
     getQuestionsById,
-    deleteQuestion
+    deleteQuestion,
+    getQuestionsByCourse
 }

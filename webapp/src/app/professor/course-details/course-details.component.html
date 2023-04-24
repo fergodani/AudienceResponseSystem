@@ -19,6 +19,22 @@
         </div>
         <button mat-raised-button (click)="openSurveyDialog()">Añadir cuestionarios</button>
         <h2>Preguntas</h2>
+        <mat-expansion-panel class="m-1" *ngFor="let question of questions">
+            <mat-expansion-panel-header>
+                <mat-panel-title class="d-inline-block">
+                    <h2 class="text-truncate">
+                        {{ question.description }}
+                    </h2>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div *ngFor="let answer of question.answers">
+                <div class="d-flex flex-rowalign-items-center">
+                    <p class="align-self-center text-break w-75">{{ answer.description }}</p>
+                    <mat-icon class="w-auto" [ngStyle]="{'color':'green'}" *ngIf="answer.is_correct">check</mat-icon>
+                    <mat-icon class="w-auto" [ngStyle]="{'color':'red'}" *ngIf="!answer.is_correct">clear</mat-icon>
+                </div>
+            </div>
+        </mat-expansion-panel>
         <button mat-raised-button (click)="openQuestionDialog()">Añadir preguntas</button>
     </div>
     <div class="content border mb-5">

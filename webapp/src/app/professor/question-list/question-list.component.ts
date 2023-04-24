@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Message } from '@app/core/models/message.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
-import { Question } from 'src/app/core/models/question.model';
+import { Question, equals } from 'src/app/core/models/question.model';
 import { ApiProfessorService } from 'src/app/core/services/professor/api.professor.service';
 
 @Component({
@@ -31,6 +31,8 @@ export class QuestionListComponent implements OnInit {
   @Output() questionToAdd = new EventEmitter<Question>;
   requiredFileType = "text/csv";
   fileName: string = ''
+
+  @Input() questionsAdded: Question[] = []
 
   addQuestionToSurvey(question: Question) {
     this.questionToAdd.emit(question);
@@ -74,6 +76,20 @@ export class QuestionListComponent implements OnInit {
       alert(msg.message)
       this.questions = this.questions.filter((q) => q.id != question.id)
     })
+  }
+
+  addQuestionToCourse(question: Question) {
+    this.questionToAdd.emit(question)
+    this.questionsAdded.push(question)
+  }
+
+  isInclude(question: Question){
+    let value = false
+    this.questionsAdded.forEach( questionToCompare => {
+      if(equals(question, questionToCompare))
+        value = true;
+    })
+    return value;
   }
 
 }

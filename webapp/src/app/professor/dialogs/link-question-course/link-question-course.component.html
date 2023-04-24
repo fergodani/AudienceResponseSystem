@@ -1,8 +1,8 @@
 <h1 mat-dialog-title>Lista de preguntas</h1>
 <div mat-dialog-content>
-    <app-question-list [isSelecting]="true"></app-question-list>
+    <app-question-list [isSelecting]="true" [questionsAdded]="questionsAdded" (questionToAdd)="addQuestion($event)"></app-question-list>
 </div>
 <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button>Aceptar</button>
+    <button mat-button [mat-dialog-close]="questions">Aceptar</button>
 </div>

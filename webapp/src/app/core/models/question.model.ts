@@ -36,3 +36,13 @@ export interface QuestionSurvey {
     position: number;
     question: Question;
 }
+
+export function equals(question1: Question, question2: Question): boolean {
+    if (question1.id != question2.id)
+        return false
+    if (question1.description != question2.description)
+        return false
+    if (question1.type != question2.type)
+        return false
+    return true;
+}

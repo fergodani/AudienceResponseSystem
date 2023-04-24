@@ -94,6 +94,14 @@ export class ApiProfessorService {
     )
   }
 
+  getQuestionsByCourse(id: number): Observable<Question[]> {
+    return this.http.get<Question[]>(`${this.apiUrl}/question/courses/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+
   createGame(game: Game): Observable<Game> {
     return this.http.post<Game>(`${this.apiUrl}/game`, game)
     .pipe(

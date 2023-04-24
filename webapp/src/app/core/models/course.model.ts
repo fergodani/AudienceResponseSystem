@@ -1,3 +1,4 @@
+import { Question } from "./question.model";
 import { Survey } from "./survey.model";
 import { User } from "./user.model";
 
@@ -22,4 +23,9 @@ export interface UserCourse {
 export interface SurveyCourse {
     course_id: number;
     surveys: Survey[];
+}
+
+export interface QuestionCourse {
+    course_id: number;
+    questions: Question[];
 }

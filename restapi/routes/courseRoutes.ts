@@ -11,7 +11,8 @@ const {
     uploadCourseFile,
     addUsers,
     addSurveys,
-    getCoursesByUser
+    getCoursesByUser,
+    addQuestions
 } = require('../controllers/courseController')
 
 api.get("/", getCourses)
@@ -32,6 +33,8 @@ api.post("/file", uploadCourseFile)
 api.post("/addUser", addUsers)
 
 api.post("/addSurvey", addSurveys)
+
+api.post("/addQuestion", addQuestions)
 
 api.put("/", [
     check('name').isLength({ min: 1 }).trim().escape(),
