@@ -39,7 +39,7 @@ export class CourseDetailsComponent {
           .subscribe(surveys => {this.surveys = surveys})
         this.apiProfessorService
           .getQuestionsByCourse(this.course.id)
-          .subscribe(questions => {this.questions = questions; console.log(questions)})
+          .subscribe(questions => {this.questions = questions})
       })
   }
 
@@ -124,5 +124,32 @@ export class CourseDetailsComponent {
     this.dialog.open(CreateGameDialogComponent, {
       data: { course_id: this.course.id, survey_id}
     });
+  }
+
+  deleteSurveyFromCourse(survey: Survey) {
+    this.apiProfessorService
+    .deleteSurveyFromCourse(this.course.id, survey.id!)
+    .subscribe((msg: Message) =>{
+      alert(msg.message)
+      this.surveys = this.surveys.filter((s) => s.id != survey.id)
+    })
+  }
+
+  deleteQuestionFromCourse(question: Question) {
+    this.apiProfessorService
+    .deleteQuestionFromCourse(this.course.id, question.id)
+    .subscribe((msg: Message) =>{
+      alert(msg.message)
+      this.questions = this.questions.filter((q) => q.id != question.id)
+    })
+  }
+
+  deleteUserFromCourse(user: User) {
+    this.apiProfessorService
+    .deleteUserFromCourse(this.course.id, user.id)
+    .subscribe((msg: Message) =>{
+      alert(msg.message)
+      this.users = this.users.filter((u) => u.id != user.id)
+    })
   }
 }

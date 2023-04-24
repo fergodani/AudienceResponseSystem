@@ -193,6 +193,23 @@ const deleteSurvey = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+const deleteSurveyFromCourse = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        await prisma.courseSurvey.delete({
+            where: {
+                survey_id_course_id: {
+                    course_id: Number(req.params.course_id),
+                    survey_id: Number(req.params.survey_id)
+                }
+            }
+        })
+        return res.status(200).json({message: "Cuestionario eliminado del curso correctamente"})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error)
+    }
+}
+
 module.exports = {
     getSurveys,
     getSurveysByUser,
@@ -200,5 +217,6 @@ module.exports = {
     getSurveysByCourse,
     getSurveysById,
     updateSurvey,
-    deleteSurvey
+    deleteSurvey,
+    deleteSurveyFromCourse
 }

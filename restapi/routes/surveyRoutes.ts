@@ -8,7 +8,8 @@ const {
     getSurveysByCourse,
     getSurveysById,
     updateSurvey,
-    deleteSurvey
+    deleteSurvey,
+    deleteSurveyFromCourse
 } = require('../controllers/surveyController')
 
 api.get("/", getSurveys)
@@ -24,5 +25,7 @@ api.post("/", createSurvey);
 api.put("/", [], updateSurvey)
 
 api.delete("/:id", deleteSurvey)
+
+api.delete("/:survey_id/course/:course_id", deleteSurveyFromCourse)
 
 module.exports = api

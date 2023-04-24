@@ -159,8 +159,28 @@ export class ApiProfessorService {
   }
 
   deleteSurvey(id: number): Observable<Message> {
-    console.log(id)
     return this.http.delete<Message>(`${this.apiUrl}/survey/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  deleteSurveyFromCourse(courseId: number, surveyId: number): Observable<Message> {
+    return this.http.delete<Message>(`${this.apiUrl}/survey/${surveyId}/course/${courseId}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  deleteQuestionFromCourse(courseId: number, questionId: number): Observable<Message> {
+    return this.http.delete<Message>(`${this.apiUrl}/question/${questionId}/course/${courseId}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  deleteUserFromCourse(courseId: number, userId: number): Observable<Message> {
+    return this.http.delete<Message>(`${this.apiUrl}/user/${userId}/course/${courseId}`)
     .pipe(
       catchError(this.handleError)
     )

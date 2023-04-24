@@ -260,6 +260,23 @@ const getQuestionsByCourse = async(req: Request, res: Response): Promise<Respons
      }
 }
 
+const deleteQuestionFromCourse = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        await prisma.courseQuestion.delete({
+            where: {
+                question_id_course_id: {
+                    course_id: Number(req.params.course_id),
+                    question_id: Number(req.params.question_id)
+                }
+            }
+        })
+        return res.status(200).json({message: "Pregunta eliminada del curso correctamente"})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error)
+    }
+}
+
 
 module.exports = {
     getQuestions,
@@ -270,5 +287,6 @@ module.exports = {
     updateQuestion,
     getQuestionsById,
     deleteQuestion,
-    getQuestionsByCourse
+    getQuestionsByCourse,
+    deleteQuestionFromCourse
 }

@@ -11,7 +11,8 @@ const {
     deleteUser,
     uploadUserFile,
     getUsersByCourse,
-    changePassword
+    changePassword,
+    deleteUserFromCourse
 } = require('../controllers/userController')
 
 api.get("/", getUsers)
@@ -44,5 +45,7 @@ api.put("/password/:id", changePassword)
 api.delete("/:id", [
     check('id').isLength({ min: 1 }).trim().escape()
 ], deleteUser)
+
+api.delete("/:user_id/course/:course_id", deleteUserFromCourse)
 
 module.exports = api
