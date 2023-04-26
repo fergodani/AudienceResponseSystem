@@ -48,7 +48,6 @@ export class CreateGameDialogComponent {
       return;
     }
     const pointType = this.getPointType(this.createGameForm.value.pointType!);
-    console.log(pointType)
     const game = new Game(
       this.authService.userValue!.id,
       this.data.survey_id,
@@ -62,10 +61,12 @@ export class CreateGameDialogComponent {
       .createGame(game)
       .subscribe( game => {
         console.log(game)
+        this.socketService.setupSocketConnection()
         this.socketService.createGame(game, this.data.course_id);
+        this.dialogRef.close();
+        this.router.navigate(["/game/host", game.id])
       })
-    this.dialogRef.close();
-    this.router.navigate(["/game/host", this.data.course_id])
+    
   }
 
   getPointType(type: string): PointsType{

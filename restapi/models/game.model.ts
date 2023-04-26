@@ -29,3 +29,17 @@ export enum PointsType {
     double = 'double',
     no_points = 'no_points'
 }
+
+export interface GameSession {
+    game: Game;
+    users: User[];
+    state: GameSessionState
+}
+
+export enum GameSessionState {
+    not_started,
+    is_leaderboard_screen,
+    is_preview_screen,
+    is_question_screen,
+    is_question_result
+}

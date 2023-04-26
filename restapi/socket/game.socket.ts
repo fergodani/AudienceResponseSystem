@@ -1,29 +1,49 @@
 import { Server } from "socket.io";
-import { Game, GameState } from "../models/game.model";
+import { Game, GameSession, GameSessionState, GameState } from "../models/game.model";
 import { User, UserResult } from "../models/user.model";
 import { Constants } from './constants'
 
 let game: Game;
 let students: User[] = [];
+let gameSessions = new Map<string, GameSession>()
+
 
 export default (io: Server) => {
     io.on(Constants.CONNECT, socket => {
+        if (socket.recovered) {
+            console.log("Socket recovered")
+        } else {
+            console.log("First connection")
+        }
 
         socket.on(Constants.CREATE_GAME, (newGame, courseId: string) => {
             game = newGame;
             console.log("Creando juego...")
             // unirse al juego con el game id
             socket.join(game.id + '')
+            let gameSession: GameSession = {
+                game,
+                users: [],
+                state: GameSessionState.not_started
+            }
+            gameSessions.set(game.id + '', gameSession)
             io.to(courseId).emit('wait_for_surveys', game)
         });
 
+        socket.on("look_for_game_session", (id: number) => {
+            const gameSession = gameSessions.get(id + '')
+            socket.to(id + '').emit('wait_for_game_session', gameSession)
+        })
+
         socket.on(Constants.JOIN_GAME, (newUser, id: string) => {
-            !students.some( student => newUser.id === student.id) && students.push(newUser)
-            let user = students.find( student => student.id == newUser.id);
+            let user = gameSessions.get(id)?.users.find(student => student.id == newUser.id)
+            console.log("User joning...")
+            if(!user)
+                gameSessions.get(id)?.users.push(newUser)
             socket.join(id)
-            io.to(id).emit('connectUser', user)
+            io.to(id).emit('connectUser', gameSessions.get(id))
         });
-        
+
         socket.on(Constants.START_GAME, (game: Game) => {
             console.log("Empezando juego...")
             game.state = GameState.started;

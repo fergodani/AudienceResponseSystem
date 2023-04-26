@@ -6,6 +6,7 @@ import { Game, GameState } from '../models/game.model';
 import { equals, User, UserResult } from '../models/user.model';
 import { ApiAuthService } from '../services/auth/api.auth.service';
 import { ApiProfessorService } from '../services/professor/api.professor.service';
+import { SocketOptions } from 'socket.io-client';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,9 @@ export class SocketioService {
     private authService: ApiAuthService,
     private apiProfessorService: ApiProfessorService
   ) {
-   }
+  }
 
-  socket:any;
+  socket: any;
 
   // Usuarios conectados al juego -- Host
   private usersConnectedSubject: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
@@ -36,7 +37,7 @@ export class SocketioService {
 
 
 
-  public get userValue(): User[]{
+  public get userValue(): User[] {
     return this.usersConnectedSubject.value;
   }
 
@@ -45,25 +46,12 @@ export class SocketioService {
   }
 
   setupSocketConnection() {
-    this.socket = io('http://localhost:5000');
-  }
-
-  setupHostSocketConnection() {
-    this.socket = io('http://localhost:5000');
-    
-    this.socket.on('connectUser', (data: User) => {
-      let alreadyConnected = false;
-      this.userList.forEach(u => {
-        if(equals(u, data)){
-          alreadyConnected = true;
-        }
-      })
-      if(!alreadyConnected){
-        this.userList.push(data)
-        this.usersConnectedSubject.next(this.userList)
+    const socketOptions: SocketOptions = {
+      auth: {
+        token: this.authService.userValue?.token
       }
-      
-    });
+    }
+    this.socket = io('http://localhost:5000', socketOptions);
   }
 
   createGame(game: Game, courseId: number) {
@@ -76,25 +64,25 @@ export class SocketioService {
     const game = this.gameValue;
     game.state = GameState.started;
     this.apiProfessorService
-    .updateGame(game)
-    .subscribe()
+      .updateGame(game)
+      .subscribe()
     this.gameSubject.next(game);
     this.socket.emit('start_game', this.gameValue);
-    
+
   }
 
   closeGame(userResults: UserResult[]) {
     const game = this.gameValue;
     game.state = GameState.closed;
     this.apiProfessorService
-    .updateGame(game)
-    .subscribe()
+      .updateGame(game)
+      .subscribe()
     this.apiProfessorService
-    .createUserResults(userResults)
-    .subscribe()
+      .createUserResults(userResults)
+      .subscribe()
   }
 
-  sendUser(id: string){
+  sendUser(id: string) {
     this.socket.emit('join_game', this.authService.userValue, id)
     this.socket.on('move_to_survey', (game: Game) => {
       console.log(game)
@@ -102,7 +90,7 @@ export class SocketioService {
     })
   }
 
-  waitForSurveys(){
+  waitForSurveys() {
     this.socket.on('wait_for_surveys', (data: Game) => {
       console.log(data)
       this.newGameSubject.next(data)

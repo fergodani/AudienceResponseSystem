@@ -2,7 +2,7 @@ import { Component, OnInit, Type } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Answer, AnswerResult } from '@app/core/models/answer.model';
-import { Game, GameState, PointsType } from '@app/core/models/game.model';
+import { Game, GameSession, GameSessionState, GameState, PointsType } from '@app/core/models/game.model';
 import { Question } from '@app/core/models/question.model';
 import { UserResult } from '@app/core/models/user.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
@@ -36,8 +36,24 @@ export class StudentGameComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
-    this.socketService.setupSocketConnection();
-    this.socketService.sendUser(id!);
+    //this.socketService.setupSocketConnection();
+    this.socketService.socket.emit('look_for_game_session', id)
+    this.socketService.socket.on('wait_for_game_session', (gameSession: GameSession) => {
+      if (gameSession) {
+        if (gameSession.state == GameSessionState.not_started) {
+          this.socketService.sendUser(id!)
+        } else {
+          if (gameSession.users.includes(this.authService.userValue!)){
+            this.gameSession = gameSession
+          }else {
+            this.isError = true
+            this.errorMessage = "No te puedes unir, el juego ya ha empezado"
+          }
+        }
+
+      }
+    })
+    //this.socketService.sendUser(id!);
     this.socketService.socket.on("host-start-preview", () => {
       this.timeLeft = 5;
       this.isStart = true;
@@ -77,9 +93,16 @@ export class StudentGameComponent implements OnInit {
 
   timeLeft: number = 5;
 
+  gameSession: GameSession = <GameSession>{}
+  gameSessionState = GameSessionState
+
+  isError = false
+  errorMessage = ''
+
   startTimerPreview(seconds: number) {
     let time = seconds;
     let interval = setInterval(() => {
+      this.gameSession.state = GameSessionState.is_preview_screen
       this.isPreviewScreen = true;
       this.isResultScreen = false;
       this.isLoading = false;
@@ -98,6 +121,7 @@ export class StudentGameComponent implements OnInit {
 
   startQuestionTimer(seconds: number) {
     let time = seconds;
+    this.gameSession.state = GameSessionState.is_question_screen
     this.isQuestionScreen = true;
     this.isPreviewScreen = false;
     this.answerTime = 0;
@@ -111,6 +135,7 @@ export class StudentGameComponent implements OnInit {
         this.isQuestionScreen = false;
         this.isPreviewScreen = false;
         this.isQuestionAnswered = false;
+        this.gameSession.state = GameSessionState.is_question_result
         this.isResultScreen = true;
         this.lastScore = this.result.score;
         if (!this.haveAnswered) {
@@ -177,7 +202,7 @@ export class StudentGameComponent implements OnInit {
     console.log("Respuestas correctas: ")
     this.actualQuestion.answers.forEach((a) => {
       console.log(a.description)
-      if(answer === a.description){
+      if (answer === a.description) {
         isCorrect = true;
       }
     })
@@ -207,16 +232,16 @@ export class StudentGameComponent implements OnInit {
     // 3. Resta ese valor a 1
     // 4. Multiplica los puntos posibles por ese valor
     // 5. Redondea al número entero más cercano
-    if (isCorrect){
+    if (isCorrect) {
       let points = (1 - ((this.answerTime / this.actualQuestion.answer_time) / 2)) * STANDARD_POINTS;
       if (this.game.point_type == PointsType.double)
         points = points * 2;
       this.result.score += Math.round(points);
     }
-      
+
   }
 
-  leaveGame(){
+  leaveGame() {
     this.router.navigate(['/student/home'])
   }
 

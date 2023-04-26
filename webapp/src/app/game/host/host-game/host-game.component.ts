@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Type } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Answer } from '@app/core/models/answer.model';
-import { Game, GameState } from '@app/core/models/game.model';
+import { Game, GameSession, GameSessionState, GameState } from '@app/core/models/game.model';
 import { Question, QuestionSurvey } from '@app/core/models/question.model';
 import { User, UserResult } from '@app/core/models/user.model';
 import { SocketioService } from '@app/core/socket/socketio.service';
@@ -15,7 +15,8 @@ export class HostGameComponent implements OnInit {
 
   constructor(
     private socketService: SocketioService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
   }
   game: Game = <Game>{};
@@ -34,6 +35,9 @@ export class HostGameComponent implements OnInit {
   isQuestionScreen: boolean = false;
   isQuestionResult: boolean = false;
 
+  gameSession: GameSession = <GameSession>{}
+  gameSessionState = GameSessionState
+
   addUsers(users: User[]) {
     this.usersConnected = users;
   }
@@ -44,6 +48,7 @@ export class HostGameComponent implements OnInit {
   @Input() courseId: number = 0;
 
   ngOnInit() {
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.socketService.game.subscribe((game: Game) => {
       if (game.survey != undefined && this.questionList.length == 0) {
         this.game = game;
@@ -58,7 +63,18 @@ export class HostGameComponent implements OnInit {
         this.correctAnswers = this.actualQuestion.answers.filter(a => a.is_correct);
       }
     })
-    this.socketService.setupHostSocketConnection();
+    if(!this.socketService.socket)
+      this.socketService.setupSocketConnection();
+    this.socketService.socket.emit('look_for_game_session', id)
+    this.socketService.socket.on('wait_for_game_session', (gameSession: GameSession) => {
+      if (gameSession) {
+        this.gameSession = gameSession
+      }
+      console.log(this.gameSession)
+    })
+    this.socketService.socket.on('connectUser', (gameSession: GameSession) => {
+      this.gameSession = gameSession
+    });
     this.socketService.socket.on('get-answer-from-player', (data: string) => {
       this.userResults.push(JSON.parse(data));
       console.log(this.userResults)

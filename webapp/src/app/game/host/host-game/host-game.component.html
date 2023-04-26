@@ -1,14 +1,20 @@
-<div *ngIf="game.state == gameStateType.created">
+<div *ngIf="gameSession.state == gameSessionState.not_started || !gameSession">
     <button mat-button (click)="startGame()" *ngIf="usersConnected.length != 0">Empezar</button>
-    <app-host-wait-room (users)="addUsers($event)"></app-host-wait-room>
+    <h1>Usuarios conectados</h1>
+    <div class="d-flex flex-row flex-wrap gap-2" *ngFor="let user of gameSession.users">
+        <div class="d-flex flex-column ps-2">
+            <h2>{{ user.username }}</h2>
+        </div>
+        <p *ngIf="gameSession.users.length == 0">Esperando usuarios...</p>
+    </div>
 </div>
-<div class="question_preview" *ngIf="isPreviewScreen">
+<div class="question_preview" *ngIf="gameSession.state == gameSessionState.is_preview_screen">
     <h1>{{ timeLeft }} </h1>
 </div>
 <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
     <span class="visually-hidden">Loading...</span>
 </div>
-<div class="d-flex flex-column align-items-center p-5" *ngIf="isQuestionScreen">
+<div class="d-flex flex-column align-items-center p-5" *ngIf="gameSession.state == gameSessionState.is_question_screen">
     <h1>{{ timeLeft }} </h1>
     <h1>{{ actualQuestion.description }}</h1>
     <div class="image-box mb-2" *ngIf="game.are_questions_visible && actualQuestion.resource != ''">
@@ -16,7 +22,8 @@
             <img [src]="actualQuestion.resource" *ngIf="actualQuestion.resource != ''" alt="Question image source" />
         </div>
     </div>
-    <div class="row w-100 gap-2 ms-2 me-2" *ngIf="actualQuestion.type == 'multioption' || actualQuestion.type == 'true_false'">
+    <div class="row w-100 gap-2 ms-2 me-2"
+        *ngIf="actualQuestion.type == 'multioption' || actualQuestion.type == 'true_false'">
         <h2 class="col bg-white text-center">{{ actualQuestion.answers[0].description }}</h2>
         <h2 class="col bg-white text-center">{{ actualQuestion.answers[1].description }}</h2>
     </div>
@@ -25,13 +32,13 @@
         <h2 class="col bg-white text-center">{{ actualQuestion.answers[3].description }}</h2>
     </div>
 </div>
-<div class="d-flex flex-column align-items-center" *ngIf="isQuestionResult">
+<div class="d-flex flex-column align-items-center" *ngIf="gameSession.state == gameSessionState.is_question_result">
     <h1>La/s respuesta/s correcta/s es: </h1>
     <h2 *ngFor="let answer of correctAnswers">
         {{ answer.description }}
     </h2>
 </div>
-<div class="d-flex flex-column align-items-center" *ngIf="isLeaderboardScreen">
+<div class="d-flex flex-column align-items-center" *ngIf="gameSession.state == gameSessionState.is_leaderboard_screen">
     <h1>1º {{ userResults[0].user.username}}</h1>
     <div class="d-flex flex-row" *ngIf="usersConnected.length >= 2">
         <h2>2º {{ userResults[1].user.username}}</h2>
