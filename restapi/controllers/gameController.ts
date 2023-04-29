@@ -15,12 +15,42 @@ const getGames = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+const getGameById = async (req: Request, res: Response): Promise<Response> => {
+    try{
+        let result = await prisma.game.findUnique({
+            where: {
+                id: Number(req.params.id)
+            },
+            include: {
+                survey: {
+                    include: {
+                        questionsSurvey: {
+                            include: {
+                                question: {
+                                    include: {
+                                        answers: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        return res.status(200).json(result)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error)
+    }
+}
+
 interface CoursesIds {
     course: string[]
 }
 
 const getOpenGamesByCourses = async (req: Request<{}, {}, {}, CoursesIds>, res: Response): Promise<Response> => {
     try {
+        console.log("Getting open games by courses")
         let coursesIds: number[] = [];
         if(!Array.isArray(req.query.course)){
             coursesIds.push(Number(req.query.course))
@@ -61,6 +91,7 @@ const getOpenGamesByCourses = async (req: Request<{}, {}, {}, CoursesIds>, res: 
                 }
             }
         })
+        console.log(result)
         return res.status(200).json(result)
     } catch (error) {
         console.log(error)
@@ -207,5 +238,6 @@ module.exports = {
     getOpenGamesByCourses,
     updateGame,
     createResults,
-    getGamesResultsByUser
+    getGamesResultsByUser,
+    getGameById
 }

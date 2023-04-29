@@ -1,4 +1,4 @@
-import { Component, OnInit, Type } from '@angular/core';
+import { Component, OnInit, Type, HostListener } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Answer, AnswerResult } from '@app/core/models/answer.model';
@@ -13,10 +13,21 @@ const STANDARD_POINTS = 1000;
 @Component({
   selector: 'app-student-game',
   templateUrl: './student-game.component.html',
-  styleUrls: ['./student-game.component.css']
+  styleUrls: ['./student-game.component.css'],
 })
 export class StudentGameComponent implements OnInit {
 
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: any) {
+    event.returnValue = 'Estás seguro de que desea salir?'
+  }
+
+  @HostListener('window:unload', ['$event'])
+  unloadHanlder(event: any) {
+    // En el caso del estudiante, tiene que poder volver a conectarse
+    // 
+    window.location.reload()
+  }
 
   constructor(
     private authService: ApiAuthService,
@@ -36,7 +47,7 @@ export class StudentGameComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
-    //this.socketService.setupSocketConnection();
+    this.socketService.setupSocketConnection();
     this.socketService.socket.emit('look_for_game_session', id)
     this.socketService.socket.on('wait_for_game_session', (gameSession: GameSession) => {
       if (gameSession) {

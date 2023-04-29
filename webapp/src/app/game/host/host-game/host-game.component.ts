@@ -1,28 +1,56 @@
-import { Component, Input, OnInit, Type } from '@angular/core';
+import { Component, Input, OnInit, Type, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Answer } from '@app/core/models/answer.model';
 import { Game, GameSession, GameSessionState, GameState } from '@app/core/models/game.model';
 import { Question, QuestionSurvey } from '@app/core/models/question.model';
 import { User, UserResult } from '@app/core/models/user.model';
+import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
+import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 import { SocketioService } from '@app/core/socket/socketio.service';
+
 
 @Component({
   selector: 'app-host-game',
   templateUrl: './host-game.component.html',
   styleUrls: ['./host-game.component.css']
 })
-export class HostGameComponent implements OnInit {
+@HostListener('window:beforeunload')
+export class HostGameComponent implements OnInit{
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: any) {
+    event.preventDefault();
+    event.returnValue = 'Estás seguro de que desea salir?'
+  }
+
+  @HostListener('window:unload', ['$event'])
+  unloadHandler(event: any) {
+    // Esto sucede cuando el usuario le da a que sí
+    // En el caso del profesor, si se sale de la página, el juego se acaba
+    // Por lo que habría que envíar un emit a todos los jugadores para echarlos del juego
+    // Finalmente, habría que eliminar el juego, para que no quede constancia, puesto que no es válido
+    this.socketService.socket.emit('game_over', (response: any) => {
+    });
+    window.location.reload()
+  }
+
+  @HostListener('window:onpopstate', ['$event'])
+  onpopstateHandler(event: any) {
+    
+  }
 
   constructor(
     private socketService: SocketioService,
+    private authService: ApiAuthService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private apiProfessorService: ApiProfessorService
   ) {
   }
   game: Game = <Game>{};
   gameStateType = GameState;
   questionList: Question[] = [];
-  questionIndex: number = 0;
+  questionIndex: number = 0;  
   actualQuestion: Question = <Question>{};
   correctAnswers: Answer[] = [];
   usersConnected: User[] = [];
@@ -38,6 +66,9 @@ export class HostGameComponent implements OnInit {
   gameSession: GameSession = <GameSession>{}
   gameSessionState = GameSessionState
 
+  isError = false
+  errorMessage = ''
+
   addUsers(users: User[]) {
     this.usersConnected = users;
   }
@@ -48,7 +79,8 @@ export class HostGameComponent implements OnInit {
   @Input() courseId: number = 0;
 
   ngOnInit() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    const course_id = this.activatedRoute.snapshot.paramMap.get('course_id');
+    const game_id = this.activatedRoute.snapshot.paramMap.get('game_id');
     this.socketService.game.subscribe((game: Game) => {
       if (game.survey != undefined && this.questionList.length == 0) {
         this.game = game;
@@ -63,15 +95,16 @@ export class HostGameComponent implements OnInit {
         this.correctAnswers = this.actualQuestion.answers.filter(a => a.is_correct);
       }
     })
-    if(!this.socketService.socket)
-      this.socketService.setupSocketConnection();
-    this.socketService.socket.emit('look_for_game_session', id)
-    this.socketService.socket.on('wait_for_game_session', (gameSession: GameSession) => {
-      if (gameSession) {
-        this.gameSession = gameSession
-      }
-      console.log(this.gameSession)
-    })
+    this.socketService.setupSocketConnection();
+    //this.socketService.createGame(Number(game_id), Number(course_id))
+    this.apiProfessorService
+      .getGameById(Number(game_id))
+      .subscribe((game: Game) => {
+        this.socketService.socket.emit('create_game', game, course_id + '', (response: string) => {
+          this.isError = true;
+          this.errorMessage = response;
+        });
+      })
     this.socketService.socket.on('connectUser', (gameSession: GameSession) => {
       this.gameSession = gameSession
     });

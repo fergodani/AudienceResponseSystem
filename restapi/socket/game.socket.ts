@@ -16,18 +16,25 @@ export default (io: Server) => {
             console.log("First connection")
         }
 
-        socket.on(Constants.CREATE_GAME, (newGame, courseId: string) => {
+        socket.on(Constants.CREATE_GAME, (newGame, courseId: string, callback) => {
             game = newGame;
             console.log("Creando juego...")
             // unirse al juego con el game id
-            socket.join(game.id + '')
-            let gameSession: GameSession = {
-                game,
-                users: [],
-                state: GameSessionState.not_started
+            if (game) {
+                socket.join(game.id + '')
+                let gameSession: GameSession = {
+                    game,
+                    users: [],
+                    state: GameSessionState.not_started,
+                    question_list: [],
+                    question_index: 0,
+                    user_results: []
+                }
+                gameSessions.set(game.id + '', gameSession)
+                io.to(courseId).emit('wait_for_surveys', game)
+            } else {
+                callback("No existe el juego")
             }
-            gameSessions.set(game.id + '', gameSession)
-            io.to(courseId).emit('wait_for_surveys', game)
         });
 
         socket.on("look_for_game_session", (id: number) => {
@@ -38,7 +45,7 @@ export default (io: Server) => {
         socket.on(Constants.JOIN_GAME, (newUser, id: string) => {
             let user = gameSessions.get(id)?.users.find(student => student.id == newUser.id)
             console.log("User joning...")
-            if(!user)
+            if (!user)
                 gameSessions.get(id)?.users.push(newUser)
             socket.join(id)
             io.to(id).emit('connectUser', gameSessions.get(id))
@@ -75,6 +82,7 @@ export default (io: Server) => {
         })
 
         socket.on(Constants.FINISH_GAME, () => {
+            console.log("finishing game...")
             socket.to(game.id + '').emit('finish_game');
         })
 
@@ -82,6 +90,10 @@ export default (io: Server) => {
             socket.leave(game.id + '');
         })
 
-
+        socket.on('game_over', (callback) => {
+            console.log('game over')
+            callback('hola amigo')
+            socket.leave(game.id + '');
+        })
     });
 }

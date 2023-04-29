@@ -62,9 +62,9 @@ export class CreateGameDialogComponent {
       .subscribe( game => {
         console.log(game)
         this.socketService.setupSocketConnection()
-        this.socketService.createGame(game, this.data.course_id);
+        //this.socketService.createGame(game, this.data.course_id);
         this.dialogRef.close();
-        this.router.navigate(["/game/host", game.id])
+        this.router.navigate(["/course", this.data.course_id, 'game', game.id])
       })
     
   }

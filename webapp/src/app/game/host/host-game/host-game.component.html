@@ -1,4 +1,4 @@
-<div *ngIf="gameSession.state == gameSessionState.not_started || !gameSession">
+<div *ngIf="gameSession.state == gameSessionState.not_started || gameSession == null">
     <button mat-button (click)="startGame()" *ngIf="usersConnected.length != 0">Empezar</button>
     <h1>Usuarios conectados</h1>
     <div class="d-flex flex-row flex-wrap gap-2" *ngFor="let user of gameSession.users">
@@ -50,3 +50,4 @@
     <h1>Juego terminado</h1>
     <button mat-raised-button (click)="leaveGame()">Salir</button>
 </div>
+<div *ngIf="isError" class="alert alert-danger mt-3 mb-0">{{errorMessage}}</div>

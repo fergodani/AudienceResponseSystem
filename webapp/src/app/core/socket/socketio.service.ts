@@ -54,10 +54,14 @@ export class SocketioService {
     this.socket = io('http://localhost:5000', socketOptions);
   }
 
-  createGame(game: Game, courseId: number) {
+  createGame(game_id: number, courseId: number) {
     this.course_id = courseId;
-    this.gameSubject.next(game);
-    this.socket.emit('create_game', game, courseId + '');
+    this.apiProfessorService
+      .getGameById(game_id)
+      .subscribe((game: Game) => {
+        this.socket.emit('create_game', game, courseId + '');
+      })
+    
   }
 
   startGame() {
