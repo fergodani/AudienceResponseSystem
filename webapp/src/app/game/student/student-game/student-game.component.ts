@@ -35,69 +35,56 @@ export class StudentGameComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
-
-    this.socketService.game.subscribe((game: Game) => {
-      if (game.survey != undefined) {
-        this.game = game;
-        this.result.game_id = game.id!;
-      }
-    })
-
   }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     this.socketService.setupSocketConnection();
-    this.socketService.socket.emit('look_for_game_session', id)
-    this.socketService.socket.on('wait_for_game_session', (gameSession: GameSession) => {
+    this.socketService.socket.emit('join_game', this.authService.userValue, id, (gameSession: GameSession) => {
+      console.log(gameSession)
       if (gameSession) {
-        if (gameSession.state == GameSessionState.not_started) {
-          this.socketService.sendUser(id!)
-        } else {
-          if (gameSession.users.includes(this.authService.userValue!)){
-            this.gameSession = gameSession
-          }else {
-            this.isError = true
-            this.errorMessage = "No te puedes unir, el juego ya ha empezado"
-          }
-        }
-
+        this.gameSession = gameSession
+        // TODO Comprobar, en el caso de que justo entre cuando hay una pregunta en juego, si ya a respondido
+      } else {
+        this.isError = true
+        this.errorMessage = "Ha ocurrido un error"
       }
     })
-    //this.socketService.sendUser(id!);
-    this.socketService.socket.on("host-start-preview", () => {
+
+    this.socketService.socket.on("host-start-preview", (gameSession: GameSession) => {
+      this.gameSession = gameSession
       this.timeLeft = 5;
-      this.isStart = true;
       this.isLoading = true;
+      this.haveAnswered = false
       this.startTimerPreview(5);
     })
-    this.socketService.socket.on("host-start-question-timer", (time: number, question: Question) => {
-      this.timeLeft = time;
-      this.actualQuestion = question;
-      this.startQuestionTimer(time);
+    this.socketService.socket.on("host-start-question-timer", (gameSession: GameSession) => {
+      this.gameSession = gameSession
+      this.actualQuestion = this.gameSession.question_list[this.gameSession.question_index];
     })
-    this.socketService.socket.on("finish_game", () => {
-      this.isFinished = true;
+    this.socketService.socket.on("finish_question", (gameSession: GameSession) => {
+      this.gameSession = gameSession
+    })
+    this.socketService.socket.on('show_score', (gameSession: GameSession) => {
+      this.gameSession = gameSession
+    })
+    this.socketService.socket.on("finish_game", (gameSession: GameSession) => {
+      this.gameSession = gameSession
       this.socketService.socket.emit('leave_game');
     })
   }
 
-  game: Game = <Game>{};
-  questionList: Question[] = [];
-  questionIndex: number = 0;
   actualQuestion: Question = <Question>{};
-  gameStateType = GameState;
-  isStart: boolean = false;
-  isFinished: boolean = false;
   result: UserResult = {
     user: this.authService.userValue!,
     user_id: this.authService.userValue!.id,
-    game_id: this.game.id!,
+    game_id: 0,
     answer_results: [],
     score: 0
   };
   lastScore: number = 0;
   haveAnswered: boolean = false;
+  isResultScreen = false
   shortQuestionForm = new FormControl('');
 
   questionType = Type;
@@ -113,9 +100,6 @@ export class StudentGameComponent implements OnInit {
   startTimerPreview(seconds: number) {
     let time = seconds;
     let interval = setInterval(() => {
-      this.gameSession.state = GameSessionState.is_preview_screen
-      this.isPreviewScreen = true;
-      this.isResultScreen = false;
       this.isLoading = false;
       this.timeLeft = time;
       if (time > 0) {
@@ -123,18 +107,12 @@ export class StudentGameComponent implements OnInit {
         time--;
       } else {
         clearInterval(interval);
-
-
-        this.isPreviewScreen = false;
       }
     }, 1000)
   }
 
   startQuestionTimer(seconds: number) {
     let time = seconds;
-    this.gameSession.state = GameSessionState.is_question_screen
-    this.isQuestionScreen = true;
-    this.isPreviewScreen = false;
     this.answerTime = 0;
     let interval = setInterval(() => {
       this.timeLeft = time;
@@ -142,19 +120,13 @@ export class StudentGameComponent implements OnInit {
         time--;
       } else {
         clearInterval(interval);
-
-        this.isQuestionScreen = false;
-        this.isPreviewScreen = false;
-        this.isQuestionAnswered = false;
-        this.gameSession.state = GameSessionState.is_question_result
-        this.isResultScreen = true;
         this.lastScore = this.result.score;
         if (!this.haveAnswered) {
           let answerResult: AnswerResult = {
             user_id: this.authService.userValue!.id,
-            game_id: this.game.id!,
+            game_id: this.gameSession.game.id!,
             question_id: this.actualQuestion.id,
-            question_index: this.questionIndex,
+            question_index: this.gameSession.question_index,
             answered: false
           }
           this.result.answer_results.push(answerResult)
@@ -166,22 +138,13 @@ export class StudentGameComponent implements OnInit {
     }, 1000)
   }
 
-  // **************
-  isQuestionAnswered: boolean = false;
-  isPreviewScreen: boolean = false;
-  isQuestionScreen: boolean = false;
-  isResultScreen: boolean = false;
   answerTime: number = 0;
   correctAnswerCount: number = 0;
   score: number = 0;
   isLoading = false;
 
   displayAnswerResult() {
-    this.isQuestionScreen = false;
-    this.isQuestionAnswered = true;
     setTimeout(() => {
-      this.isQuestionAnswered = false;
-      this.isResultScreen = true;
     }, 5000)
   }
 
@@ -189,24 +152,22 @@ export class StudentGameComponent implements OnInit {
     this.haveAnswered = true;
     let answer = this.actualQuestion.answers.find(a => a.id === id)
     this.calculatePoints(answer!.is_correct)
-    this.isQuestionAnswered = true;
 
     let answerResult: AnswerResult = {
       user_id: this.authService.userValue!.id,
-      game_id: this.game.id!,
+      game_id: this.gameSession.game.id!,
       question_id: this.actualQuestion.id,
-      question_index: this.questionIndex,
+      question_index: this.gameSession.question_index,
       answer_id: answer!.id,
       answered: true
     }
     this.result.answer_results.push(answerResult)
     this.displayAnswerResult();
-    this.socketService.socket.emit('send_answer', this.result);
+    this.socketService.socket.emit('send_answer',this.gameSession.game.id, this.result);
   }
 
   checkShortAnswer() {
     this.haveAnswered = true;
-    this.isQuestionAnswered = true;
     const answer = this.shortQuestionForm.value!;
     let isCorrect = false;
     console.log("Respues del usuario: " + answer)
@@ -221,16 +182,16 @@ export class StudentGameComponent implements OnInit {
 
     let answerResult: AnswerResult = {
       user_id: this.authService.userValue!.id,
-      game_id: this.game.id!,
+      game_id: this.gameSession.game.id!,
       question_id: this.actualQuestion.id,
-      question_index: this.questionIndex,
+      question_index: this.gameSession.question_index,
       short_answer: answer,
       answered: true
     }
     console.log(answerResult)
     this.result.answer_results.push(answerResult)
     this.displayAnswerResult();
-    this.socketService.socket.emit('send_answer', this.result);
+    this.socketService.socket.emit('send_answer', this.gameSession.game.id, this.result);
   }
 
   calculatePoints(isCorrect: boolean) {
@@ -245,7 +206,7 @@ export class StudentGameComponent implements OnInit {
     // 5. Redondea al número entero más cercano
     if (isCorrect) {
       let points = (1 - ((this.answerTime / this.actualQuestion.answer_time) / 2)) * STANDARD_POINTS;
-      if (this.game.point_type == PointsType.double)
+      if (this.gameSession.game.point_type == PointsType.double)
         points = points * 2;
       this.result.score += Math.round(points);
     }

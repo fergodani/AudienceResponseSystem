@@ -1,16 +1,16 @@
-<div class="question_preview" *ngIf="isPreviewScreen">
+<div class="question_preview" *ngIf="gameSession.state == gameSessionState.is_preview_screen">
     <h1>{{ timeLeft }}</h1>
 </div>
-<div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+<div class="spinner-border text-primary" role="status" *ngIf="isLoading || haveAnswered">
     <span class="visually-hidden">Loading...</span>
 </div>
-<div class="d-flex align-items-center justify-content-center" *ngIf="!isStart">
+<div class="d-flex align-items-center justify-content-center" *ngIf="gameSession.state == gameSessionState.not_started">
     <h2>Mira tu nombre en la pantalla del profesor</h2>
 </div>
-<div class="d-flex flex-column align-items-center p-5" *ngIf="isQuestionScreen">
-    <h1>{{ timeLeft }}</h1>
-    <h1 *ngIf="game.are_questions_visible">{{ actualQuestion.description }}</h1>
-    <div class="image-box mb-2" *ngIf="game.are_questions_visible && actualQuestion.resource != ''">
+<div class="d-flex flex-column align-items-center p-5" *ngIf="gameSession.state == gameSessionState.is_question_screen
+&& !haveAnswered">
+    <h1 *ngIf="gameSession.game.are_questions_visible">{{ actualQuestion.description }}</h1>
+    <div class="image-box mb-2" *ngIf="gameSession.game.are_questions_visible && actualQuestion.resource != ''">
         <div class="imageContainer">
             <img [src]="actualQuestion.resource" *ngIf="actualQuestion.resource != ''" alt="Question image source" />
         </div>
@@ -36,21 +36,21 @@
         <button mat-button (click)="checkShortAnswer()">Aceptar</button>
     </form>
 </div>
-<div class="d-flex flex-column align-items-center justify-content-center" *ngIf="isQuestionAnswered">
+<div class="d-flex flex-column align-items-center justify-content-center" *ngIf="gameSession.state == gameSessionState.is_question_result">
     <div class="p-3 mb-2 bg-success text-white w-90 h-90" *ngIf="result.score > lastScore">
         Eres un genio?
     </div>
-    <div class="p-3 mb-2 bg-danger text-white w-90 h-90" *ngIf="result.score == lastScore">
+    <div class="p-3 mb-2 bg-danger text-white w-90 h-90" *ngIf="result.score == lastScore && haveAnswered">
         Tendrás más suerte la próxima vez
     </div>
-    <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
+    <div class="p-3 mb-2 bg-secondary text-white w-90 h-90" *ngIf="result.score == lastScore && !haveAnswered">
+        Tendrás más suerte la próxima vez
     </div>
 </div>
-<div *ngIf="isResultScreen">
+<div *ngIf="gameSession.state == gameSessionState.is_leaderboard_screen">
     <h2>Puntos: {{ result.score }}</h2>
 </div>
-<div *ngIf="isFinished">
+<div *ngIf="gameSession.state == gameSessionState.is_finished">
     <h1>Juego terminado</h1>
     <button mat-raised-button (click)="leaveGame()">Salir</button>
 </div>

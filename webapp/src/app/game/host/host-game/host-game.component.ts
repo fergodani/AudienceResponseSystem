@@ -31,13 +31,9 @@ export class HostGameComponent implements OnInit{
     // Finalmente, habría que eliminar el juego, para que no quede constancia, puesto que no es válido
     this.socketService.socket.emit('game_over', (response: any) => {
     });
-    window.location.reload()
+    //window.location.reload()
   }
 
-  @HostListener('window:onpopstate', ['$event'])
-  onpopstateHandler(event: any) {
-    
-  }
 
   constructor(
     private socketService: SocketioService,
@@ -47,104 +43,74 @@ export class HostGameComponent implements OnInit{
     private apiProfessorService: ApiProfessorService
   ) {
   }
+
   game: Game = <Game>{};
   gameStateType = GameState;
-  questionList: Question[] = [];
-  questionIndex: number = 0;  
   actualQuestion: Question = <Question>{};
   correctAnswers: Answer[] = [];
-  usersConnected: User[] = [];
-  userResults: UserResult[] = [];
-  isFinished: boolean = false;
   isLoading: boolean = false;
-
-  isLeaderboardScreen: boolean = false;
-  isPreviewScreen: boolean = false;
-  isQuestionScreen: boolean = false;
-  isQuestionResult: boolean = false;
-
   gameSession: GameSession = <GameSession>{}
   gameSessionState = GameSessionState
 
   isError = false
   errorMessage = ''
 
-  addUsers(users: User[]) {
-    this.usersConnected = users;
-  }
-
   questionType = Type;
-
 
   @Input() courseId: number = 0;
 
   ngOnInit() {
     const course_id = this.activatedRoute.snapshot.paramMap.get('course_id');
     const game_id = this.activatedRoute.snapshot.paramMap.get('game_id');
-    this.socketService.game.subscribe((game: Game) => {
-      if (game.survey != undefined && this.questionList.length == 0) {
-        this.game = game;
-        this.game.survey?.questionsSurvey.forEach((qS: QuestionSurvey) => {
-          qS.question.position = qS.position
-        })
-        this.game.survey?.questionsSurvey.forEach((qS: QuestionSurvey) => {
-          this.questionList.push(qS.question)
-        })
-        this.questionList.sort((q1, q2) => {return q1.position! - q2.position!})
-        this.actualQuestion = this.questionList[this.questionIndex];
-        this.correctAnswers = this.actualQuestion.answers.filter(a => a.is_correct);
-      }
-    })
     this.socketService.setupSocketConnection();
-    //this.socketService.createGame(Number(game_id), Number(course_id))
     this.apiProfessorService
       .getGameById(Number(game_id))
       .subscribe((game: Game) => {
-        this.socketService.socket.emit('create_game', game, course_id + '', (response: string) => {
-          this.isError = true;
-          this.errorMessage = response;
+        this.socketService.socket.emit('create_game', game, course_id + '', (gameSession: GameSession) => {
+          console.log(gameSession)
+          this.gameSession = gameSession
         });
       })
     this.socketService.socket.on('connectUser', (gameSession: GameSession) => {
       this.gameSession = gameSession
     });
     this.socketService.socket.on('get-answer-from-player', (data: string) => {
-      this.userResults.push(JSON.parse(data));
-      console.log(this.userResults)
+      console.log(data)
+      this.gameSession.user_results.push(JSON.parse(data));
     })
   }
 
   startGame() {
-    this.socketService.startGame()
-    this.socketService.socket.emit('question_preview', () => {
+    this.gameSession.game.state = GameState.started;
+    this.apiProfessorService
+      .updateGame(this.gameSession.game)
+      .subscribe()
+    this.actualQuestion = this.gameSession.question_list[this.gameSession.question_index]
+    this.gameSession.state = GameSessionState.is_preview_screen
+    this.socketService.socket.emit('question_preview', this.gameSession, () => {
       this.isLoading = true;
       this.timeLeft = 5;
-      this.startPreviewCountdown(5, this.questionIndex);
+      this.startPreviewCountdown(5);
     })
   }
 
   timeLeft: number = 5;
 
-  startPreviewCountdown(seconds: number, index: number) {
-
+  startPreviewCountdown(seconds: number) {
     let time = seconds;
     let interval = setInterval(() => {
       this.timeLeft = time;
-      this.isLeaderboardScreen = false;
-      this.isPreviewScreen = true;
       this.isLoading = false;
       if (time > 0) {
         time--;
       } else {
         clearInterval(interval);
-        this.displayQuestion(index);
+        this.displayQuestion();
       }
     }, 1000)
   }
 
-  startQuestionCountdown(seconds: number, index: number) {
-    this.isPreviewScreen = false;
-    this.isQuestionScreen = true;
+  startQuestionCountdown(seconds: number) {
     let time = seconds;
     let interval = setInterval(() => {
       this.timeLeft = time;
@@ -152,62 +118,59 @@ export class HostGameComponent implements OnInit{
         time--;
       } else {
         clearInterval(interval);
-        this.displayQuestionResult(index);
+        this.displayQuestionResult();
       }
     }, 1000)
   }
 
-  displayQuestionResult(index: number) {
-    this.isQuestionScreen = false;
-    this.isQuestionResult = true;
-    setTimeout(() => {
-      this.displayCurrentLeaderboard(index);
-    }, 5000)
+  displayQuestionResult() {
+    this.gameSession.state = GameSessionState.is_question_result
+    this.socketService.socket.emit("finish_question", this.gameSession, () => {
+      setTimeout(() => {
+        this.gameSession.state = GameSessionState.is_leaderboard_screen
+        this.socketService.socket.emit("show_score", this.gameSession, () => {
+          this.displayCurrentLeaderboard();
+        })
+      }, 5000)
+    })
   }
 
-  displayCurrentLeaderboard(index: number) {
-    this.userResults.sort((a, b) => {
+  displayCurrentLeaderboard() {
+    this.gameSession.user_results.sort((a, b) => {
       return b.score - a.score;
     })
-    this.isQuestionResult = false;
-    this.isLeaderboardScreen = true;
     setTimeout(() => {
-      if (this.questionIndex == this.questionList.length) {
+      if (this.gameSession.question_index == this.gameSession.question_list.length) {
         this.socketService.socket.emit('finish_game');
-        this.isFinished = true;
+        this.gameSession.state = GameSessionState.is_finished
       } else {
-        this.isLeaderboardScreen = false;
-        this.socketService.socket.emit("question_preview", () => {
+        this.socketService.socket.emit("question_preview", this.gameSession, () => {
           this.timeLeft = 5;
-          this.startPreviewCountdown(5, index);
-          this.userResults = [];
+          this.startPreviewCountdown(5);
+          this.gameSession.user_results = [];
         })
       }
 
     }, 5000)
   }
 
-  displayQuestion(index: number) {
-    if (index === this.questionList.length) {
-      // TODO: mostrar la tabla final, guardar todos los resultados finales
-      // y acabar el juego
-      this.isQuestionResult = false;
-      this.isLeaderboardScreen = true;
+  displayQuestion() {
+    if (this.gameSession.question_index === this.gameSession.question_list.length) {
       this.socketService.socket.emit('finish_game');
     } else {
-      this.actualQuestion = this.questionList[index];
-      this.correctAnswers = this.actualQuestion.answers.filter(a => a.is_correct);
-      this.questionIndex++;
-      let time = this.actualQuestion.answer_time;
-      this.timeLeft = time;
-      this.socketService.socket.emit('start_question_time', time, this.actualQuestion, () => {
-        this.startQuestionCountdown(time, ++index);
+      this.actualQuestion = this.gameSession.question_list[this.gameSession.question_index]
+      this.timeLeft = this.actualQuestion.answer_time;
+      this.correctAnswers = this.actualQuestion.answers.filter((a: Answer) => a.is_correct)
+      this.gameSession.state = GameSessionState.is_question_screen
+      this.socketService.socket.emit('start_question_time', this.gameSession, () => {
+        this.gameSession.question_index++
+        this.startQuestionCountdown(this.timeLeft);
       })
     }
   }
 
   leaveGame() {
-    this.socketService.closeGame(this.userResults);
+    this.socketService.closeGame(this.gameSession.user_results);
     this.router.navigate(['/professor/home'])
   }
 }

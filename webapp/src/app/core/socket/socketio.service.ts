@@ -64,16 +64,6 @@ export class SocketioService {
     
   }
 
-  startGame() {
-    const game = this.gameValue;
-    game.state = GameState.started;
-    this.apiProfessorService
-      .updateGame(game)
-      .subscribe()
-    this.gameSubject.next(game);
-    this.socket.emit('start_game', this.gameValue);
-
-  }
 
   closeGame(userResults: UserResult[]) {
     const game = this.gameValue;

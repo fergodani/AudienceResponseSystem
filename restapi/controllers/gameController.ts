@@ -143,6 +143,7 @@ const createGame = async (req: Request, res: Response): Promise<Response> => {
 
 const updateGame = async (req: Request, res: Response): Promise<Response> => {
     try {
+        console.log(req.body)
         const updateGame = await prisma.game.update({
             where: {
                 id: req.body.id

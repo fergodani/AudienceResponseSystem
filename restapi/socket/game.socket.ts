@@ -2,9 +2,8 @@ import { Server } from "socket.io";
 import { Game, GameSession, GameSessionState, GameState } from "../models/game.model";
 import { User, UserResult } from "../models/user.model";
 import { Constants } from './constants'
+import { Question, QuestionSurvey } from "../models/question.model";
 
-let game: Game;
-let students: User[] = [];
 let gameSessions = new Map<string, GameSession>()
 
 
@@ -16,64 +15,76 @@ export default (io: Server) => {
             console.log("First connection")
         }
 
-        socket.on(Constants.CREATE_GAME, (newGame, courseId: string, callback) => {
-            game = newGame;
+        socket.on(Constants.CREATE_GAME, (newGame: Game, courseId: string, callback) => {
             console.log("Creando juego...")
             // unirse al juego con el game id
-            if (game) {
-                socket.join(game.id + '')
+            if (newGame) {
+                socket.join(newGame.id + '')
+                let questionList: Question[] = []
+                newGame.survey?.questionsSurvey!.forEach((qS: QuestionSurvey) => {
+                    qS.question!!.position = qS.position
+                })
+                newGame.survey?.questionsSurvey!.forEach((qS: QuestionSurvey) => {
+                    questionList.push(qS.question!)
+                })
+                questionList.sort((q1, q2) => { return q1.position! - q2.position! })
                 let gameSession: GameSession = {
-                    game,
+                    game: newGame,
                     users: [],
                     state: GameSessionState.not_started,
-                    question_list: [],
+                    question_list: questionList,
                     question_index: 0,
                     user_results: []
                 }
-                gameSessions.set(game.id + '', gameSession)
-                io.to(courseId).emit('wait_for_surveys', game)
-            } else {
-                callback("No existe el juego")
+                gameSessions.set(newGame.id + '', gameSession)
+                io.to(courseId).emit('wait_for_surveys', newGame)
+                callback(gameSession)
             }
         });
 
-        socket.on("look_for_game_session", (id: number) => {
-            const gameSession = gameSessions.get(id + '')
-            socket.to(id + '').emit('wait_for_game_session', gameSession)
-        })
-
-        socket.on(Constants.JOIN_GAME, (newUser, id: string) => {
+        socket.on(Constants.JOIN_GAME, (newUser, id: string, cb) => {
             let user = gameSessions.get(id)?.users.find(student => student.id == newUser.id)
             console.log("User joning...")
             if (!user)
                 gameSessions.get(id)?.users.push(newUser)
-            socket.join(id)
-            io.to(id).emit('connectUser', gameSessions.get(id))
+            socket.join(id + '')
+            io.to(id + '').emit('connectUser', gameSessions.get(id))
+            cb(gameSessions.get(id))
         });
 
-        socket.on(Constants.START_GAME, (game: Game) => {
-            console.log("Empezando juego...")
-            game.state = GameState.started;
-            io.to(game.id + '').emit('move_to_survey', game);
-        });
-
-        socket.on(Constants.QUESTION_PREVIEW, (cb) => {
-            cb();
+        socket.on(Constants.QUESTION_PREVIEW, (gameSession: GameSession, cb) => {
+            cb()
             console.log("Question preview...")
-            socket.to(game.id + '').emit('host-start-preview');
+            socket.to(gameSession.game.id + '').emit('host-start-preview', gameSession);
         })
 
-        socket.on(Constants.START_QUESTION_TIME, (time, question, cb) => {
+        socket.on(Constants.START_QUESTION_TIME, (gameSession: GameSession, cb) => {
             cb();
-            socket.to(game.id + '').emit('host-start-question-timer', time, question);
+            gameSessions.set(gameSession.game.id + '', gameSession)
+            socket.to(gameSession.game.id  + '').emit('host-start-question-timer', gameSession);
         });
 
-        socket.on(Constants.SEND_ANSWER, (result: UserResult) => {
+        socket.on("finish_question", (gameSession: GameSession, cb) => {
+            cb()
+            console.log("Finishing question...")
+            gameSessions.set(gameSession.game.id + '', gameSession)
+            socket.to(gameSession.game.id + '').emit("finish_question", gameSession)
+        })
+
+        socket.on("show_score", (gameSession: GameSession, cb) => {
+            cb()
+            console.log("Showing score...")
+            socket.to(gameSession.game.id + '').emit('show_score', gameSession)
+        })
+
+        socket.on(Constants.SEND_ANSWER, (id, result: UserResult) => {
             console.log("Enviando respuesta...")
-            socket.to(game.id + '').emit("get-answer-from-player", JSON.stringify(result))
+            socket.to(id + '').emit("get-answer-from-player", JSON.stringify(result))
         });
 
         socket.on(Constants.DISCONNECT, () => {
+            // TODO Mirar si se desconecta un usuario que sea host de un juego que esté en proceso
+            // Aquí sería un buen método para eliminar el juego también
             console.log('user disconnected');
         });
 
@@ -81,19 +92,19 @@ export default (io: Server) => {
             socket.join(courseIds)
         })
 
-        socket.on(Constants.FINISH_GAME, () => {
+        socket.on(Constants.FINISH_GAME, (id) => {
             console.log("finishing game...")
-            socket.to(game.id + '').emit('finish_game');
+            socket.to(id + '').emit('finish_game');
         })
 
-        socket.on('leave_game', () => {
-            socket.leave(game.id + '');
+        socket.on('leave_game', (id) => {
+            socket.leave(id + '');
         })
 
-        socket.on('game_over', (callback) => {
+        socket.on('game_over', (id, callback) => {
             console.log('game over')
             callback('hola amigo')
-            socket.leave(game.id + '');
+            socket.leave(id + '');
         })
     });
 }
