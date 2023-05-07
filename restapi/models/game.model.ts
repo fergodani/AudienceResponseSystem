@@ -38,6 +38,7 @@ export interface GameSession {
     question_list: Question[];
     question_index: number;
     user_results: UserResult[];
+    socket_id?: String;
 }
 
 export enum GameSessionState {

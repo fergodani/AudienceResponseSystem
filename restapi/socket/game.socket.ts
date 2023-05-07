@@ -34,8 +34,10 @@ export default (io: Server) => {
                     state: GameSessionState.not_started,
                     question_list: questionList,
                     question_index: 0,
-                    user_results: []
+                    user_results: [],
+                    socket_id: socket.id
                 }
+                console.log(gameSession)
                 gameSessions.set(newGame.id + '', gameSession)
                 io.to(courseId).emit('wait_for_surveys', newGame)
                 callback(gameSession)
@@ -79,12 +81,19 @@ export default (io: Server) => {
 
         socket.on(Constants.SEND_ANSWER, (id, result: UserResult) => {
             console.log("Enviando respuesta...")
-            socket.to(id + '').emit("get-answer-from-player", JSON.stringify(result))
+            socket.to(id + '').emit("get-answer-from-player", result)
         });
 
         socket.on(Constants.DISCONNECT, () => {
             // TODO Mirar si se desconecta un usuario que sea host de un juego que esté en proceso
             // Aquí sería un buen método para eliminar el juego también
+            const sessionArray = Array.from(gameSessions.values())
+            const sessionDisconnected = sessionArray.find((s) => s.socket_id === socket.id)
+            if (sessionDisconnected) {
+                console.log("Game Over")
+                sessionDisconnected.state = GameSessionState.is_finished
+                socket.to(sessionDisconnected.game.id + "").emit("finish_game", sessionDisconnected)
+            }
             console.log('user disconnected');
         });
 
@@ -92,18 +101,12 @@ export default (io: Server) => {
             socket.join(courseIds)
         })
 
-        socket.on(Constants.FINISH_GAME, (id) => {
+        socket.on(Constants.FINISH_GAME, (gameSession: GameSession) => {
             console.log("finishing game...")
-            socket.to(id + '').emit('finish_game');
+            socket.to(gameSession.game.id + '').emit('finish_game', gameSession);
         })
 
         socket.on('leave_game', (id) => {
-            socket.leave(id + '');
-        })
-
-        socket.on('game_over', (id, callback) => {
-            console.log('game over')
-            callback('hola amigo')
             socket.leave(id + '');
         })
     });

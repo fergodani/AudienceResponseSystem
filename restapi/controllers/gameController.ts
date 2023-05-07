@@ -7,7 +7,7 @@ import { Game } from '../models/game.model';
 const prisma = new PrismaClient()
 
 const getGames = async (req: Request, res: Response): Promise<Response> => {
-    try{
+    try {
         let result = await prisma.game.findMany()
         return res.status(200).json(result)
     } catch (error) {
@@ -16,7 +16,7 @@ const getGames = async (req: Request, res: Response): Promise<Response> => {
 }
 
 const getGameById = async (req: Request, res: Response): Promise<Response> => {
-    try{
+    try {
         let result = await prisma.game.findUnique({
             where: {
                 id: Number(req.params.id)
@@ -48,16 +48,16 @@ interface CoursesIds {
     course: string[]
 }
 
-const getOpenGamesByCourses = async (req: Request<{}, {}, {}, CoursesIds>, res: Response): Promise<Response> => {
+const getOpenOrStartedGamesByCourses = async (req: Request<{}, {}, {}, CoursesIds>, res: Response): Promise<Response> => {
     try {
         console.log("Getting open games by courses")
         let coursesIds: number[] = [];
-        if(!Array.isArray(req.query.course)){
+        if (!Array.isArray(req.query.course)) {
             coursesIds.push(Number(req.query.course))
-        }else {
+        } else {
             coursesIds = req.query.course.map(id => Number(id))
         }
-        
+
         let courseSurveys = await prisma.courseSurvey.findMany({
             where: {
                 course_id: {
@@ -65,10 +65,17 @@ const getOpenGamesByCourses = async (req: Request<{}, {}, {}, CoursesIds>, res: 
                 }
             }
         })
-        const surveysIds: number[] = courseSurveys.map( c => c.survey_id)
+        const surveysIds: number[] = courseSurveys.map(c => c.survey_id)
         let result = await prisma.game.findMany({
             where: {
-                state: state.created,
+                OR: [
+                    {
+                        state: state.created
+                    },
+                    {
+                        state: state.started
+                    }
+                ],
                 survey: {
                     id: {
                         in: surveysIds
@@ -105,10 +112,10 @@ const createGame = async (req: Request, res: Response): Promise<Response> => {
         let game: Prisma.gameCreateInput;
         game = {
             user: {
-                connect: {id: host_id}
+                connect: { id: host_id }
             },
             survey: {
-                connect: {id: survey_id}
+                connect: { id: survey_id }
             },
             type,
             state,
@@ -153,7 +160,7 @@ const updateGame = async (req: Request, res: Response): Promise<Response> => {
             }
         })
         if (!updateGame)
-            return res.status(404).json({message: "Game not found"})
+            return res.status(404).json({ message: "Game not found" })
         return res.status(200).json(updateGame)
     } catch (error) {
         console.log(error)
@@ -161,7 +168,7 @@ const updateGame = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
-const createResults = async (req:Request, res: Response): Promise<Response> => {
+const createResults = async (req: Request, res: Response): Promise<Response> => {
     try {
         const userResults: UserResult[] = req.body
         const userResultsMapped = userResults.map((userResult: UserResult) => ({
@@ -188,7 +195,7 @@ const createResults = async (req:Request, res: Response): Promise<Response> => {
         await prisma.answerResult.createMany({
             data: answerResultsMapped
         })
-        return res.status(200).json({message: "Results uploaded"})
+        return res.status(200).json({ message: "Results uploaded" })
     } catch (error) {
         console.log(error)
         return res.status(500).send(error)
@@ -226,7 +233,22 @@ const getGamesResultsByUser = async (req: Request, res: Response): Promise<Respo
                 }
             }
         })
+        console.log(result)
         return res.status(200).json(result)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error)
+    }
+}
+
+const deleteGame = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        await prisma.game.delete({
+            where: {
+                id: Number(req.params.id)
+            },
+        })
+        return res.status(200).json({ message: req.params.id + " game deleted" })
     } catch (error) {
         console.log(error)
         return res.status(500).send(error)
@@ -236,9 +258,10 @@ const getGamesResultsByUser = async (req: Request, res: Response): Promise<Respo
 module.exports = {
     getGames,
     createGame,
-    getOpenGamesByCourses,
+    getOpenOrStartedGamesByCourses,
     updateGame,
     createResults,
     getGamesResultsByUser,
-    getGameById
+    getGameById,
+    deleteGame
 }

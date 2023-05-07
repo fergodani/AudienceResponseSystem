@@ -8,7 +8,10 @@
     </mat-form-field>
     <mat-checkbox formControlName="areQuestionsVisible">Mostar preguntas</mat-checkbox>
 </div>
-<div mat-dialog-actions>
+<div mat-dialog-actions *ngIf="!isLoading">
     <button mat-button (click)="onNoClick()">Cancelar</button>
     <button mat-button (click)="onCreateGame()">Aceptar</button>
+</div>
+<div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+    <span class="visually-hidden">Loading...</span>
 </div>

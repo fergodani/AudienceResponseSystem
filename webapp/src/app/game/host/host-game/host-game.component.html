@@ -9,9 +9,9 @@
     </div>
     <p *ngIf="gameSession.users.length == 0">Esperando usuarios...</p>
 </div>
-<div class="" *ngIf="gameSession.state == gameSessionState.is_preview_screen">
+<div class="d-flex flex-column gap-1 justify-content-center align-items-center"*ngIf="gameSession.state == gameSessionState.is_preview_screen">
     <h1>{{ actualQuestion.description }}</h1>
-    <h1 class="question_preview">{{ timeLeft }} </h1>
+    <h1 class="question_preview w-100">{{ timeLeft }} </h1>
 </div>
 <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
     <span class="visually-hidden">Loading...</span>
@@ -41,12 +41,12 @@
     </h2>
 </div>
 <div class="d-flex flex-column align-items-center" *ngIf="gameSession.state == gameSessionState.is_leaderboard_screen">
-    <h1>1º {{ gameSession.user_results[0].user.username}}</h1>
+    <h1>1º {{ gameSession.users[0].username}}</h1>
     <div class="d-flex flex-row" *ngIf="gameSession.users.length >= 2">
-        <h2>2º {{ gameSession.user_results[0].user.username}}</h2>
-        <h2 *ngIf="gameSession.users.length >= 3">3º {{ gameSession.user_results[0].user.username}}</h2>
+        <h2>2º {{ gameSession.users[0].username}}</h2>
+        <h2 *ngIf="gameSession.users.length >= 3">3º {{ gameSession.users[0].username}}</h2>
     </div>
-
+    <button mat-raised-button (click)="nextQuestion()">Siguiente</button>
 </div>
 <div *ngIf="gameSession.state == gameSessionState.is_finished">
     <h1>Juego terminado</h1>

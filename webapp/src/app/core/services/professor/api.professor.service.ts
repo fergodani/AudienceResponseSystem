@@ -192,4 +192,11 @@ export class ApiProfessorService {
       catchError(this.handleError)
     )
   }
+
+  deleteGame(id: number): Observable<Message> {
+    return this.http.delete<Message>(`${this.apiUrl}/game/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
 }

@@ -37,13 +37,13 @@
     </form>
 </div>
 <div class="d-flex flex-column align-items-center justify-content-center" *ngIf="gameSession.state == gameSessionState.is_question_result">
-    <div class="p-3 mb-2 bg-success text-white w-90 h-90" *ngIf="result.score > lastScore">
+    <div class="p-3 mb-2 bg-success text-white w-90 h-90" *ngIf="actualAnswer!.is_correct && haveAnswered">
         Eres un genio?
     </div>
-    <div class="p-3 mb-2 bg-danger text-white w-90 h-90" *ngIf="result.score == lastScore && haveAnswered">
+    <div class="p-3 mb-2 bg-danger text-white w-90 h-90" *ngIf="!actualAnswer!.is_correct && haveAnswered">
         Tendrás más suerte la próxima vez
     </div>
-    <div class="p-3 mb-2 bg-secondary text-white w-90 h-90" *ngIf="result.score == lastScore && !haveAnswered">
+    <div class="p-3 mb-2 bg-secondary text-white w-90 h-90" *ngIf="!haveAnswered">
         Tendrás más suerte la próxima vez
     </div>
 </div>

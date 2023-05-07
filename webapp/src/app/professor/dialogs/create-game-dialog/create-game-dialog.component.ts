@@ -38,6 +38,7 @@ export class CreateGameDialogComponent {
       Validators.required
     ])
   })
+  isLoading = false
 
   onNoClick() {
     this.dialogRef.close();
@@ -56,13 +57,12 @@ export class CreateGameDialogComponent {
       pointType,
       this.createGameForm.value.areQuestionsVisible!,
     );
-    console.log(game)
+    this.isLoading = true
     this.apiProfessorService
       .createGame(game)
       .subscribe( game => {
-        console.log(game)
-        this.socketService.setupSocketConnection()
-        //this.socketService.createGame(game, this.data.course_id);
+        //this.socketService.setupSocketConnection()
+        this.isLoading = false
         this.dialogRef.close();
         this.router.navigate(["/course", this.data.course_id, 'game', game.id])
       })

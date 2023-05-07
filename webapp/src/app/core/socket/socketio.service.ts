@@ -65,8 +65,7 @@ export class SocketioService {
   }
 
 
-  closeGame(userResults: UserResult[]) {
-    const game = this.gameValue;
+  closeGame(userResults: UserResult[], game: Game) {
     game.state = GameState.closed;
     this.apiProfessorService
       .updateGame(game)
