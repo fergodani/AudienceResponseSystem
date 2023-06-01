@@ -17,6 +17,7 @@ export interface QuestionSurvey {
     question_id: number;
     survey_id: number;
     position: number;
+    question?: Question;
 }
 
 export interface QuestionCsv {

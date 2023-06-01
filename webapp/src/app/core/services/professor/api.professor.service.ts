@@ -116,6 +116,13 @@ export class ApiProfessorService {
     )
   }
 
+  getGameById(id: number): Observable<Game> {
+    return this.http.get<Game>(`${this.apiUrl}/game/${id}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
   createUserResults(userResults: UserResult[]): Observable<unknown> {
     return this.http.post(`${this.apiUrl}/game/results`, userResults)
     .pipe(
@@ -181,6 +188,13 @@ export class ApiProfessorService {
 
   deleteUserFromCourse(courseId: number, userId: number): Observable<Message> {
     return this.http.delete<Message>(`${this.apiUrl}/user/${userId}/course/${courseId}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  deleteGame(id: number): Observable<Message> {
+    return this.http.delete<Message>(`${this.apiUrl}/game/${id}`)
     .pipe(
       catchError(this.handleError)
     )

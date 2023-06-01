@@ -16,6 +16,7 @@ const getCourses = async (req: Request, res: Response): Promise<Response> => {
         let result = await prisma.course.findMany();
         return res.status(200).json(result)
     } catch (error) {
+        console.error(error)
         return res.status(500).send(error)
     }
 }

@@ -1,10 +1,15 @@
-import { Component, Input, OnInit, Type } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, OnInit, Type, HostListener, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AnswerResult } from '@app/core/models/answer.model';
 import { Answer } from '@app/core/models/answer.model';
-import { Game, GameState } from '@app/core/models/game.model';
+import { Game, GameSession, GameSessionState, GameState } from '@app/core/models/game.model';
 import { Question, QuestionSurvey } from '@app/core/models/question.model';
 import { User, UserResult } from '@app/core/models/user.model';
+import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
+import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 import { SocketioService } from '@app/core/socket/socketio.service';
+import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-host-game',
@@ -13,89 +18,96 @@ import { SocketioService } from '@app/core/socket/socketio.service';
 })
 export class HostGameComponent implements OnInit {
 
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: any) {
+    this.apiProfessorService
+    .deleteGame(this.gameSession.game.id!)
+    .subscribe()
+  }
+
+
   constructor(
     private socketService: SocketioService,
-    private router: Router
+    private authService: ApiAuthService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private apiProfessorService: ApiProfessorService,
+    private dialog: MatDialog
   ) {
   }
+
+
   game: Game = <Game>{};
   gameStateType = GameState;
-  questionList: Question[] = [];
-  questionIndex: number = 0;
   actualQuestion: Question = <Question>{};
   correctAnswers: Answer[] = [];
-  usersConnected: User[] = [];
-  userResults: UserResult[] = [];
-  isFinished: boolean = false;
   isLoading: boolean = false;
+  gameSession: GameSession = <GameSession>{}
+  gameSessionState = GameSessionState
 
-  isLeaderboardScreen: boolean = false;
-  isPreviewScreen: boolean = false;
-  isQuestionScreen: boolean = false;
-  isQuestionResult: boolean = false;
-
-  addUsers(users: User[]) {
-    this.usersConnected = users;
-  }
+  isError = false
+  errorMessage = ''
 
   questionType = Type;
-
 
   @Input() courseId: number = 0;
 
   ngOnInit() {
-    this.socketService.game.subscribe((game: Game) => {
-      if (game.survey != undefined && this.questionList.length == 0) {
-        this.game = game;
-        this.game.survey?.questionsSurvey.forEach((qS: QuestionSurvey) => {
-          qS.question.position = qS.position
-        })
-        this.game.survey?.questionsSurvey.forEach((qS: QuestionSurvey) => {
-          this.questionList.push(qS.question)
-        })
-        this.questionList.sort((q1, q2) => {return q1.position! - q2.position!})
-        this.actualQuestion = this.questionList[this.questionIndex];
-        this.correctAnswers = this.actualQuestion.answers.filter(a => a.is_correct);
-      }
-    })
-    this.socketService.setupHostSocketConnection();
-    this.socketService.socket.on('get-answer-from-player', (data: string) => {
-      this.userResults.push(JSON.parse(data));
-      console.log(this.userResults)
+    const course_id = this.activatedRoute.snapshot.paramMap.get('course_id');
+    const game_id = this.activatedRoute.snapshot.paramMap.get('game_id');
+    this.socketService.setupSocketConnection();
+    this.apiProfessorService
+      .getGameById(Number(game_id))
+      .subscribe((game: Game) => {
+        this.socketService.socket.emit('create_game', game, course_id + '', (gameSession: GameSession) => {
+          console.log(gameSession.user_results)
+          this.gameSession = gameSession
+        });
+      })
+    this.socketService.socket.on('connectUser', (gameSession: GameSession) => {
+      this.gameSession = gameSession
+    });
+    this.socketService.socket.on('get-answer-from-player', (data: UserResult) => {
+      const index = this.gameSession.user_results.findIndex(u => u.user_id === data.user_id)
+      if (index >= 0)
+        this.gameSession.user_results[index] = data
+      else
+        this.gameSession.user_results[0] = data
+      console.log(this.gameSession)
     })
   }
 
   startGame() {
-    this.socketService.startGame()
-    this.socketService.socket.emit('question_preview', () => {
+    this.gameSession.game.state = GameState.started;
+    this.apiProfessorService
+      .updateGame(this.gameSession.game)
+      .subscribe()
+    this.actualQuestion = this.gameSession.question_list[this.gameSession.question_index]
+    this.gameSession.state = GameSessionState.is_preview_screen
+    this.socketService.socket.emit('question_preview', this.gameSession, () => {
       this.isLoading = true;
       this.timeLeft = 5;
-      this.startPreviewCountdown(5, this.questionIndex);
+      this.startPreviewCountdown(5);
     })
   }
 
   timeLeft: number = 5;
 
-  startPreviewCountdown(seconds: number, index: number) {
-
+  startPreviewCountdown(seconds: number) {
     let time = seconds;
     let interval = setInterval(() => {
       this.timeLeft = time;
-      this.isLeaderboardScreen = false;
-      this.isPreviewScreen = true;
       this.isLoading = false;
       if (time > 0) {
         time--;
       } else {
         clearInterval(interval);
-        this.displayQuestion(index);
+        this.displayQuestion();
       }
     }, 1000)
   }
 
-  startQuestionCountdown(seconds: number, index: number) {
-    this.isPreviewScreen = false;
-    this.isQuestionScreen = true;
+  startQuestionCountdown(seconds: number) {
     let time = seconds;
     let interval = setInterval(() => {
       this.timeLeft = time;
@@ -103,62 +115,57 @@ export class HostGameComponent implements OnInit {
         time--;
       } else {
         clearInterval(interval);
-        this.displayQuestionResult(index);
+        this.displayQuestionResult();
       }
     }, 1000)
   }
 
-  displayQuestionResult(index: number) {
-    this.isQuestionScreen = false;
-    this.isQuestionResult = true;
-    setTimeout(() => {
-      this.displayCurrentLeaderboard(index);
-    }, 5000)
-  }
-
-  displayCurrentLeaderboard(index: number) {
-    this.userResults.sort((a, b) => {
-      return b.score - a.score;
-    })
-    this.isQuestionResult = false;
-    this.isLeaderboardScreen = true;
-    setTimeout(() => {
-      if (this.questionIndex == this.questionList.length) {
-        this.socketService.socket.emit('finish_game');
-        this.isFinished = true;
-      } else {
-        this.isLeaderboardScreen = false;
-        this.socketService.socket.emit("question_preview", () => {
-          this.timeLeft = 5;
-          this.startPreviewCountdown(5, index);
-          this.userResults = [];
+  displayQuestionResult() {
+    this.gameSession.state = GameSessionState.is_question_result
+    this.socketService.socket.emit("finish_question", this.gameSession, () => {
+      setTimeout(() => {
+        this.gameSession.state = GameSessionState.is_leaderboard_screen
+        this.socketService.socket.emit("show_score", this.gameSession, () => {
+          this.displayCurrentLeaderboard();
         })
-      }
-
-    }, 5000)
+      }, 5000)
+    })
   }
 
-  displayQuestion(index: number) {
-    if (index === this.questionList.length) {
-      // TODO: mostrar la tabla final, guardar todos los resultados finales
-      // y acabar el juego
-      this.isQuestionResult = false;
-      this.isLeaderboardScreen = true;
-      this.socketService.socket.emit('finish_game');
+  displayCurrentLeaderboard() {
+    this.gameSession.users.sort((a, b) => {
+      const scoreA = this.gameSession.user_results.find(u => u.user_id === a.id)?.score
+      const scoreB = this.gameSession.user_results.find(u => u.user_id === b.id)?.score
+      return scoreB! - scoreA!
+    })
+  }
+
+  displayQuestion() {
+      this.actualQuestion = this.gameSession.question_list[this.gameSession.question_index]
+      this.timeLeft = this.actualQuestion.answer_time;
+      this.correctAnswers = this.actualQuestion.answers.filter((a: Answer) => a.is_correct)
+      this.gameSession.state = GameSessionState.is_question_screen
+      this.socketService.socket.emit('start_question_time', this.gameSession, () => {
+        this.gameSession.question_index++
+        this.startQuestionCountdown(this.timeLeft);
+      })
+  }
+
+  nextQuestion() {
+    if (this.gameSession.question_index == this.gameSession.question_list.length) {
+      this.gameSession.state = GameSessionState.is_finished
+      this.socketService.socket.emit('finish_game', this.gameSession);
     } else {
-      this.actualQuestion = this.questionList[index];
-      this.correctAnswers = this.actualQuestion.answers.filter(a => a.is_correct);
-      this.questionIndex++;
-      let time = this.actualQuestion.answer_time;
-      this.timeLeft = time;
-      this.socketService.socket.emit('start_question_time', time, this.actualQuestion, () => {
-        this.startQuestionCountdown(time, ++index);
+      this.gameSession.state = GameSessionState.is_preview_screen
+      this.socketService.socket.emit("question_preview", this.gameSession, () => {
+        this.timeLeft = 5;
+        this.startPreviewCountdown(5);
       })
     }
   }
 
   leaveGame() {
-    this.socketService.closeGame(this.userResults);
+    this.socketService.closeGame(this.gameSession.user_results, this.gameSession.game);
     this.router.navigate(['/professor/home'])
   }
 }

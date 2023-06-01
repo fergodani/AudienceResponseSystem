@@ -37,7 +37,7 @@ export class StudentHomeComponent {
   connectToSocket(courses: Course[]) {
     this.isLoadingGames = true;
     this.apiStudentService
-      .getOpenGamesByCourses(courses)
+      .getOpenOrStartedGamesByCourses(courses)
       .subscribe(games => {
         this.games = games
         this.isLoadingGames = false;

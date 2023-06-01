@@ -7,7 +7,7 @@ import { Game } from '../models/game.model';
 const prisma = new PrismaClient()
 
 const getGames = async (req: Request, res: Response): Promise<Response> => {
-    try{
+    try {
         let result = await prisma.game.findMany()
         return res.status(200).json(result)
     } catch (error) {
@@ -15,35 +15,11 @@ const getGames = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
-interface CoursesIds {
-    course: string[]
-}
-
-const getOpenGamesByCourses = async (req: Request<{}, {}, {}, CoursesIds>, res: Response): Promise<Response> => {
+const getGameById = async (req: Request, res: Response): Promise<Response> => {
     try {
-        let coursesIds: number[] = [];
-        if(!Array.isArray(req.query.course)){
-            coursesIds.push(Number(req.query.course))
-        }else {
-            coursesIds = req.query.course.map(id => Number(id))
-        }
-        
-        let courseSurveys = await prisma.courseSurvey.findMany({
+        let result = await prisma.game.findUnique({
             where: {
-                course_id: {
-                    in: coursesIds
-                }
-            }
-        })
-        const surveysIds: number[] = courseSurveys.map( c => c.survey_id)
-        let result = await prisma.game.findMany({
-            where: {
-                state: state.created,
-                survey: {
-                    id: {
-                        in: surveysIds
-                    }
-                },
+                id: Number(req.params.id)
             },
             include: {
                 survey: {
@@ -68,16 +44,78 @@ const getOpenGamesByCourses = async (req: Request<{}, {}, {}, CoursesIds>, res: 
     }
 }
 
+interface CoursesIds {
+    course: string[]
+}
+
+const getOpenOrStartedGamesByCourses = async (req: Request<{}, {}, {}, CoursesIds>, res: Response): Promise<Response> => {
+    try {
+        console.log("Getting open games by courses")
+        let coursesIds: number[] = [];
+        if (!Array.isArray(req.query.course)) {
+            coursesIds.push(Number(req.query.course))
+        } else {
+            coursesIds = req.query.course.map(id => Number(id))
+        }
+
+        let courseSurveys = await prisma.courseSurvey.findMany({
+            where: {
+                course_id: {
+                    in: coursesIds
+                }
+            }
+        })
+        const surveysIds: number[] = courseSurveys.map(c => c.survey_id)
+        let result = await prisma.game.findMany({
+            where: {
+                OR: [
+                    {
+                        state: state.created
+                    },
+                    {
+                        state: state.started
+                    }
+                ],
+                survey: {
+                    id: {
+                        in: surveysIds
+                    }
+                },
+            },
+            include: {
+                survey: {
+                    include: {
+                        questionsSurvey: {
+                            include: {
+                                question: {
+                                    include: {
+                                        answers: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        console.log(result)
+        return res.status(200).json(result)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error)
+    }
+}
+
 const createGame = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { host_id, survey_id, type, state, are_questions_visible, point_type } = req.body;
         let game: Prisma.gameCreateInput;
         game = {
             user: {
-                connect: {id: host_id}
+                connect: { id: host_id }
             },
             survey: {
-                connect: {id: survey_id}
+                connect: { id: survey_id }
             },
             type,
             state,
@@ -112,6 +150,7 @@ const createGame = async (req: Request, res: Response): Promise<Response> => {
 
 const updateGame = async (req: Request, res: Response): Promise<Response> => {
     try {
+        console.log(req.body)
         const updateGame = await prisma.game.update({
             where: {
                 id: req.body.id
@@ -121,7 +160,7 @@ const updateGame = async (req: Request, res: Response): Promise<Response> => {
             }
         })
         if (!updateGame)
-            return res.status(404).json({message: "Game not found"})
+            return res.status(404).json({ message: "Game not found" })
         return res.status(200).json(updateGame)
     } catch (error) {
         console.log(error)
@@ -129,7 +168,7 @@ const updateGame = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
-const createResults = async (req:Request, res: Response): Promise<Response> => {
+const createResults = async (req: Request, res: Response): Promise<Response> => {
     try {
         const userResults: UserResult[] = req.body
         const userResultsMapped = userResults.map((userResult: UserResult) => ({
@@ -156,7 +195,7 @@ const createResults = async (req:Request, res: Response): Promise<Response> => {
         await prisma.answerResult.createMany({
             data: answerResultsMapped
         })
-        return res.status(200).json({message: "Results uploaded"})
+        return res.status(200).json({ message: "Results uploaded" })
     } catch (error) {
         console.log(error)
         return res.status(500).send(error)
@@ -194,7 +233,22 @@ const getGamesResultsByUser = async (req: Request, res: Response): Promise<Respo
                 }
             }
         })
+        console.log(result)
         return res.status(200).json(result)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send(error)
+    }
+}
+
+const deleteGame = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        await prisma.game.delete({
+            where: {
+                id: Number(req.params.id)
+            },
+        })
+        return res.status(200).json({ message: req.params.id + " game deleted" })
     } catch (error) {
         console.log(error)
         return res.status(500).send(error)
@@ -204,8 +258,10 @@ const getGamesResultsByUser = async (req: Request, res: Response): Promise<Respo
 module.exports = {
     getGames,
     createGame,
-    getOpenGamesByCourses,
+    getOpenOrStartedGamesByCourses,
     updateGame,
     createResults,
-    getGamesResultsByUser
+    getGamesResultsByUser,
+    getGameById,
+    deleteGame
 }

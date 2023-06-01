@@ -38,6 +38,7 @@ export class CreateGameDialogComponent {
       Validators.required
     ])
   })
+  isLoading = false
 
   onNoClick() {
     this.dialogRef.close();
@@ -48,7 +49,6 @@ export class CreateGameDialogComponent {
       return;
     }
     const pointType = this.getPointType(this.createGameForm.value.pointType!);
-    console.log(pointType)
     const game = new Game(
       this.authService.userValue!.id,
       this.data.survey_id,
@@ -57,15 +57,16 @@ export class CreateGameDialogComponent {
       pointType,
       this.createGameForm.value.areQuestionsVisible!,
     );
-    console.log(game)
+    this.isLoading = true
     this.apiProfessorService
       .createGame(game)
       .subscribe( game => {
-        console.log(game)
-        this.socketService.createGame(game, this.data.course_id);
+        //this.socketService.setupSocketConnection()
+        this.isLoading = false
+        this.dialogRef.close();
+        this.router.navigate(["/course", this.data.course_id, 'game', game.id])
       })
-    this.dialogRef.close();
-    this.router.navigate(["/game/host", this.data.course_id])
+    
   }
 
   getPointType(type: string): PointsType{

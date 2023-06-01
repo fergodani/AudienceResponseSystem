@@ -73,13 +73,13 @@ const login = async (req: Request, res: Response): Promise<Response> => {
             },
         })
         if (user == null) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ message: "Usuario o contraseña incorrectos" });
         }
 
         const success = await bcrypt.compare(req.body.password, user.password);
 
         if (!success) {
-            return res.status(400).send("Invalid credentials");
+            return res.status(400).send("Usuario o contraseña incorrectos");
         }
         const userId = user.id;
         const token = jwt.sign({ userId }, process.env.SECRET);

@@ -25,7 +25,7 @@ export class CreateUserFormComponent {
 
   onUserSubmit() {
     const username = this.createUserForm.value.username;
-    const password = "df98734hjdasf" // TODO: generar contraseña aleatoria, hacer en el backend
+    const password = "test" // TODO: generar contraseña aleatoria, hacer en el backend
     const role = this.createUserForm.value.role;
     const newUser = new User(username!, password, this.translate(role!));
     this.apiService

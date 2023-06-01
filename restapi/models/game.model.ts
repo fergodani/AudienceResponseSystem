@@ -1,5 +1,6 @@
+import { Question } from "./question.model";
 import { Survey } from "./survey.model";
-import { User } from "./user.model";
+import { User, UserResult } from "./user.model";
 
 export interface Game {
     id: number;
@@ -28,4 +29,23 @@ export enum PointsType {
     standard = 'standard',
     double = 'double',
     no_points = 'no_points'
+}
+
+export interface GameSession {
+    game: Game;
+    users: User[];
+    state: GameSessionState;
+    question_list: Question[];
+    question_index: number;
+    user_results: UserResult[];
+    socket_id?: String;
+}
+
+export enum GameSessionState {
+    not_started,
+    is_leaderboard_screen,
+    is_preview_screen,
+    is_question_screen,
+    is_question_result,
+    is_finished
 }

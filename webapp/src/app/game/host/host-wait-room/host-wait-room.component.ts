@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { GameSession } from '@app/core/models/game.model';
 import { User } from '@app/core/models/user.model';
 import { SocketioService } from '@app/core/socket/socketio.service';
 
@@ -12,10 +13,12 @@ export class HostWaitRoomComponent {
   constructor(
     private socketService: SocketioService
     ) {
-      this.socketService.users.subscribe( (users: User[]) => {this.userList = users; this.users.emit(this.userList)})
+      //this.socketService.users.subscribe( (users: User[]) => {this.userList = users; this.users.emit(this.userList)})
+      
     }
 
-  userList: User[] = [];
+  //userList: User[] = [];
+  gameSession: GameSession = <GameSession>{}
   @Output() users = new EventEmitter<User[]>();
 
 }

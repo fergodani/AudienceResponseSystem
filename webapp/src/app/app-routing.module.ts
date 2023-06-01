@@ -136,7 +136,7 @@ const routes: Routes = [
     data: { roles: [Role.Student]}
   },
   {
-    path: 'game/host/:id', 
+    path: 'course/:course_id/game/:game_id', 
     component: HostGameComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Professor]}

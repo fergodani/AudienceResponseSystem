@@ -40,7 +40,7 @@ export class ApiStudentService {
     )
   }
 
-  getOpenGamesByCourses(courses: Course[]): Observable<Game[]>{
+  getOpenOrStartedGamesByCourses(courses: Course[]): Observable<Game[]>{
     const coursesIds = courses.map(c => c.id)
     console.log(coursesIds)
     return this.http.get<Game[]>(`${this.apiUrl}/game/course/`, {params: {course: coursesIds}})

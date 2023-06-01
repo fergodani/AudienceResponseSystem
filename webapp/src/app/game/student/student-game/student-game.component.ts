@@ -1,8 +1,8 @@
-import { Component, OnInit, Type } from '@angular/core';
+import { Component, OnInit, Type, HostListener } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Answer, AnswerResult } from '@app/core/models/answer.model';
-import { Game, GameState, PointsType } from '@app/core/models/game.model';
+import { GameSession, GameSessionState, PointsType } from '@app/core/models/game.model';
 import { Question } from '@app/core/models/question.model';
 import { UserResult } from '@app/core/models/user.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
@@ -13,10 +13,9 @@ const STANDARD_POINTS = 1000;
 @Component({
   selector: 'app-student-game',
   templateUrl: './student-game.component.html',
-  styleUrls: ['./student-game.component.css']
+  styleUrls: ['./student-game.component.css'],
 })
 export class StudentGameComponent implements OnInit {
-
 
   constructor(
     private authService: ApiAuthService,
@@ -24,64 +23,104 @@ export class StudentGameComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
-
-    this.socketService.game.subscribe((game: Game) => {
-      if (game.survey != undefined) {
-        this.game = game;
-        this.result.game_id = game.id!;
-      }
-    })
-
   }
 
-  ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.socketService.setupSocketConnection();
-    this.socketService.sendUser(id!);
-    this.socketService.socket.on("host-start-preview", () => {
-      this.timeLeft = 5;
-      this.isStart = true;
-      this.isLoading = true;
-      this.startTimerPreview(5);
-    })
-    this.socketService.socket.on("host-start-question-timer", (time: number, question: Question) => {
-      this.timeLeft = time;
-      this.actualQuestion = question;
-      this.startQuestionTimer(time);
-    })
-    this.socketService.socket.on("finish_game", () => {
-      this.isFinished = true;
-      this.socketService.socket.emit('leave_game');
-    })
-  }
-
-  game: Game = <Game>{};
-  questionList: Question[] = [];
-  questionIndex: number = 0;
   actualQuestion: Question = <Question>{};
-  gameStateType = GameState;
-  isStart: boolean = false;
-  isFinished: boolean = false;
   result: UserResult = {
     user: this.authService.userValue!,
     user_id: this.authService.userValue!.id,
-    game_id: this.game.id!,
+    game_id: 0,
     answer_results: [],
     score: 0
   };
   lastScore: number = 0;
   haveAnswered: boolean = false;
+  isResultScreen = false
   shortQuestionForm = new FormControl('');
 
   questionType = Type;
 
   timeLeft: number = 5;
+  interval: any
+
+  gameSession: GameSession = <GameSession>{}
+  gameSessionState = GameSessionState
+
+  isError = false
+  errorMessage = ''
+
+  answerTime: number = 0;
+  correctAnswerCount: number = 0;
+  score: number = 0;
+  isLoading = false;
+
+  actualAnswer?: Answer
+
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.socketService.setupSocketConnection();
+    this.socketService.socket.emit('join_game', this.authService.userValue, id, (gameSession: GameSession) => {
+      if (gameSession) {
+        this.gameSession = gameSession
+        this.result.game_id = gameSession.game.id!
+        if (this.gameSession.state == this.gameSessionState.is_question_screen) {
+          this.haveAnswered = true
+          const result = this.gameSession.user_results.find(u => u.user_id == this.authService.userValue!.id)
+          if (result != undefined)
+            this.result = result
+        }
+
+      } else {
+        this.isError = true
+        this.errorMessage = "Ha ocurrido un error"
+      }
+    })
+
+    this.socketService.socket.on("host-start-preview", (gameSession: GameSession) => {
+      this.gameSession = gameSession
+      this.timeLeft = 5;
+      this.isLoading = true;
+      this.haveAnswered = false
+      this.actualAnswer = undefined
+      this.startTimerPreview(5);
+    })
+    this.socketService.socket.on("host-start-question-timer", (gameSession: GameSession) => {
+      this.gameSession = gameSession
+      this.actualQuestion = this.gameSession.question_list[this.gameSession.question_index];
+      this.startQuestionTimer()
+    })
+    this.socketService.socket.on("finish_question", (gameSession: GameSession) => {
+      this.gameSession = gameSession
+      // TODO Si el usuario no ha envíado una respuesta, enviarla aquí una respuesta vacía
+      clearInterval(this.interval)
+      this.answerTime = 0
+      this.lastScore = this.result.score;
+      if (!this.haveAnswered) {
+        let answerResult: AnswerResult = {
+          user_id: this.authService.userValue!.id,
+          game_id: this.gameSession.game.id!,
+          question_id: this.actualQuestion.id,
+          question_index: this.gameSession.question_index,
+          answered: false
+        }
+        this.result.answer_results.push(answerResult)
+        this.socketService.socket.emit('send_answer', this.result);
+
+      }
+    })
+    this.socketService.socket.on('show_score', (gameSession: GameSession) => {
+      this.gameSession = gameSession
+    })
+    this.socketService.socket.on("finish_game", (gameSession: GameSession) => {
+      console.log(gameSession)
+      this.gameSession = gameSession
+      this.socketService.socket.emit('leave_game');
+    })
+  }
 
   startTimerPreview(seconds: number) {
     let time = seconds;
     let interval = setInterval(() => {
-      this.isPreviewScreen = true;
-      this.isResultScreen = false;
       this.isLoading = false;
       this.timeLeft = time;
       if (time > 0) {
@@ -89,112 +128,58 @@ export class StudentGameComponent implements OnInit {
         time--;
       } else {
         clearInterval(interval);
-
-
-        this.isPreviewScreen = false;
       }
     }, 1000)
   }
 
-  startQuestionTimer(seconds: number) {
-    let time = seconds;
-    this.isQuestionScreen = true;
-    this.isPreviewScreen = false;
+  startQuestionTimer() {
     this.answerTime = 0;
-    let interval = setInterval(() => {
-      this.timeLeft = time;
-      if (time > 0) {
-        time--;
-      } else {
-        clearInterval(interval);
-
-        this.isQuestionScreen = false;
-        this.isPreviewScreen = false;
-        this.isQuestionAnswered = false;
-        this.isResultScreen = true;
-        this.lastScore = this.result.score;
-        if (!this.haveAnswered) {
-          let answerResult: AnswerResult = {
-            user_id: this.authService.userValue!.id,
-            game_id: this.game.id!,
-            question_id: this.actualQuestion.id,
-            question_index: this.questionIndex,
-            answered: false
-          }
-          this.result.answer_results.push(answerResult)
-          this.socketService.socket.emit('send_answer', this.result);
-
-        }
-      }
+    this.interval = setInterval(() => {
       this.answerTime++;
     }, 1000)
   }
 
-  // **************
-  isQuestionAnswered: boolean = false;
-  isPreviewScreen: boolean = false;
-  isQuestionScreen: boolean = false;
-  isResultScreen: boolean = false;
-  answerTime: number = 0;
-  correctAnswerCount: number = 0;
-  score: number = 0;
-  isLoading = false;
-
-  displayAnswerResult() {
-    this.isQuestionScreen = false;
-    this.isQuestionAnswered = true;
-    setTimeout(() => {
-      this.isQuestionAnswered = false;
-      this.isResultScreen = true;
-    }, 5000)
-  }
-
   checkAnswer(id: number) {
     this.haveAnswered = true;
-    let answer = this.actualQuestion.answers.find(a => a.id === id)
-    this.calculatePoints(answer!.is_correct)
-    this.isQuestionAnswered = true;
+    this.actualAnswer = this.actualQuestion.answers.find(a => a.id === id)
+    this.calculatePoints(this.actualAnswer!.is_correct)
 
     let answerResult: AnswerResult = {
       user_id: this.authService.userValue!.id,
-      game_id: this.game.id!,
+      game_id: this.gameSession.game.id!,
       question_id: this.actualQuestion.id,
-      question_index: this.questionIndex,
-      answer_id: answer!.id,
+      question_index: this.gameSession.question_index,
+      answer_id: this.actualAnswer!.id,
       answered: true
     }
     this.result.answer_results.push(answerResult)
-    this.displayAnswerResult();
-    this.socketService.socket.emit('send_answer', this.result);
+    this.socketService.socket.emit('send_answer', this.gameSession.game.id, this.result);
   }
 
   checkShortAnswer() {
     this.haveAnswered = true;
-    this.isQuestionAnswered = true;
     const answer = this.shortQuestionForm.value!;
     let isCorrect = false;
-    console.log("Respues del usuario: " + answer)
-    console.log("Respuestas correctas: ")
     this.actualQuestion.answers.forEach((a) => {
-      console.log(a.description)
-      if(answer === a.description){
+      if (answer === a.description) {
         isCorrect = true;
+        this.actualAnswer = a
       }
     })
+    if (this.actualAnswer == undefined)
+      this.actualAnswer = new Answer("", false)
     this.calculatePoints(isCorrect);
 
     let answerResult: AnswerResult = {
       user_id: this.authService.userValue!.id,
-      game_id: this.game.id!,
+      game_id: this.gameSession.game.id!,
       question_id: this.actualQuestion.id,
-      question_index: this.questionIndex,
+      question_index: this.gameSession.question_index,
       short_answer: answer,
       answered: true
     }
-    console.log(answerResult)
     this.result.answer_results.push(answerResult)
-    this.displayAnswerResult();
-    this.socketService.socket.emit('send_answer', this.result);
+    this.socketService.socket.emit('send_answer', this.gameSession.game.id, this.result);
   }
 
   calculatePoints(isCorrect: boolean) {
@@ -207,16 +192,16 @@ export class StudentGameComponent implements OnInit {
     // 3. Resta ese valor a 1
     // 4. Multiplica los puntos posibles por ese valor
     // 5. Redondea al número entero más cercano
-    if (isCorrect){
+    if (isCorrect) {
       let points = (1 - ((this.answerTime / this.actualQuestion.answer_time) / 2)) * STANDARD_POINTS;
-      if (this.game.point_type == PointsType.double)
+      if (this.gameSession.game.point_type == PointsType.double)
         points = points * 2;
       this.result.score += Math.round(points);
     }
-      
+
   }
 
-  leaveGame(){
+  leaveGame() {
     this.router.navigate(['/student/home'])
   }
 
