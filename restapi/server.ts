@@ -12,7 +12,6 @@ const courseRoutes = require('./routes/courseRoutes')
 const questionRoutes = require('./routes/questionRoutes')
 const surveyRoutes = require('./routes/surveyRoutes')
 const userRoutes = require('./routes/userRoutes')
-const answerRoutes = require('./routes/answerRoutes')
 const gameRoutes = require('./routes/gameRoutes')
 
 app.use(cors({
@@ -29,7 +28,6 @@ app.use('/api/course', courseRoutes)
 app.use('/api/question', questionRoutes)
 app.use('/api/survey', surveyRoutes)
 app.use('/api/user', userRoutes)
-app.use('/api/answer', answerRoutes)
 app.use('/api/game', gameRoutes)
 
 app.use(express.json({limit: '50mb'}))

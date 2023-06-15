@@ -93,7 +93,7 @@ export class CreateQuestionComponent implements OnInit{
     if (!this.isEditing) {
       this.apiProfessorService
       .createQuestion(question)
-      .subscribe(msg => alert("Pregunta creada"))
+      .subscribe((msg: Message) => {alert(msg.message)})
     } else {
       question.id = this.questionToEdit!.id
       this.apiProfessorService

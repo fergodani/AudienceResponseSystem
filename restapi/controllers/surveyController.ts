@@ -1,13 +1,16 @@
 import { Request, Response } from 'express';
-import { Prisma, PrismaClient } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { Question, QuestionSurvey } from '../models/question.model';
-const prisma = new PrismaClient()
+import prisma from '../prisma/prismaClient';
 
 const getSurveys = async (req: Request, res: Response): Promise<Response> => {
-    try{
+    try {
         // igual no es necesario que busque las respuestas, o si
         let result = await prisma.survey.findMany({
-            include: {
+            select: {
+                id: true,
+                title: true,
+                user_creator_id: true,
                 questionsSurvey: {
                     include: {
                         question: {
@@ -21,13 +24,16 @@ const getSurveys = async (req: Request, res: Response): Promise<Response> => {
         });
         return res.status(200).json(result)
     } catch (error) {
-        return res.status(500).send(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al obtener los cuestionarios" })
     }
 }
 
 // Cuestionarios dado su creador
 const getSurveysByUser = async (req: Request, res: Response): Promise<Response> => {
-    try{
+    try {
+        if (!req.params.id || isNaN(Number(req.params.id))) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de usuario válido" })
+        }
         let user = await prisma.user.findUnique({
             where: {
                 id: Number(req.params.id)
@@ -37,7 +43,11 @@ const getSurveysByUser = async (req: Request, res: Response): Promise<Response> 
             where: {
                 user
             },
-            include: {
+            select: {
+                id: true,
+                resource: true,
+                title: true,
+                user_creator_id: true,
                 questionsSurvey: {
                     include: {
                         question: {
@@ -51,17 +61,24 @@ const getSurveysByUser = async (req: Request, res: Response): Promise<Response> 
         });
         return res.status(200).json(result)
     } catch (error) {
-        return res.status(500).send(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al obtener los cuestionarios" })
     }
 }
 
 const getSurveysById = async (req: Request, res: Response): Promise<Response> => {
-    try{
+    try {
+        if (!req.params.id || isNaN(Number(req.params.id))) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de cuestionario válido" })
+        }
         let result = await prisma.survey.findUnique({
             where: {
                 id: Number(req.params.id)
             },
-            include: {
+            select: {
+                id: true,
+                resource: true,
+                title: true,
+                user_creator_id: true,
                 questionsSurvey: {
                     include: {
                         question: {
@@ -75,67 +92,107 @@ const getSurveysById = async (req: Request, res: Response): Promise<Response> =>
         });
         return res.status(200).json(result)
     } catch (error) {
-        return res.status(500).send(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al obtener los cuestionarios" })
     }
 }
 
 const createSurvey = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { title, user_creator_id, questions, resource } = req.body;
-        //let questionIds = <Question[]>questions.map((question: Question)  => ({ id: question.id }))
+
+        if (!title || !user_creator_id || !questions) {
+            return res.status(500).json({ message: "Se deben proporcionar todos los camos requeridos" })
+        }
+
+        if (questions.length == 0) {
+            res.status(500).json({ message: "El cuestionario debe tener al menos una pregunta" })
+        }
+
         const user = await prisma.user.findUnique({
             where: {
                 id: user_creator_id,
             },
         })
-        if (!user){
-            return res.status(400).json({message: "The user who is creating question does not exists"})
+        if (!user) {
+            return res.status(404).json({ message: "El usuario especificado no existe" })
         }
         let savedSurvey: Prisma.surveyCreateInput;
         savedSurvey = {
             title,
             user: {
-                connect: {id: user_creator_id}
+                connect: { id: user_creator_id }
             },
             resource
         }
-        
+
         const surveyCreated = await prisma.survey.create({ data: savedSurvey })
-        const questionsWithPosition = <QuestionSurvey[]>questions.map((question:Question) => ({
+        const questionsWithPosition = <QuestionSurvey[]>questions.map((question: Question) => ({
             survey_id: surveyCreated.id,
             question_id: question.id,
             position: question.position
         }))
-        console.log(questionsWithPosition)
+
         await prisma.questionSurvey.createMany({ data: questionsWithPosition })
-        return res.status(200).json({message: "Survey created"})
+        return res.status(200).json({ message: "El cuestionario ha sido creado correctamente" })
     } catch (error) {
         console.log(error)
-        return res.status(500).send(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al crear el cuestionario" })
     }
 }
 
 const getSurveysByCourse = async (req: Request, res: Response): Promise<Response> => {
-    try{
-       const courseSurvey = await prisma.courseSurvey.findMany({
+    try {
+        if (!req.params.id || isNaN(Number(req.params.id))) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de curso válido" })
+        }
+        const courseSurvey = await prisma.courseSurvey.findMany({
             where: {
                 course_id: Number(req.params.id)
             },
             select: {
-                survey: true
+                survey: {
+                    select: {
+                        id: true,
+                        resource: true,
+                        title: true,
+                        user_creator_id: true,
+                        questionsSurvey: {
+                            include: {
+                                question: {
+                                    include: {
+                                        answers: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         })
         const survey = courseSurvey.map((survey: any) => survey.survey)
         return res.status(200).json(survey)
     } catch (error) {
-        return res.status(500).send(error);
+        return res.status(500).json({ message: "Ha ocurrido un error al obtener los cuestionarios" })
     }
 }
 
 const updateSurvey = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const {id, title, questions, resource} = req.body
-        const questionsWithPosition = <QuestionSurvey[]>questions.map((question:Question) => ({
+        const { id, title, questions, resource } = req.body
+        if (!title || !questions) {
+            return res.status(500).json({ message: "Se deben proporcionar todos los camos requeridos" })
+        }
+
+        if (questions.length == 0) {
+            res.status(500).json({ message: "El cuestionario debe tener al menos una pregunta" })
+        }
+
+        const survey = await prisma.survey.findUnique({ where: { id: id } })
+        if (!survey) {
+            return res.status(404).json({ message: "El cuestionario especificado no existe" })
+        }
+
+        const questionsWithPosition = <QuestionSurvey[]>questions.map((question: Question) => ({
             survey_id: id,
             question_id: question.id,
             position: question.position
@@ -172,24 +229,31 @@ const updateSurvey = async (req: Request, res: Response): Promise<Response> => {
                 }
             })
         }
-        return res.status(200).json({message: "Cuestionario actualizado correctamente"})
+        return res.status(200).json({ message: "Cuestionario actualizado correctamente" })
     } catch (error) {
         console.error(error)
-        return res.status(500).send(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al actualizar el cuestionario" })
     }
 }
 
 const deleteSurvey = async (req: Request, res: Response): Promise<Response> => {
     try {
+        if (!req.params.id || isNaN(Number(req.params.id))) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de cuestionario válido" })
+        }
+        const survey = await prisma.survey.findFirst({where: { id: Number(req.params.id)}})
+        if(!survey) {
+            res.status(404).json({message: "El cuestionario especificado no existe"})
+        }
         await prisma.survey.delete({
             where: {
                 id: Number(req.params.id)
             }
         })
-        return res.status(200).json({message: "Cuestionario eliminado correctamente"})
-    }catch(error){
+        return res.status(200).json({ message: "Cuestionario eliminado correctamente" })
+    } catch (error) {
         console.error(error)
-        return res.status(500).send(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al eliminar el cuestionario" })
     }
 }
 
@@ -203,10 +267,10 @@ const deleteSurveyFromCourse = async (req: Request, res: Response): Promise<Resp
                 }
             }
         })
-        return res.status(200).json({message: "Cuestionario eliminado del curso correctamente"})
+        return res.status(200).json({ message: "Cuestionario eliminado del curso correctamente" })
     } catch (error) {
         console.log(error)
-        return res.status(500).send(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al eliminar el cuestionario del curso" })
     }
 }
 

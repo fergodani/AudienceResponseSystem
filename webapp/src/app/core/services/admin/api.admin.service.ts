@@ -104,8 +104,8 @@ export class ApiService {
       )
   }
 
-  uploadUserFile(formData: FormData): Observable<unknown> {
-    return this.http.post<unknown>(`${this.apiUrl}/user/file`, formData)
+  uploadUserFile(formData: FormData): Observable<Message> {
+    return this.http.post<Message>(`${this.apiUrl}/user/file`, formData)
       .pipe(
         catchError(this.handleError)
       )

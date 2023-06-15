@@ -8,7 +8,7 @@ const {
     exportQuestions,
     importQuestions,
     updateQuestion,
-    getQuestionsById,
+    getQuestionById,
     deleteQuestion,
     getQuestionsByCourse,
     deleteQuestionFromCourse
@@ -18,7 +18,7 @@ api.get("/", getQuestions)
 
 api.get('/user/:id', [], getQuestionsByUser);
 
-api.get('/:id', [], getQuestionsById)
+api.get('/:id', [], getQuestionById)
 
 api.post("/", [
 

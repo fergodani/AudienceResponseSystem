@@ -2,17 +2,14 @@ import express, { Router } from 'express'
 const api: Router = express.Router()
 
 const {
-    getGames,
     createGame,
     getOpenOrStartedGamesByCourses,
-    updateGame,
+    updateState,
     createResults,
     getGamesResultsByUser,
     getGameById,
     deleteGame
 } = require('../controllers/gameController')
-
-api.get("/", getGames)
 
 api.get("/course", getOpenOrStartedGamesByCourses)
 
@@ -24,7 +21,7 @@ api.post("/", createGame)
 
 api.post("/results", createResults)
 
-api.put("/", updateGame)
+api.put("/", updateState)
 
 api.delete("/:id", deleteGame)
 
