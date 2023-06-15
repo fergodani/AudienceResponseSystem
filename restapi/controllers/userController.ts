@@ -1,48 +1,59 @@
 import { Request, Response } from 'express';
-import { Prisma, PrismaClient, role } from '@prisma/client'
+import { Prisma } from '@prisma/client'
+import prisma from '../prisma/prismaClient';
 import multiparty = require('multiparty');
-import * as fs from 'fs';
-import * as path from 'path';
-import * as csv from 'fast-csv';
+import { parseFile } from 'fast-csv'
 import { Role, User } from '../models/user.model';
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const prisma = new PrismaClient()
 
 const getUsers = async (req: Request, res: Response): Promise<Response> => {
     try {
-        let result = await prisma.user.findMany();
+        let result = await prisma.user.findMany({
+            select: {
+                id: true,
+                username: true,
+                role: true
+            }
+        });
         return res.status(200).json(result)
     } catch (error) {
-        return res.status(500).send(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al obtener los usuarios" })
     }
 }
 
 const getUser = async (req: Request, res: Response): Promise<Response> => {
     try {
+        if (!req.params.id || isNaN(Number(req.params.id))) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de curso válido" })
+        }
         let result = await prisma.user.findFirst({
             where: {
                 id: Number(req.params.id),
             },
+            select: {
+                id: true,
+                username: true,
+                role: true
+            }
         })
         return res.status(200).json(result);
     } catch (error) {
-        return res.status(500).send(error);
+        return res.status(500).json({ message: "Ha ocurrido un error al obtener el usuario" })
     }
 }
 
 const createUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { username, password, role } = req.body;
-        console.log(req.body)
-        const existingUser = await prisma.user.findFirst({
+        const existingUser = await prisma.user.findUnique({
             where: {
                 username: username,
             },
         })
 
         if (existingUser) {
-            return res.status(400).send("User already exists");
+            return res.status(400).json({ message: "El usuario ya existe" });
         }
         // TODO: generar contraseña aleatoria
         const salt = await bcrypt.genSalt();
@@ -55,15 +66,12 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
         }
         await prisma.user.create({ data: savedUser })
 
-        return res.status(200).json({ message: "User created" });
+        return res.status(200).json({ message: "Usuario creado correctamente" });
 
     } catch (error) {
-        console.log(error)
-        return res.status(500).send(error);
+        return res.status(500).json({ message: "Ha ocurrido un error al crear el usuario" })
     }
 };
-
-
 
 const login = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -79,7 +87,7 @@ const login = async (req: Request, res: Response): Promise<Response> => {
         const success = await bcrypt.compare(req.body.password, user.password);
 
         if (!success) {
-            return res.status(400).send("Usuario o contraseña incorrectos");
+            return res.status(400).json({ message: "Usuario o contraseña incorrectos" });
         }
         const userId = user.id;
         const token = jwt.sign({ userId }, process.env.SECRET);
@@ -92,7 +100,7 @@ const login = async (req: Request, res: Response): Promise<Response> => {
             token
         });
     } catch (error) {
-        return res.status(500).send(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al iniciar sesión" })
     }
 };
 
@@ -118,120 +126,135 @@ const updateUser = async (req: Request, res: Response): Promise<Response> => {
                 id: Number(id),
             },
         })
-        if (user == null) {
-            return res.status(404).json({ message: "User not found" });
+        if (!user) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
         }
         const newUsername = username != "" ? username : user.username;
         const newRole = role != "" ? role : user.role;
-        if (password != "") {
-            const salt = await bcrypt.genSalt();
-            const hash = await bcrypt.hash(password, salt);
-            await prisma.user.update({
-                where: {
-                    id: Number(id),
-                },
-                data: {
-                    username: newUsername,
-                    password: hash,
-                    role: newRole
-                }
-            })
-            return res.status(200).json({ message: req.body.username + " updated." })
-        } else {
-            await prisma.user.update({
-                where: {
-                    id: Number(id),
-                },
-                data: {
-                    username: newUsername,
-                    role: newRole
-                }
-            })
-            return res.status(200).json({ message: req.body.username + " updated." })
-        }
+        const salt = await bcrypt.genSalt();
+        const hash = await bcrypt.hash(password, salt);
+        await prisma.user.update({
+            where: {
+                id: Number(id),
+            },
+            data: {
+                username: newUsername,
+                password: password != '' ? hash : undefined,
+                role: newRole
+            }
+        })
+        return res.status(200).json({ message: "Usuario modificado correctamente" })
+
     } catch (error) {
-        console.log("The user can't be updated")
-        return res.status(500).send(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al modificar el usuario" })
     }
 }
 
 const deleteUser = async (req: Request, res: Response): Promise<Response> => {
     try {
+        if (!req.params.id || isNaN(Number(req.params.id))) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de usuario válido" })
+        }
+        const user = await prisma.user.findUnique({
+            where: {
+                id: Number(req.params.id)
+            },
+        });
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
         await prisma.user.delete({
             where: {
                 id: Number(req.params.id)
             },
         })
-        return res.status(200).json({ message: req.params.id + " user deleted" })
+        return res.status(200).json({ message: "Usuario eliminado correctamente" })
     } catch (error) {
-        return res.status(500).send(error)
+        console.log(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al eliminar el usuario" })
     }
 }
 
-const uploadUserFile = async (req: Request, res: Response): Promise<Response> => {
-    try {
-        const form = new multiparty.Form({ uploadDir: '../restapi/files' });
+const importUsers = async (req: Request, res: Response) => {
+    return new Promise(function (resolve, reject) {
+        const form = new multiparty.Form();
         form.parse(req, function (err, fields, files) {
-            fs.rename(files.file[0].path, process.env.FILEPATH!, function (err) {
-                if (err) console.log('ERROR: ' + err);
-            });
-            fs.createReadStream(path.resolve(process.env.FILEPATH!))
-                .pipe(csv.parse({ headers: true }))
-                .on('error', error => console.error(error))
-                .on('data', row => {
-                    addUser(row)
+            const users: User[] = []
+            parseFile(files.file[0].path, { headers: true })
+                .on('error', error => {
+                    res.status(500).json({ message: "Ha ocurrido un error al importar los usuarios" })
                 })
-                .on('end', (rowCount: number) => console.log(`Parsed ${rowCount} rows`));
-        });
+                .on('data', row => {
+                    users.push(row)
+                })
+                .on('end', (rowCount: number) => {
+                    if (rowCount == 0) {
+                        res.status(500).json({ message: "El fichero no puede estar vacío" })
+                    }
 
-        return res.status(200).json({ message: "File read successful" })
-    } catch (error) {
-        return res.status(500).send(error)
-    }
+                    (async () => {
+                        await addUsers(res, users)
+                        resolve(res)
+                    })();
+
+                });
+        });
+    })
+
 }
 
-async function addUser(user: User) {
+async function addUsers(res: Response, users: User[]) {
     try {
-        const existingUser = await prisma.user.findFirst({
-            where: {
-                username: user.username,
-            },
-        })
-
-        if (existingUser) {
-            return;
-        }
         // TODO: generar contraseña aleatoria
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash("3456g243bv5", salt);
-        let savedUser: Prisma.userCreateInput
-        savedUser = {
-            username: user.username,
-            password: hash,
-            role: user.role as role,
+        let usersPrisma: Prisma.userCreateInput[] = []
+        let hasMissingFields = false
+        users.forEach(user => {
+            if (user.username == "" || user.role == "")
+                hasMissingFields = true
+            user.password = hash
+            usersPrisma.push({
+                username: user.username,
+                password: hash,
+                role: getRole(user.role)
+            })
+        })
+        if (!hasMissingFields) {
+            await prisma.user.createMany({ data: usersPrisma })
+            res.status(200).json({ message: "Usuarios creados correctamente" })
+        } else {
+            res.status(500).json({ message: "No puede haber campos vacíos" })
         }
-        await prisma.user.create({ data: savedUser })
-
-
     } catch (error) {
         console.log(error)
+        res.status(500).json({ message: "Ha ocurrido un error al importar los usuarios" })
     }
 }
 
 const getUsersByCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
+        if (!req.params.id || isNaN(Number(req.params.id))) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de curso válido" })
+        }
         const userCourses = await prisma.userCourse.findMany({
             where: {
                 course_id: Number(req.params.id)
             },
             select: {
-                user: true
+                user: {
+                    select: {
+                        id: true,
+                        username: true,
+                        role: true
+                    }
+                }
             }
         })
         const users = userCourses.map((user: any) => user.user)
         return res.status(200).json(users)
     } catch (error) {
-        return res.status(500).send(error);
+        return res.status(500).json({ message: "Ha ocurrido un error al obtener los usuarios" })
     }
 }
 
@@ -243,16 +266,14 @@ const changePassword = async (req: Request, res: Response): Promise<Response> =>
             },
         })
         if (user == null) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ message: "Usuario no encontrado" });
         }
-
         const success = await bcrypt.compare(req.body.actualPassword, user.password);
-
+        console.log(success)
         if (!success) {
-            console.log("Invalid credentials")
-            return res.status(400).send("Invalid credentials");
+            return res.status(400).json({ message: "Credencial inválida" });
         }
-        
+
         const newPassword = req.body.newPassword;
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(newPassword, salt);
@@ -264,10 +285,10 @@ const changePassword = async (req: Request, res: Response): Promise<Response> =>
                 password: hash
             }
         })
-        return res.status(200).json({ message: "Contraseña cambiada correctamente" })
+        return res.status(200).json({ message: "La contraseña se ha actualizado correctamente" })
     } catch (error) {
         console.log(error)
-        return res.status(500).send(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al modificar la contraseña" })
     }
 }
 
@@ -281,10 +302,9 @@ const deleteUserFromCourse = async (req: Request, res: Response): Promise<Respon
                 }
             }
         })
-        return res.status(200).json({message: "Usuario eliminado del curso correctamente"})
+        return res.status(200).json({ message: "Usuario eliminado del curso correctamente" })
     } catch (error) {
-        console.log(error)
-        return res.status(500).send(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al eliminar el usuario del curso" })
     }
 }
 
@@ -295,7 +315,7 @@ module.exports = {
     updateUser,
     deleteUser,
     getUser,
-    uploadUserFile,
+    importUsers,
     getUsersByCourse,
     changePassword,
     deleteUserFromCourse

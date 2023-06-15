@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { Message } from '@app/core/models/message.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { equals, User } from 'src/app/core/models/user.model';
 import { ApiService } from 'src/app/core/services/admin/api.admin.service';
@@ -57,10 +58,9 @@ export class UserListComponent implements OnInit {
       this.fileName = file.name;
       const formData: FormData = new FormData();
       formData.append('file', file, file.name);
-      console.log(formData.get('file'))
       this.apiService
       .uploadUserFile(formData)
-      .subscribe(msg => alert("Archivo subido correctamente"))
+      .subscribe((msg: Message) => alert(msg.message))
     }
   }
 

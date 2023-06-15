@@ -31,8 +31,8 @@ export class ApiProfessorService {
     return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 
-  createQuestion(question: Question): Observable<Question> {
-    return this.http.post<Question>(`${this.apiUrl}/question`, question)
+  createQuestion(question: Question): Observable<Message> {
+    return this.http.post<Message>(`${this.apiUrl}/question`, question)
     .pipe(
       catchError(this.handleError)
     )

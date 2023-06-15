@@ -8,7 +8,7 @@ const {
     createCourse,
     updateCourse,
     deleteCourse,
-    uploadCourseFile,
+    importCourses,
     addUsers,
     addSurveys,
     getCoursesByUser,
@@ -28,7 +28,7 @@ api.post("/", [
     check('description').isLength({ min: 1 }).trim().escape(),
 ], createCourse)
 
-api.post("/file", uploadCourseFile)
+api.post("/file", importCourses)
 
 api.post("/addUser", addUsers)
 

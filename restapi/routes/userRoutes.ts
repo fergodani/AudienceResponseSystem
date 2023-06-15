@@ -9,7 +9,7 @@ const {
     createUser,
     updateUser,
     deleteUser,
-    uploadUserFile,
+    importUsers,
     getUsersByCourse,
     changePassword,
     deleteUserFromCourse
@@ -34,7 +34,7 @@ api.post("/create", [
     check('role').isLength({ min: 1 }).trim().escape(),
 ], createUser)
 
-api.post("/file", uploadUserFile)
+api.post("/file", importUsers)
 
 api.put("/", [
     check('id').isLength({ min: 1 }).trim().escape(),
