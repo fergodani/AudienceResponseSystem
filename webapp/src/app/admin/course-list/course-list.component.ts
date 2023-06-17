@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { User } from '@app/core/models/user.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { Course } from 'src/app/core/models/course.model';
@@ -32,8 +32,8 @@ export class CourseListComponent implements OnInit {
       .subscribe(courses => { this.courses = courses; this.isLoading = false; console.log(courses) })
   }
 
-  onCreateCourse() {
-    this.router.navigate(["/courses/create"])
+  async onCreateCourse() {
+    await this.router.navigate(["/courses/create"])
   }
 
   onDeleteCourse(id: number) {

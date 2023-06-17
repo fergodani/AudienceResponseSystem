@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Course } from 'src/app/core/models/course.model';
 import { ApiService } from 'src/app/core/services/admin/api.admin.service';
@@ -12,8 +12,12 @@ import { ApiService } from 'src/app/core/services/admin/api.admin.service';
 export class CreateCourseFormComponent {
   
   createCourseForm = new FormGroup({
-    name: new FormControl(''),
-    description: new FormControl(''),
+    name: new FormControl('', [
+      Validators.required
+    ]),
+    description: new FormControl('',[
+      Validators.required
+    ]),
   })
 
   constructor(private apiService:ApiService, private router: Router){

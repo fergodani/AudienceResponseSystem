@@ -19,7 +19,7 @@
         <button type="button" class="btn btn-dark w-25" (click)="onCreateUser()">Nuevo usuario</button>
         <div class="alig-self-center">
             <label for="fileUpload">Importar usuarios: </label>
-            <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+            <input id="file" type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
 
             <div class="file-upload">
 

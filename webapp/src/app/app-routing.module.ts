@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { CourseListComponent } from './admin/course-list/course-list.component';
 import { CreateCourseFormComponent } from './admin/create-course-form/create-course-form.component';
 import { CreateUserFormComponent } from './admin/create-user-form/create-user-form.component';
-import { AdminHomeComponent } from './admin/home/admin-home.component';
 import { UpdateCourseFormComponent } from './admin/update-course-form/update-course-form.component';
 import { UpdateUserFormComponent } from './admin/update-user-form/update-user-form.component';
 import { UserListComponent } from './admin/user-list/user-list.component';
@@ -23,6 +22,7 @@ import { StudentHomeComponent } from './student/student-home/student-home.compon
 import { StudentProfileComponent } from './student/student-profile/student-profile.component';
 import { UpdateQuestionComponent } from './professor/update-question/update-question.component';
 import { UpdateSurveyComponent } from './professor/update-survey/update-survey.component';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 const routes: Routes = [
   {
@@ -149,12 +149,12 @@ const routes: Routes = [
   },
   {
     path: 'admin/home', 
-    component: AdminHomeComponent,
+    component: UserListComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Admin]}
   },
   {
-    path: '**', component: AdminHomeComponent // TODO: hacer una página de error o redireccionar correctamente
+    path: '**', component: ErrorPageComponent 
   }
 ];
 

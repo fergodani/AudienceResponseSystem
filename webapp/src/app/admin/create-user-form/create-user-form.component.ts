@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from 'src/app/core/services/admin/api.admin.service';
 import { User } from 'src/app/core/models/user.model';
 import { Router } from '@angular/router';
+import { Message } from '@app/core/models/message.model';
 
 
 @Component({
@@ -16,7 +17,9 @@ export class CreateUserFormComponent {
     'Profesor'
   ]
   createUserForm = new FormGroup({
-    username: new FormControl(''),
+    username: new FormControl('', [
+      Validators.required
+    ]),
     role: new FormControl(this.roles[0]),
   })
 
@@ -24,13 +27,16 @@ export class CreateUserFormComponent {
   }
 
   onUserSubmit() {
+    if(this.createUserForm.get("username")?.invalid) {
+      return;
+    }
     const username = this.createUserForm.value.username;
     const password = "test" // TODO: generar contraseña aleatoria, hacer en el backend
     const role = this.createUserForm.value.role;
     const newUser = new User(username!, password, this.translate(role!));
     this.apiService
     .createUser(newUser)
-    .subscribe( msg => alert("Usuario creado"));
+    .subscribe( (msg: Message) => alert(msg.message));
   }
 
   translate(data: string): string {

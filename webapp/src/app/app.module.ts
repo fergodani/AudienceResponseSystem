@@ -4,7 +4,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AdminHomeComponent } from './admin/home/admin-home.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { CreateUserFormComponent } from './admin/create-user-form/create-user-form.component';
@@ -44,11 +43,11 @@ import { CreateGameDialogComponent } from './professor/dialogs/create-game-dialo
 import { StudentProfileComponent } from './student/student-profile/student-profile.component';
 import { UpdateQuestionComponent } from './professor/update-question/update-question.component';
 import { UpdateSurveyComponent } from './professor/update-survey/update-survey.component';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AdminHomeComponent,
     HeaderComponent,
     FooterComponent,
     CreateUserFormComponent,
@@ -76,7 +75,8 @@ import { UpdateSurveyComponent } from './professor/update-survey/update-survey.c
     CreateGameDialogComponent,
     StudentProfileComponent,
     UpdateQuestionComponent,
-    UpdateSurveyComponent
+    UpdateSurveyComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,
