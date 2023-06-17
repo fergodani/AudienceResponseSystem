@@ -17,11 +17,11 @@ import { CourseListComponent } from './admin/course-list/course-list.component';
 import { UpdateUserFormComponent } from './admin/update-user-form/update-user-form.component';
 import { UpdateCourseFormComponent } from './admin/update-course-form/update-course-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatIconModule} from '@angular/material/icon';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatNativeDateModule} from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatNativeDateModule } from '@angular/material/core';
 import { CreateQuestionComponent } from './professor/create-question/create-question.component';
-import {MaterialExampleModule} from '../material.module';
+import { MaterialExampleModule } from '../material.module';
 import { AnswersComponent } from './professor/create-question/answers/answers.component';
 import { QuestionListComponent } from './professor/question-list/question-list.component';
 import { LoginFormComponent } from './login/login-form/login-form.component';
@@ -36,9 +36,8 @@ import { CourseDetailsComponent } from './professor/course-details/course-detail
 import { LinkUserCourseComponent } from './professor/dialogs/link-user-course/link-user-course.component';
 import { LinkSurveyCourseComponent } from './professor/dialogs/link-survey-course/link-survey-course.component';
 import { LinkQuestionCourseComponent } from './professor/dialogs/link-question-course/link-question-course.component';
-import { HostGameComponent } from './game/host/host-game/host-game.component';
-import { StudentGameComponent } from './game/student/student-game/student-game.component';
-import { HostWaitRoomComponent } from './game/host/host-wait-room/host-wait-room.component';
+import { HostGameComponent } from './professor/host-game/host-game.component';
+import { StudentGameComponent } from './student/student-game/student-game.component';
 import { CreateGameDialogComponent } from './professor/dialogs/create-game-dialog/create-game-dialog.component';
 import { StudentProfileComponent } from './student/student-profile/student-profile.component';
 import { UpdateQuestionComponent } from './professor/update-question/update-question.component';
@@ -71,7 +70,6 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     LinkQuestionCourseComponent,
     HostGameComponent,
     StudentGameComponent,
-    HostWaitRoomComponent,
     CreateGameDialogComponent,
     StudentProfileComponent,
     UpdateQuestionComponent,
@@ -93,8 +91,8 @@ import { ErrorPageComponent } from './error-page/error-page.component';
   ],
   providers: [
     ApiService,
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

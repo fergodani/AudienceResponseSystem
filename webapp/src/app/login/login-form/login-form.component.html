@@ -1,5 +1,5 @@
 <form class="d-flex flex-column align-items-center justify-content-center mt-5" [formGroup]="loginFormGroup">
-    <mat-icon>account_circle</mat-icon>
+    <mat-icon class="mt-1">account_circle</mat-icon>
     <h1>Iniciar sesión</h1>
     <mat-form-field class="">
         <mat-label>Usuario</mat-label>
@@ -9,8 +9,8 @@
         <mat-label>Contraseña</mat-label>
         <input type="password" id="password" matInput formControlName="password">
     </mat-form-field>
-    <button class="mb-5" mat-raised-button (click)="submitUser()">Aceptar</button>
-    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+    <button class="mb-3" mat-raised-button (click)="submitUser()">Aceptar</button>
+    <div *ngIf="error" class="alert alert-danger mb-3">{{error}}</div>
     <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
         <span class="visually-hidden">Loading...</span>
     </div>
