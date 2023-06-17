@@ -19,7 +19,7 @@ import { Message } from '@app/core/models/message.model';
   templateUrl: './course-details.component.html',
   styleUrls: ['./course-details.component.css']
 })
-export class CourseDetailsComponent {
+export class CourseProfessorDetailsComponent {
 
   constructor(
     private apiService: ApiService,

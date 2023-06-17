@@ -201,8 +201,8 @@ export class StudentGameComponent implements OnInit {
 
   }
 
-  leaveGame() {
-    this.router.navigate(['/student/home'])
+  async leaveGame() {
+    await this.router.navigate(['/student/home'])
   }
 
 

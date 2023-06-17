@@ -52,8 +52,8 @@ interface CoursesIds {
 const getOpenOrStartedGamesByCourses = async (req: Request<{}, {}, {}, CoursesIds>, res: Response): Promise<Response> => {
     try {
         console.log(req.query)
-        if(!req.query.course) {
-            return res.status(500).json({message: "Se deben de pasar los parámetros correspondientes"})
+        if (!req.query.course) {
+            return res.status(500).json({ message: "Se deben de pasar los parámetros correspondientes" })
         }
         let coursesIds: number[] = [];
         if (!Array.isArray(req.query.course)) {
@@ -63,7 +63,7 @@ const getOpenOrStartedGamesByCourses = async (req: Request<{}, {}, {}, CoursesId
         }
 
         if (coursesIds.length == 0) {
-            return res.status(500).json({message: "Se deben de pasar al menos un curso"})
+            return res.status(500).json({ message: "Se deben de pasar al menos un curso" })
         }
 
         let courseSurveys = await prisma.courseSurvey.findMany({
@@ -126,17 +126,17 @@ const createGame = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { host_id, survey_id, type, state, are_questions_visible, point_type } = req.body;
 
-        if(!host_id || !survey_id || !type || !state || !are_questions_visible || !point_type) {
-            res.status(500).json({message: "Se deben proporcionar todos los parámetros"})
+        if (!host_id || !survey_id || !type || !state || !are_questions_visible || !point_type) {
+            res.status(500).json({ message: "Se deben proporcionar todos los parámetros" })
         }
 
-        const user = await prisma.user.findFirst({where: {id: host_id}})
-        if(!user)
-            res.status(404).json({message: "El usuario especificado como host no existe"})
+        const user = await prisma.user.findFirst({ where: { id: host_id } })
+        if (!user)
+            res.status(404).json({ message: "El usuario especificado como host no existe" })
 
-        const survey = await prisma.survey.findFirst({where: {id: survey_id}})
-        if(!survey)
-            res.status(404).json({message: "El cuestionario especificado no existe"})
+        const survey = await prisma.survey.findFirst({ where: { id: survey_id } })
+        if (!survey)
+            res.status(404).json({ message: "El cuestionario especificado no existe" })
 
         let game: Prisma.gameCreateInput;
         game = {
@@ -192,11 +192,11 @@ const updateState = async (req: Request, res: Response): Promise<Response> => {
         }
 
         if (!req.params.id || !req.body.state) {
-            return res.status(500).json({message: "Se deben proporcionar todos los parámetros necesarios"})
+            return res.status(500).json({ message: "Se deben proporcionar todos los parámetros necesarios" })
         }
-        const game = await prisma.game.findFirst({where: {id: Number(req.params.id)}})
-        if(!game)
-            return res.status(404).json({message: "El juego especificado no existe"})
+        const game = await prisma.game.findFirst({ where: { id: Number(req.params.id) } })
+        if (!game)
+            return res.status(404).json({ message: "El juego especificado no existe" })
         const updateGame = await prisma.game.update({
             where: {
                 id: Number(req.params.id)
@@ -239,8 +239,8 @@ const updateState = async (req: Request, res: Response): Promise<Response> => {
 
 const createResults = async (req: Request, res: Response): Promise<Response> => {
     try {
-        if(req.body.length == 0)
-            return res.status(500).json({message: "Tiene que haber al menos un resutlado"})
+        if (req.body.length == 0)
+            return res.status(500).json({ message: "Tiene que haber al menos un resutlado" })
         const userResults: UserResult[] = req.body
         const userResultsMapped = userResults.map((userResult: UserResult) => ({
             user_id: userResult.user_id,
@@ -278,12 +278,84 @@ const getGamesResultsByUser = async (req: Request, res: Response): Promise<Respo
         if (!req.params.id || isNaN(Number(req.params.id))) {
             return res.status(400).json({ message: "Debe proporcionar un ID de usuario válido" })
         }
-        const user = await prisma.user.findUnique({where: { id: Number(req.params.id)}})
-        if(!user)
-            return res.status(404).json({message: "El usuario especificado no existe"})
+        const user = await prisma.user.findUnique({ where: { id: Number(req.params.id) } })
+        if (!user)
+            return res.status(404).json({ message: "El usuario especificado no existe" })
         const result = await prisma.gameResult.findMany({
             where: {
                 user_id: Number(req.params.id)
+            },
+            select: {
+                game_id: true,
+                user_id: true,
+                score: true,
+                answer_results: {
+                    include: {
+                        answer: true
+                    }
+                },
+                game: {
+                    select: {
+                        are_questions_visible: true,
+                        host_id: true,
+                        id: true,
+                        point_type: true,
+                        state: true,
+                        survey: {
+                            select: {
+                                id: true,
+                                resource: true,
+                                title: true,
+                                user_creator_id: true,
+                                questionsSurvey: {
+                                    include: {
+                                        question: {
+                                            include: {
+                                                answers: true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        console.log(result)
+        return res.status(200).json(result)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al obtener los resultados" })
+    }
+}
+
+const getGamesResultsByUserAndCourse = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        if (!req.params.user_id || isNaN(Number(req.params.user_id))) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de usuario válido" })
+        }
+        if (!req.params.course_id || isNaN(Number(req.params.course_id))) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de curso válido" })
+        }
+        const user = await prisma.user.findUnique({ where: { id: Number(req.params.user_id) } })
+        if (!user)
+            return res.status(404).json({ message: "El usuario especificado no existe" })
+        const course = await prisma.course.findUnique({ where: { id: Number(req.params.course_id) } })
+        if (!course)
+            return res.status(404).json({ message: "El curso especificado no existe" })
+        const result = await prisma.gameResult.findMany({
+            where: {
+                AND: [
+                    {
+                        user_id: Number(req.params.user_id)
+                    },
+                    {
+                        game: {
+                            course_id: Number(req.params.course_id)
+                        }
+                    }
+                ]
             },
             select: {
                 game_id: true,
@@ -335,9 +407,9 @@ const deleteGame = async (req: Request, res: Response): Promise<Response> => {
         if (!req.params.id || isNaN(Number(req.params.id))) {
             return res.status(400).json({ message: "Debe proporcionar un ID de juego válido" })
         }
-        const game = await prisma.game.findFirst({where: {id: Number(req.params.id)}})
-        if(!game)
-            return res.status(404).json({message: "El juego especificado no existe"})
+        const game = await prisma.game.findFirst({ where: { id: Number(req.params.id) } })
+        if (!game)
+            return res.status(404).json({ message: "El juego especificado no existe" })
         await prisma.game.delete({
             where: {
                 id: Number(req.params.id)

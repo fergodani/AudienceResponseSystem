@@ -1,0 +1,14 @@
+.mat-column-survey {
+    width: 32px;
+    border-right: 1px solid currentColor;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.mat-column-score {
+    text-align: center;
+}
+
+.mat-column-mark {
+  text-align: center;
+}

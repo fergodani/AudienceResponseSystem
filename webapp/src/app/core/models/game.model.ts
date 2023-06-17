@@ -5,7 +5,7 @@ import { User, UserResult } from "./user.model";
 
 export class Game {
 
-    constructor(host_id: number, survey_id: number, type: GameType, state: GameState, point_type: PointsType, are_questions_visible: boolean) {
+    constructor(host_id: number, survey_id: number, type: GameType, state: GameState, point_type: PointsType, are_questions_visible: boolean, course_id: number) {
         this.survey_id = survey_id;
         this.host_id = host_id;
         this.type = type;
@@ -21,6 +21,7 @@ export class Game {
     state: GameState = GameState.created;
     are_questions_visible: boolean = false;
     point_type: PointsType = PointsType.standard;
+    course_id: number = 0;
     user?: User;
     survey?: Survey;
 }

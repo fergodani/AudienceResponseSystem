@@ -68,7 +68,7 @@ export class CreateQuestionComponent implements OnInit{
     ])
   })
 
-  addAnswers(answers: Answer[]) {
+  async addAnswers(answers: Answer[]) {
     this.error = false;
     const question = new Question(
       this.createQuestionForm.value.description!,
@@ -100,7 +100,7 @@ export class CreateQuestionComponent implements OnInit{
       .updateQuestion(question)
       .subscribe((msg: Message) => alert(msg.message))
     }
-    this.router.navigate(['/library'])
+    await this.router.navigate(['/library'])
   }
 
   checkAnswersDescription(answers: Answer[]): boolean {

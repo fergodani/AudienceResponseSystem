@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Game, GameState, GameType, PointsType } from '@app/core/models/game.model';
@@ -56,21 +56,24 @@ export class CreateGameDialogComponent {
       GameState.created,
       pointType,
       this.createGameForm.value.areQuestionsVisible!,
+      this.data.course_id
     );
     this.isLoading = true
     this.apiProfessorService
       .createGame(game)
-      .subscribe( game => {
-        //this.socketService.setupSocketConnection()
-        this.isLoading = false
-        this.dialogRef.close();
-        this.router.navigate(["/course", this.data.course_id, 'game', game.id])
+      .subscribe(game => {
+        (async () => {
+          //this.socketService.setupSocketConnection()
+          this.isLoading = false
+          this.dialogRef.close();
+          await this.router.navigate(["/course", this.data.course_id, 'game', game.id])
+        })()
       })
-    
+
   }
 
-  getPointType(type: string): PointsType{
-    switch(type){
+  getPointType(type: string): PointsType {
+    switch (type) {
       case 'Estándar': {
         return PointsType.standard;
       }

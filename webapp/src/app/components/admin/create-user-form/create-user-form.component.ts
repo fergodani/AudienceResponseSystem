@@ -26,17 +26,19 @@ export class CreateUserFormComponent {
   constructor(private apiService:ApiService, private router:Router){
   }
 
+  isLoading = false
+
   onUserSubmit() {
     if(this.createUserForm.get("username")?.invalid) {
       return;
     }
+    this.isLoading = true
     const username = this.createUserForm.value.username;
-    const password = "test" // TODO: generar contraseña aleatoria, hacer en el backend
     const role = this.createUserForm.value.role;
-    const newUser = new User(username!, password, this.translate(role!));
+    const newUser = new User(username!, this.translate(role!));
     this.apiService
     .createUser(newUser)
-    .subscribe( (msg: Message) => alert(msg.message));
+    .subscribe( (msg: Message) => {alert(msg.message); this.isLoading = false});
   }
 
   translate(data: string): string {

@@ -18,8 +18,11 @@ export class UpdateQuestionComponent implements OnInit{
 
   ngOnInit(): void {
     const id = this.actRoute.snapshot.paramMap.get('id');
-    if (id == null)
-      this.router.navigate(['/library'])
+    if (id == null){
+      (async () => {
+        await this.router.navigate(['/library'])
+      })()
+    }
     this.isLoading = true;
     this.apiProfessorService
     .getQuestionById(Number(id))

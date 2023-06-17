@@ -33,8 +33,8 @@ export class SurveyListComponent implements OnInit{
   @Output() surveyToAdd = new EventEmitter<Survey>
   @Input() surveysAdded: Survey[] = [];
 
-  createNewSurvey() {
-    this.route.navigate(['survey/create'])
+  async createNewSurvey() {
+    await this.route.navigate(['survey/create'])
   }
 
   addSurveyToCourse(survey: Survey) {

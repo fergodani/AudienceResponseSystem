@@ -24,7 +24,7 @@ export class UpdateUserFormComponent implements OnInit {
       })
   }
   
-  user: User = new User('', '', '');
+  user: User = new User('', '');
 
   roles = [
     'Estudiante',

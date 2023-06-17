@@ -3,10 +3,9 @@ import { Game } from "./game.model";
 
 export class User {
 
-    constructor(username: string, password: string, role: string = 'student', id: number = 0) {
+    constructor(username: string, role: string = 'student', id: number = 0) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.role = role;
     }
 

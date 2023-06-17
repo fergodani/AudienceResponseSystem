@@ -26,11 +26,10 @@ const getCourses = async (req: Request, res: Response): Promise<Response> => {
 
 const getCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
-        console.log(!req.params.id || isNaN(Number(req.params.id)))
         if (!req.params.id || isNaN(Number(req.params.id))) {
             return res.status(400).json({ message: "Debe proporcionar un ID de curso válido" })
         }
-        let result = await prisma.course.findFirst({
+        let result = await prisma.course.findUnique({
             where: {
                 id: Number(req.params.id),
             },

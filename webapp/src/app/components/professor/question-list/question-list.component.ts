@@ -38,8 +38,8 @@ export class QuestionListComponent implements OnInit {
     this.questionToAdd.emit(question);
   }
 
-  createNewQuestion() {
-    this.router.navigate(['/questions/create'])
+  async createNewQuestion() {
+    await this.router.navigate(['/questions/create'])
   }
 
   onFileSelected(event: Event) {
