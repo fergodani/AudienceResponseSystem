@@ -15,7 +15,6 @@ import { CourseProfessorDetailsComponent } from './components/professor/course-d
 import { CreateQuestionComponent } from './components/professor/create-question/create-question.component';
 import { CreateSurveyComponent } from './components/professor/create-survey/create-survey.component';
 import { LibraryComponent } from './components/professor/library/library.component';
-import { ProfessorHomeComponent } from './components/professor/professor-home/professor-home.component';
 import { QuestionListComponent } from './components/professor/question-list/question-list.component';
 import { SurveyListComponent } from './components/professor/survey-list/survey-list.component';
 import { StudentHomeComponent } from './components/student/student-home/student-home.component';
@@ -24,6 +23,7 @@ import { UpdateQuestionComponent } from './components/professor/update-question/
 import { UpdateSurveyComponent } from './components/professor/update-survey/update-survey.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
 import { CourseStudentDetailsComponent } from './components/student/course-details/course-details.component';
+import { TestComponent } from './test/test.component';
 
 const routes: Routes = [
   {
@@ -150,7 +150,7 @@ const routes: Routes = [
   },
   {
     path: 'professor/home', 
-    component: ProfessorHomeComponent,
+    component: LibraryComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Professor]}
   },
@@ -159,6 +159,10 @@ const routes: Routes = [
     component: UserListComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Admin]}
+  },
+  {
+    path: 'test', 
+    component: TestComponent,
   },
   {
     path: '**', component: ErrorPageComponent 

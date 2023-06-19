@@ -25,7 +25,6 @@ import { MaterialExampleModule } from '../material.module';
 import { AnswersComponent } from './components/professor/create-question/answers/answers.component';
 import { QuestionListComponent } from './components/professor/question-list/question-list.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
-import { ProfessorHomeComponent } from './components/professor/professor-home/professor-home.component';
 import { StudentHomeComponent } from './components/student/student-home/student-home.component';
 import { JwtInterceptor } from './core/helpers/jwt.interceptor';
 import { ErrorInterceptor } from './core/helpers/error.interceptor';
@@ -44,6 +43,7 @@ import { UpdateQuestionComponent } from './components/professor/update-question/
 import { UpdateSurveyComponent } from './components/professor/update-survey/update-survey.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
 import { CourseStudentDetailsComponent } from './components/student/course-details/course-details.component';
+import { TestComponent } from './test/test.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +60,6 @@ import { CourseStudentDetailsComponent } from './components/student/course-detai
     AnswersComponent,
     QuestionListComponent,
     LoginFormComponent,
-    ProfessorHomeComponent,
     StudentHomeComponent,
     CreateSurveyComponent,
     SurveyListComponent,
@@ -76,7 +75,8 @@ import { CourseStudentDetailsComponent } from './components/student/course-detai
     StudentProfileComponent,
     UpdateQuestionComponent,
     UpdateSurveyComponent,
-    ErrorPageComponent
+    ErrorPageComponent,
+    TestComponent
   ],
   imports: [
     BrowserModule,

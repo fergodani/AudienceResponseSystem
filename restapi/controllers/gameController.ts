@@ -3,6 +3,7 @@ import { Prisma, state } from '@prisma/client'
 import { UserResult } from '../models/user.model';
 import { AnswerResult } from '../models/answer.model';
 import prisma from '../prisma/prismaClient';
+import { QuestionSurvey } from '../models/question.model';
 
 const getGameById = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -124,19 +125,22 @@ const getOpenOrStartedGamesByCourses = async (req: Request<{}, {}, {}, CoursesId
 
 const createGame = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const { host_id, survey_id, type, state, are_questions_visible, point_type } = req.body;
-
-        if (!host_id || !survey_id || !type || !state || !are_questions_visible || !point_type) {
-            res.status(500).json({ message: "Se deben proporcionar todos los parámetros" })
+        const { host_id, survey_id, course_id, type, state, are_questions_visible, point_type } = req.body;
+        if (!host_id || !survey_id || !type || !state || !are_questions_visible || !point_type || !course_id) {
+            return res.status(500).json({ message: "Se deben proporcionar todos los parámetros" })
         }
 
         const user = await prisma.user.findFirst({ where: { id: host_id } })
         if (!user)
-            res.status(404).json({ message: "El usuario especificado como host no existe" })
+            return res.status(404).json({ message: "El usuario especificado como host no existe" })
 
         const survey = await prisma.survey.findFirst({ where: { id: survey_id } })
         if (!survey)
-            res.status(404).json({ message: "El cuestionario especificado no existe" })
+            return res.status(404).json({ message: "El cuestionario especificado no existe" })
+
+        const course = await prisma.course.findUnique({ where: { id: course_id } })
+        if (!course)
+            return res.status(404).json({ message: "El curso especificado no existe" })
 
         let game: Prisma.gameCreateInput;
         game = {
@@ -149,7 +153,10 @@ const createGame = async (req: Request, res: Response): Promise<Response> => {
             type,
             state,
             are_questions_visible: (are_questions_visible),
-            point_type
+            point_type,
+            course: {
+                connect: { id: course_id }
+            }
         }
         const gameSaved = await prisma.game.create({
             data: game,
@@ -178,6 +185,7 @@ const createGame = async (req: Request, res: Response): Promise<Response> => {
                 }
             }
         })
+
         return res.status(200).json(gameSaved)
     } catch (error) {
         console.log(error)
@@ -187,19 +195,20 @@ const createGame = async (req: Request, res: Response): Promise<Response> => {
 
 const updateState = async (req: Request, res: Response): Promise<Response> => {
     try {
-        if (!req.params.id || isNaN(Number(req.params.id))) {
-            return res.status(500).json({ message: "Debe proporcionar un ID de curso válido" })
+        console.log(req.body)
+        if (!req.body.id || isNaN(Number(req.body.id))) {
+            return res.status(500).json({ message: "Debe proporcionar un ID de juego válido" })
         }
 
-        if (!req.params.id || !req.body.state) {
+        if (!req.body.id || !req.body.state) {
             return res.status(500).json({ message: "Se deben proporcionar todos los parámetros necesarios" })
         }
-        const game = await prisma.game.findFirst({ where: { id: Number(req.params.id) } })
+        const game = await prisma.game.findFirst({ where: { id: Number(req.body.id) } })
         if (!game)
             return res.status(404).json({ message: "El juego especificado no existe" })
         const updateGame = await prisma.game.update({
             where: {
-                id: Number(req.params.id)
+                id: Number(req.body.id)
             },
             data: {
                 state: req.body.state
@@ -240,13 +249,39 @@ const updateState = async (req: Request, res: Response): Promise<Response> => {
 const createResults = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (req.body.length == 0)
-            return res.status(500).json({ message: "Tiene que haber al menos un resutlado" })
+            return res.status(500).json({ message: "Tiene que haber al menos un resultado" })
+
         const userResults: UserResult[] = req.body
-        const userResultsMapped = userResults.map((userResult: UserResult) => ({
-            user_id: userResult.user_id,
-            game_id: userResult.game_id,
-            score: userResult.score
-        }))
+        const game = await prisma.game.findUnique({
+            where: { id: userResults[0].game_id },
+            select: {
+                survey: {
+                    select: {
+                        questionsSurvey: {
+                            select: {
+                                question: {
+                                    select: {
+                                        answers: true
+                                    }
+                                },
+                                position: true,
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        const userResultsMapped = userResults.map((userResult: UserResult) => {
+            let answers = getCorrectAndIncorrectAnswers(game, userResult)
+            return {
+                user_id: userResult.user_id,
+                game_id: userResult.game_id,
+                score: userResult.score,
+                total_questions: Number(game?.survey?.questionsSurvey.length),
+                correct_questions: answers.correctAnswers,
+                wrong_questions: answers.wrongAnswers
+            }
+        })
         let answerResults: AnswerResult[] = [];
         userResults.forEach((uR: UserResult) => {
             answerResults = answerResults.concat(uR.answer_results)
@@ -273,6 +308,29 @@ const createResults = async (req: Request, res: Response): Promise<Response> => 
     }
 }
 
+// Devuelve el número de preguntas correctas e incorrectas
+function getCorrectAndIncorrectAnswers(game: any, userResult: UserResult) {
+    let correctAnswers = 0;
+    let wrongAnswers = 0;
+    game.survey.questionsSurvey.forEach((qS: QuestionSurvey) => {
+        // Resultado correspondiente a la pregunta
+        let answerResult = userResult.answer_results.find(aR => aR.question_index == qS.position)
+        if (answerResult == undefined || answerResult?.answered) {
+            let answers = qS.question?.answers
+            if (answers != undefined) {
+                let actualAnswer = answers.find(answer => answer.id == answerResult?.answer_id)
+                correctAnswers = actualAnswer?.is_correct ? correctAnswers + 1 : correctAnswers;
+                wrongAnswers = !actualAnswer?.is_correct ? wrongAnswers + 1 : wrongAnswers;
+            }
+
+        }
+    });
+    return {
+        correctAnswers,
+        wrongAnswers
+    }
+}
+
 const getGamesResultsByUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -286,36 +344,18 @@ const getGamesResultsByUser = async (req: Request, res: Response): Promise<Respo
                 user_id: Number(req.params.id)
             },
             select: {
-                game_id: true,
-                user_id: true,
                 score: true,
-                answer_results: {
-                    include: {
-                        answer: true
-                    }
-                },
+                correct_questions: true,
+                total_questions: true,
+                wrong_questions: true,
+                user_id: true,
+                game_id: true,
+                answer_results: true,
                 game: {
                     select: {
-                        are_questions_visible: true,
-                        host_id: true,
-                        id: true,
-                        point_type: true,
-                        state: true,
                         survey: {
                             select: {
-                                id: true,
-                                resource: true,
                                 title: true,
-                                user_creator_id: true,
-                                questionsSurvey: {
-                                    include: {
-                                        question: {
-                                            include: {
-                                                answers: true
-                                            }
-                                        }
-                                    }
-                                }
                             }
                         }
                     }
@@ -332,6 +372,7 @@ const getGamesResultsByUser = async (req: Request, res: Response): Promise<Respo
 
 const getGamesResultsByUserAndCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
+        console.log(req.params)
         if (!req.params.user_id || isNaN(Number(req.params.user_id))) {
             return res.status(400).json({ message: "Debe proporcionar un ID de usuario válido" })
         }
@@ -344,6 +385,7 @@ const getGamesResultsByUserAndCourse = async (req: Request, res: Response): Prom
         const course = await prisma.course.findUnique({ where: { id: Number(req.params.course_id) } })
         if (!course)
             return res.status(404).json({ message: "El curso especificado no existe" })
+        console.log("hola cai")
         const result = await prisma.gameResult.findMany({
             where: {
                 AND: [
@@ -358,36 +400,18 @@ const getGamesResultsByUserAndCourse = async (req: Request, res: Response): Prom
                 ]
             },
             select: {
-                game_id: true,
-                user_id: true,
                 score: true,
-                answer_results: {
-                    include: {
-                        answer: true
-                    }
-                },
+                correct_questions: true,
+                total_questions: true,
+                wrong_questions: true,
+                user_id: true,
+                game_id: true,
+                answer_results: true,
                 game: {
                     select: {
-                        are_questions_visible: true,
-                        host_id: true,
-                        id: true,
-                        point_type: true,
-                        state: true,
                         survey: {
                             select: {
-                                id: true,
-                                resource: true,
                                 title: true,
-                                user_creator_id: true,
-                                questionsSurvey: {
-                                    include: {
-                                        question: {
-                                            include: {
-                                                answers: true
-                                            }
-                                        }
-                                    }
-                                }
                             }
                         }
                     }
@@ -428,6 +452,7 @@ module.exports = {
     updateState,
     createResults,
     getGamesResultsByUser,
+    getGamesResultsByUserAndCourse,
     getGameById,
     deleteGame
 }

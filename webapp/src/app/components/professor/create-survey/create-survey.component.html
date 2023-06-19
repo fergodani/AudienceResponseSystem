@@ -36,12 +36,12 @@
                     </div>
                 </div>
             </div>
-            <div class="flex-fill bd-highlight w-75">
+            <div class="flex-fill bd-highlight w-75 mb-5">
                 <button class="answers-button" mat-button (click)="drawer.toggle()">
                     <mat-icon *ngIf="!drawer.opened">keyboard_arrow_left</mat-icon>
                     <mat-icon *ngIf="drawer.opened">keyboard_arrow_right</mat-icon>
                 </button>
-                <h1 class="m-2">Preguntas ({{ questionsAdded.length }})</h1>
+                <h2 class="m-2">Preguntas ({{ questionsAdded.length }})</h2>
                 <mat-accordion class="example-headers-align" multi>
                     <div cdkDropList class="list m-3" (cdkDropListDropped)="drop($event)">
                         <mat-expansion-panel class="p-2" hideToggle *ngFor="let question of questionsAdded; let indexOfElement=index" cdkDrag>
@@ -51,7 +51,7 @@
 
                                 </mat-panel-title>
                                 <mat-panel-description class="msg-header-description">
-                                    <h1 class="text-nowrap">{{ question.description }}</h1>
+                                    <h5 class="overflow-auto">{{ question.description }}</h5>
                                 </mat-panel-description>
                             </mat-expansion-panel-header>
 

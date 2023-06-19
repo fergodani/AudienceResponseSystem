@@ -9,6 +9,14 @@
     text-align: center;
 }
 
-.mat-column-mark {
+.mat-column-correct_answers {
+  text-align: center;
+}
+
+.mat-column-wrong_answers {
+  text-align: center;
+}
+
+.mat-column-total_answers {
   text-align: center;
 }

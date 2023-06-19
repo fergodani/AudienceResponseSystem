@@ -44,7 +44,8 @@ export class LoginFormComponent {
     this.isLoading = true;
     const username = this.loginFormGroup.value.username;
     const password = this.loginFormGroup.value.password;
-    const user = new User(username!, password!);
+    const user = new User(username!);
+    user.password = password!
     this.authService
     .login(user)
     .subscribe({

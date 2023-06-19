@@ -1,13 +1,15 @@
-<div class="spinner-border text-primary" role="status" *ngIf="isLoading">
-    <span class="visually-hidden">Loading...</span>
+<div class="d-flex justify-content-center">
+    <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+        <span class="visually-hidden">Loading...</span>
+    </div>
 </div>
-<div class="pt-3 h-auto" *ngIf="!isCreatingSurvey && !isSelecting">
+<div class="h-auto ms-3 me-3 mb-5" *ngIf="!isCreatingSurvey && !isSelecting && !isLoading">
     <mat-expansion-panel class="m-1" *ngFor="let question of questions">
         <mat-expansion-panel-header>
-            <mat-panel-title class="d-inline-block">
-                <h2 class="text-truncate">
+            <mat-panel-title class="d-inline-block d-flex">
+                <h5 class="overflow-auto">
                     {{ question.description }}
-                </h2>
+                </h5>
             </mat-panel-title>
         </mat-expansion-panel-header>
         <div *ngFor="let answer of question.answers">
@@ -25,39 +27,39 @@
         <button mat-button type="button" class="btn btn-danger ms-3"
             (click)="deleteQuestion(question)">Eliminar<mat-icon>delete_forever</mat-icon></button>
     </mat-expansion-panel>
-    <button class="m-2" mat-raised-button (click)="createNewQuestion()" *ngIf="!isSelecting">Crear nueva
+    <button class="m-2" mat-raised-button (click)="createNewQuestion()" *ngIf="!isSelecting">Nueva
         pregunta</button>
     <div class="p-2">
         <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
 
         <div class="file-upload d-flex gap-2">
             <button mat-raised-button color="primary" class="upload-btn" (click)="fileUpload.click()">
-                Importar preguntas <mat-icon>attach_file</mat-icon>
+                Importar <mat-icon>attach_file</mat-icon>
             </button>
             <button mat-raised-button color="primary" class="upload-btn" (click)="exportQuestions()">
-                Exportar preguntas <mat-icon>cloud_download</mat-icon>
+                Exportar <mat-icon>cloud_download</mat-icon>
             </button>
         </div>
     </div>
 </div>
-<div *ngIf="isSelecting">
+<div class="mb-5" *ngIf="isSelecting">
     <div class="d-flex gap-5 justify-content-between align-items-center" *ngFor="let question of questions">
         <div class="border m-2 d-flex flex-row">
             <div class="d-flex flex-column ps-2">
-                <h1 class="overflow-auto">{{ question.description }}</h1>
+                <h5 class="overflow-auto">{{ question.description }}</h5>
             </div>
-            <button mat-mini-fab color="primary" class="upload-btn ms-3"
-                (click)="addQuestionToCourse(question)" *ngIf="isSelecting && !isInclude(question)">
+            <button mat-mini-fab color="primary" class="upload-btn ms-3" (click)="addQuestionToCourse(question)"
+                *ngIf="isSelecting && !isInclude(question)">
                 <mat-icon>library_add</mat-icon>
             </button>
         </div>
     </div>
 </div>
-<div *ngIf="isCreatingSurvey">
+<div class="mb-5" *ngIf="isCreatingSurvey">
     <div class="d-flex gap-5 justify-content-between align-items-center" *ngFor="let question of questions">
         <div class="border m-2 d-flex flex-row">
             <div class="d-flex flex-column ps-2">
-                <h1 class="overflow-auto">{{ question.description }}</h1>
+                <h5 class="overflow-auto">{{ question.description }}</h5>
             </div>
             <button mat-mini-fab color="primary" class="upload-btn ms-3" (click)="addQuestionToSurvey(question)"
                 *ngIf="isCreatingSurvey">

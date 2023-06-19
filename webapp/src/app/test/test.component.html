@@ -1,0 +1,15 @@
+<div class="d-flex flex-column align-items-center leaderboard">
+    <div class="leaderboard_container_first">
+        <h2>1º {{ gameSession.users[0].username}}</h2>
+
+    </div>
+
+
+        <div class="leaderboard_container" *ngIf="gameSession.users.length >= 2">
+            <h2>2º {{ gameSession.users[0].username}}</h2>
+        </div>
+        <div class="leaderboard_container" *ngIf="gameSession.users.length >= 3">
+            <h2 >3º {{ gameSession.users[0].username}}</h2>
+        </div>
+    <button mat-raised-button>Siguiente</button>
+</div>

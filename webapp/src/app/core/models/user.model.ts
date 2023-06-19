@@ -43,11 +43,13 @@ export enum Role {
 }
 
 export interface UserResult {
-    user: User;
     user_id: number;
     game_id: number;
     game?: Game;
     answer_results: AnswerResult[];
     score: number;
-    mark?: number
+    correct_questions?: number;
+    survey_title?: string;
+    wrong_questions?: number;
+    total_questions?: number;
 }

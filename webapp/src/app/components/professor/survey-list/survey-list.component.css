@@ -1,10 +1,41 @@
 .imageContainer {
-    max-width: 100px;
-    overflow: hidden;
+  max-width: 100px;
+  overflow: hidden;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+
+}
+
+.pulse:hover {
+
+  animation: pulse;
+  animation-duration: 1s;
+
+}
+
+.example-card {
+  max-width: 300px;
+}
+
+.surveys {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: 2em;
+  margin-left: 2.5em;
+  margin-right: 2.5em;
+  margin-bottom: 2.5em;
+}
+
+.new {
+  margin-left: 2.5em;
+}
+
+@media (max-width: 768px) { 
+  .surveys {
+    flex-direction: column;
   }
-  
-  img {
-    max-width: 100%;
-    max-height: 100%;
-  
-  }
+}

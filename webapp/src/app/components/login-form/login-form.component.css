@@ -1,6 +1,5 @@
 form {
     width: 400px;
-    margin: auto auto auto auto;
     order: solid 1px #ccc;
     color: rgba(0, 0, 0, 0.87);
     background: #fff;
@@ -10,3 +9,11 @@ form {
         0 2px 2px 0 rgba(0, 0, 0, 0.14),
         0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
+
+.login {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+

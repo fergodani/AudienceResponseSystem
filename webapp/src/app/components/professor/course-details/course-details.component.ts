@@ -14,6 +14,12 @@ import { LinkUserCourseComponent } from '../dialogs/link-user-course/link-user-c
 import { Question } from '@app/core/models/question.model';
 import { Message } from '@app/core/models/message.model';
 
+enum State {
+  surveys,
+  users,
+  questions
+}
+
 @Component({
   selector: 'app-course-details',
   templateUrl: './course-details.component.html',
@@ -47,6 +53,13 @@ export class CourseProfessorDetailsComponent {
   users: User[] = [];
   surveys: Survey[] = [];
   questions: Question[] = []
+
+  state: State = State.surveys;
+  stateType = State;
+
+  changeState(newState: State) {
+    this.state = newState;
+  }
 
   openUserDialog(): void {
     const dialogRef = this.dialog.open(LinkUserCourseComponent, {

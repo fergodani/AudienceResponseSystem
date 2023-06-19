@@ -85,7 +85,7 @@ mat-drawer-container {
 }
 
 .example-container {
-  background-color: #f2f2f0;
+  background-color: rgba(0,0,0,0);
 }
 
 .file-input {
@@ -111,4 +111,10 @@ img {
 .example-headers-align .mat-expansion-panel-header-description {
   justify-content: space-between;
   align-items: center;
+}
+
+h5 {
+  white-space: nowrap;
+  overflow: scroll;
+  max-width: 50em;
 }

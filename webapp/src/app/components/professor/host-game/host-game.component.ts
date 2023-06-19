@@ -60,7 +60,6 @@ export class HostGameComponent implements OnInit {
       .getGameById(Number(game_id))
       .subscribe((game: Game) => {
         this.socketService.socket.emit('create_game', game, course_id + '', (gameSession: GameSession) => {
-          console.log(gameSession.user_results)
           this.gameSession = gameSession
         });
       })
@@ -92,14 +91,18 @@ export class HostGameComponent implements OnInit {
   }
 
   timeLeft: number = 5;
+  value = 0
 
   startPreviewCountdown(seconds: number) {
     let time = seconds;
+    let valueAux = 0
     let interval = setInterval(() => {
-      this.timeLeft = time;
+      this.timeLeft = time - 1;
       this.isLoading = false;
       if (time > 0) {
         time--;
+        valueAux++;
+        this.value = (valueAux/seconds) * 100;
       } else {
         clearInterval(interval);
         this.displayQuestion();
@@ -155,6 +158,7 @@ export class HostGameComponent implements OnInit {
     if (this.gameSession.question_index == this.gameSession.question_list.length) {
       this.gameSession.state = GameSessionState.is_finished
       this.socketService.socket.emit('finish_game', this.gameSession);
+      this.socketService.closeGame(this.gameSession.user_results, this.gameSession.game);
     } else {
       this.gameSession.state = GameSessionState.is_preview_screen
       this.socketService.socket.emit("question_preview", this.gameSession, () => {
@@ -164,8 +168,7 @@ export class HostGameComponent implements OnInit {
     }
   }
 
-  leaveGame() {
-    this.socketService.closeGame(this.gameSession.user_results, this.gameSession.game);
-    this.router.navigate(['/professor/home'])
+  async leaveGame() {
+    await this.router.navigate(['/professor/home'])
   }
 }

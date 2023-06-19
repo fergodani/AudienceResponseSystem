@@ -1,5 +1,20 @@
-@media (min-width: 768px) { 
+.library {
+    display: flex;
+    flex-direction: row;
+    height: 90%;
+}
+
+.menu {
+    min-width: 180px;
+    min-height: 200px;
+}
+
+@media (max-width: 768px) { 
     .library {
         flex-direction: column;
+    }
+
+    .menu {
+        margin-bottom: 2em;
     }
  }

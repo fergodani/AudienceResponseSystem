@@ -22,10 +22,16 @@ let survey1: Prisma.surveyUncheckedCreateInput = {
     title: "test1",
     user_creator_id: 1
 }
+let course: Prisma.courseUncheckedCreateInput = {
+    id: 5,
+    name: "testCourse",
+    description: "testDescription"
+}
 let game: Prisma.gameUncheckedCreateInput = {
     id: 1,
     host_id: 1,
     survey_id: 1,
+    course_id: course.id!,
     state: state.created,
     point_type: point_type.standard,
     type: game_type.online,
@@ -195,10 +201,8 @@ describe("Game", () => {
             it("should update state", async () => {
                 const req = {
                     body: {
+                        id: 1,
                         state: state.closed
-                    },
-                    params: {
-                        id: 1
                     }
                 }
                 const res = {
@@ -247,10 +251,8 @@ describe("Game", () => {
                 it("should return 404", async () => {
                     const req = {
                         body: {
+                            id: 999,
                             state: state.closed
-                        },
-                        params: {
-                            id: 999
                         }
                     }
                     const res = {
@@ -280,10 +282,8 @@ describe("Game", () => {
             it("should return error if wrong id", async () => {
                 const req = {
                     body: {
+                        id: "test",
                         state: state.closed
-                    },
-                    params: {
-                        id: "test"
                     }
                 }
                 const res = {
@@ -460,6 +460,7 @@ describe("Game", () => {
                 id: 2,
                 host_id: 1,
                 survey_id: 2,
+                course_id: 1,
                 state: state.started,
                 point_type: point_type.standard,
                 type: game_type.online,
@@ -469,6 +470,7 @@ describe("Game", () => {
                 id: 3,
                 host_id: 1,
                 survey_id: 3,
+                course_id: 2,
                 state: state.closed,
                 point_type: point_type.standard,
                 type: game_type.online,

@@ -7,13 +7,18 @@
     margin-left: 20px;
     margin-right: 20px;
     height: 600px;
-    border: 1px solid black;
     padding: 10px;
 }
 
-.question_preview h1 {
-    font-size: 90px;
+.preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 2em;
 }
+
 
 .image-box {
     width: 300px;
@@ -46,19 +51,60 @@
 }
 
 .imageContainer {
-    max-width: 400px;
+    max-width: 500px;
     overflow: hidden;
 }
+
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+
+}
+
+.alternate_font {
+    font-family: bradley hand, cursive;
+}
+
+.answer {
+    height: 9em;
+    border-radius: 30px;
+}
+
+#timer {
+    width: 100px;
+}
+
 
 .wait_room {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 20px;
-    margin-left: 20px;
-    margin-right: 20px;
-    height: 600px;
-    border: 1px solid black;
+
     padding: 10px;
+}
+
+.users {
+    padding: 50px;
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: center;
+    justify-content: center;
+}
+
+.user {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    color: white;
+}
+
+.user:hover {
+    animation: pulse;
+    animation-duration: 1s; /* don't forget to set a duration! */
 }

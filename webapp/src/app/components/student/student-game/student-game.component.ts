@@ -27,7 +27,6 @@ export class StudentGameComponent implements OnInit {
 
   actualQuestion: Question = <Question>{};
   result: UserResult = {
-    user: this.authService.userValue!,
     user_id: this.authService.userValue!.id,
     game_id: 0,
     answer_results: [],

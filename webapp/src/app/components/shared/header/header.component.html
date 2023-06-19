@@ -1,12 +1,12 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" *ngIf="user">
+<nav class="navbar navbar-expand-lg " *ngIf="user">
 	<div class="container-fluid">
 		<a class="navbar-brand ps-3" href="">
 			<img src="../../assets/uniovi.png" width="50" height="50" alt="">
 		</a>
 		<button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">&#9776;</button>
 		<div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
-			<ul class="navbar-nav">
-				<li class="nav-item active">
+			<ul class="navbar-nav mb-3 d-flex align-items-center gap-2">
+				<li class="nav-item active" *ngIf="isStudent">
 					<a class="nav-item nav-link active fs-6" href="" (click)="isMenuCollapsed = true">Inicio</a>
 				</li>
 				<li class="nav-item">
@@ -17,21 +17,24 @@
 					<a class="nav-item nav-link fs-6" href="/courses" (click)="isMenuCollapsed = true"
 						*ngIf="isAdmin">Cursos</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-item nav-link fs-6" href="/library" (click)="isMenuCollapsed = true"
+				<li class="nav-item active">
+					<a class="nav-item nav-link active fs-6" href="/library" (click)="isMenuCollapsed = true"
 						*ngIf="isProfessor">Biblioteca</a>
 				</li>
-				<li class="nav-item">
+				<li class="nav-item" *ngIf="isStudent">
 					<a class="nav-item nav-link fs-6" href="/student/profile" (click)="isMenuCollapsed = true"
-						*ngIf="isStudent">Perfil</a>
+						>Perfil</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-item nav-link fs-6" href="/test" (click)="isMenuCollapsed = true">Test</a>
+				</li>
+				<li class="nav-item ">
 					<a class="nav-item nav-link fs-6" href="/login" (click)="isMenuCollapsed = true"
 						*ngIf="!user">Login</a>
 
 					<button class="nav-item nav-link fs-6" mat-raised-button (click)="logout()"
 						*ngIf="user">Logout</button>
-					</li>
+				</li>
 			</ul>
 		</div>
 	</div>

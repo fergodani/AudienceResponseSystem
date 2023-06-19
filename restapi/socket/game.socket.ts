@@ -37,7 +37,6 @@ export default (io: Server) => {
                     user_results: [],
                     socket_id: socket.id
                 }
-                console.log(gameSession)
                 gameSessions.set(newGame.id + '', gameSession)
                 io.to(courseId).emit('wait_for_surveys', newGame)
                 callback(gameSession)

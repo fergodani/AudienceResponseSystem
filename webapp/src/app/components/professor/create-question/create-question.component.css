@@ -39,7 +39,7 @@ mat-drawer-container {
 }
 
 .example-container {
-  background-color: #f2f2f0;
+  background-color: rgba(0,0,0,0)
 }
 
 .file-input {

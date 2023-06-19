@@ -1,5 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color:#f2f2f0 ;}
+@import '~animate.css/animate.min.css';
 
+@font-face {
+    font-family: "LexenDeca";
+    src: local("LexenDeca"), url(./assets/LexendDeca-VariableFont_wght.ttf) format("truetype");
+}
+
+html,
+body {
+    height: 100%;
+}
+
+* {
+    font-family: 'LexenDeca', Arial, Helvetica, sans-serif ;
+    font-size: 19px;
+}
+body {
+    margin: 0;
+    
+    background-image: url(./assets/4861242.jpg);
+}

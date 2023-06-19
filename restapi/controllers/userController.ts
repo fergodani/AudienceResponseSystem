@@ -127,15 +127,17 @@ const login = async (req: Request, res: Response): Promise<Response> => {
                 username: req.body.username,
             },
         })
+        
         if (user == null) {
             return res.status(404).json({ message: "Usuario o contraseña incorrectos" });
         }
 
         const success = await bcrypt.compare(req.body.password, user.password);
-
+        console.log(req.body.password)
         if (!success) {
             return res.status(400).json({ message: "Usuario o contraseña incorrectos" });
         }
+
         const userId = user.id;
         const token = jwt.sign({ userId }, process.env.SECRET);
         return res.status(200).json({

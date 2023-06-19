@@ -12,6 +12,7 @@ export class Game {
         this.state = state;
         this.are_questions_visible = are_questions_visible;
         this.point_type = point_type;
+        this.course_id = course_id
     }
 
     id? :number;

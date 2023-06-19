@@ -1,60 +1,95 @@
-<div class="d-flex flex-column m-3 gap-4">
-    <div class="description border">
-        <h1>{{ course.name }}</h1>
-        <small>{{ course.description }}</small>
-    </div>
-    <div class="content border">
-        <h1>Contenido del curso</h1>
-        <h2>Cuestionarios</h2>
-        <div class="d-flex gap-4 justify-content-between align-items-center felx-wrap" *ngFor="let survey of surveys">
-            <div class="border m-3 d-flex flex-row gap-3 bg-light w-100">
-                <div class="imageContainer">
-                    <img [src]="survey.resource != '' ? survey.resource : '../../../assets/default-placeholder.png'"
-                        alt="Question image source" />
+<div class="d-flex flex-column gap-4">
+    <div class="encabezado">
+        <div class="courseImageContainer ms-4 me-4">
+            <img src="../../../../assets/default-placeholder.png" alt="Imagen curso" />
+        </div>
+        <div class="d-flex flex-column ms-2 me-2">
+            <h2 class="fs-1 fw-bold">{{ course.name }}</h2>
+            <h3 class="mb-5">{{ course.description }}</h3>
+            <div class="d-flex gap-5 flex-row flex-wrap border-top border-bottom justify-content-between">
+                <div class="d-flex flex-column ">
+                    <h4 class="fs-5">Cuestionarios</h4>
+                    <h5 class="text-center fs-6">{{ surveys.length }}</h5>
                 </div>
-                <div class="d-flex flex-row gap-3 bg-light flex-wrap">
-                    <h2 class="mt-1"><strong>{{ survey.title }}</strong></h2>
-                    <button class="mt-1" (click)="openCreateOnlineGameDialog(survey.id!)" mat-button
-                        color="primary">Jugar</button>
-                    <button mat-button type="button" class="btn btn-danger mt-1" 
-                    (click)="deleteSurveyFromCourse(survey)">Eliminar del
+                <div class="d-flex flex-column ">
+                    <h4 class="fs-5">Preguntas</h4>
+                    <h5 class="text-center fs-6">{{ questions.length }}</h5>
+                </div>
+                <div class="d-flex flex-column ">
+                    <h4 class="fs-5">Alumnos</h4>
+                    <h5 class="text-center fs-6">{{ users.length }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contenido ms-4 me-4">
+        <mat-button-toggle-group class="d-flex gap-3 flex-column bg-light w-auto" name="fontStyle"
+            aria-label="Font Style">
+            <mat-button-toggle [checked]="true" class="fs-5 pe-4"
+                (click)="changeState(stateType.surveys)">Cuestionarios</mat-button-toggle>
+            <mat-divider></mat-divider>
+            <mat-button-toggle class="fs-5" (click)="changeState(stateType.questions)">Preguntas</mat-button-toggle>
+            <mat-divider></mat-divider>
+            <mat-button-toggle class="fs-5" (click)="changeState(stateType.users)">Usuarios</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <div class="w-100">
+            <div *ngIf="state == stateType.surveys">
+                <button mat-raised-button (click)="openSurveyDialog()">Añadir cuestionarios</button>
+                <div class="d-flex gap-4  align-items-center flex-wrap mt-2 bg-light"
+                    *ngFor="let survey of surveys">
+                    <div class="imageContainer">
+                        <img [src]="survey.resource != '' ? survey.resource : '../../../assets/default-placeholder.png'"
+                            alt="Question image source" />
+                    </div>
+                    <div class="d-flex flex-column align-items-center">
+                        <h2 class=""><strong>{{ survey.title }}</strong></h2>
+                        <button class="" (click)="openCreateOnlineGameDialog(survey.id!)" mat-button
+                            color="primary">Jugar</button>
+                    </div>
+                    
+                    <button mat-button type="button" class="btn btn-danger "
+                        (click)="deleteSurveyFromCourse(survey)">Eliminar del
                         curso<mat-icon>delete_forever</mat-icon></button>
                 </div>
+
             </div>
-        </div>
-        <button mat-raised-button (click)="openSurveyDialog()">Añadir cuestionarios</button>
-        <h2>Preguntas</h2>
-        <mat-expansion-panel class="m-1" *ngFor="let question of questions">
-            <mat-expansion-panel-header>
-                <mat-panel-title class="d-inline-block">
-                    <h2 class="text-truncate">
-                        {{ question.description }}
-                    </h2>
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div *ngFor="let answer of question.answers">
-                <div class="d-flex flex-rowalign-items-center">
-                    <p class="align-self-center text-break w-75">{{ answer.description }}</p>
-                    <mat-icon class="w-auto" [ngStyle]="{'color':'green'}" *ngIf="answer.is_correct">check</mat-icon>
-                    <mat-icon class="w-auto" [ngStyle]="{'color':'red'}" *ngIf="!answer.is_correct">clear</mat-icon>
+            <div *ngIf="state == stateType.questions">
+                <button mat-raised-button (click)="openQuestionDialog()">Añadir preguntas</button>
+                <mat-expansion-panel class="m-1" *ngFor="let question of questions">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="d-inline-block">
+                            <h5 class="text-truncate">
+                                {{ question.description }}
+                            </h5>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div *ngFor="let answer of question.answers">
+                        <div class="d-flex flex-rowalign-items-center">
+                            <p class="align-self-center text-break w-75">{{ answer.description }}</p>
+                            <mat-icon class="w-auto" [ngStyle]="{'color':'green'}"
+                                *ngIf="answer.is_correct">check</mat-icon>
+                            <mat-icon class="w-auto" [ngStyle]="{'color':'red'}"
+                                *ngIf="!answer.is_correct">clear</mat-icon>
+                        </div>
+                    </div>
+                    <button mat-button type="button" class="btn btn-danger mt-1"
+                        (click)="deleteQuestionFromCourse(question)">Eliminar del
+                        curso<mat-icon>delete_forever</mat-icon></button>
+                </mat-expansion-panel>
+
+            </div>
+            <div *ngIf="state == stateType.users">
+                <button mat-raised-button (click)="openUserDialog()">Añadir alumnos</button>
+                <div class="d-flex flex-column gap-3" *ngFor="let user of users">
+                    <div class="d-flex flex-row bg-light align-items-center gap-3 border">
+                        <h5 class="mt-3 ps-2">{{ user.username }}</h5>
+                        <button mat-button type="button" class="btn btn-danger"
+                            (click)="deleteUserFromCourse(user)">Eliminar
+                            del
+                            curso<mat-icon>delete_forever</mat-icon></button>
+                    </div>
                 </div>
             </div>
-            <button mat-button type="button" class="btn btn-danger mt-1"
-            (click)="deleteQuestionFromCourse(question)">Eliminar del
-                curso<mat-icon>delete_forever</mat-icon></button>
-        </mat-expansion-panel>
-        <button mat-raised-button (click)="openQuestionDialog()">Añadir preguntas</button>
-    </div>
-    <div class="content border mb-5">
-        <h1>Alumnos del curso</h1>
-        <button mat-raised-button (click)="openUserDialog()">Añadir alumnos</button>
-        <div class="d-flex flex-column" *ngFor="let user of users">
-            <div class="d-flex flex-row bg-light align-items-center gap-3 border">
-                <h2 class="mt-3">{{ user.username }}</h2>
-                <button mat-button type="button" class="btn btn-danger"
-                (click)="deleteUserFromCourse(user)">Eliminar del
-                    curso<mat-icon>delete_forever</mat-icon></button>
-            </div>
         </div>
     </div>
-</div>
