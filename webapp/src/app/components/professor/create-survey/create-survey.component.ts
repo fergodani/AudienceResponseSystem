@@ -101,5 +101,8 @@ export class CreateSurveyComponent implements OnInit{
     this.router.navigate(['/library'])
   }
 
+  async backToLibrary() {
+    await this.router.navigate(['/library'])
+  }
 
 }

@@ -1,25 +1,26 @@
 .courseImageContainer {
-    max-width: 400px;
-    overflow: hidden;
-  }
+  max-width: 400px;
+  overflow: hidden;
+}
 
-  .imageContainer {
-    max-width: 100px;
-    overflow: hidden;
-  }
-  
-  img {
-    max-width: 100%;
-    max-height: 100%;
-  
-  }
-  .contenido {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 3em;
-    height: 90%;
-    margin-bottom: 5em;
+.imageContainer {
+  max-width: 100px;
+  overflow: hidden;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+
+}
+
+.contenido {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 3em;
+  height: 90%;
+  margin-bottom: 5em;
 }
 
 .encabezado {
@@ -34,11 +35,43 @@ h5 {
   max-width: 50em;
 }
 
-@media (max-width: 768px) { 
-    .contenido {
-        flex-direction: column;
-    }
-    .encabezado {
-      flex-direction: column;
-    }
+a {
+  background-image: linear-gradient(to right,
+      #54b3d6,
+      #54b3d6 50%,
+      #000 50%);
+  background-size: 200% 100%;
+  background-position: -100%;
+  display: inline-block;
+  padding: 5px 0;
+  position: relative;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+a:before {
+  content: '';
+  background: #54b3d6;
+  display: block;
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  transition: all 0.3s ease-in-out;
+}
+
+a:hover {
+  background-position: 0;
  }
+
+@media (max-width: 768px) {
+  .contenido {
+    flex-direction: column;
+  }
+
+  .encabezado {
+    flex-direction: column;
+  }
+}

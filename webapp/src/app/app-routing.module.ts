@@ -24,6 +24,8 @@ import { UpdateSurveyComponent } from './components/professor/update-survey/upda
 import { ErrorPageComponent } from './components/error-page/error-page.component';
 import { CourseStudentDetailsComponent } from './components/student/course-details/course-details.component';
 import { TestComponent } from './test/test.component';
+import { GameDetailsComponent } from './components/professor/course-details/game-details/game-details.component';
+import { GameRevisionComponent } from './components/student/course-details/game-revision/game-revision.component';
 
 const routes: Routes = [
   {
@@ -107,6 +109,18 @@ const routes: Routes = [
     component: UpdateQuestionComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Professor]}
+  },
+  {
+    path: 'game/:id', 
+    component: GameDetailsComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Professor]}
+  },
+  {
+    path: 'game/revision/:game_id/:user_id', 
+    component: GameRevisionComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Student]}
   },
   {
     path: 'survey/edit/:id', 

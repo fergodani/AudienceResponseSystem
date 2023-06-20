@@ -6,12 +6,9 @@
 		<button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">&#9776;</button>
 		<div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
 			<ul class="navbar-nav mb-3 d-flex align-items-center gap-2">
-				<li class="nav-item active" *ngIf="isStudent">
-					<a class="nav-item nav-link active fs-6" href="" (click)="isMenuCollapsed = true">Inicio</a>
-				</li>
 				<li class="nav-item">
-					<a class="nav-item nav-link fs-6" href="/users" (click)="isMenuCollapsed = true"
-						*ngIf="isAdmin">Usuarios</a>
+					<a class="nav-item nav-link fs-6 active" href="/" (click)="isMenuCollapsed = true"
+						*ngIf="isStudent">Inicio</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-item nav-link fs-6" href="/courses" (click)="isMenuCollapsed = true"

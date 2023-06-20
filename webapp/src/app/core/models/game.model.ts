@@ -25,6 +25,7 @@ export class Game {
     course_id: number = 0;
     user?: User;
     survey?: Survey;
+    created_at?: string;
 }
 
 export enum GameType {

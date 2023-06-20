@@ -44,6 +44,8 @@ import { UpdateSurveyComponent } from './components/professor/update-survey/upda
 import { ErrorPageComponent } from './components/error-page/error-page.component';
 import { CourseStudentDetailsComponent } from './components/student/course-details/course-details.component';
 import { TestComponent } from './test/test.component';
+import { GameDetailsComponent } from './components/professor/course-details/game-details/game-details.component';
+import { GameRevisionComponent } from './components/student/course-details/game-revision/game-revision.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +78,9 @@ import { TestComponent } from './test/test.component';
     UpdateQuestionComponent,
     UpdateSurveyComponent,
     ErrorPageComponent,
-    TestComponent
+    TestComponent,
+    GameDetailsComponent,
+    GameRevisionComponent
   ],
   imports: [
     BrowserModule,

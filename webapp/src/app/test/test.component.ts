@@ -13,7 +13,7 @@ export class TestComponent implements OnInit {
   }
 
   game = {
-    are_questions_visible: true
+    are_questions_visible: false
   }
 
   gameSession = {

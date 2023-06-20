@@ -42,7 +42,6 @@ export class ApiStudentService {
 
   getOpenOrStartedGamesByCourses(courses: Course[]): Observable<Game[]>{
     const coursesIds = courses.map(c => c.id)
-    console.log(coursesIds)
     return this.http.get<Game[]>(`${this.apiUrl}/game/course/`, {params: {course: coursesIds}})
     .pipe(
       catchError(this.handleError)
@@ -57,14 +56,21 @@ export class ApiStudentService {
   }
 
   getGamesResultsByUser(userId: number): Observable<UserResult[]> {
-    return this.http.get<UserResult[]>(`${this.apiUrl}/game/results/${userId}`)
+    return this.http.get<UserResult[]>(`${this.apiUrl}/game/user/results/${userId}`)
     .pipe(
       catchError(this.handleError)
     )
   }
 
   getGamesResultsByUserAndCourse(userId: number, courseId: number): Observable<UserResult[]> {
-    return this.http.get<UserResult[]>(`${this.apiUrl}/game/results/${userId}/${courseId}`)
+    return this.http.get<UserResult[]>(`${this.apiUrl}/game/results/user/${userId}/course/${courseId}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  getGamesResultByUserAndGame(userId: number, gameId: number): Observable<UserResult> {
+    return this.http.get<UserResult>(`${this.apiUrl}/game/results/user/${userId}/game/${gameId}`)
     .pipe(
       catchError(this.handleError)
     )

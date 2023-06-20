@@ -370,9 +370,81 @@ const getGamesResultsByUser = async (req: Request, res: Response): Promise<Respo
     }
 }
 
+// Obtiene los resultados de todos los alumnos de un juego
+const getGameResultsByGame = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        if (!req.params.game_id || isNaN(Number(req.params.game_id))) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de juego válido" })
+        }
+        const game = await prisma.game.findUnique({ where: { id: Number(req.params.game_id) } })
+        if (!game)
+            return res.status(404).json({ message: "El juego especificado no existe" })
+        const result = await prisma.gameResult.findMany({
+            where: {
+                game_id: Number(req.params.game_id)
+            },
+            select: {
+                score: true,
+                correct_questions: true,
+                total_questions: true,
+                wrong_questions: true,
+                user: {
+                    select: {
+                        username: true,
+                    }
+                },
+                game_id: true,
+                answer_results: true,
+                game: {
+                    select: {
+                        survey: {
+                            select: {
+                                title: true,
+                            }
+                        },
+                        course_id: true
+                    }
+                }
+            }
+        })
+        return res.status(200).json(result)
+    } catch (error) {
+        return res.status(500).json({ message: "Ha ocurrido un error al obtener los resultados" })
+    }
+}
+
+
+const getGamesByCourse = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        if (!req.params.id || isNaN(Number(req.params.id))) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de curso válido" })
+        }
+        const course = await prisma.course.findUnique({ where: { id: Number(req.params.id) } })
+        if (!course)
+            return res.status(404).json({ message: "El curso especificado no existe" })
+        const result = await prisma.game.findMany({
+            where: {
+                course_id: Number(req.params.id)
+            },
+            select: {
+                id: true,
+                created_at: true,
+                survey: {
+                    select: {
+                        title: true,
+                    }
+                }
+            }
+        })
+        return res.status(200).json(result)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al obtener los resultados" })
+    }
+}
+
 const getGamesResultsByUserAndCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
-        console.log(req.params)
         if (!req.params.user_id || isNaN(Number(req.params.user_id))) {
             return res.status(400).json({ message: "Debe proporcionar un ID de usuario válido" })
         }
@@ -426,6 +498,71 @@ const getGamesResultsByUserAndCourse = async (req: Request, res: Response): Prom
     }
 }
 
+const getGameResultByUserAndGame = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        if (!req.params.user_id || isNaN(Number(req.params.user_id))) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de usuario válido" })
+        }
+        if (!req.params.game_id || isNaN(Number(req.params.game_id))) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de juego válido" })
+        }
+        const user = await prisma.user.findUnique({ where: { id: Number(req.params.user_id) } })
+        if (!user)
+            return res.status(404).json({ message: "El usuario especificado no existe" })
+        const game = await prisma.game.findUnique({ where: { id: Number(req.params.game_id) } })
+        if (!game)
+            return res.status(404).json({ message: "El juego especificado no existe" })
+
+        const result = await prisma.gameResult.findUnique({
+            where: {
+                game_id_user_id: {
+                    user_id: Number(req.params.user_id),
+                    game_id: Number(req.params.game_id)
+                }
+            },
+            select: {
+                score: true,
+                correct_questions: true,
+                total_questions: true,
+                wrong_questions: true,
+                user_id: true,
+                game_id: true,
+                answer_results: {
+                    select: {
+                        question_id: true,
+                        answer: true,
+                        answered: true
+                    }
+                },
+                game: {
+                    select: {
+                        survey: {
+                            select: {
+                                title: true,
+                                questionsSurvey: {
+                                    select: {
+                                        question: {
+                                            include: {
+                                                answers: true
+                                            }
+                                        },
+                                        position: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        console.log(result)
+        return res.status(200).json(result)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "Ha ocurrido un error al obtener los resultados" })
+    }
+}
+
 const deleteGame = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -451,7 +588,10 @@ module.exports = {
     getOpenOrStartedGamesByCourses,
     updateState,
     createResults,
+    getGamesByCourse,
+    getGameResultByUserAndGame,
     getGamesResultsByUser,
+    getGameResultsByGame,
     getGamesResultsByUserAndCourse,
     getGameById,
     deleteGame

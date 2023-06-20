@@ -165,4 +165,8 @@ export class CreateQuestionComponent implements OnInit{
     this.resourceFile = '';
   }
 
+  async backToLibrary() {
+    await this.router.navigate(['/library'])
+  }
+
 }

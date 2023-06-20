@@ -23,21 +23,19 @@
         </div>
     </div>
     <div class="contenido ms-4 me-4">
-        <mat-button-toggle-group class="d-flex gap-3 flex-column bg-light w-auto" name="fontStyle"
+        <mat-button-toggle-group class="d-flex gap-3 flex-column bg-light w-auto h-100" name="fontStyle"
             aria-label="Font Style">
             <mat-button-toggle [checked]="true" class="fs-5 pe-4"
                 (click)="changeState(stateType.surveys)">Cuestionarios</mat-button-toggle>
-            <mat-divider></mat-divider>
             <mat-button-toggle class="fs-5" (click)="changeState(stateType.questions)">Preguntas</mat-button-toggle>
-            <mat-divider></mat-divider>
             <mat-button-toggle class="fs-5" (click)="changeState(stateType.users)">Usuarios</mat-button-toggle>
+            <mat-button-toggle class="fs-5" (click)="changeState(stateType.games)">Juegos</mat-button-toggle>
         </mat-button-toggle-group>
 
         <div class="w-100">
             <div *ngIf="state == stateType.surveys">
                 <button mat-raised-button (click)="openSurveyDialog()">Añadir cuestionarios</button>
-                <div class="d-flex gap-4  align-items-center flex-wrap mt-2 bg-light"
-                    *ngFor="let survey of surveys">
+                <div class="d-flex gap-4  align-items-center flex-wrap mt-2 bg-light" *ngFor="let survey of surveys">
                     <div class="imageContainer">
                         <img [src]="survey.resource != '' ? survey.resource : '../../../assets/default-placeholder.png'"
                             alt="Question image source" />
@@ -47,7 +45,7 @@
                         <button class="" (click)="openCreateOnlineGameDialog(survey.id!)" mat-button
                             color="primary">Jugar</button>
                     </div>
-                    
+
                     <button mat-button type="button" class="btn btn-danger "
                         (click)="deleteSurveyFromCourse(survey)">Eliminar del
                         curso<mat-icon>delete_forever</mat-icon></button>
@@ -88,6 +86,15 @@
                             (click)="deleteUserFromCourse(user)">Eliminar
                             del
                             curso<mat-icon>delete_forever</mat-icon></button>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="state == stateType.games">
+                <h3>Últimos cuestionarios jugados</h3>
+                <div class="d-flex flex-column gap-3" *ngFor="let game of games">
+                    <div class="d-flex flex-row bg-light align-items-center justify-content-between gap-3 p-1 border">
+                        <h5 class="p-1"><a [routerLink]="['/game/', game.id]">{{ game.survey!.title }}</a></h5>
+                        <h5>{{ game.created_at}}</h5>
                     </div>
                 </div>
             </div>

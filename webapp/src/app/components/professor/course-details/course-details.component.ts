@@ -13,11 +13,13 @@ import { LinkSurveyCourseComponent } from '../dialogs/link-survey-course/link-su
 import { LinkUserCourseComponent } from '../dialogs/link-user-course/link-user-course.component';
 import { Question } from '@app/core/models/question.model';
 import { Message } from '@app/core/models/message.model';
+import { Game } from '@app/core/models/game.model';
 
 enum State {
   surveys,
   users,
-  questions
+  questions,
+  games
 }
 
 @Component({
@@ -46,6 +48,9 @@ export class CourseProfessorDetailsComponent {
         this.apiProfessorService
           .getQuestionsByCourse(this.course.id)
           .subscribe(questions => {this.questions = questions})
+        this.apiProfessorService
+        .getGamesByCourse(this.course.id)
+        .subscribe(games =>{this.games = games})
       })
   }
 
@@ -53,6 +58,7 @@ export class CourseProfessorDetailsComponent {
   users: User[] = [];
   surveys: Survey[] = [];
   questions: Question[] = []
+  games: Game[] = []
 
   state: State = State.surveys;
   stateType = State;

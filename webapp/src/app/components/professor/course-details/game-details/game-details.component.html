@@ -1,0 +1,40 @@
+<div class="d-flex justify-content-center">
+    <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+<button mat-raised-button class="ms-3 mb-3" (click)="backToCourse()">
+    <mat-icon>keyboard_backspace</mat-icon> Volver
+</button>
+<div class="me-3 ms-3">
+    <table mat-table [dataSource]="results" class="mat-elevation-z2">
+        <caption>Resultados del cuestionario</caption>
+      <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef> Alumno</th>
+        <td mat-cell *matCellDef="let element"> {{element.user.username}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="score">
+        <th mat-header-cell *matHeaderCellDef> Puntuación </th>
+        <td mat-cell *matCellDef="let element"> {{element.score}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="correct_answers">
+        <th mat-header-cell *matHeaderCellDef> Preguntas acertadas </th>
+        <td mat-cell *matCellDef="let element"> {{element.correct_questions}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="wrong_answers">
+        <th mat-header-cell *matHeaderCellDef> Preguntas falladas </th>
+        <td mat-cell *matCellDef="let element"> {{element.wrong_questions}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="total_answers">
+        <th mat-header-cell *matHeaderCellDef> Total de preguntas </th>
+        <td mat-cell *matCellDef="let element"> {{element.total_questions}} </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>

@@ -33,7 +33,7 @@ model course {
   id             Int              @id @default(autoincrement())
   name           String           @unique @db.VarChar
   description    String           @db.VarChar
-  created_at     DateTime?        @default(now()) @db.Timestamp(6)
+  created_at     DateTime?        @default(now()) @db.Timestamp(3)
   UserCourse     UserCourse[]
   courseQuestion courseQuestion[]
   courseSurvey   courseSurvey[]
@@ -106,7 +106,7 @@ model game {
   point_type            point_type
   are_questions_visible Boolean?
   game_result           gameResult[]
-  created_at            DateTime?    @default(now()) @db.Timestamp(6)
+  created_at            DateTime?    @default(now()) @db.Timestamp(3)
   date                  DateTime?    @db.Timestamp(6)
   user                  user?        @relation(fields: [host_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   survey                survey?      @relation(fields: [survey_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -121,7 +121,7 @@ model question {
   answer_time     Int
   resource        String?
   user_creator_id Int
-  created_at      DateTime?        @default(now()) @db.Timestamp(6)
+  created_at      DateTime?        @default(now()) @db.Timestamp(3)
   answers         answer[]
   courseQuestion  courseQuestion[]
   answerResults   answerResult[]
@@ -132,7 +132,7 @@ model question {
 model survey {
   id              Int              @id @default(autoincrement())
   title           String           @db.VarChar
-  created_at      DateTime         @default(now()) @db.Timestamp(6)
+  created_at      DateTime         @default(now()) @db.Timestamp(3)
   user_creator_id Int?
   resource        String?
   courseSurvey    courseSurvey[]
@@ -145,7 +145,7 @@ model user {
   id          Int          @id @default(autoincrement())
   username    String       @unique @db.VarChar
   password    String       @db.VarChar
-  created_at  DateTime?    @default(now()) @db.Timestamp(6)
+  created_at  DateTime?    @default(now()) @db.Timestamp(3)
   role        role
   UserCourse  UserCourse[]
   game        game[]

@@ -1,42 +1,56 @@
-<div class="question_preview" *ngIf="gameSession.state == gameSessionState.is_preview_screen">
-    <h1>{{ timeLeft }}</h1>
-</div>
 <div class="spinner-border text-primary" role="status" *ngIf="isLoading || haveAnswered">
     <span class="visually-hidden">Loading...</span>
 </div>
+
+<!-- WAITING SCREEN -->
 <div class="d-flex align-items-center justify-content-center" *ngIf="gameSession.state == gameSessionState.not_started">
     <h2>Mira tu nombre en la pantalla del profesor</h2>
 </div>
-<div class="d-flex flex-column align-items-center p-5" *ngIf="gameSession.state == gameSessionState.is_question_screen
+
+<!-- QUESTION SCREEN -->
+<div class="d-flex flex-column gap-2 align-items-center" *ngIf="gameSession.state == gameSessionState.is_question_screen
 && !haveAnswered">
-    <h1 *ngIf="gameSession.game.are_questions_visible">{{ actualQuestion.description }}</h1>
+    <h2 class="bg-light shadow-sm ps-5 pe-5 text-center" *ngIf="gameSession.game.are_questions_visible">{{
+        actualQuestion.description }}</h2>
     <div class="image-box mb-2" *ngIf="gameSession.game.are_questions_visible && actualQuestion.resource != ''">
         <div class="imageContainer">
-            <img [src]="actualQuestion.resource" *ngIf="actualQuestion.resource != ''" alt="Question image source" />
+            <img src="../../assets/testImage.jpg" alt="Question image source" />
         </div>
     </div>
-    <div class="row w-100 gap-2 m-2"
-        *ngIf="actualQuestion.type == 'multioption' || actualQuestion.type == 'true_false'">
-        <button mat-button class="col bg-white text-center w-auto h-auto " (click)="checkAnswer(actualQuestion.answers[0].id!)">{{
+    <div class="grid-container">
+        <button mat-button class="grid-item bg-primary text-center text-white"
+            *ngIf="actualQuestion.type == 'multioption' || actualQuestion.type == 'true_false'"
+            (click)="checkAnswer(actualQuestion.answers[0].id!)">{{
             actualQuestion.answers[0].description }}</button>
-        <button mat-button class="col bg-white text-center w-auto h-auto" (click)="checkAnswer(actualQuestion.answers[1].id!)">{{
+        <button mat-button class="grid-item bg-danger text-center text-white"
+            *ngIf="actualQuestion.type == 'multioption' || actualQuestion.type == 'true_false'"
+            (click)="checkAnswer(actualQuestion.answers[1].id!)">{{
             actualQuestion.answers[1].description }}</button>
-    </div>
-    <div class="row w-100 gap-2 ms-2 me-2" *ngIf="actualQuestion.type == 'multioption'">
-        <button mat-button class="col bg-white text-center w-auto h-auto" (click)="checkAnswer(actualQuestion.answers[2].id!)">{{
+        <button mat-button class="grid-item bg-success text-center text-white"
+            *ngIf="actualQuestion.type == 'multioption'"
+            (click)="checkAnswer(actualQuestion.answers[2].id!)">{{
             actualQuestion.answers[2].description }}</button>
-        <button mat-button class="col bg-white text-center w-auto h-auto" (click)="checkAnswer(actualQuestion.answers[3].id!)">{{
+        <button mat-button class="grid-item bg-warning text-center text-white"
+            *ngIf="actualQuestion.type == 'multioption'"
+            (click)="checkAnswer(actualQuestion.answers[3].id!)">{{
             actualQuestion.answers[3].description }}</button>
+        
     </div>
-    <form class="d-flex flex-column lign-items-center justify-content-center" *ngIf="actualQuestion.type == 'short'">
-        <mat-form-field>
+    <form class="d-flex flex-column align-items-center justify-content-center w-100" *ngIf="actualQuestion.type == 'short'">
+        <div class=" d-flex justify-content-center  align-items-center bg-primary short mb-5">
+            <h3 class="text-center text-white ps-2 pe-2">Escribe la respuesta correcta:</h3>
+        </div>
+        <mat-form-field  class="example-form">
             <mat-label>Respuesta</mat-label>
-            <input matInput [formControl]="shortQuestionForm"/>
+            <input matInput  />
         </mat-form-field>
-        <button mat-button (click)="checkShortAnswer()">Aceptar</button>
+        <button id="button-short" mat-raised-button class="bg-primary text-white w-50" (click)="checkShortAnswer()">Aceptar</button>
     </form>
 </div>
-<div class="d-flex flex-column align-items-center justify-content-center" *ngIf="gameSession.state == gameSessionState.is_question_result">
+
+<!-- RESULT SCREEN -->
+<div class="d-flex flex-column align-items-center justify-content-center"
+    *ngIf="gameSession.state == gameSessionState.is_question_result">
     <div class="p-3 mb-2 bg-success text-white w-90 h-90" *ngIf="actualAnswer!.is_correct && haveAnswered">
         Eres un genio?
     </div>
@@ -47,10 +61,21 @@
         Tendrás más suerte la próxima vez
     </div>
 </div>
+
+<!-- SCORE SCREEN -->
 <div *ngIf="gameSession.state == gameSessionState.is_leaderboard_screen">
     <h2>Puntos: {{ result.score }}</h2>
 </div>
+
+<!-- END SCREEN -->
 <div *ngIf="gameSession.state == gameSessionState.is_finished">
     <h1>Juego terminado</h1>
     <button mat-raised-button (click)="leaveGame()">Salir</button>
+</div>
+
+<!-- PREVIEW SCREEN -->
+<div class="d-flex justify-content-center">
+    <div class="question_preview" *ngIf="gameSession.state == gameSessionState.is_preview_screen">
+        <h1>{{ timeLeft }}</h1>
+    </div>
 </div>
