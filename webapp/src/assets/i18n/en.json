@@ -165,5 +165,15 @@
         "USER": "Username",
         "PASSWORD": "Password",
         "ACCEPT": "Accept"
+    },
+    "HEADER": {
+        "HOME": "Home",
+        "USERS": "Users", 
+        "COURSES": "Courses",
+        "LIBRARY": "Library",
+        "PROFILE": "Profile",
+        "LOGOUT": "Logout",
+        "SPANISH": "Spanish",
+        "ENGLISH": "English"
     }
 }

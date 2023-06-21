@@ -8,23 +8,23 @@
 			<ul class="navbar-nav d-flex align-items-center gap-2 me-auto mb-2 mb-lg-0">
 				<li class="nav-item">
 					<a class="nav-item nav-link fs-6 active text-white" href="/" (click)="isMenuCollapsed = true"
-						*ngIf="isStudent">Inicio</a>
+						*ngIf="isStudent">{{"HEADER.HOME" | translate}}</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-item nav-link fs-6 text-white" href="/users" (click)="isMenuCollapsed = true"
-						*ngIf="isAdmin">Usuarios</a>
+						*ngIf="isAdmin">{{"HEADER.USERS" | translate}}</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-item nav-link fs-6 text-white" href="/courses" (click)="isMenuCollapsed = true"
-						*ngIf="isAdmin">Cursos</a>
+						*ngIf="isAdmin">{{"HEADER.COURSES" | translate}}</a>
 				</li>
 				<li class="nav-item active">
 					<a class="nav-item nav-link active fs-6 text-white" href="/library" (click)="isMenuCollapsed = true"
-						*ngIf="isProfessor">Biblioteca</a>
+						*ngIf="isProfessor">{{"HEADER.LIBRARY" | translate}}</a>
 				</li>
 				<li class="nav-item" *ngIf="isStudent">
 					<a class="nav-item nav-link fs-6 text-white" href="/student/profile"
-						(click)="isMenuCollapsed = true">Perfil</a>
+						(click)="isMenuCollapsed = true">{{"HEADER.PROFILE" | translate}}</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-item nav-link fs-6 text-white" href="/test" (click)="isMenuCollapsed = true">Test</a>
@@ -34,12 +34,12 @@
 			<div class="nav-item d-flex gap-2 align-items-center justify-content-center">
 
 				<button class="nav-item nav-link fs-6 p-3" color="primary" mat-raised-button (click)="logout()"
-					*ngIf="user">Logout</button>
+					*ngIf="user">{{"HEADER.LOGOUT" | translate}}</button>
 
 					<form [formGroup]="selectLanguageForm">
 					<select class="form-select" aria-label="Language select" formControlName="selectLanguage">
-						<option [ngValue] = "languages[0]" selected>Español</option>
-						<option [ngValue] = "languages[1]">Inglés</option>
+						<option [ngValue] = "languages[0]" selected>{{"HEADER.SPANISH" | translate}}</option>
+						<option [ngValue] = "languages[1]">{{"HEADER.ENGLISH" | translate}}</option>
 					  </select>
 					</form>
 			</div>

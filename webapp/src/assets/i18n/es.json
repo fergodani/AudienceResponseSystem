@@ -165,5 +165,16 @@
         "USER": "Usuario",
         "PASSWORD": "Contraseña",
         "ACCEPT": "Aceptar"
+    },
+    "HEADER": {
+        "HOME": "Inicio",
+        "USERS": "Usuarios", 
+        "COURSES": "Cursos",
+        "LIBRARY": "Biblioteca",
+        "PROFILE": "Perfil",
+        "LOGOUT": "Cerrar sesión",
+        "LOGIN": "Iniciar sesión",
+        "SPANISH": "Español",
+        "ENGLISH": "Inglés"
     }
 }
