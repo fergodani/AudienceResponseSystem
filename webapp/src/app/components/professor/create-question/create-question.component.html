@@ -1,30 +1,34 @@
 <mat-drawer-container class="example-container">
     <mat-drawer #drawer [formGroup]="createQuestionForm">
-        <h2 class="ps-3 pt-3">Opciones</h2>
+        <h2 class="ps-3 pt-3">{{"PROFESSOR.CREATE_QUESTION.OPTIONS" | translate}}</h2>
         <mat-form-field class="m-3" appearance="fill">
-            <mat-label>Tipo de pregunta</mat-label>
+            <mat-label>{{"PROFESSOR.CREATE_QUESTION.QUESTION_TYPE" | translate}}</mat-label>
             <mat-select formControlName="type">
-                <mat-option *ngFor="let type of types" [value]="type">{{type}}</mat-option>
+                <mat-option selected [value]="types[0]">{{"PROFESSOR.CREATE_QUESTION.MULTIOPTION" |
+                    translate}}</mat-option>
+                <mat-option [value]="types[1]">{{"PROFESSOR.CREATE_QUESTION.TRUE_FALSE" | translate}}</mat-option>
+                <mat-option [value]="types[2]">{{"PROFESSOR.CREATE_QUESTION.SHORT" | translate}}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field class="m-3" appearance="fill">
-            <mat-label>Tiempo límite</mat-label>
+            <mat-label>{{"PROFESSOR.CREATE_QUESTION.TIME_LIMIT" | translate}}</mat-label>
             <input matInput type="number" formControlName="limitTime" name="given-name">
         </mat-form-field>
     </mat-drawer>
     <mat-drawer-content>
         <div>
-            <button class="m-3" mat-raised-button (click)="drawer.toggle()">Opciones</button>
+            <button class="m-3" mat-raised-button (click)="drawer.toggle()">{{"PROFESSOR.CREATE_QUESTION.OPTIONS" |
+                translate}}</button>
             <div class="d-flex flex-column align-items-center gap-4" [formGroup]="createQuestionForm">
                 <mat-form-field class="w-50">
-                    <mat-label>Pregunta</mat-label>
+                    <mat-label>{{"PROFESSOR.CREATE_QUESTION.QUESTION" | translate}}</mat-label>
                     <input id="description" matInput formControlName="description">
                 </mat-form-field>
                 <div class="box">
                     <div class="imageContainer">
                         <img [src]="resourceFile" *ngIf="resourceFile != ''" alt="Question image source" />
                     </div>
-                    <p *ngIf="resourceFile == ''">Incorpora un recurso</p>
+                    <p *ngIf="resourceFile == ''">{{"PROFESSOR.CREATE_QUESTION.ATTACH_RESOURCE" | translate}}</p>
                     <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
 
                     <div class="d-flex gap-2">
@@ -42,15 +46,10 @@
                 <div class="alert alert-danger" role="alert" *ngIf="error">
                     {{ errorMessage }}
                 </div>
-                <app-answers [typeString]="createQuestionForm.value.type!"
-                 (answers)="addAnswers($event)"
-                 *ngIf="questionToEdit == undefined"
-                 ></app-answers>
-                <app-answers [typeString]="createQuestionForm.value.type!"
-                [answersToEdit] = 'questionToEdit!!.answers'
-                 (answers)="addAnswers($event)"
-                 *ngIf="questionToEdit != undefined"
-                 ></app-answers>
+                <app-answers [typeString]="createQuestionForm.value.type!" (answers)="addAnswers($event)"
+                    *ngIf="questionToEdit == undefined"></app-answers>
+                <app-answers [typeString]="createQuestionForm.value.type!" [answersToEdit]='questionToEdit!!.answers'
+                    (answers)="addAnswers($event)" *ngIf="questionToEdit != undefined"></app-answers>
             </div>
         </div>
     </mat-drawer-content>

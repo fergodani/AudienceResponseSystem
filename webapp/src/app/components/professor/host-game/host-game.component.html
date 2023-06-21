@@ -1,12 +1,12 @@
 <!-- WAIT ROOM -->
 <div class="wait_room" *ngIf="gameSession.state == gameSessionState.not_started || gameSession == undefined">
-    <h1>Usuarios conectados</h1>
+    <h1>{{"PROFESSOR.HOST_GAME.USERS_CONNECTED" | translate}}</h1>
     <div class="d-flex flex-row flex-wrap gap-2 users">
         <h4 class="user " *ngFor="let user of gameSession.users">{{user.username}}</h4>
     </div>
 
     <p *ngIf="gameSession.users.length == 0">Esperando usuarios...</p>
-    <button mat-button (click)="startGame()" *ngIf="gameSession.users.length != 0">Empezar</button>
+    <button mat-button (click)="startGame()" *ngIf="gameSession.users.length != 0">{{"PROFESSOR.HOST_GAME.START" | translate}}</button>
 </div>
 
 <!-- QUESTION PREVIEW -->
@@ -35,7 +35,7 @@
         </div>
         <div class="d-flex flex-column align-items-center justify-content-center">
             <h1 class="alternate_font">0</h1>
-            <p class="alternate_font">Answers</p>
+            <p class="alternate_font">{{"PROFESSOR.HOST_GAME.ANSWERS" | translate}}</p>
         </div>
     </div>
     <div class="row gap-2 ms-2 me-2"
@@ -57,14 +57,14 @@
     </div>
     <div class="row gap-2 ms-2 me-2 mb-5" *ngIf="actualQuestion.type == 'short'">
         <div class="col d-flex justify-content-center  align-items-center bg-primary answer ">
-            <h3 class="text-center text-white ">Escribe la respuesta correcta</h3>
+            <h3 class="text-center text-white ">{{"PROFESSOR.HOST_GAME.WRITE_ANSWER" | translate}}</h3>
         </div>
     </div>
 </div>
 
 <!-- QUESTION RESULT -->
 <div class="d-flex flex-column align-items-center" *ngIf="gameSession.state == gameSessionState.is_question_result">
-    <h1>La respuesta correcta es: </h1>
+    <h1>{{"PROFESSOR.HOST_GAME.CORRECT_ANSWER" | translate}} </h1>
     <h2 *ngFor="let answer of correctAnswers">
         {{ answer.description }}
     </h2>
@@ -77,13 +77,13 @@
         <h2>2º {{ gameSession.users[0].username}}</h2>
         <h2 *ngIf="gameSession.users.length >= 3">3º {{ gameSession.users[0].username}}</h2>
     </div>
-    <button mat-raised-button (click)="nextQuestion()">Siguiente</button>
+    <button mat-raised-button (click)="nextQuestion()">{{"PROFESSOR.HOST_GAME.NEXT" | translate}}</button>
 </div>
 
 <!-- GAME FINISHED -->
 <div *ngIf="gameSession.state == gameSessionState.is_finished">
-    <h1>Juego terminado</h1>
-    <button mat-raised-button (click)="leaveGame()">Salir</button>
+    <h1>{{"PROFESSOR.HOST_GAME.GAME_FINISHED" | translate}}</h1>
+    <button mat-raised-button (click)="leaveGame()">{{"PROFESSOR.HOST_GAME.LEAVE" | translate}}</button>
 </div>
 
 <div *ngIf="isError" class="alert alert-danger mt-3 mb-0">{{errorMessage}}</div>

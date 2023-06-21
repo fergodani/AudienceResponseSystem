@@ -1,5 +1,5 @@
 <div class="d-flex flex-column gap-5 p-4 ">
-    <h1 class="fs-1" *ngIf="isAdmin">Lista de usuarios</h1>
+    <h1 class="fs-1" *ngIf="isAdmin">{{"ADMIN.USER_LIST.USER_LIST" | translate }}</h1>
     <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
         <span class="visually-hidden">Loading...</span>
     </div>
@@ -9,16 +9,16 @@
             <small class="fs-6">{{ user.role }}</small>
         </div>
 
-        <button type="button" class="btn btn-danger" (click)="onDeleteUser(user.id)" *ngIf="isAdmin">Eliminar</button>
+        <button type="button" class="btn btn-danger" (click)="onDeleteUser(user.id)" *ngIf="isAdmin">{{"ADMIN.USER_LIST.DELETE" | translate }}</button>
         <button mat-mini-fab color="primary" class="upload-btn flex-shrink-1 ms-3" (click)="addUserToCourse(user)"
             *ngIf="isSelecting && !isInclude(user)">
             <mat-icon>library_add</mat-icon>
         </button>
     </div>
     <div class="d-flex flex-row gap-3 mb-5" *ngIf="isAdmin">
-        <button type="button" class="btn btn-dark w-25" (click)="onCreateUser()">Nuevo usuario</button>
+        <button type="button" class="btn btn-dark w-25" (click)="onCreateUser()">{{"ADMIN.USER_LIST.NEW_USER" | translate }}</button>
         <div class="alig-self-center">
-            <label for="fileUpload">Importar usuarios: </label>
+            <label for="fileUpload">{{"ADMIN.USER_LIST.IMPORT_USER" | translate }} </label>
             <input id="file" type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
 
             <div class="file-upload">

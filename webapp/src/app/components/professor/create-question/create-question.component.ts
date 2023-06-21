@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Message } from '@app/core/models/message.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
+import { TranslateService } from '@ngx-translate/core';
 import { isEmpty } from 'rxjs';
 import { Answer } from 'src/app/core/models/answer.model';
 import { Question, Type } from 'src/app/core/models/question.model';
@@ -10,6 +11,7 @@ import { ApiProfessorService } from 'src/app/core/services/professor/api.profess
 
 const MANDATORY_FIELDS = "Debes rellenar los campos obligatorios";
 const NO_CORRECT_ANSWER = "Debe haber al menos una respuesta correcta";
+const LIMIT_TIME = "El tiempo tiene que ser al menos 5 segundos";
 
 @Component({
   selector: 'app-create-question',
@@ -22,7 +24,8 @@ export class CreateQuestionComponent implements OnInit{
     private apiProfessorService: ApiProfessorService,
     private authService: ApiAuthService,
     private router: Router
-  ) { }
+  ) {
+   }
 
   ngOnInit(): void {
     if (this.questionToEdit != undefined) {
@@ -55,9 +58,9 @@ export class CreateQuestionComponent implements OnInit{
   @Input() questionToEdit: Question | undefined
 
   types = [
-    'Multiopción',
-    'Verdadero o falso',
-    'Respuesta corta'
+    'multioption',
+    'true_false',
+    'short'
   ]
   createQuestionForm = new FormGroup({
     type: new FormControl(this.types[0]),
@@ -73,12 +76,13 @@ export class CreateQuestionComponent implements OnInit{
     const question = new Question(
       this.createQuestionForm.value.description!,
       'subject',
-      this.getType(this.createQuestionForm.value.type!),
+      this.createQuestionForm.value.type!,
       this.createQuestionForm.value.limitTime!,
       answers,
       this.resourceFile,
       this.authService.userValue!.id
     );
+    console.log(question.answer_time < 5)
     if (question.description == '' || !this.checkAnswersDescription(answers)) {
       this.error = true;
       this.errorMessage = MANDATORY_FIELDS;
@@ -87,6 +91,10 @@ export class CreateQuestionComponent implements OnInit{
       this.error = true;
       this.errorMessage = NO_CORRECT_ANSWER;
       return
+    }else if(question.answer_time < 5) {
+      this.error = true;
+      this.errorMessage = LIMIT_TIME;
+      return;
     } else {
       this.error = false;
     }
@@ -123,23 +131,6 @@ export class CreateQuestionComponent implements OnInit{
     })
     console.log("At least one correct: " + isAtLeastOneCorrect)
     return isAtLeastOneCorrect;
-  }
-
-  getType(type: string): string {
-    switch (type) {
-      case "Multiopción": {
-        return 'multioption';
-      }
-      case "Verdadero o falso": {
-        return 'true_false';
-      }
-      case "Respuesta corta": {
-        return 'short';
-      }
-      default: {
-        return 'multioption';
-      }
-    }
   }
 
   onFileSelected(event: Event) {

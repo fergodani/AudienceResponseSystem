@@ -3,13 +3,13 @@
         <span class="visually-hidden">Loading...</span>
     </div>
 </div>
-<h2 *ngIf="!isLoading">Cuestionario: {{result.game!.survey!.title}}</h2>
+<h2 *ngIf="!isLoading">{{ 'STUDENT.GAME_REVISION.SURVEY' | translate }} {{result.game!.survey!.title}}</h2>
 <div class="revision" *ngIf="!isLoading">
     <div class="contenido">
         <div class="resumen">
-            <p>Preguntas correctas: {{result.correct_questions}}</p>
-            <p>Preguntas incorrectas: {{result.wrong_questions}}</p>
-            <p>Preguntas sin contestar: {{result.total_questions! - result.wrong_questions! -
+            <p>{{ 'STUDENT.GAME_REVISION.CORRECT_QUESTIONS' | translate }} {{result.correct_questions}}</p>
+            <p>{{ 'STUDENT.GAME_REVISION.WRONG_QUESTIONS' | translate }} {{result.wrong_questions}}</p>
+            <p>{{ 'STUDENT.GAME_REVISION.UNANSWERED_QUESTIONS' | translate }} {{result.total_questions! - result.wrong_questions! -
                 result.correct_questions!}}
             </p>
         </div>
@@ -25,7 +25,7 @@
             </div>
             <div class="d-flex flex-row align-items-center" *ngFor="let answerResult of result.answer_results">
                 <div class="respuesta" *ngIf="answerResult.question_id == result.game!.survey!.questionsSurvey[i].question.id">
-                    <p>Su respuesta:</p>
+                    <p>{{ 'STUDENT.GAME_REVISION.YOUR_ANSWER' | translate }}</p>
                     <p class="align-self-center ">{{ answerResult.answer!.description }}</p>
                     <mat-icon class="w-auto" [ngStyle]="{'color':'green'}"
                         *ngIf="answerResult.answer!.is_correct">check</mat-icon>
@@ -37,7 +37,7 @@
             </div>
         </div>
         <button mat-raised-button class="mb-5 w-50 h-100" (click)="backToCourse()">
-            Finalizar revisión<mat-icon>keyboard_backspace</mat-icon>
+            {{ 'STUDENT.GAME_REVISION.END_REVISION' | translate }}<mat-icon>keyboard_backspace</mat-icon>
         </button>
     </div>
     <div class="resumen-preguntas w-100">

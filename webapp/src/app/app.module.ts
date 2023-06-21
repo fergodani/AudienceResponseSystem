@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -46,6 +46,8 @@ import { CourseStudentDetailsComponent } from './components/student/course-detai
 import { TestComponent } from './test/test.component';
 import { GameDetailsComponent } from './components/professor/course-details/game-details/game-details.component';
 import { GameRevisionComponent } from './components/student/course-details/game-revision/game-revision.component';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -93,7 +95,14 @@ import { GameRevisionComponent } from './components/student/course-details/game-
     MatIconModule,
     MatSidenavModule,
     MatNativeDateModule,
-    MaterialExampleModule
+    MaterialExampleModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     ApiService,
@@ -103,3 +112,7 @@ import { GameRevisionComponent } from './components/student/course-details/game-
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}

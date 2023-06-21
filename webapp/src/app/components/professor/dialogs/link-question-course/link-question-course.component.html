@@ -1,8 +1,8 @@
-<h1 mat-dialog-title>Lista de preguntas</h1>
+<h1 mat-dialog-title>{{"PROFESSOR.QUESTION_COURSE_DIALOG.QUESTION_LIST" | translate }}</h1>
 <div mat-dialog-content>
     <app-question-list [isSelecting]="true" [questionsAdded]="questionsAdded" (questionToAdd)="addQuestion($event)"></app-question-list>
 </div>
 <div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button [mat-dialog-close]="questions">Aceptar</button>
+    <button mat-button (click)="onNoClick()">{{"PROFESSOR.QUESTION_COURSE_DIALOG.CANCEL" | translate }}</button>
+    <button mat-button [mat-dialog-close]="questions">{{"PROFESSOR.QUESTION_COURSE_DIALOG.ACCEPT" | translate }}</button>
 </div>

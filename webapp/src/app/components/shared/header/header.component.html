@@ -1,11 +1,11 @@
-<nav class="navbar navbar-expand-lg" *ngIf="user">
+<nav class="navbar navbar-expand-lg" >
 	<div class="container-fluid">
 		<a class="navbar-brand ps-3" href="">
 			<img src="../../assets/logo_blanco.png" width="153.6" height="60" alt="">
 		</a>
 		<button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">&#9776;</button>
 		<div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
-			<ul class="navbar-nav d-flex align-items-center gap-2">
+			<ul class="navbar-nav d-flex align-items-center gap-2 me-auto mb-2 mb-lg-0">
 				<li class="nav-item">
 					<a class="nav-item nav-link fs-6 active text-white" href="/" (click)="isMenuCollapsed = true"
 						*ngIf="isStudent">Inicio</a>
@@ -23,20 +23,26 @@
 						*ngIf="isProfessor">Biblioteca</a>
 				</li>
 				<li class="nav-item" *ngIf="isStudent">
-					<a class="nav-item nav-link fs-6 text-white" href="/student/profile" (click)="isMenuCollapsed = true"
-						>Perfil</a>
+					<a class="nav-item nav-link fs-6 text-white" href="/student/profile"
+						(click)="isMenuCollapsed = true">Perfil</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-item nav-link fs-6 text-white" href="/test" (click)="isMenuCollapsed = true">Test</a>
 				</li>
-				<li class="nav-item ">
-					<a class="nav-item nav-link fs-6" href="/login" (click)="isMenuCollapsed = true"
-						*ngIf="!user">Login</a>
 
-					<button class="nav-item nav-link fs-6" color="primary" mat-raised-button (click)="logout()"
-						*ngIf="user">Logout</button>
-				</li>
 			</ul>
+			<div class="nav-item d-flex gap-2 align-items-center justify-content-center">
+
+				<button class="nav-item nav-link fs-6 p-3" color="primary" mat-raised-button (click)="logout()"
+					*ngIf="user">Logout</button>
+
+					<form [formGroup]="selectLanguageForm">
+					<select class="form-select" aria-label="Language select" formControlName="selectLanguage">
+						<option [ngValue] = "languages[0]" selected>Español</option>
+						<option [ngValue] = "languages[1]">Inglés</option>
+					  </select>
+					</form>
+			</div>
 		</div>
 	</div>
 </nav>

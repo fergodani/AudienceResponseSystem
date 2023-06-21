@@ -21,23 +21,22 @@
         </div>
         <a [routerLink]="['/question/edit', question.id]">
             <button type="button" mat-raised-button>
-                Editar <mat-icon>edit</mat-icon>
+                {{ 'PROFESSOR.QUESTION_LIST.EDIT' | translate }} <mat-icon>edit</mat-icon>
             </button>
         </a>
         <button mat-button type="button" class="btn btn-danger ms-3"
-            (click)="deleteQuestion(question)">Eliminar<mat-icon>delete_forever</mat-icon></button>
+            (click)="deleteQuestion(question)">{{ 'PROFESSOR.QUESTION_LIST.DELETE' | translate }}<mat-icon>delete_forever</mat-icon></button>
     </mat-expansion-panel>
-    <button class="m-2" mat-raised-button (click)="createNewQuestion()" *ngIf="!isSelecting">Nueva
-        pregunta</button>
+    <button class="m-2" mat-raised-button (click)="createNewQuestion()" *ngIf="!isSelecting">{{ 'PROFESSOR.QUESTION_LIST.NEW_QUESTION' | translate }}</button>
     <div class="p-2">
         <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
 
-        <div class="file-upload d-flex gap-2">
+        <div class="file-upload d-flex gap-2 mb-5">
             <button mat-raised-button color="primary" class="upload-btn" (click)="fileUpload.click()">
-                Importar <mat-icon>attach_file</mat-icon>
+                {{ 'PROFESSOR.QUESTION_LIST.IMPORT' | translate }} <mat-icon>attach_file</mat-icon>
             </button>
             <button mat-raised-button color="primary" class="upload-btn" (click)="exportQuestions()">
-                Exportar <mat-icon>cloud_download</mat-icon>
+                {{ 'PROFESSOR.QUESTION_LIST.EXPORT' | translate }} <mat-icon>cloud_download</mat-icon>
             </button>
         </div>
     </div>

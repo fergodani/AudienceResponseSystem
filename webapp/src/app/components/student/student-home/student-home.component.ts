@@ -6,6 +6,7 @@ import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 import { ApiStudentService } from '@app/core/services/user/api.user.service';
 import { SocketioService } from '@app/core/socket/socketio.service';
+import { TranslateService } from '@ngx-translate/core';
 import { isEmpty } from 'rxjs';
 
 @Component({
@@ -14,7 +15,7 @@ import { isEmpty } from 'rxjs';
   styleUrls: ['./student-home.component.css']
 })
 export class StudentHomeComponent {
-
+  selectedLanguage = 'es';
   constructor(
     private apiStudentService: ApiStudentService,
     private apiProfessorService: ApiProfessorService,

@@ -12,40 +12,40 @@ import { Message } from '@app/core/models/message.model';
   styleUrls: ['./create-user-form.component.css']
 })
 export class CreateUserFormComponent {
+
+  constructor(
+    private apiService:ApiService, 
+    private router:Router,
+    ){
+  }
+
   roles = [
-    'Estudiante',
-    'Profesor'
+    "student",
+    "professor"
   ]
+  
   createUserForm = new FormGroup({
     username: new FormControl('', [
       Validators.required
     ]),
-    role: new FormControl(this.roles[0]),
+    role: new FormControl(this.roles[0], [
+      Validators.required
+    ]),
   })
-
-  constructor(private apiService:ApiService, private router:Router){
-  }
-
   isLoading = false
 
   onUserSubmit() {
-    if(this.createUserForm.get("username")?.invalid) {
+    if(this.createUserForm.get("username")?.invalid || this.createUserForm.get("role")?.invalid ) {
       return;
     }
+    
     this.isLoading = true
     const username = this.createUserForm.value.username;
     const role = this.createUserForm.value.role;
-    const newUser = new User(username!, this.translate(role!));
+    console.log(role)
+    const newUser = new User(username!, role!);
     this.apiService
     .createUser(newUser)
     .subscribe( (msg: Message) => {alert(msg.message); this.isLoading = false});
-  }
-
-  translate(data: string): string {
-    if(data == "Estudiante"){
-      return 'student'
-    }else{
-      return 'professor'
-    }
   }
 }

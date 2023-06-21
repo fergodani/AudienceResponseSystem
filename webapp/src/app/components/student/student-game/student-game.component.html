@@ -4,7 +4,7 @@
 
 <!-- WAITING SCREEN -->
 <div class="d-flex align-items-center justify-content-center" *ngIf="gameSession.state == gameSessionState.not_started">
-    <h2>Mira tu nombre en la pantalla del profesor</h2>
+    <h2>{{"STUDENT.GAME.LOOK_AT_YOUR_NAME" | translate}}</h2>
 </div>
 
 <!-- QUESTION SCREEN -->
@@ -38,13 +38,13 @@
     </div>
     <form class="d-flex flex-column align-items-center justify-content-center w-100" *ngIf="actualQuestion.type == 'short'">
         <div class=" d-flex justify-content-center  align-items-center bg-primary short mb-5">
-            <h3 class="text-center text-white ps-2 pe-2">Escribe la respuesta correcta:</h3>
+            <h3 class="text-center text-white ps-2 pe-2">{{"STUDENT.GAME.WRITE_ANSWER" | translate}}</h3>
         </div>
         <mat-form-field  class="example-form">
-            <mat-label>Respuesta</mat-label>
+            <mat-label>{{"STUDENT.GAME.ANSWER" | translate}}</mat-label>
             <input matInput  />
         </mat-form-field>
-        <button id="button-short" mat-raised-button class="bg-primary text-white w-50" (click)="checkShortAnswer()">Aceptar</button>
+        <button id="button-short" mat-raised-button class="bg-primary text-white w-50" (click)="checkShortAnswer()">{{"STUDENT.GAME.ACCEPT" | translate}}</button>
     </form>
 </div>
 
@@ -52,24 +52,24 @@
 <div class="d-flex flex-column align-items-center justify-content-center"
     *ngIf="gameSession.state == gameSessionState.is_question_result">
     <div class="p-3 mb-2 bg-success text-white w-90 h-90" *ngIf="actualAnswer!.is_correct && haveAnswered">
-        Eres un genio?
+        {{"STUDENT.GAME.CORRECT" | translate}}
     </div>
     <div class="p-3 mb-2 bg-danger text-white w-90 h-90" *ngIf="!actualAnswer!.is_correct && haveAnswered">
-        Tendrás más suerte la próxima vez
+        {{"STUDENT.GAME.INCORRECT" | translate}}
     </div>
     <div class="p-3 mb-2 bg-secondary text-white w-90 h-90" *ngIf="!haveAnswered">
-        Tendrás más suerte la próxima vez
+        {{"STUDENT.GAME.INCORRECT" | translate}}
     </div>
 </div>
 
 <!-- SCORE SCREEN -->
 <div *ngIf="gameSession.state == gameSessionState.is_leaderboard_screen">
-    <h2>Puntos: {{ result.score }}</h2>
+    <h2>{{"STUDENT.GAME.SCORE" | translate}} {{ result.score }}</h2>
 </div>
 
 <!-- END SCREEN -->
 <div *ngIf="gameSession.state == gameSessionState.is_finished">
-    <h1>Juego terminado</h1>
+    <h1>{{"STUDENT.GAME.GAME_FINISHED" | translate}}</h1>
     <button mat-raised-button (click)="leaveGame()">Salir</button>
 </div>
 

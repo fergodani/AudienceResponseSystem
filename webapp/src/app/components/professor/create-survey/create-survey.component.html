@@ -1,6 +1,6 @@
 <mat-drawer-container class="example-container" [hasBackdrop]="false">
     <mat-drawer class="w-75" #drawer position="end" mode="push" [disableClose]="false">
-        <h2 class="ps-3 pt-3 pe-3">Preguntas</h2>
+        <h2 class="ps-3 pt-3 pe-3">{{ 'PROFESSOR.CREATE_SURVEY.QUESTIONS' | translate }}</h2>
         <div class="d-flex flex-row m-3">
             <app-question-list [isCreatingSurvey]="true" (questionToAdd)="addQuestion($event)"></app-question-list>
         </div>
@@ -13,7 +13,7 @@
                         <div class="imageContainer">
                             <img [src]="resourceFile" *ngIf="resourceFile != ''" alt="Question image source" />
                         </div>
-                        <p *ngIf="resourceFile == ''">Incorpora un recurso</p>
+                        <p *ngIf="resourceFile == ''">{{ 'PROFESSOR.CREATE_SURVEY.ATTACH_RESOURCE' | translate }}</p>
                         <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
 
                         <div class="d-flex gap-2">
@@ -29,10 +29,10 @@
                     </div>
                     <div class="d-flex flex-column">
                         <mat-form-field class="p-3">
-                            <mat-label>Título</mat-label>
+                            <mat-label>{{ 'PROFESSOR.CREATE_SURVEY.TITLE' | translate }}</mat-label>
                             <input id="title" matInput [formControl]="title">
                         </mat-form-field>
-                        <button class="m-3" mat-raised-button (click)="onSurveySubmit()">Guardar</button>
+                        <button class="m-3" mat-raised-button (click)="onSurveySubmit()">{{ 'PROFESSOR.CREATE_SURVEY.SAVE' | translate }}</button>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                     <mat-icon *ngIf="!drawer.opened">keyboard_arrow_left</mat-icon>
                     <mat-icon *ngIf="drawer.opened">keyboard_arrow_right</mat-icon>
                 </button>
-                <h2 class="m-2">Preguntas ({{ questionsAdded.length }})</h2>
+                <h2 class="m-2">{{ 'PROFESSOR.CREATE_SURVEY.QUESTIONS' | translate }} ({{ questionsAdded.length }})</h2>
                 <mat-accordion class="example-headers-align" multi>
                     <div cdkDropList class="list m-3" (cdkDropListDropped)="drop($event)">
                         <mat-expansion-panel class="p-2" hideToggle *ngFor="let question of questionsAdded; let indexOfElement=index" cdkDrag>
@@ -63,7 +63,7 @@
                                 </div>
                             </div>
                             <button type="button" class="btn btn-danger"
-                                        (click)="removeQuestion(indexOfElement)">Eliminar</button>
+                                        (click)="removeQuestion(indexOfElement)">{{ 'PROFESSOR.CREATE_SURVEY.DELETE' | translate }}</button>
                         </mat-expansion-panel>
                     </div>
                 </mat-accordion>

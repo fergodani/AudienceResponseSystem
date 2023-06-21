@@ -68,9 +68,10 @@ export class AnswersComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.typeString == 'Verdadero o falso') {
+    console.log(this.typeString)
+    if (this.typeString == 'true_false') {
       this.type = Type.true_false;
-    } else if (this.typeString == 'Multiopción') {
+    } else if (this.typeString == 'multioption') {
       this.type = Type.multioption;
     } else {
       this.type = Type.short;

@@ -43,6 +43,7 @@ a:hover::before {
     width: 100%;
 }
 
+
 @media (max-width: 768px) {
     .home {
         flex-direction: column;

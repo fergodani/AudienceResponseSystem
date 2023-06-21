@@ -1,16 +1,16 @@
-<h1 mat-dialog-title>Crear juego en línea</h1>
+<h1 mat-dialog-title>{{"PROFESSOR.CREATE_GAME_DIALOG.CREATE_ONLINE_GAME" | translate }}</h1>
 <div mat-dialog-content class="d-flex flex-column gap-2" [formGroup]="createGameForm">
     <mat-form-field class="m-3" appearance="fill">
-        <mat-label>Tipo de puntuación</mat-label>
+        <mat-label>{{"PROFESSOR.CREATE_GAME_DIALOG.SCORE_TYPE" | translate }}</mat-label>
         <mat-select formControlName="pointType">
             <mat-option *ngFor="let point_type of point_types" [value]="point_type">{{point_type}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-checkbox formControlName="areQuestionsVisible">Mostar preguntas</mat-checkbox>
+    <mat-checkbox formControlName="areQuestionsVisible">{{"PROFESSOR.CREATE_GAME_DIALOG.SHOW_QUESTIONS" | translate }}</mat-checkbox>
 </div>
 <div mat-dialog-actions *ngIf="!isLoading">
-    <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button (click)="onCreateGame()">Aceptar</button>
+    <button mat-button (click)="onNoClick()">{{"PROFESSOR.CREATE_GAME_DIALOG.CANCEL" | translate }}</button>
+    <button mat-button (click)="onCreateGame()">{{"PROFESSOR.CREATE_GAME_DIALOG.ACCEPT" | translate }}</button>
 </div>
 <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
     <span class="visually-hidden">Loading...</span>

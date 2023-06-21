@@ -1,5 +1,5 @@
 <div class="d-flex flex-column gap-3 ms-3 me-3 mb-5">
-    <h1 class="fs-1 mt-3" *ngIf="isAdmin">Lista de cursos</h1>
+    <h1 class="fs-1 mt-3" *ngIf="isAdmin">{{"ADMIN.COURSE_LIST.COURSE_LIST" | translate }}</h1>
     <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
         <span class="visually-hidden">Loading...</span>
     </div>
@@ -9,12 +9,12 @@
             <h2 *ngIf="isProfessor"><a [routerLink]="['/course/details', course.id]">{{ course.name}}</a></h2>
             <small class="fs-6 pb-2">{{ course.description }}</small>
         </div>
-        <button type="button" class="btn btn-danger" (click)="onDeleteCourse(course.id)" *ngIf="isAdmin">Eliminar</button>
+        <button type="button" class="btn btn-danger" (click)="onDeleteCourse(course.id)" *ngIf="isAdmin">{{"ADMIN.COURSE_LIST.DELETE" | translate }}</button>
     </div>
     <div class="d-flex flex-row gap-3 mb-5" *ngIf="isAdmin">
-        <button type="button" class="btn btn-dark w-25" (click)="onCreateCourse()">Nuevo curso</button>
+        <button type="button" class="btn btn-dark w-25" (click)="onCreateCourse()">{{"ADMIN.COURSE_LIST.NEW_COURSE" | translate }}</button>
         <div class="alig-self-center">
-            <label for="fileUpload">Importar cursos: </label>
+            <label for="fileUpload">{{"ADMIN.COURSE_LIST.IMPORT_COURSE" | translate }} </label>
             <input id="file" type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
 
             <div class="file-upload">
