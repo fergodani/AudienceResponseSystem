@@ -3,7 +3,7 @@
         <span class="visually-hidden">Loading...</span>
     </div>
 </div>
-<h1 *ngIf="!isLoading">Cuestionario: {{result.game!.survey!.title}}</h1>
+<h2 *ngIf="!isLoading">Cuestionario: {{result.game!.survey!.title}}</h2>
 <div class="revision" *ngIf="!isLoading">
     <div class="contenido">
         <div class="resumen">
@@ -36,7 +36,9 @@
                 </div>
             </div>
         </div>
-        <button class="mb-5 w-50 h-100" mat-raised-button>Finalizar revisión</button>
+        <button mat-raised-button class="mb-5 w-50 h-100" (click)="backToCourse()">
+            Finalizar revisión<mat-icon>keyboard_backspace</mat-icon>
+        </button>
     </div>
     <div class="resumen-preguntas w-100">
         <div class="d-flex flex-column flex-wrap align-items-center resumen-pregunta" *ngFor="let i of questionIndexes">

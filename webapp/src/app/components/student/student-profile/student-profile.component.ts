@@ -26,7 +26,6 @@ export class StudentProfileComponent implements OnInit{
     .subscribe(results => {
       this.results = results; 
       this.loadingResults = false; 
-      console.log(results)
     })
   }
 

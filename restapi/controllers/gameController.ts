@@ -353,6 +353,11 @@ const getGamesResultsByUser = async (req: Request, res: Response): Promise<Respo
                 answer_results: true,
                 game: {
                     select: {
+                        course: {
+                            select: {
+                                name: true
+                            }
+                        },
                         survey: {
                             select: {
                                 title: true,
@@ -536,6 +541,7 @@ const getGameResultByUserAndGame = async (req: Request, res: Response): Promise<
                 },
                 game: {
                     select: {
+                        course_id: true,
                         survey: {
                             select: {
                                 title: true,

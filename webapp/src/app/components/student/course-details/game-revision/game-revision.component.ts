@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserResult } from '@app/core/models/user.model';
 import { ApiStudentService } from '@app/core/services/user/api.user.service';
 
@@ -12,7 +12,8 @@ export class GameRevisionComponent implements OnInit{
 
   constructor(
     private apiStudentService: ApiStudentService,
-    private actRoute: ActivatedRoute
+    private actRoute: ActivatedRoute,
+    private router: Router
   ) {
     
   }
@@ -28,6 +29,10 @@ export class GameRevisionComponent implements OnInit{
       this.questionIndexes = Array(this.result.game?.survey?.questionsSurvey.length).fill(1).map((x,i)=>i);
       
     })
+  }
+
+  async backToCourse() {
+    await this.router.navigate(['/student/course/details', this.result.game!.course_id])
   }
 
   result: UserResult = <UserResult>{}

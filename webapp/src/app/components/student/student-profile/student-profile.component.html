@@ -1,7 +1,7 @@
 <div class="d-flex flex-column gap-2 align-items-center justify-content-center">
     <h1 class="fs-1">{{ user!.username }}</h1>
     <form class="d-flex flex-column align-items-center justify-content-center " [formGroup]="passwordFormGroup">
-        <h1>Modificar contraseña</h1>
+        <h2>Modificar contraseña</h2>
         <mat-form-field class="">
             <mat-label>Contraseña actual</mat-label>
             <input type="password" id="password" matInput formControlName="password">
@@ -13,12 +13,13 @@
         <button class="mb-5" mat-raised-button (click)="submitPassword()">Aceptar</button>
         <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
     </form>
-    <h1>Últimos juegos jugados</h1>
+    <h2>Últimos juegos jugados</h2>
     <div class="spinner-border text-primary" role="status" *ngIf="loadingResults">
         <span class="visually-hidden">Loading...</span>
     </div>
     <div class="d-flex flex-row flex-wrap gap-2" *ngFor="let result of results">
         <div class="container d-flex flex-columns align-items-center gap-5 bg-light border rounded-pill">
+            <h4>{{ result.game?.course?.name}}</h4>
             <h4>{{ result.game?.survey?.title }}</h4>
             <h4>Puntuación: {{ result.score }}</h4>
         </div>

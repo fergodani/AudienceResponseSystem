@@ -5,8 +5,8 @@
   a {
     background-image: linear-gradient(
       to right,
-      #54b3d6,
-      #54b3d6 50%,
+      #4184d5,
+      #4184d5 50%,
       #000 50%
     );
     background-size: 200% 100%;
@@ -21,7 +21,7 @@
   
   a:before {
     content: '';
-    background: #54b3d6;
+    background: #4184d5;
     display: block;
     position: absolute;
     bottom: -3px;

@@ -11,7 +11,7 @@
             <input type="password" id="password" matInput formControlName="password">
         </mat-form-field>
         <button class="mb-3" color="" mat-raised-button (click)="submitUser()">Aceptar</button>
-        <div *ngIf="error" class="alert alert-danger mb-3">{{error}}</div>
+        <div *ngIf="error" class="alert alert-danger m-3">{{error}}</div>
         <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
             <span class="visually-hidden">Loading...</span>
         </div>

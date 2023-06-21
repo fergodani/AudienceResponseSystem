@@ -1,3 +1,4 @@
+import { Course } from "./course.model";
 import { Question } from "./question.model";
 import { Survey } from "./survey.model";
 import { User, UserResult } from "./user.model";
@@ -23,6 +24,7 @@ export class Game {
     are_questions_visible: boolean = false;
     point_type: PointsType = PointsType.standard;
     course_id: number = 0;
+    course?: Course;
     user?: User;
     survey?: Survey;
     created_at?: string;

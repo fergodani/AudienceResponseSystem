@@ -1,35 +1,39 @@
-<nav class="navbar navbar-expand-lg " *ngIf="user">
+<nav class="navbar navbar-expand-lg" *ngIf="user">
 	<div class="container-fluid">
 		<a class="navbar-brand ps-3" href="">
-			<img src="../../assets/uniovi.png" width="50" height="50" alt="">
+			<img src="../../assets/logo_blanco.png" width="153.6" height="60" alt="">
 		</a>
 		<button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">&#9776;</button>
 		<div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
-			<ul class="navbar-nav mb-3 d-flex align-items-center gap-2">
+			<ul class="navbar-nav d-flex align-items-center gap-2">
 				<li class="nav-item">
-					<a class="nav-item nav-link fs-6 active" href="/" (click)="isMenuCollapsed = true"
+					<a class="nav-item nav-link fs-6 active text-white" href="/" (click)="isMenuCollapsed = true"
 						*ngIf="isStudent">Inicio</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-item nav-link fs-6" href="/courses" (click)="isMenuCollapsed = true"
+					<a class="nav-item nav-link fs-6 text-white" href="/users" (click)="isMenuCollapsed = true"
+						*ngIf="isAdmin">Usuarios</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-item nav-link fs-6 text-white" href="/courses" (click)="isMenuCollapsed = true"
 						*ngIf="isAdmin">Cursos</a>
 				</li>
 				<li class="nav-item active">
-					<a class="nav-item nav-link active fs-6" href="/library" (click)="isMenuCollapsed = true"
+					<a class="nav-item nav-link active fs-6 text-white" href="/library" (click)="isMenuCollapsed = true"
 						*ngIf="isProfessor">Biblioteca</a>
 				</li>
 				<li class="nav-item" *ngIf="isStudent">
-					<a class="nav-item nav-link fs-6" href="/student/profile" (click)="isMenuCollapsed = true"
+					<a class="nav-item nav-link fs-6 text-white" href="/student/profile" (click)="isMenuCollapsed = true"
 						>Perfil</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-item nav-link fs-6" href="/test" (click)="isMenuCollapsed = true">Test</a>
+					<a class="nav-item nav-link fs-6 text-white" href="/test" (click)="isMenuCollapsed = true">Test</a>
 				</li>
 				<li class="nav-item ">
 					<a class="nav-item nav-link fs-6" href="/login" (click)="isMenuCollapsed = true"
 						*ngIf="!user">Login</a>
 
-					<button class="nav-item nav-link fs-6" mat-raised-button (click)="logout()"
+					<button class="nav-item nav-link fs-6" color="primary" mat-raised-button (click)="logout()"
 						*ngIf="user">Logout</button>
 				</li>
 			</ul>
