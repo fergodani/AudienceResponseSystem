@@ -1,16 +1,14 @@
 import { Request, Response } from 'express';
 import { Prisma } from '@prisma/client'
-import prisma from '../prisma/prismaClient';
 import multiparty = require('multiparty');
 import { parseFile } from 'fast-csv'
 import { Role, User } from '../models/user.model';
 import nodemailer from "nodemailer";
-import Mail from "nodemailer/lib/mailer";
+import prisma from '../prisma/prismaClient';
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { google } = require("googleapis");
-var passGenerator = require('generate-password');
-
+const passGenerator = require('generate-password');
 const oAuth2Client = new google.auth.OAuth2(
     process.env.CLIENT_ID,
     process.env.CLIENT_SECRET,
@@ -72,7 +70,6 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
             length: 10,
             numbers: true
         })
-        console.log(password)
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(password, salt);
         let savedUser: Prisma.userCreateInput
@@ -133,7 +130,6 @@ const login = async (req: Request, res: Response): Promise<Response> => {
         }
 
         const success = await bcrypt.compare(req.body.password, user.password);
-        console.log(req.body.password)
         if (!success) {
             return res.status(400).json({ message: "Usuario o contraseña incorrectos" });
         }

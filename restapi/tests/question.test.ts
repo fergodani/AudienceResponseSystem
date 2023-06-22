@@ -1,8 +1,8 @@
 import { Prisma, role, type } from "@prisma/client"
 import * as sinon from "ts-sinon"
-import prisma from "../prisma/prismaClient"
 import FormData from "form-data";
 import * as fs from 'fs';
+import prisma from "../prisma/prismaClient";
 const MockExpressRequest = require('mock-express-request');
 
 const {

@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { Prisma, state } from '@prisma/client'
 import { UserResult } from '../models/user.model';
 import { AnswerResult } from '../models/answer.model';
-import prisma from '../prisma/prismaClient';
 import { QuestionSurvey } from '../models/question.model';
+import prisma from '../prisma/prismaClient';
 
 const getGameById = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -52,7 +52,6 @@ interface CoursesIds {
 
 const getOpenOrStartedGamesByCourses = async (req: Request<{}, {}, {}, CoursesIds>, res: Response): Promise<Response> => {
     try {
-        console.log(req.query)
         if (!req.query.course) {
             return res.status(500).json({ message: "Se deben de pasar los parámetros correspondientes" })
         }
