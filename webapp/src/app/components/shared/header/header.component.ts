@@ -16,7 +16,8 @@ export class HeaderComponent implements OnInit{
   isMenuCollapsed = true;
   languages = [
     "es",
-    "en"
+    "en",
+    "ast"
   ]
   selectedLanguage = "es"
   selectLanguageForm = new FormGroup({

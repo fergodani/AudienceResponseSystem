@@ -10,7 +10,7 @@ import { Question, Type } from 'src/app/core/models/question.model';
 import { ApiProfessorService } from 'src/app/core/services/professor/api.professor.service';
 
 const MANDATORY_FIELDS = "Debes rellenar los campos obligatorios";
-const NO_CORRECT_ANSWER = "Debe haber al menos una respuesta correcta";
+const NO_CORRECT_ANSWER = "Debe haber una respuesta correcta";
 const LIMIT_TIME = "El tiempo tiene que ser al menos 5 segundos";
 
 @Component({
@@ -51,8 +51,10 @@ export class CreateQuestionComponent implements OnInit{
   opened: boolean = false;
   events: string[] = [];
   answers: Answer[] = [];
-  error: boolean = false;
-  errorMessage: string = '';
+  isRequiredFieldsError: boolean = false;
+  isCorrectAnswerError: boolean = false;
+  isLimitTimeError: boolean = false;
+  isFileError: boolean = false;
   resourceFile: string = '';
   @Input() isEditing = false;
   @Input() questionToEdit: Question | undefined
@@ -71,8 +73,10 @@ export class CreateQuestionComponent implements OnInit{
     ])
   })
 
-  async addAnswers(answers: Answer[]) {
-    this.error = false;
+  async createQuestion(answers: Answer[]) {
+    this.isCorrectAnswerError = false;
+    this.isLimitTimeError = false;
+    this.isRequiredFieldsError = false;
     const question = new Question(
       this.createQuestionForm.value.description!,
       'subject',
@@ -82,21 +86,15 @@ export class CreateQuestionComponent implements OnInit{
       this.resourceFile,
       this.authService.userValue!.id
     );
-    console.log(question.answer_time < 5)
     if (question.description == '' || !this.checkAnswersDescription(answers)) {
-      this.error = true;
-      this.errorMessage = MANDATORY_FIELDS;
+      this.isRequiredFieldsError = true;
       return
     } else if (!this.checkAtLeastOneCorrect(answers)) {
-      this.error = true;
-      this.errorMessage = NO_CORRECT_ANSWER;
+      this.isCorrectAnswerError = true;
       return
     }else if(question.answer_time < 5) {
-      this.error = true;
-      this.errorMessage = LIMIT_TIME;
+      this.isLimitTimeError = true;
       return;
-    } else {
-      this.error = false;
     }
     if (!this.isEditing) {
       this.apiProfessorService
@@ -136,12 +134,9 @@ export class CreateQuestionComponent implements OnInit{
   onFileSelected(event: Event) {
     const file = (<HTMLInputElement>event.target).files![0];
     if (file.type.match(/image\/*/) == null) {
-      this.error = true;
-			this.errorMessage = "Solo puedes subir imágenes";
+      this.isFileError = true;
 			return;
-		} else {
-      this.error = false;
-    }
+		}
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {

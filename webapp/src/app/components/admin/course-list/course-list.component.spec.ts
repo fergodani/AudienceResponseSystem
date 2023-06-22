@@ -11,15 +11,15 @@ import { imports } from '@app/core/services/stubs/imports';
 describe('CourseListComponent', () => {
   let component: CourseListComponent;
   let fixture: ComponentFixture<CourseListComponent>;
-  
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: imports ,
+      imports: imports,
       declarations: [CourseListComponent],
       providers: [
-        { provide: ApiService, useClass: ApiServiceStub},
-        { provide: Router},
-        { provide: ApiAuthService, useClass: AuthServiceStub}
+        { provide: ApiService, useClass: ApiServiceStub },
+        { provide: Router },
+        { provide: ApiAuthService, useClass: AuthServiceStub }
       ]
     }).compileComponents()
   })
@@ -29,14 +29,14 @@ describe('CourseListComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   })
-  
+
   it('should fetch courses on initialization', () => {
     expect(component.courses.length).toBeGreaterThan(0);
     expect(component.isLoading).toBe(false);
-   
+
   });
 
-  it("should show the coursesCourseListComponent", () => {
+  it("should show the courses", () => {
     const compiled = fixture.debugElement;
     expect(compiled.nativeElement.innerHTML).toContain("testCourse1");
     expect(compiled.nativeElement.innerHTML).toContain("descriptionTest1");
@@ -56,13 +56,13 @@ describe('CourseListComponent', () => {
     expect(component.courses.length).toBe(1)
   })
 
-  it('should detect file input change', inject([ApiService], (apiServiceStub: ApiServiceStub) => { 
+  it('should detect file input change', inject([ApiService], (apiServiceStub: ApiServiceStub) => {
     spyOn(apiServiceStub, 'uploadCourseFile')
     const dataTransfer = new DataTransfer()
 
-    dataTransfer.items.add(new File([''], 'test-file.csv', {type: "text/csv"}))
+    dataTransfer.items.add(new File([''], 'test-file.csv', { type: "text/csv" }))
 
-    const inputDebugEl  = fixture.debugElement.query(By.css('input[type=file]'));
+    const inputDebugEl = fixture.debugElement.query(By.css('input[type=file]'));
     inputDebugEl.nativeElement.files = dataTransfer.files;
 
     inputDebugEl.nativeElement.dispatchEvent(new InputEvent('change'));
@@ -72,15 +72,15 @@ describe('CourseListComponent', () => {
     expect(component.fileName).toBeTruthy()
     expect(component.fileName).toBe('test-file.csv')
     expect(apiServiceStub.uploadCourseFile).toHaveBeenCalled()
-    
-}));
 
-it('file change event should arrive in handler', () => {
+  }));
+
+  it('file change event should arrive in handler', () => {
     const element = fixture.nativeElement;
     const input = element.querySelector('#file');
     spyOn(component, 'onFileSelected');
     input.dispatchEvent(new Event('change'));
     fixture.detectChanges();
     expect(component.onFileSelected).toHaveBeenCalled();
-});
+  });
 });

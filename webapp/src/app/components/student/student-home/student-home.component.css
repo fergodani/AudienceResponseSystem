@@ -43,6 +43,11 @@ a:hover::before {
     width: 100%;
 }
 
+.course {
+    background-color: #e3e3e3;
+    border-radius: 15px;
+    padding: 0.5em;
+}
 
 @media (max-width: 768px) {
     .home {

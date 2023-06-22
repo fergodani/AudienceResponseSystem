@@ -8,7 +8,7 @@ import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { AuthServiceStub } from '@app/core/services/stubs/api.auth.service.mock';
 import { Router } from '@angular/router';
 
-describe('CreateUserFormComponent', () => {
+describe('LoginFormComponent', () => {
   let component: LoginFormComponent;
   let fixture: ComponentFixture<LoginFormComponent>;
   

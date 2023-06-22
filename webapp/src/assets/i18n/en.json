@@ -55,14 +55,20 @@
             "UPDATE_QUESTION": "Update question",
             "MULTIOPTION": "Multioption",
             "TRUE_FALSE": "True or false",
-            "SHORT": "Short answer"
+            "SHORT": "Short answer",
+            "MANDATORY_FIELDS": "You must fill in the required fields",
+            "NO_CORRECT_ANSWER": "There must be a correct answer",
+            "LIMIT_TIME_ERROR": "The time has to be at least 5 seconds",
+            "FILE_ERROR": "You can only upload images"
         },
         "CREATE_SURVEY": {
             "QUESTIONS": "Questions",
             "ATTACH_RESOURCE": "Attach resource",
             "TITLE": "Title",
             "SAVE": "Save",
-            "DELETE": "Delete"
+            "DELETE": "Delete",
+            "INVALID_TITLE": "You must introduce a title",
+            "EMPTY_QUESTIONS": "There must be at least one question"
         },
         "COURSE_DETAILS": {
             "SURVEYS": "Surveys",
@@ -174,6 +180,7 @@
         "PROFILE": "Profile",
         "LOGOUT": "Logout",
         "SPANISH": "Spanish",
-        "ENGLISH": "English"
+        "ENGLISH": "English",
+        "ASTURIANU": "Asturianu"
     }
 }

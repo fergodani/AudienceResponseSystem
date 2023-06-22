@@ -7,6 +7,7 @@ import { Question } from '@app/core/models/question.model';
 import { Survey } from '@app/core/models/survey.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-create-survey',
@@ -18,7 +19,8 @@ export class CreateSurveyComponent implements OnInit{
   constructor(
     private authService: ApiAuthService,
     private apiProfessorService: ApiProfessorService,
-    private router: Router
+    private router: Router,
+    private translateService: TranslateService
     ) {}
 
   ngOnInit(): void {
@@ -37,6 +39,8 @@ export class CreateSurveyComponent implements OnInit{
   title = new FormControl('', [
     Validators.required
   ]);
+  isTitleError = false;
+  isQuestionsError = false;
 
   @Input() isEditing = false
   @Input() surveyToEdit: Survey | undefined
@@ -73,9 +77,18 @@ export class CreateSurveyComponent implements OnInit{
   }
 
   onSurveySubmit() {
-    if (this.title.invalid || this.questionsAdded.length == 0) {
+    if (this.title.invalid) {
+      this.isQuestionsError = false;
+      this.isTitleError = true
       return;
     }
+    if (this.questionsAdded.length == 0) {
+      this.isQuestionsError = true;
+      this.isTitleError = false
+      return;
+    }
+    this.isQuestionsError = false;
+      this.isTitleError = false
     for(let i = 0; i < this.questionsAdded.length ; i++){
       this.questionsAdded[i].position = i;
     }
@@ -98,7 +111,7 @@ export class CreateSurveyComponent implements OnInit{
         
       })
     }
-    this.router.navigate(['/library'])
+    this.backToLibrary()
   }
 
   async backToLibrary() {

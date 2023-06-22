@@ -55,14 +55,20 @@
             "UPDATE_QUESTION": "Actualizar pregunta",
             "MULTIOPTION": "Multiopción",
             "TRUE_FALSE": "Verdadero o falso",
-            "SHORT": "Respuesta corta"
+            "SHORT": "Respuesta corta",
+            "MANDATORY_FIELDS": "Debes rellenar los campos obligatorios",
+            "NO_CORRECT_ANSWER": "Debe haber una respuesta correcta",
+            "LIMIT_TIME_ERROR": "El tiempo tiene que ser al menos 5 segundos",
+            "FILE_ERROR": "Solo puedes subir imágenes"
         },
         "CREATE_SURVEY": {
             "QUESTIONS": "Preguntas",
             "ATTACH_RESOURCE": "Incorpora un recurso",
             "TITLE": "Título",
             "SAVE": "Guardar",
-            "DELETE": "Eliminar"
+            "DELETE": "Eliminar",
+            "INVALID_TITLE": "Debes completar el título",
+            "EMPTY_QUESTIONS": "Debe de haber al menos una pregunta"
         },
         "COURSE_DETAILS": {
             "SURVEYS": "Cuestionarios",
@@ -175,6 +181,7 @@
         "LOGOUT": "Cerrar sesión",
         "LOGIN": "Iniciar sesión",
         "SPANISH": "Español",
-        "ENGLISH": "Inglés"
+        "ENGLISH": "Inglés",
+        "ASTURIANU": "Asturianu"
     }
 }

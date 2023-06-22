@@ -44,13 +44,13 @@ export class CourseProfessorDetailsComponent {
           .subscribe(users => this.users = users)
         this.apiProfessorService
           .getSurveysByCourse(this.course.id)
-          .subscribe(surveys => {this.surveys = surveys})
+          .subscribe(surveys => { this.surveys = surveys })
         this.apiProfessorService
           .getQuestionsByCourse(this.course.id)
-          .subscribe(questions => {this.questions = questions})
+          .subscribe(questions => { this.questions = questions })
         this.apiProfessorService
-        .getGamesByCourse(this.course.id)
-        .subscribe(games =>{this.games = games})
+          .getGamesByCourse(this.course.id)
+          .subscribe(games => { this.games = games })
       })
   }
 
@@ -73,7 +73,7 @@ export class CourseProfessorDetailsComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result == undefined)
+      if (result == undefined)
         return
       if (result.length != 0) {
         this.addUserToCourse(result);
@@ -96,7 +96,7 @@ export class CourseProfessorDetailsComponent {
       data: this.surveys,
     });
     dialogRef.afterClosed().subscribe(result => {
-      if(result == undefined)
+      if (result == undefined)
         return
       if (result.length != 0) {
         this.addSurveyToCourse(result)
@@ -120,7 +120,7 @@ export class CourseProfessorDetailsComponent {
       data: this.questions,
     });
     dialogRef.afterClosed().subscribe(result => {
-      if(result == undefined)
+      if (result == undefined)
         return
       if (result.length != 0) {
         this.addQuestionsToCourse(result)
@@ -135,40 +135,40 @@ export class CourseProfessorDetailsComponent {
       questions: questionsToAdd
     }
     this.apiService
-    .addQuestionToCourse(questionToCourse)
-    .subscribe((msg: Message) => alert(msg.message))
+      .addQuestionToCourse(questionToCourse)
+      .subscribe((msg: Message) => alert(msg.message))
   }
 
   openCreateOnlineGameDialog(survey_id: number): void {
     this.dialog.open(CreateGameDialogComponent, {
-      data: { course_id: this.course.id, survey_id}
+      data: { course_id: this.course.id, survey_id }
     });
   }
 
   deleteSurveyFromCourse(survey: Survey) {
     this.apiProfessorService
-    .deleteSurveyFromCourse(this.course.id, survey.id!)
-    .subscribe((msg: Message) =>{
-      alert(msg.message)
-      this.surveys = this.surveys.filter((s) => s.id != survey.id)
-    })
+      .deleteSurveyFromCourse(this.course.id, survey.id!)
+      .subscribe((msg: Message) => {
+        alert(msg.message)
+        this.surveys = this.surveys.filter((s) => s.id != survey.id)
+      })
   }
 
   deleteQuestionFromCourse(question: Question) {
     this.apiProfessorService
-    .deleteQuestionFromCourse(this.course.id, question.id)
-    .subscribe((msg: Message) =>{
-      alert(msg.message)
-      this.questions = this.questions.filter((q) => q.id != question.id)
-    })
+      .deleteQuestionFromCourse(this.course.id, question.id)
+      .subscribe((msg: Message) => {
+        alert(msg.message)
+        this.questions = this.questions.filter((q) => q.id != question.id)
+      })
   }
 
   deleteUserFromCourse(user: User) {
     this.apiProfessorService
-    .deleteUserFromCourse(this.course.id, user.id)
-    .subscribe((msg: Message) =>{
-      alert(msg.message)
-      this.users = this.users.filter((u) => u.id != user.id)
-    })
+      .deleteUserFromCourse(this.course.id, user.id)
+      .subscribe((msg: Message) => {
+        alert(msg.message)
+        this.users = this.users.filter((u) => u.id != user.id)
+      })
   }
 }

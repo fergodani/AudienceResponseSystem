@@ -1,0 +1,187 @@
+{
+    "ADMIN": {
+        "COURSE_LIST": {
+            "COURSE_LIST": "Llista de cursos",
+            "DELETE": "Esaniciar",
+            "NEW_COURSE": "Nuevu cursu",
+            "IMPORT_COURSE": "Importar cursos:"
+        },
+        "CREATE_COURSE": {
+            "CREATE_NEW_COURSE": "Crear nuevu cursu",
+            "COURSE_NAME": "Nome del cursu",
+            "DESCRIPTION": "Descripción:",
+            "ACCEPT": "Aceptar"
+        },
+        "USER_LIST": {
+            "USER_LIST": "Llista d'usuarios",
+            "DELETE": "Esaniciar",
+            "NEW_USER": "Nuevu usuariu",
+            "IMPORT_USER": "Importar usuarios:"
+        },
+        "CREATE_USER": {
+            "CREATE_NEW_USER": "Crear nuevu usuariu",
+            "USER_NAME": "Nombe del usuariu:",
+            "USER_ROLE": "Rol:",
+            "ACCEPT": "Aceptar",
+            "STUDENT_ROLE": "Alumnu",
+            "PROFESSOR_ROLE": "Profesor"
+        }
+    },
+    "PROFESSOR": {
+        "LIBRARY": {
+            "COURSES": "Cursos",
+            "SURVEYS": "Cuestionarios",
+            "QUESTIONS": "Entrugues"
+        },
+        "QUESTION_LIST": {
+            "EDIT": "Editar",
+            "DELETE": "Esaniciar",
+            "NEW_QUESTION": "Nueva entruga",
+            "IMPORT": "Importar",
+            "EXPORT": "Exportar"
+        },
+        "SURVEY_LIST": {
+            "NEW_SURVEY": "Nuevu cuestionariu"
+        },
+        "CREATE_QUESTION": {
+            "OPTIONS": "Opciones",
+            "QUESTION_TYPE": "Tipu d'entruga",
+            "TIME_LIMIT": "Tiempu llende",
+            "QUESTION": "Entruga",
+            "ATTACH_RESOURCE": "Incorpora un recursu",
+            "ANSWER": "Respuesta",
+            "OTHER_ANSWERS_ACCEPTED": "Otres entrugues aceptaes",
+            "CREATE_QUESTION": "Crear entruga",
+            "UPDATE_QUESTION": "Actualizar entruga",
+            "MULTIOPTION": "Multiopción",
+            "TRUE_FALSE": "Verdaderu o falsu",
+            "SHORT": "Respuesta curtia",
+            "MANDATORY_FIELDS": "Tienes de rellenar los campos obligatorios",
+            "NO_CORRECT_ANSWER": "Tien de haber una respuesta correcta",
+            "LIMIT_TIME_ERROR": "El tiempu tien que ser siquier 5 segundos",
+            "FILE_ERROR": "Solo puedes xubir imaxes"
+        },
+        "CREATE_SURVEY": {
+            "QUESTIONS": "Entrugues",
+            "ATTACH_RESOURCE": "Incorpora un recursu",
+            "TITLE": "Títulu",
+            "SAVE": "Guardar",
+            "DELETE": "Esaniciar",
+            "INVALID_TITLE": "Tienes de completar el títulu",
+            "EMPTY_QUESTIONS": "Debe d'haber siquier una entruga"
+        },
+        "COURSE_DETAILS": {
+            "SURVEYS": "Cuestionarios",
+            "QUESTIONS": "Entrugues",
+            "STUDENTS": "Alumnos",
+            "GAMES": "Xuegos",
+            "ADD_SURVEYS": "Añedir cuestionarios",
+            "PLAY": "Xugar",
+            "DELETE_FROM_COURSE": "Esaniciar del cursu",
+            "ADD_QUESTIONS": "Añedir entrugues",
+            "ADD_STUDENTS": "Añedir alumnos",
+            "LAST_SURVEYS_PLAYED": "Últimos cuestionarios xugaos"
+        },
+        "GAME_DETAILS": {
+            "STUDENT": "Alumno",
+            "SCORE": "Puntuación",
+            "CORRECT_QUESTIONS": "Entrugues acertaes",
+            "WRONG_QUESTIONS": "Preguntas falladas",
+            "TOTAL_QUESTIONS": "Entrugues fallaes",
+            "CAPTION": "Resultancies de los cuestionarios xugaos",
+            "GO_BACK": "Volver"
+        },
+        "CREATE_GAME_DIALOG": {
+            "CREATE_ONLINE_GAME": "Crear xuegu en llínea",
+            "SCORE_TYPE": "Tipo de puntuación",
+            "SHOW_QUESTIONS": "Tipo de puntuación",
+            "CANCEL": "Cancelar",
+            "ACCEPT": "Aceptar"
+        },
+        "QUESTION_COURSE_DIALOG": {
+            "QUESTION_LIST": "Lista de preguntas",
+            "CANCEL": "Atayar",
+            "ACCEPT": "Aceptar"
+        },
+        "SURVEY_COURSE_DIALOG": {
+            "SURVEY_LIST": "Llista de cuestionarios",
+            "CANCEL": "Atayar",
+            "ACCEPT": "Aceptar"
+        },
+        "STUDENT_COURSE_DIALOG": {
+            "STUDENT_LIST": "Llista de alumnos",
+            "CANCEL": "Atayar",
+            "ACCEPT": "Aceptar"
+        },
+        "HOST_GAME": {
+            "USERS_CONNECTED": "Usuarios conectaos",
+            "START": "Empezar",
+            "ANSWERS": "Respuestas",
+            "WRITE_ANSWER": "Escribe la respuesta",
+            "CORRECT_ANSWER": "La respuesta correcta ye:",
+            "NEXT": "Siguiente",
+            "GAME_FINISHED": "Xuegu termináu",
+            "LEAVE": "Salir"
+        }
+    },
+    "STUDENT": {
+        "HOME": {
+            "MY_COURSES": "Los mios cursos",
+            "OPEN_SURVEYS": "Cuestionarios abiertos",
+            "WAITING_FOR_SURVEYS": "Esperando cuestionarios...",
+            "ANY_COURSES": "Inda nun foi asignáu a nengún cursu"
+        },
+        "COURSE_DETAILS": {
+            "SURVEY": "Cuestionario",
+            "SCORE": "Puntuación",
+            "CORRECT_QUESTIONS": "Entrugues acertaes",
+            "WRONG_QUESTIONS": "Entrugues fallaes",
+            "TOTAL_QUESTIONS": "Total de entrugues",
+            "CAPTION": "Resultancies de los cuestionarios xugaos"
+        },
+        "GAME_REVISION": {
+            "SURVEY": "Cuestionariu:",
+            "CORRECT_QUESTIONS": "Entrugues acertaes:",
+            "WRONG_QUESTIONS": "Entrugues fallaes:",
+            "UNANSWERED_QUESTIONS": "Entrugues ensin contestar:",
+            "END_REVISION": "Rematar revisión",
+            "YOUR_ANSWER": "La so respuesta:"
+        },
+        "PROFILE": {
+            "CHANGE_PASSWORD": "Modificar contraseña",
+            "ACTUAL_PASSWORD": "Contraseña actua",
+            "NEW_PASSWORD": "Contraseña nueva",
+            "LAST_GAMES": "Últimos cuestionarios xugaos",
+            "SCORE": "Puntuación:"
+        },
+        "GAME": {
+            "LOOK_AT_YOUR_NAME": "Mira'l to nome na pantalla del profesor",
+            "WRITE_ANSWER": "Escribe la respuesta",
+            "ANSWER": "Respuesta",
+            "ACCEPT": "Aceptar",
+            "CORRECT": "Correctu",
+            "INCORRECT": "Incorrectu",
+            "SCORE": "Puntuación:",
+            "GAME_FINISHED": "Xuegu termináu",
+            "LEAVE": "Salir"
+        }
+    },
+    "LOGIN": {
+        "LOGIN": "Empecipiar sesión",
+        "USER": "Usuariu",
+        "PASSWORD": "Contraseña",
+        "ACCEPT": "Aceptar"
+    },
+    "HEADER": {
+        "HOME": "Entamu",
+        "USERS": "Usuarios", 
+        "COURSES": "Cursos",
+        "LIBRARY": "Biblioteca",
+        "PROFILE": "Perfil",
+        "LOGOUT": "Cerrar sesión",
+        "LOGIN": "Empecipiar sesión",
+        "SPANISH": "Español",
+        "ENGLISH": "Inglés",
+        "ASTURIANU": "Asturianu"
+    }
+}
