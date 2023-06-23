@@ -21,6 +21,6 @@ jobs:
               with:
                 node-version: ${{ matrix.node-version }}
             - run: npm ci --legacy-peer-deps
-            - run: npm test:prod
+            - run: npm run test:prod
             
     
