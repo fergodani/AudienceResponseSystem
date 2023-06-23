@@ -7,20 +7,39 @@ on:
         branches:
             - main
 jobs:
-    unit-test-webapp:
+    unit-test-restapo:
         runs-on: ubuntu-latest
+
+        services:
+            postgres:
+                image: postgres
+
+                env:
+                    POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD }}
+                    POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+                    POSTGRES_DB: ${{secrets.POSTGRES_DB}}
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - 5432:5432
         strategy:
-          matrix:
-            node-version: [18.x]
+            matrix:
+              node-version: [18.x]
         defaults:
-            run:
-                working-directory: webapp
+              run:
+                  working-directory: restapi
         steps:
             - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
                 node-version: ${{ matrix.node-version }}
             - run: npm ci --legacy-peer-deps
-            - run: npm run test:prod
+            - run: npm run migrateDb
+            - run: npm test
+
+
             
     
