@@ -9,6 +9,15 @@ on:
 jobs:
     unit-test-restapo:
         runs-on: ubuntu-latest
+        env:
+            PRODUCTION_DATABASE_URL: ${{secrets.POSTGRES_PASSWORD }}
+            SECRET: ${{secrets.POSTGRES_PASSWORD }}
+            FILEPATH: ${{secrets.POSTGRES_PASSWORD }}
+            EMAIL: ${{secrets.POSTGRES_PASSWORD }}
+            REFRESH_TOKEN: ${{secrets.POSTGRES_PASSWORD }}
+            CLIENT_ID: ${{secrets.POSTGRES_PASSWORD }}
+            CLIENT_SECRET: ${{secrets.POSTGRES_PASSWORD }}
+            REDIRECT_URI: ${{secrets.POSTGRES_PASSWORD }}
 
         services:
             postgres:
