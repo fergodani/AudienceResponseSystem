@@ -10,14 +10,14 @@ jobs:
     unit-test-restapo:
         runs-on: ubuntu-latest
         env:
-            PRODUCTION_DATABASE_URL: ${{secrets.POSTGRES_PASSWORD }}
-            SECRET: ${{secrets.POSTGRES_PASSWORD }}
-            FILEPATH: ${{secrets.POSTGRES_PASSWORD }}
-            EMAIL: ${{secrets.POSTGRES_PASSWORD }}
-            REFRESH_TOKEN: ${{secrets.POSTGRES_PASSWORD }}
-            CLIENT_ID: ${{secrets.POSTGRES_PASSWORD }}
-            CLIENT_SECRET: ${{secrets.POSTGRES_PASSWORD }}
-            REDIRECT_URI: ${{secrets.POSTGRES_PASSWORD }}
+            PRODUCTION_DATABASE_URL: ${{secrets.PRODUCTION_DATABASE_URL }}
+            SECRET: ${{secrets.SECRET }}
+            FILEPATH: ${{secrets.FILEPATH }}
+            EMAIL: ${{secrets.EMAIL }}
+            REFRESH_TOKEN: ${{secrets.REFRESH_TOKEN }}
+            CLIENT_ID: ${{secrets.CLIENT_ID }}
+            CLIENT_SECRET: ${{secrets.CLIENT_SECRET }}
+            REDIRECT_URI: ${{secrets.REDIRECT_URI }}
 
         services:
             postgres:
