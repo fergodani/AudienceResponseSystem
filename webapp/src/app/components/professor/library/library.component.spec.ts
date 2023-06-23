@@ -19,8 +19,8 @@ describe('LibraryComponent', () => {
       imports: imports,
       declarations: [LibraryComponent, SurveyListComponent, QuestionListComponent, CourseListComponent],
       providers: [
-        {provide: ApiService, userClass: ApiServiceStub},
-        {provide: ApiProfessorService, userClass: ApiProfessorServiceStub}
+        {provide: ApiService, useClass: ApiServiceStub},
+        {provide: ApiProfessorService, useClass: ApiProfessorServiceStub}
       ],
       teardown: {destroyAfterEach: false}
     }).compileComponents()
