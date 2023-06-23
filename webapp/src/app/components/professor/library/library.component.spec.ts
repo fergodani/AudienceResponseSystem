@@ -5,6 +5,10 @@ import { imports } from '@app/core/services/stubs/imports';
 import { SurveyListComponent } from '../survey-list/survey-list.component';
 import { QuestionListComponent } from '../question-list/question-list.component';
 import { CourseListComponent } from '@app/components/admin/course-list/course-list.component';
+import { ApiServiceStub } from '@app/core/services/stubs/api.admin.service.mock';
+import { ApiService } from '@app/core/services/admin/api.admin.service';
+import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
+import { ApiProfessorServiceStub } from '@app/core/services/stubs/api.professor.service.mock';
 
 describe('LibraryComponent', () => {
   let component: LibraryComponent;
@@ -15,6 +19,8 @@ describe('LibraryComponent', () => {
       imports: imports,
       declarations: [LibraryComponent, SurveyListComponent, QuestionListComponent, CourseListComponent],
       providers: [
+        {provide: ApiService, userClass: ApiServiceStub},
+        {provide: ApiProfessorService, userClass: ApiProfessorServiceStub}
       ],
       teardown: {destroyAfterEach: false}
     }).compileComponents()
