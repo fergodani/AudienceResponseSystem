@@ -1,0 +1,4 @@
+descripcion,tema,tipo,tiempo,respuesta1,correcta1,respuesta2,correcta2,respuesta3,correcta3,respuesta4,correcta4
+test1,test1,multioption,10,respuesta1,true,respuesta2,false,respuesta3,false,respuesta4,false
+test2,test2,true_false,10,respuesta1,true,respuesta2,false
+test3,test3,short,10,respuesta1,true,respuesta2,true
