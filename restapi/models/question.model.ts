@@ -7,7 +7,7 @@ export interface Question{
     subject: string;
     type: string;
     answer_time: number;
-    answers: Answer[] | answer[];
+    answers: Answer[];
     resource?: string;
     user_creator_id?: number;
     position?: number;

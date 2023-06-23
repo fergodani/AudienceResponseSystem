@@ -1,0 +1,22 @@
+.mat-column-score {
+    text-align: center;
+}
+
+.mat-column-correct_answers {
+    text-align: center;
+}
+
+.mat-column-wrong_answers {
+    text-align: center;
+}
+
+.mat-column-total_answers {
+    text-align: center;
+}
+
+.mat-column-user {
+    width: 32px;
+    border-right: 1px solid currentColor;
+    padding-right: 24px;
+    text-align: center;
+}

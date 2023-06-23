@@ -1,0 +1,98 @@
+<div class="d-flex flex-column gap-4 mt-3">
+    <div class="encabezado">
+        <div class="courseImageContainer ms-4 me-4">
+            <img src="../../../../assets/default-placeholder.png" alt="Imagen curso" />
+        </div>
+        <div class="d-flex flex-column ms-2 me-2">
+            <h2 class="fs-1 fw-bold">{{ course.name }}</h2>
+            <h3 class="mb-5">{{ course.description }}</h3>
+            <div class="d-flex gap-5 flex-row flex-wrap justify-content-between resumen">
+                <div class="d-flex flex-column ">
+                    <h4 class="fs-5">{{"PROFESSOR.COURSE_DETAILS.SURVEYS" | translate }}</h4>
+                    <h5 class="text-center fs-6">{{ surveys.length }}</h5>
+                </div>
+                <div class="d-flex flex-column ">
+                    <h4 class="fs-5">{{"PROFESSOR.COURSE_DETAILS.QUESTIONS" | translate }}</h4>
+                    <h5 class="text-center fs-6">{{ questions.length }}</h5>
+                </div>
+                <div class="d-flex flex-column ">
+                    <h4 class="fs-5">{{"PROFESSOR.COURSE_DETAILS.STUDENTS" | translate }}</h4>
+                    <h5 class="text-center fs-6">{{ users.length }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contenido ms-4 me-4">
+        <mat-button-toggle-group class="d-flex gap-3 flex-column bg-light w-auto h-100 botones" name="fontStyle"
+            aria-label="Font Style">
+            <mat-button-toggle [checked]="true" class="fs-5 "
+                (click)="changeState(stateType.surveys)">{{"PROFESSOR.COURSE_DETAILS.SURVEYS" | translate }}</mat-button-toggle>
+            <mat-button-toggle class="fs-5" (click)="changeState(stateType.questions)">{{"PROFESSOR.COURSE_DETAILS.QUESTIONS" | translate }}</mat-button-toggle>
+            <mat-button-toggle class="fs-5" (click)="changeState(stateType.users)">{{"PROFESSOR.COURSE_DETAILS.STUDENTS" | translate }}</mat-button-toggle>
+            <mat-button-toggle class="fs-5" (click)="changeState(stateType.games)">{{"PROFESSOR.COURSE_DETAILS.GAMES" | translate }}</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <div class="w-100">
+            <div *ngIf="state == stateType.surveys">
+                <button mat-raised-button (click)="openSurveyDialog()">{{"PROFESSOR.COURSE_DETAILS.ADD_SURVEYS" | translate }}</button>
+                <div class="d-flex gap-4  align-items-center flex-wrap mt-2 bg-light" *ngFor="let survey of surveys">
+                    <div class="imageContainer">
+                        <img [src]="survey.resource != '' ? survey.resource : '../../../assets/default-placeholder.png'"
+                            alt="Question image source" />
+                    </div>
+                    <div class="d-flex flex-column align-items-center">
+                        <h2 class=""><strong>{{ survey.title }}</strong></h2>
+                        <button class="" (click)="openCreateOnlineGameDialog(survey.id!)" mat-button
+                            color="primary">Jugar</button>
+                    </div>
+
+                    <button mat-button type="button" class="btn btn-danger "
+                        (click)="deleteSurveyFromCourse(survey)">{{"PROFESSOR.COURSE_DETAILS.DELETE_FROM_COURSE" | translate }}<mat-icon>delete_forever</mat-icon></button>
+                </div>
+
+            </div>
+            <div *ngIf="state == stateType.questions">
+                <button mat-raised-button (click)="openQuestionDialog()">{{"PROFESSOR.COURSE_DETAILS.ADD_QUESTIONS" | translate }}</button>
+                <mat-expansion-panel class="m-1" *ngFor="let question of questions">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="d-inline-block">
+                            <h5 class="text-truncate">
+                                {{ question.description }}
+                            </h5>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div *ngFor="let answer of question.answers">
+                        <div class="d-flex flex-rowalign-items-center">
+                            <p class="align-self-center text-break w-75">{{ answer.description }}</p>
+                            <mat-icon class="w-auto" [ngStyle]="{'color':'green'}"
+                                *ngIf="answer.is_correct">check</mat-icon>
+                            <mat-icon class="w-auto" [ngStyle]="{'color':'red'}"
+                                *ngIf="!answer.is_correct">clear</mat-icon>
+                        </div>
+                    </div>
+                    <button mat-button type="button" class="btn btn-danger mt-1"
+                        (click)="deleteQuestionFromCourse(question)">{{"PROFESSOR.COURSE_DETAILS.DELETE_FROM_COURSE" | translate }}<mat-icon>delete_forever</mat-icon></button>
+                </mat-expansion-panel>
+
+            </div>
+            <div *ngIf="state == stateType.users">
+                <button mat-raised-button (click)="openUserDialog()">{{"PROFESSOR.COURSE_DETAILS.ADD_STUDENTS" | translate }}</button>
+                <div class="d-flex flex-column gap-3" *ngFor="let user of users">
+                    <div class="d-flex flex-row bg-light align-items-center gap-3 border">
+                        <h5 class="mt-3 ps-2">{{ user.username }}</h5>
+                        <button mat-button type="button" class="btn btn-danger"
+                            (click)="deleteUserFromCourse(user)">{{"PROFESSOR.COURSE_DETAILS.DELETE_FROM_COURSE" | translate }}<mat-icon>delete_forever</mat-icon></button>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="state == stateType.games">
+                <h3>{{"PROFESSOR.COURSE_DETAILS.LAST_SURVEYS_PLAYED" | translate }}</h3>
+                <div class="d-flex flex-column gap-3" *ngFor="let game of games">
+                    <div class="d-flex flex-row bg-light align-items-center justify-content-between gap-3 p-1 border">
+                        <h5 class="p-1"><a [routerLink]="['/game/', game.id]">{{ game.survey!.title }}</a></h5>
+                        <h5>{{ game.created_at}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

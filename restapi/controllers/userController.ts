@@ -1,11 +1,20 @@
 import { Request, Response } from 'express';
 import { Prisma } from '@prisma/client'
-import prisma from '../prisma/prismaClient';
 import multiparty = require('multiparty');
 import { parseFile } from 'fast-csv'
 import { Role, User } from '../models/user.model';
+import nodemailer from "nodemailer";
+import prisma from '../prisma/prismaClient';
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { google } = require("googleapis");
+const passGenerator = require('generate-password');
+const oAuth2Client = new google.auth.OAuth2(
+    process.env.CLIENT_ID,
+    process.env.CLIENT_SECRET,
+    process.env.REDIRECT_URI
+);
+oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 
 const getUsers = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -45,7 +54,8 @@ const getUser = async (req: Request, res: Response): Promise<Response> => {
 
 const createUser = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const { username, password, role } = req.body;
+        const { username, role } = req.body;
+        const usernameUpperCase = username.toUpperCase()
         const existingUser = await prisma.user.findUnique({
             where: {
                 username: username,
@@ -55,7 +65,11 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
         if (existingUser) {
             return res.status(400).json({ message: "El usuario ya existe" });
         }
-        // TODO: generar contraseña aleatoria
+
+        let password = passGenerator.generate({
+            length: 10,
+            numbers: true
+        })
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(password, salt);
         let savedUser: Prisma.userCreateInput
@@ -65,13 +79,43 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
             role: role,
         }
         await prisma.user.create({ data: savedUser })
-
+        await sendEmail(usernameUpperCase, password)
         return res.status(200).json({ message: "Usuario creado correctamente" });
 
     } catch (error) {
         return res.status(500).json({ message: "Ha ocurrido un error al crear el usuario" })
     }
 };
+
+async function sendEmail(username: string, password: string) {
+    try {
+    const accessToken = await oAuth2Client.getAccessToken()
+    const transport = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            type: 'OAuth2',
+            user: process.env.EMAIL,
+            clientId: process.env.CLIENT_ID,
+            clientSecret: process.env.CLIENT_SECRET,
+            refreshToken: process.env.REFRESH_TOKEN,
+            accessToken: accessToken.token,
+        },
+    })
+
+    const mailOptions = {
+        from: process.env.EMAIL,
+        to: username + "@uniovi.es",
+        subject: 'Acceso a la aplicación Audience Response System',
+        html: '<p>Para acceder a la aplicación, usa las siguientes credenciales:</p>'
+        + '<p>Usuario: ' + username + "</p>"
+        + '<p>Contraseña: ' + password + '</p>',
+      };
+  
+    await transport.sendMail(mailOptions);
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 const login = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -80,15 +124,16 @@ const login = async (req: Request, res: Response): Promise<Response> => {
                 username: req.body.username,
             },
         })
+        
         if (user == null) {
             return res.status(404).json({ message: "Usuario o contraseña incorrectos" });
         }
 
         const success = await bcrypt.compare(req.body.password, user.password);
-
         if (!success) {
             return res.status(400).json({ message: "Usuario o contraseña incorrectos" });
         }
+
         const userId = user.id;
         const token = jwt.sign({ userId }, process.env.SECRET);
         return res.status(200).json({

@@ -1,0 +1,187 @@
+{
+    "ADMIN": {
+        "COURSE_LIST": {
+            "COURSE_LIST": "Lista de cursos",
+            "DELETE": "Eliminar",
+            "NEW_COURSE": "Nuevo curso",
+            "IMPORT_COURSE": "Importar cursos:"
+        },
+        "CREATE_COURSE": {
+            "CREATE_NEW_COURSE": "Crear nuevo curso",
+            "COURSE_NAME": "Nombre del curso:",
+            "DESCRIPTION": "Descripción:",
+            "ACCEPT": "Aceptar"
+        },
+        "USER_LIST": {
+            "USER_LIST": "Lista de usuarios",
+            "DELETE": "Eliminar",
+            "NEW_USER": "Nuevo usuario",
+            "IMPORT_USER": "Importar usuarios:"
+        },
+        "CREATE_USER": {
+            "CREATE_NEW_USER": "Crear nuevo usuario",
+            "USER_NAME": "Nombre del usuario:",
+            "USER_ROLE": "Rol:",
+            "ACCEPT": "Aceptar",
+            "STUDENT_ROLE": "Alumno",
+            "PROFESSOR_ROLE": "Profesor"
+        }
+    },
+    "PROFESSOR": {
+        "LIBRARY": {
+            "COURSES": "Cursos",
+            "SURVEYS": "Cuestionarios",
+            "QUESTIONS": "Preguntas"
+        },
+        "QUESTION_LIST": {
+            "EDIT": "Editar",
+            "DELETE": "Eliminar",
+            "NEW_QUESTION": "Nueva pregunta",
+            "IMPORT": "Importar",
+            "EXPORT": "Exportar"
+        },
+        "SURVEY_LIST": {
+            "NEW_SURVEY": "Nuevo cuestionario"
+        },
+        "CREATE_QUESTION": {
+            "OPTIONS": "Opciones",
+            "QUESTION_TYPE": "Tipo de pregunta",
+            "TIME_LIMIT": "Tiempo límite",
+            "QUESTION": "Pregunta",
+            "ATTACH_RESOURCE": "Incorpora un recurso",
+            "ANSWER": "Respuesta",
+            "OTHER_ANSWERS_ACCEPTED": "Otras preguntas aceptadas",
+            "CREATE_QUESTION": "Crear pregunta",
+            "UPDATE_QUESTION": "Actualizar pregunta",
+            "MULTIOPTION": "Multiopción",
+            "TRUE_FALSE": "Verdadero o falso",
+            "SHORT": "Respuesta corta",
+            "MANDATORY_FIELDS": "Debes rellenar los campos obligatorios",
+            "NO_CORRECT_ANSWER": "Debe haber una respuesta correcta",
+            "LIMIT_TIME_ERROR": "El tiempo tiene que ser al menos 5 segundos",
+            "FILE_ERROR": "Solo puedes subir imágenes"
+        },
+        "CREATE_SURVEY": {
+            "QUESTIONS": "Preguntas",
+            "ATTACH_RESOURCE": "Incorpora un recurso",
+            "TITLE": "Título",
+            "SAVE": "Guardar",
+            "DELETE": "Eliminar",
+            "INVALID_TITLE": "Debes completar el título",
+            "EMPTY_QUESTIONS": "Debe de haber al menos una pregunta"
+        },
+        "COURSE_DETAILS": {
+            "SURVEYS": "Cuestionarios",
+            "QUESTIONS": "Preguntas",
+            "STUDENTS": "Alumnos",
+            "GAMES": "Juegos",
+            "ADD_SURVEYS": "Añadir cuestionarios",
+            "PLAY": "Jugar",
+            "DELETE_FROM_COURSE": "Eliminar del curso",
+            "ADD_QUESTIONS": "Añadir preguntas",
+            "ADD_STUDENTS": "Añadir alumnos",
+            "LAST_SURVEYS_PLAYED": "Últimos cuestionarios jugados"
+        },
+        "GAME_DETAILS": {
+            "STUDENT": "Alumno",
+            "SCORE": "Puntuación",
+            "CORRECT_QUESTIONS": "Preguntas acertadas",
+            "WRONG_QUESTIONS": "Preguntas falladas",
+            "TOTAL_QUESTIONS": "Total de preguntas",
+            "CAPTION": "Resultados de los cuestionarios jugados",
+            "GO_BACK": "Volver"
+        },
+        "CREATE_GAME_DIALOG": {
+            "CREATE_ONLINE_GAME": "Crear juego en línea",
+            "SCORE_TYPE": "Tipo de puntuación",
+            "SHOW_QUESTIONS": "Mostrar preguntas",
+            "CANCEL": "Cancelar",
+            "ACCEPT": "Aceptar"
+        },
+        "QUESTION_COURSE_DIALOG": {
+            "QUESTION_LIST": "Lista de preguntas",
+            "CANCEL": "Cancelar",
+            "ACCEPT": "Aceptar"
+        },
+        "SURVEY_COURSE_DIALOG": {
+            "SURVEY_LIST": "Lista de cuestionarios",
+            "CANCEL": "Cancelar",
+            "ACCEPT": "Aceptar"
+        },
+        "STUDENT_COURSE_DIALOG": {
+            "STUDENT_LIST": "Lista de alumnos",
+            "CANCEL": "Cancelar",
+            "ACCEPT": "Aceptar"
+        },
+        "HOST_GAME": {
+            "USERS_CONNECTED": "Usuarios conectados",
+            "START": "Empezar",
+            "ANSWERS": "Respuestas",
+            "WRITE_ANSWER": "Escribe la respuesta",
+            "CORRECT_ANSWER": "La respuesta correcta es:",
+            "NEXT": "Siguiente",
+            "GAME_FINISHED": "Juego terminado",
+            "LEAVE": "Salir"
+        }
+    },
+    "STUDENT": {
+        "HOME": {
+            "MY_COURSES": "Mis cursos",
+            "OPEN_SURVEYS": "Cuestionarios abiertos",
+            "WAITING_FOR_SURVEYS": "Esperando cuestionarios...",
+            "ANY_COURSES": "Todavía no ha sido asignado a ningún curso"
+        },
+        "COURSE_DETAILS": {
+            "SURVEY": "Cuestionario",
+            "SCORE": "Puntuación",
+            "CORRECT_QUESTIONS": "Preguntas acertadas",
+            "WRONG_QUESTIONS": "Preguntas falladas",
+            "TOTAL_QUESTIONS": "Total de preguntas",
+            "CAPTION": "Resultados de los cuestionarios jugados"
+        },
+        "GAME_REVISION": {
+            "SURVEY": "Cuestionario:",
+            "CORRECT_QUESTIONS": "Preguntas correctas:",
+            "WRONG_QUESTIONS": "Preguntas falladas:",
+            "UNANSWERED_QUESTIONS": "Preguntas sin contestar:",
+            "END_REVISION": "Finalizar revisión",
+            "YOUR_ANSWER": "Su respuesta:"
+        },
+        "PROFILE": {
+            "CHANGE_PASSWORD": "Modificar contraseña",
+            "ACTUAL_PASSWORD": "Contraseña actual",
+            "NEW_PASSWORD": "Contraseña nueva",
+            "LAST_GAMES": "Últimos cuestionarios jugados",
+            "SCORE": "Puntuación:"
+        },
+        "GAME": {
+            "LOOK_AT_YOUR_NAME": "Mira tu nombre en la pantalla del profesor",
+            "WRITE_ANSWER": "Escribe la respuesta",
+            "ANSWER": "Respuesta",
+            "ACCEPT": "Aceptar",
+            "CORRECT": "Correcto",
+            "INCORRECT": "Incorrecto",
+            "SCORE": "Puntuación:",
+            "GAME_FINISHED": "Juego terminado",
+            "LEAVE": "Salir"
+        }
+    },
+    "LOGIN": {
+        "LOGIN": "Iniciar sesión",
+        "USER": "Usuario",
+        "PASSWORD": "Contraseña",
+        "ACCEPT": "Aceptar"
+    },
+    "HEADER": {
+        "HOME": "Inicio",
+        "USERS": "Usuarios", 
+        "COURSES": "Cursos",
+        "LIBRARY": "Biblioteca",
+        "PROFILE": "Perfil",
+        "LOGOUT": "Cerrar sesión",
+        "LOGIN": "Iniciar sesión",
+        "SPANISH": "Español",
+        "ENGLISH": "Inglés",
+        "ASTURIANU": "Asturianu"
+    }
+}

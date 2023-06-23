@@ -1,0 +1,65 @@
+<mat-drawer-container class="example-container">
+    <mat-drawer #drawer [formGroup]="createQuestionForm">
+        <h2 class="ps-3 pt-3">{{"PROFESSOR.CREATE_QUESTION.OPTIONS" | translate}}</h2>
+        <mat-form-field class="m-3" appearance="fill">
+            <mat-label>{{"PROFESSOR.CREATE_QUESTION.QUESTION_TYPE" | translate}}</mat-label>
+            <mat-select formControlName="type">
+                <mat-option selected [value]="types[0]">{{"PROFESSOR.CREATE_QUESTION.MULTIOPTION" |
+                    translate}}</mat-option>
+                <mat-option [value]="types[1]">{{"PROFESSOR.CREATE_QUESTION.TRUE_FALSE" | translate}}</mat-option>
+                <mat-option [value]="types[2]">{{"PROFESSOR.CREATE_QUESTION.SHORT" | translate}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="m-3" appearance="fill">
+            <mat-label>{{"PROFESSOR.CREATE_QUESTION.TIME_LIMIT" | translate}}</mat-label>
+            <input matInput type="number" formControlName="limitTime" name="given-name">
+        </mat-form-field>
+    </mat-drawer>
+    <mat-drawer-content>
+        <div>
+            <button class="m-3" mat-raised-button (click)="drawer.toggle()">{{"PROFESSOR.CREATE_QUESTION.OPTIONS" |
+                translate}}</button>
+            <div class="d-flex flex-column align-items-center gap-4" [formGroup]="createQuestionForm">
+                <mat-form-field class="w-50">
+                    <mat-label>{{"PROFESSOR.CREATE_QUESTION.QUESTION" | translate}}</mat-label>
+                    <input id="description" matInput formControlName="description">
+                </mat-form-field>
+                <div class="box">
+                    <div class="imageContainer">
+                        <img [src]="resourceFile" *ngIf="resourceFile != ''" alt="Question image source" />
+                    </div>
+                    <p *ngIf="resourceFile == ''">{{"PROFESSOR.CREATE_QUESTION.ATTACH_RESOURCE" | translate}}</p>
+                    <input id="file" type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+
+                    <div class="d-flex gap-2">
+                        <div class="file-upload">
+                            <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                                <mat-icon>attach_file</mat-icon>
+                            </button>
+                        </div>
+                        <button mat-mini-fab color="primary" (click)="removeFile()" *ngIf="resourceFile != ''">
+                            <mat-icon>delete_forever</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="alert alert-danger" role="alert" *ngIf="isRequiredFieldsError">
+                    {{ "PROFESSOR.CREATE_QUESTION.MANDATORY_FIELDS" | translate }}
+                </div>
+                <div class="alert alert-danger" role="alert" *ngIf="isCorrectAnswerError">
+                    {{ "PROFESSOR.CREATE_QUESTION.NO_CORRECT_ANSWER" | translate }}
+                </div>
+                <div class="alert alert-danger" role="alert" *ngIf="isLimitTimeError">
+                    {{ "PROFESSOR.CREATE_QUESTION.LIMIT_TIME_ERROR" | translate }}
+                </div>
+                <div class="alert alert-danger" role="alert" *ngIf="isFileError">
+                    {{ "PROFESSOR.CREATE_QUESTION.FILE_ERROR" | translate }}
+                </div>
+                <app-answers [typeString]="createQuestionForm.value.type!" (answers)="createQuestion($event)"
+                    *ngIf="questionToEdit == undefined"></app-answers>
+                <app-answers [typeString]="createQuestionForm.value.type!" [answersToEdit]='questionToEdit!!.answers'
+                    (answers)="createQuestion($event)" *ngIf="questionToEdit != undefined"></app-answers>
+            </div>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>

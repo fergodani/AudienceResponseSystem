@@ -1,0 +1,81 @@
+<div class="spinner-border text-primary" role="status" *ngIf="isLoading || haveAnswered">
+    <span class="visually-hidden">Loading...</span>
+</div>
+
+<!-- WAITING SCREEN -->
+<div class="d-flex align-items-center justify-content-center" *ngIf="gameSession.state == gameSessionState.not_started">
+    <h2>{{"STUDENT.GAME.LOOK_AT_YOUR_NAME" | translate}}</h2>
+</div>
+
+<!-- QUESTION SCREEN -->
+<div class="d-flex flex-column gap-2 align-items-center" *ngIf="gameSession.state == gameSessionState.is_question_screen
+&& !haveAnswered">
+    <h2 class="bg-light shadow-sm ps-5 pe-5 text-center" *ngIf="gameSession.game.are_questions_visible">{{
+        actualQuestion.description }}</h2>
+    <div class="image-box mb-2" *ngIf="gameSession.game.are_questions_visible && actualQuestion.resource != ''">
+        <div class="imageContainer">
+            <img src="../../assets/testImage.jpg" alt="Question image source" />
+        </div>
+    </div>
+    <div class="grid-container">
+        <button mat-button class="grid-item bg-primary text-center text-white"
+            *ngIf="actualQuestion.type == 'multioption' || actualQuestion.type == 'true_false'"
+            (click)="checkAnswer(actualQuestion.answers[0].id!)">{{
+            actualQuestion.answers[0].description }}</button>
+        <button mat-button class="grid-item bg-danger text-center text-white"
+            *ngIf="actualQuestion.type == 'multioption' || actualQuestion.type == 'true_false'"
+            (click)="checkAnswer(actualQuestion.answers[1].id!)">{{
+            actualQuestion.answers[1].description }}</button>
+        <button mat-button class="grid-item bg-success text-center text-white"
+            *ngIf="actualQuestion.type == 'multioption'"
+            (click)="checkAnswer(actualQuestion.answers[2].id!)">{{
+            actualQuestion.answers[2].description }}</button>
+        <button mat-button class="grid-item bg-warning text-center text-white"
+            *ngIf="actualQuestion.type == 'multioption'"
+            (click)="checkAnswer(actualQuestion.answers[3].id!)">{{
+            actualQuestion.answers[3].description }}</button>
+        
+    </div>
+    <form class="d-flex flex-column align-items-center justify-content-center w-100" *ngIf="actualQuestion.type == 'short'">
+        <div class=" d-flex justify-content-center  align-items-center bg-primary short mb-5">
+            <h3 class="text-center text-white ps-2 pe-2">{{"STUDENT.GAME.WRITE_ANSWER" | translate}}</h3>
+        </div>
+        <mat-form-field  class="example-form">
+            <mat-label>{{"STUDENT.GAME.ANSWER" | translate}}</mat-label>
+            <input matInput  />
+        </mat-form-field>
+        <button id="button-short" mat-raised-button class="bg-primary text-white w-50" (click)="checkShortAnswer()">{{"STUDENT.GAME.ACCEPT" | translate}}</button>
+    </form>
+</div>
+
+<!-- RESULT SCREEN -->
+<div class="d-flex flex-column align-items-center justify-content-center"
+    *ngIf="gameSession.state == gameSessionState.is_question_result">
+    <div class="p-3 mb-2 bg-success text-white w-90 h-90" *ngIf="actualAnswer!.is_correct && haveAnswered">
+        {{"STUDENT.GAME.CORRECT" | translate}}
+    </div>
+    <div class="p-3 mb-2 bg-danger text-white w-90 h-90" *ngIf="!actualAnswer!.is_correct && haveAnswered">
+        {{"STUDENT.GAME.INCORRECT" | translate}}
+    </div>
+    <div class="p-3 mb-2 bg-secondary text-white w-90 h-90" *ngIf="!haveAnswered">
+        {{"STUDENT.GAME.INCORRECT" | translate}}
+    </div>
+</div>
+
+<!-- SCORE SCREEN -->
+<div *ngIf="gameSession.state == gameSessionState.is_leaderboard_screen">
+    <h2>{{"STUDENT.GAME.SCORE" | translate}} {{ result.score }}</h2>
+</div>
+
+<!-- END SCREEN -->
+<div *ngIf="gameSession.state == gameSessionState.is_finished">
+    <h1>{{"STUDENT.GAME.GAME_FINISHED" | translate}}</h1>
+    <button mat-raised-button (click)="leaveGame()">Salir</button>
+</div>
+
+<!-- PREVIEW SCREEN -->
+<div class="d-flex justify-content-center">
+    <div class="question_preview" *ngIf="gameSession.state == gameSessionState.is_preview_screen">
+        <h1>{{ timeLeft }}</h1>
+    </div>
+</div>

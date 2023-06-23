@@ -1,8 +1,0 @@
-<h1 mat-dialog-title>Lista de usuarios</h1>
-<div mat-dialog-content>
-    <app-user-list [isSelecting]="true" [usersAdded]="usersAdded" (userToAdd)="addUser($event)"></app-user-list>
-</div>
-<div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button [mat-dialog-close]="users">Aceptar</button>
-</div>

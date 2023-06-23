@@ -20,14 +20,14 @@ export class ApiStudentService {
   apiUrl = "http://localhost:5000/api"
 
   private handleError(error: HttpErrorResponse) {
+    console.log(error)
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error);
+      console.error('An error occurred:', error);
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong.
-      console.error(
-        `Backend returned code ${error.status}, body was: `, error.error);
+      console.error(error);
     }
     // Return an observable with a user-facing error message.
     return throwError(() => new Error('Something bad happened; please try again later.'));
@@ -42,7 +42,6 @@ export class ApiStudentService {
 
   getOpenOrStartedGamesByCourses(courses: Course[]): Observable<Game[]>{
     const coursesIds = courses.map(c => c.id)
-    console.log(coursesIds)
     return this.http.get<Game[]>(`${this.apiUrl}/game/course/`, {params: {course: coursesIds}})
     .pipe(
       catchError(this.handleError)
@@ -57,7 +56,21 @@ export class ApiStudentService {
   }
 
   getGamesResultsByUser(userId: number): Observable<UserResult[]> {
-    return this.http.get<UserResult[]>(`${this.apiUrl}/game/results/${userId}`)
+    return this.http.get<UserResult[]>(`${this.apiUrl}/game/user/results/${userId}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  getGamesResultsByUserAndCourse(userId: number, courseId: number): Observable<UserResult[]> {
+    return this.http.get<UserResult[]>(`${this.apiUrl}/game/results/user/${userId}/course/${courseId}`)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  getGamesResultByUserAndGame(userId: number, gameId: number): Observable<UserResult> {
+    return this.http.get<UserResult>(`${this.apiUrl}/game/results/user/${userId}/game/${gameId}`)
     .pipe(
       catchError(this.handleError)
     )

@@ -1,3 +1,4 @@
+import { Course } from "./course.model";
 import { Question } from "./question.model";
 import { Survey } from "./survey.model";
 import { User, UserResult } from "./user.model";
@@ -5,13 +6,14 @@ import { User, UserResult } from "./user.model";
 
 export class Game {
 
-    constructor(host_id: number, survey_id: number, type: GameType, state: GameState, point_type: PointsType, are_questions_visible: boolean) {
+    constructor(host_id: number, survey_id: number, type: GameType, state: GameState, point_type: PointsType, are_questions_visible: boolean, course_id: number) {
         this.survey_id = survey_id;
         this.host_id = host_id;
         this.type = type;
         this.state = state;
         this.are_questions_visible = are_questions_visible;
         this.point_type = point_type;
+        this.course_id = course_id
     }
 
     id? :number;
@@ -21,8 +23,11 @@ export class Game {
     state: GameState = GameState.created;
     are_questions_visible: boolean = false;
     point_type: PointsType = PointsType.standard;
+    course_id: number = 0;
+    course?: Course;
     user?: User;
     survey?: Survey;
+    created_at?: string;
 }
 
 export enum GameType {

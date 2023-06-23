@@ -1,14 +1,11 @@
 import { Request, Response } from 'express';
 import { Prisma, type } from '@prisma/client'
-import prisma from '../prisma/prismaClient';
 import { Options, parse } from 'json2csv'
-import { Question, QuestionCsv } from '../models/question.model';
+import { QuestionCsv } from '../models/question.model';
 import multiparty = require('multiparty');
 import { parseFile } from 'fast-csv'
-import * as fs from 'fs';
-import * as path from 'path';
-import * as csv from 'fast-csv';
 import { Answer } from '../models/answer.model';
+import prisma from '../prisma/prismaClient';
 
 const getQuestions = async (req: Request, res: Response): Promise<Response> => {
     try {

@@ -3,18 +3,17 @@ import { Game } from "./game.model";
 
 export class User {
 
-    constructor(username: string, password: string, role: string = 'student', id: number = 0) {
+    constructor(username: string, role: string = 'student', id: number = 0) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.role = role;
     }
 
     id: number = 0;
     username: string = '';
-    password: string = '';
+    password?: string = '';
     role: string = '';
-    roleType: Role = Role.Student;
+    roleType?: Role = Role.Student;
     token?: string;
 }
 
@@ -44,11 +43,13 @@ export enum Role {
 }
 
 export interface UserResult {
-    user: User;
     user_id: number;
     game_id: number;
     game?: Game;
     answer_results: AnswerResult[];
     score: number;
-    mark?: number
+    correct_questions?: number;
+    survey_title?: string;
+    wrong_questions?: number;
+    total_questions?: number;
 }

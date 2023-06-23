@@ -1,0 +1,53 @@
+.mat-column-survey {
+    width: 32px;
+    border-right: 1px solid currentColor;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.mat-column-score {
+    text-align: center;
+}
+
+.mat-column-correct_answers {
+  text-align: center;
+}
+
+.mat-column-wrong_answers {
+  text-align: center;
+}
+
+.mat-column-total_answers {
+  text-align: center;
+}
+
+a {
+  background-image: linear-gradient(to right,
+          #54b3d6,
+          #54b3d6 50%,
+          #000 50%);
+  background-size: 200% 100%;
+  background-position: -100%;
+  display: inline-block;
+  padding: 5px 0;
+  position: relative;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+a:before {
+  content: '';
+  background: #54b3d6;
+  display: block;
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  transition: all 0.3s ease-in-out;
+}
+
+a:hover {
+  background-position: 0;
+}

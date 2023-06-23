@@ -1,0 +1,33 @@
+<div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+    <span class="visually-hidden">Loading...</span>
+</div>
+<div class="me-3 mb-5">
+    <div class="surveys">
+        <mat-card class="example-card pulse" *ngFor="let survey of surveys">
+            <mat-card-header>
+                <mat-card-title>{{survey.title}}</mat-card-title>
+            </mat-card-header>
+            <div class="">
+                <img mat-card-image
+                    [src]="survey.resource != '' ? survey.resource : '../../../assets/default-placeholder.png'"
+                    alt="Question image source" />
+            </div>
+            <mat-card-actions class="d-flex justify-content-center align-items-center">
+                <a class="" [routerLink]="['/survey/edit', survey.id]" *ngIf="!isSelecting">
+                    <button type="button" mat-button>
+                         <mat-icon>edit</mat-icon>
+                    </button>
+                </a>
+                <button mat-button type="button" class="btn btn-danger " (click)="deleteSurvey(survey)"
+                    *ngIf="!isSelecting"><mat-icon>delete_forever</mat-icon></button>
+                <button mat-mini-fab color="primary" class="upload-btn flex-shrink-1 ms-3"
+                    (click)="addSurveyToCourse(survey)" *ngIf="isSelecting && !isInclude(survey)">
+                    <mat-icon>library_add</mat-icon>
+                </button>
+            </mat-card-actions>
+        </mat-card>
+
+    </div>
+    <button class="new mb-5" mat-raised-button (click)="createNewSurvey()" *ngIf="!isSelecting">{{"PROFESSOR.SURVEY_LIST.NEW_SURVEY" | translate}}</button>
+
+</div>

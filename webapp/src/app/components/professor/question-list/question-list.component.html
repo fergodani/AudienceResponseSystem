@@ -1,0 +1,69 @@
+<div class="d-flex justify-content-center">
+    <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+<div class="h-auto ms-3 me-3 mb-5" *ngIf="!isCreatingSurvey && !isSelecting && !isLoading">
+    <mat-expansion-panel class="m-1" *ngFor="let question of questions">
+        <mat-expansion-panel-header>
+            <mat-panel-title class="d-inline-block d-flex">
+                <h5 class="overflow-auto">
+                    {{ question.description }}
+                </h5>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div *ngFor="let answer of question.answers">
+            <div class="d-flex flex-rowalign-items-center">
+                <p class="align-self-center text-break w-75">{{ answer.description }}</p>
+                <mat-icon class="w-auto" [ngStyle]="{'color':'green'}" *ngIf="answer.is_correct">check</mat-icon>
+                <mat-icon class="w-auto" [ngStyle]="{'color':'red'}" *ngIf="!answer.is_correct">clear</mat-icon>
+            </div>
+        </div>
+        <a [routerLink]="['/question/edit', question.id]">
+            <button type="button" mat-raised-button>
+                {{ 'PROFESSOR.QUESTION_LIST.EDIT' | translate }} <mat-icon>edit</mat-icon>
+            </button>
+        </a>
+        <button mat-button type="button" class="btn btn-danger ms-3"
+            (click)="deleteQuestion(question)">{{ 'PROFESSOR.QUESTION_LIST.DELETE' | translate }}<mat-icon>delete_forever</mat-icon></button>
+    </mat-expansion-panel>
+    <button class="m-2" mat-raised-button (click)="createNewQuestion()" *ngIf="!isSelecting">{{ 'PROFESSOR.QUESTION_LIST.NEW_QUESTION' | translate }}</button>
+    <div class="p-2">
+        <input id="file" type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+
+        <div class="file-upload d-flex gap-2 mb-5">
+            <button mat-raised-button color="primary" class="upload-btn" (click)="fileUpload.click()">
+                {{ 'PROFESSOR.QUESTION_LIST.IMPORT' | translate }} <mat-icon>attach_file</mat-icon>
+            </button>
+            <button mat-raised-button color="primary" class="upload-btn" (click)="exportQuestions()">
+                {{ 'PROFESSOR.QUESTION_LIST.EXPORT' | translate }} <mat-icon>cloud_download</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="mb-5" *ngIf="isSelecting">
+    <div class="d-flex gap-5 justify-content-between align-items-center" *ngFor="let question of questions">
+        <div class="border m-2 d-flex flex-row">
+            <div class="d-flex flex-column ps-2">
+                <h5 class="overflow-auto">{{ question.description }}</h5>
+            </div>
+            <button mat-mini-fab color="primary" class="upload-btn ms-3" (click)="addQuestionToCourse(question)"
+                *ngIf="isSelecting && !isInclude(question)">
+                <mat-icon>library_add</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="mb-5" *ngIf="isCreatingSurvey">
+    <div class="d-flex gap-5 justify-content-between align-items-center" *ngFor="let question of questions">
+        <div class="border m-2 d-flex flex-row">
+            <div class="d-flex flex-column ps-2">
+                <h5 class="overflow-auto">{{ question.description }}</h5>
+            </div>
+            <button mat-mini-fab color="primary" class="upload-btn ms-3" (click)="addQuestionToSurvey(question)"
+                *ngIf="isCreatingSurvey">
+                <mat-icon>library_add</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>

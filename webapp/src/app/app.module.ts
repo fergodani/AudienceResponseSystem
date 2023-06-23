@@ -1,54 +1,57 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AdminHomeComponent } from './admin/home/admin-home.component';
-import { HeaderComponent } from './shared/header/header.component';
-import { FooterComponent } from './shared/footer/footer.component';
-import { CreateUserFormComponent } from './admin/create-user-form/create-user-form.component';
+import { HeaderComponent } from './components/shared/header/header.component';
+import { FooterComponent } from './components/shared/footer/footer.component';
+import { CreateUserFormComponent } from './components/admin/create-user-form/create-user-form.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from './core/services/admin/api.admin.service';
-import { CreateCourseFormComponent } from './admin/create-course-form/create-course-form.component';
-import { UserListComponent } from './admin/user-list/user-list.component';
-import { CourseListComponent } from './admin/course-list/course-list.component';
-import { UpdateUserFormComponent } from './admin/update-user-form/update-user-form.component';
-import { UpdateCourseFormComponent } from './admin/update-course-form/update-course-form.component';
+import { CreateCourseFormComponent } from './components/admin/create-course-form/create-course-form.component';
+import { UserListComponent } from './components/admin/user-list/user-list.component';
+import { CourseListComponent } from './components/admin/course-list/course-list.component';
+import { UpdateUserFormComponent } from './components/admin/update-user-form/update-user-form.component';
+import { UpdateCourseFormComponent } from './components/admin/update-course-form/update-course-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatIconModule} from '@angular/material/icon';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatNativeDateModule} from '@angular/material/core';
-import { CreateQuestionComponent } from './professor/create-question/create-question.component';
-import {MaterialExampleModule} from '../material.module';
-import { AnswersComponent } from './professor/create-question/answers/answers.component';
-import { QuestionListComponent } from './professor/question-list/question-list.component';
-import { LoginFormComponent } from './login/login-form/login-form.component';
-import { ProfessorHomeComponent } from './professor/professor-home/professor-home.component';
-import { StudentHomeComponent } from './student/student-home/student-home.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatNativeDateModule } from '@angular/material/core';
+import { CreateQuestionComponent } from './components/professor/create-question/create-question.component'
+import { MaterialExampleModule } from '../material.module';
+import { AnswersComponent } from './components/professor/create-question/answers/answers.component';
+import { QuestionListComponent } from './components/professor/question-list/question-list.component';
+import { LoginFormComponent } from './components/login-form/login-form.component';
+import { StudentHomeComponent } from './components/student/student-home/student-home.component';
 import { JwtInterceptor } from './core/helpers/jwt.interceptor';
 import { ErrorInterceptor } from './core/helpers/error.interceptor';
-import { CreateSurveyComponent } from './professor/create-survey/create-survey.component';
-import { SurveyListComponent } from './professor/survey-list/survey-list.component';
-import { LibraryComponent } from './professor/library/library.component';
-import { CourseDetailsComponent } from './professor/course-details/course-details.component';
-import { LinkUserCourseComponent } from './professor/dialogs/link-user-course/link-user-course.component';
-import { LinkSurveyCourseComponent } from './professor/dialogs/link-survey-course/link-survey-course.component';
-import { LinkQuestionCourseComponent } from './professor/dialogs/link-question-course/link-question-course.component';
-import { HostGameComponent } from './game/host/host-game/host-game.component';
-import { StudentGameComponent } from './game/student/student-game/student-game.component';
-import { HostWaitRoomComponent } from './game/host/host-wait-room/host-wait-room.component';
-import { CreateGameDialogComponent } from './professor/dialogs/create-game-dialog/create-game-dialog.component';
-import { StudentProfileComponent } from './student/student-profile/student-profile.component';
-import { UpdateQuestionComponent } from './professor/update-question/update-question.component';
-import { UpdateSurveyComponent } from './professor/update-survey/update-survey.component';
+import { CreateSurveyComponent } from './components/professor/create-survey/create-survey.component';
+import { SurveyListComponent } from './components/professor/survey-list/survey-list.component';
+import { LibraryComponent } from './components/professor/library/library.component';
+import { CourseProfessorDetailsComponent } from './components/professor/course-details/course-details.component';
+import { LinkUserCourseComponent } from './components/professor/dialogs/link-user-course/link-user-course.component';
+import { LinkSurveyCourseComponent } from './components/professor/dialogs/link-survey-course/link-survey-course.component';
+import { LinkQuestionCourseComponent } from './components/professor/dialogs/link-question-course/link-question-course.component';
+import { HostGameComponent } from './components/professor/host-game/host-game.component';
+import { StudentGameComponent } from './components/student/student-game/student-game.component';
+import { CreateGameDialogComponent } from './components/professor/dialogs/create-game-dialog/create-game-dialog.component';
+import { StudentProfileComponent } from './components/student/student-profile/student-profile.component';
+import { UpdateQuestionComponent } from './components/professor/update-question/update-question.component';
+import { UpdateSurveyComponent } from './components/professor/update-survey/update-survey.component';
+import { ErrorPageComponent } from './components/error-page/error-page.component';
+import { CourseStudentDetailsComponent } from './components/student/course-details/course-details.component';
+import { TestComponent } from './test/test.component';
+import { GameDetailsComponent } from './components/professor/course-details/game-details/game-details.component';
+import { GameRevisionComponent } from './components/student/course-details/game-revision/game-revision.component';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AdminHomeComponent,
     HeaderComponent,
     FooterComponent,
     CreateUserFormComponent,
@@ -61,22 +64,25 @@ import { UpdateSurveyComponent } from './professor/update-survey/update-survey.c
     AnswersComponent,
     QuestionListComponent,
     LoginFormComponent,
-    ProfessorHomeComponent,
     StudentHomeComponent,
     CreateSurveyComponent,
     SurveyListComponent,
     LibraryComponent,
-    CourseDetailsComponent,
+    CourseProfessorDetailsComponent,
+    CourseStudentDetailsComponent,
     LinkUserCourseComponent,
     LinkSurveyCourseComponent,
     LinkQuestionCourseComponent,
     HostGameComponent,
     StudentGameComponent,
-    HostWaitRoomComponent,
     CreateGameDialogComponent,
     StudentProfileComponent,
     UpdateQuestionComponent,
-    UpdateSurveyComponent
+    UpdateSurveyComponent,
+    ErrorPageComponent,
+    TestComponent,
+    GameDetailsComponent,
+    GameRevisionComponent
   ],
   imports: [
     BrowserModule,
@@ -89,13 +95,24 @@ import { UpdateSurveyComponent } from './professor/update-survey/update-survey.c
     MatIconModule,
     MatSidenavModule,
     MatNativeDateModule,
-    MaterialExampleModule
+    MaterialExampleModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [
     ApiService,
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}

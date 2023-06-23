@@ -1,28 +1,31 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CourseListComponent } from './admin/course-list/course-list.component';
-import { CreateCourseFormComponent } from './admin/create-course-form/create-course-form.component';
-import { CreateUserFormComponent } from './admin/create-user-form/create-user-form.component';
-import { AdminHomeComponent } from './admin/home/admin-home.component';
-import { UpdateCourseFormComponent } from './admin/update-course-form/update-course-form.component';
-import { UpdateUserFormComponent } from './admin/update-user-form/update-user-form.component';
-import { UserListComponent } from './admin/user-list/user-list.component';
+import { CourseListComponent } from './components/admin/course-list/course-list.component';
+import { CreateCourseFormComponent } from './components/admin/create-course-form/create-course-form.component';
+import { CreateUserFormComponent } from './components/admin/create-user-form/create-user-form.component';
+import { UpdateCourseFormComponent } from './components/admin/update-course-form/update-course-form.component';
+import { UpdateUserFormComponent } from './components/admin/update-user-form/update-user-form.component';
+import { UserListComponent } from './components/admin/user-list/user-list.component';
 import { AuthGuard } from './core/helpers/auth.guard';
 import { Role } from './core/models/user.model';
-import { HostGameComponent } from './game/host/host-game/host-game.component';
-import { StudentGameComponent } from './game/student/student-game/student-game.component';
-import { LoginFormComponent } from './login/login-form/login-form.component';
-import { CourseDetailsComponent } from './professor/course-details/course-details.component';
-import { CreateQuestionComponent } from './professor/create-question/create-question.component';
-import { CreateSurveyComponent } from './professor/create-survey/create-survey.component';
-import { LibraryComponent } from './professor/library/library.component';
-import { ProfessorHomeComponent } from './professor/professor-home/professor-home.component';
-import { QuestionListComponent } from './professor/question-list/question-list.component';
-import { SurveyListComponent } from './professor/survey-list/survey-list.component';
-import { StudentHomeComponent } from './student/student-home/student-home.component';
-import { StudentProfileComponent } from './student/student-profile/student-profile.component';
-import { UpdateQuestionComponent } from './professor/update-question/update-question.component';
-import { UpdateSurveyComponent } from './professor/update-survey/update-survey.component';
+import { HostGameComponent } from './components/professor/host-game/host-game.component';
+import { StudentGameComponent } from './components/student/student-game/student-game.component';
+import { LoginFormComponent } from './components/login-form/login-form.component';
+import { CourseProfessorDetailsComponent } from './components/professor/course-details/course-details.component';
+import { CreateQuestionComponent } from './components/professor/create-question/create-question.component';
+import { CreateSurveyComponent } from './components/professor/create-survey/create-survey.component';
+import { LibraryComponent } from './components/professor/library/library.component';
+import { QuestionListComponent } from './components/professor/question-list/question-list.component';
+import { SurveyListComponent } from './components/professor/survey-list/survey-list.component';
+import { StudentHomeComponent } from './components/student/student-home/student-home.component';
+import { StudentProfileComponent } from './components/student/student-profile/student-profile.component';
+import { UpdateQuestionComponent } from './components/professor/update-question/update-question.component';
+import { UpdateSurveyComponent } from './components/professor/update-survey/update-survey.component';
+import { ErrorPageComponent } from './components/error-page/error-page.component';
+import { CourseStudentDetailsComponent } from './components/student/course-details/course-details.component';
+import { TestComponent } from './test/test.component';
+import { GameDetailsComponent } from './components/professor/course-details/game-details/game-details.component';
+import { GameRevisionComponent } from './components/student/course-details/game-revision/game-revision.component';
 
 const routes: Routes = [
   {
@@ -55,7 +58,7 @@ const routes: Routes = [
   },
   {
     path: 'course/details/:id', 
-    component: CourseDetailsComponent,
+    component: CourseProfessorDetailsComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Professor]}
   },
@@ -108,6 +111,18 @@ const routes: Routes = [
     data: { roles: [Role.Professor]}
   },
   {
+    path: 'game/:id', 
+    component: GameDetailsComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Professor]}
+  },
+  {
+    path: 'game/revision/:game_id/:user_id', 
+    component: GameRevisionComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Student]}
+  },
+  {
     path: 'survey/edit/:id', 
     component: UpdateSurveyComponent,
     canActivate: [AuthGuard],
@@ -130,6 +145,12 @@ const routes: Routes = [
     data: { roles: [Role.Student]}
   },
   {
+    path: 'student/course/details/:course_id', 
+    component: CourseStudentDetailsComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Student]}
+  },
+  {
     path: 'game/join/:id', 
     component: StudentGameComponent,
     canActivate: [AuthGuard],
@@ -143,18 +164,22 @@ const routes: Routes = [
   },
   {
     path: 'professor/home', 
-    component: ProfessorHomeComponent,
+    component: LibraryComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Professor]}
   },
   {
     path: 'admin/home', 
-    component: AdminHomeComponent,
+    component: UserListComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Admin]}
   },
   {
-    path: '**', component: AdminHomeComponent // TODO: hacer una página de error o redireccionar correctamente
+    path: 'test', 
+    component: TestComponent,
+  },
+  {
+    path: '**', component: ErrorPageComponent 
   }
 ];
 

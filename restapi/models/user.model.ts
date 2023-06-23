@@ -1,13 +1,13 @@
 import { AnswerResult } from "./answer.model";
 import { Game } from "./game.model";
 
-export interface User{
+export interface User {
     id: number;
     username: string;
     password: string;
     role: string;
     roleType: Role;
-    token?:string;
+    token?: string;
 }
 
 export enum Role {
@@ -21,4 +21,7 @@ export interface UserResult {
     game_id: number;
     answer_results: AnswerResult[];
     score: number;
+    total_questions: number;
+    correct_questions: number;
+    wrong_questions: number;
 }

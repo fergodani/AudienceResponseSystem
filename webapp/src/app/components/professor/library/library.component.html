@@ -1,0 +1,15 @@
+<div class="library">
+    <mat-button-toggle-group class="d-flex gap-3 flex-column bg-light w-auto menu" name="fontStyle"
+        aria-label="Font Style">
+        <mat-button-toggle [checked]="true" class="fs-5"
+            (click)="changeState(stateType.courses)">{{ 'PROFESSOR.LIBRARY.COURSES' | translate }}</mat-button-toggle>
+        <mat-button-toggle class="fs-5 " (click)="changeState(stateType.surveys)">{{ 'PROFESSOR.LIBRARY.SURVEYS' | translate }}</mat-button-toggle>
+        <mat-button-toggle class="fs-5" (click)="changeState(stateType.questions)">{{ 'PROFESSOR.LIBRARY.QUESTIONS' | translate }}</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <div class="w-100 mt-3">
+        <app-survey-list *ngIf="state == stateType.surveys"></app-survey-list>
+        <app-course-list *ngIf="state == stateType.courses"></app-course-list>
+        <app-question-list *ngIf="state == stateType.questions"></app-question-list>
+    </div>
+</div>

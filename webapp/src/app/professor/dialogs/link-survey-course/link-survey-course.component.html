@@ -1,8 +1,0 @@
-<h1 mat-dialog-title>Lista de cuestionarios</h1>
-<div mat-dialog-content>
-    <app-survey-list [isSelecting]="true" [surveysAdded]="surveysAdded" (surveyToAdd)="addSurvey($event)"></app-survey-list>
-</div>
-<div mat-dialog-actions>
-    <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button [mat-dialog-close]="surveys">Aceptar</button>
-</div>

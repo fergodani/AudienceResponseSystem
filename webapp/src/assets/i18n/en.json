@@ -1,0 +1,186 @@
+{
+    "ADMIN": {
+        "COURSE_LIST": {
+            "COURSE_LIST": "Course list",
+            "DELETE": "Delete",
+            "NEW_COURSE": "New course",
+            "IMPORT_COURSE": "Import courses:"
+        },
+        "CREATE_COURSE": {
+            "CREATE_NEW_COURSE": "Create new course",
+            "COURSE_NAME": "Course's name:",
+            "DESCRIPTION": "Description:",
+            "ACCEPT": "Accept"
+        },
+        "USER_LIST": {
+            "USER_LIST": "Users list",
+            "DELETE": "Delete",
+            "NEW_USER": "New user",
+            "IMPORT_USER": "Import users:"
+        },
+        "CREATE_USER": {
+            "CREATE_NEW_USER": "Create new user",
+            "USER_NAME": "Username:",
+            "USER_ROLE": "Role:",
+            "ACCEPT": "Aceptar",
+            "STUDENT_ROLE": "Student",
+            "PROFESSOR_ROLE": "Professor"
+        }
+    },
+    "PROFESSOR": {
+        "LIBRARY": {
+            "COURSES": "Courses",
+            "SURVEYS": "Surveys",
+            "QUESTIONS": "Questions"
+        },
+        "QUESTION_LIST": {
+            "EDIT": "Edit",
+            "DELETE": "Delete",
+            "NEW_QUESTION": "New question",
+            "IMPORT": "Import",
+            "EXPORT": "Export"
+        },
+        "SURVEY_LIST": {
+            "NEW_SURVEY": "New survey"
+        },
+        "CREATE_QUESTION": {
+            "OPTIONS": "Options",
+            "QUESTION_TYPE": "Question type",
+            "TIME_LIMIT": "Time limit",
+            "QUESTION": "Questions",
+            "ATTACH_RESOURCE": "Attach resource",
+            "ANSWER": "Answer",
+            "OTHER_ANSWERS_ACCEPTED": "Other questions accepted",
+            "CREATE_QUESTION": "Create question",
+            "UPDATE_QUESTION": "Update question",
+            "MULTIOPTION": "Multioption",
+            "TRUE_FALSE": "True or false",
+            "SHORT": "Short answer",
+            "MANDATORY_FIELDS": "You must fill in the required fields",
+            "NO_CORRECT_ANSWER": "There must be a correct answer",
+            "LIMIT_TIME_ERROR": "The time has to be at least 5 seconds",
+            "FILE_ERROR": "You can only upload images"
+        },
+        "CREATE_SURVEY": {
+            "QUESTIONS": "Questions",
+            "ATTACH_RESOURCE": "Attach resource",
+            "TITLE": "Title",
+            "SAVE": "Save",
+            "DELETE": "Delete",
+            "INVALID_TITLE": "You must introduce a title",
+            "EMPTY_QUESTIONS": "There must be at least one question"
+        },
+        "COURSE_DETAILS": {
+            "SURVEYS": "Surveys",
+            "QUESTIONS": "Questions",
+            "STUDENTS": "Students",
+            "GAMES": "Games",
+            "ADD_SURVEYS": "Add surveys",
+            "PLAY": "Play",
+            "DELETE_FROM_COURSE": "Delete from course",
+            "ADD_QUESTIONS": "Add questions",
+            "ADD_STUDENTS": "Add students",
+            "LAST_SURVEYS_PLAYED": "Last surveys played"
+        },
+        "GAME_DETAILS": {
+            "STUDENT": "Student",
+            "SCORE": "Score",
+            "CORRECT_QUESTIONS": "Correct questions",
+            "WRONG_QUESTIONS": "Wrong questions",
+            "TOTAL_QUESTIONS": "Total questions",
+            "CAPTION": "Player surveys' results",
+            "GO_BACK": "Go back"
+        },
+        "CREATE_GAME_DIALOG": {
+            "CREATE_ONLINE_GAME": "Create online game",
+            "SCORE_TYPE": "Score type",
+            "SHOW_QUESTIONS": "Show questions",
+            "CANCEL": "Cancel",
+            "ACCEPT": "Accept"
+        },
+        "QUESTION_COURSE_DIALOG": {
+            "QUESTION_LIST": "Answer list",
+            "CANCEL": "Cancel",
+            "ACCEPT": "Accept"
+        },
+        "SURVEY_COURSE_DIALOG": {
+            "SURVEY_LIST": "Survey list",
+            "CANCEL": "Cancel",
+            "ACCEPT": "Accept"
+        },
+        "STUDENT_COURSE_DIALOG": {
+            "STUDENT_LIST": "Student list",
+            "CANCEL": "Cancel",
+            "ACCEPT": "Accept"
+        },
+        "HOST_GAME": {
+            "USERS_CONNECTED": "Users connected",
+            "START": "Start",
+            "ANSWERS": "Answers",
+            "WRITE_ANSWER": "Write the answer",
+            "CORRECT_ANSWER": "The correct question is:",
+            "NEXT": "Next",
+            "GAME_FINISHED": "Game finished",
+            "LEAVE": "Leave"
+        }
+    },
+    "STUDENT": {
+        "HOME": {
+            "MY_COURSES": "My courses",
+            "OPEN_SURVEYS": "Openned surveys",
+            "WAITING_FOR_SURVEYS": "Waiting for surveys...",
+            "ANY_COURSES": "You have not been assigned to any course yet"
+        },
+        "COURSE_DETAILS": {
+            "SURVEY": "Survey",
+            "SCORE": "Score",
+            "CORRECT_QUESTIONS": "Correct questions",
+            "WRONG_QUESTIONS": "Wrong questions",
+            "TOTAL_QUESTIONS": "Total questions",
+            "CAPTION": "Player surveys' results"
+        },
+        "GAME_REVISION": {
+            "SURVEY": "Survey:",
+            "CORRECT_QUESTIONS": "Correct questions:",
+            "WRONG_QUESTIONS": "Wrong questions:",
+            "UNANSWERED_QUESTIONS": "Unanswered quetsions:",
+            "END_REVISION": "End revision",
+            "YOUR_ANSWER": "Your answer:"
+        },
+        "PROFILE": {
+            "CHANGE_PASSWORD": "Modify password",
+            "ACTUAL_PASSWORD": "Actual password",
+            "NEW_PASSWORD": "New password",
+            "LAST_GAMES": "Last surveys played",
+            "SCORE": "Score:"
+        },
+        "GAME": {
+            "LOOK_AT_YOUR_NAME": "Look at your name in the professor screen",
+            "WRITE_ANSWER": "Write the answer",
+            "ANSWER": "Answer",
+            "ACCEPT": "Accept",
+            "CORRECT": "Correct",
+            "INCORRECT": "Incorrect",
+            "SCORE": "Score:",
+            "GAME_FINISHED": "Game finished",
+            "LEAVE": "Leave"
+        }
+    },
+    "LOGIN": {
+        "LOGIN": "Login",
+        "USER": "Username",
+        "PASSWORD": "Password",
+        "ACCEPT": "Accept"
+    },
+    "HEADER": {
+        "HOME": "Home",
+        "USERS": "Users", 
+        "COURSES": "Courses",
+        "LIBRARY": "Library",
+        "PROFILE": "Profile",
+        "LOGOUT": "Logout",
+        "SPANISH": "Spanish",
+        "ENGLISH": "English",
+        "ASTURIANU": "Asturianu"
+    }
+}

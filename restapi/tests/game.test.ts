@@ -22,10 +22,16 @@ let survey1: Prisma.surveyUncheckedCreateInput = {
     title: "test1",
     user_creator_id: 1
 }
+let course: Prisma.courseUncheckedCreateInput = {
+    id: 5,
+    name: "testCourse",
+    description: "testDescription"
+}
 let game: Prisma.gameUncheckedCreateInput = {
     id: 1,
     host_id: 1,
     survey_id: 1,
+    course_id: course.id!,
     state: state.created,
     point_type: point_type.standard,
     type: game_type.online,
@@ -37,6 +43,7 @@ describe("Game", () => {
         describe("With valid input data", () => {
             describe("User host and survey attached exists", () => {
                 beforeAll(async () => {
+                    await prisma.course.create({data: course})
                     await prisma.user.create({ data: user })
                     await prisma.survey.create({ data: survey1 })
                 })
@@ -44,6 +51,7 @@ describe("Game", () => {
                     await prisma.game.deleteMany({ where: { host_id: user.id } })
                     await prisma.survey.deleteMany({ where: { id: survey1.id } })
                     await prisma.user.deleteMany({ where: { id: user.id } })
+                    await prisma.course.delete({where: { id: course.id}})
                 })
                 it("game created successfully", async () => {
                     const req = {
@@ -53,7 +61,8 @@ describe("Game", () => {
                             type: game_type.online,
                             state: state.created,
                             are_questions_visible: true,
-                            point_type: point_type.standard
+                            point_type: point_type.standard,
+                            course_id: course.id!
                         }
                     };
                     const res = {
@@ -102,6 +111,12 @@ describe("Game", () => {
                     const req = {
                         body: {
                             host_id: 999,
+                            survey_id: 1,
+                            course_id: 1,
+                            type: "online",
+                            state: "created",
+                            are_questions_visible: true,
+                            point_type: "standard"
                         }
                     };
                     const res = {
@@ -123,7 +138,13 @@ describe("Game", () => {
                 it("should return error", async () => {
                     const req = {
                         body: {
-                            host_id: user.id
+                            host_id: user.id,
+                            survey_id: 1,
+                            course_id: 1,
+                            type: "online",
+                            state: "created",
+                            are_questions_visible: true,
+                            point_type: "standard"
                         }
                     };
                     const res = {
@@ -165,7 +186,13 @@ describe("Game", () => {
                 it("should return 500", async () => {
                     const req = {
                         body: {
-                            host_id: "test"
+                            host_id: "invalid",
+                            survey_id: 1,
+                            course_id: 1,
+                            type: "online",
+                            state: "created",
+                            are_questions_visible: true,
+                            point_type: "standard"
                         }
                     };
                     const res = {
@@ -183,6 +210,7 @@ describe("Game", () => {
     describe("Update state", () => {
         describe("Game exists", () => {
             beforeAll(async () => {
+                await prisma.course.create({data: course})
                 await prisma.user.create({ data: user })
                 await prisma.survey.create({ data: survey1 })
                 await prisma.game.create({ data: game })
@@ -191,14 +219,13 @@ describe("Game", () => {
                 await prisma.game.deleteMany({ where: { host_id: user.id } })
                 await prisma.survey.deleteMany({ where: { id: survey1.id } })
                 await prisma.user.deleteMany({ where: { id: user.id } })
+                await prisma.course.delete({where: { id: course.id}})
             })
             it("should update state", async () => {
                 const req = {
                     body: {
+                        id: 1,
                         state: state.closed
-                    },
-                    params: {
-                        id: 1
                     }
                 }
                 const res = {
@@ -247,10 +274,8 @@ describe("Game", () => {
                 it("should return 404", async () => {
                     const req = {
                         body: {
+                            id: 999,
                             state: state.closed
-                        },
-                        params: {
-                            id: 999
                         }
                     }
                     const res = {
@@ -275,15 +300,13 @@ describe("Game", () => {
                 }
                 await updateState(req, res);
                 expect(res.status).toHaveBeenCalledWith(500);
-                expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de curso válido" });
+                expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de juego válido" });
             })
             it("should return error if wrong id", async () => {
                 const req = {
                     body: {
+                        id: "test",
                         state: state.closed
-                    },
-                    params: {
-                        id: "test"
                     }
                 }
                 const res = {
@@ -291,7 +314,7 @@ describe("Game", () => {
                     json: jest.fn()
                 }
                 await updateState(req, res);
-                expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de curso válido" });
+                expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de juego válido" });
                 expect(res.status).toHaveBeenCalledWith(500);
 
             })
@@ -302,6 +325,7 @@ describe("Game", () => {
     describe("Delete game", () => {
         describe("Exists game", () => {
             beforeAll(async () => {
+                await prisma.course.create({data: course})
                 await prisma.user.create({ data: user })
                 await prisma.survey.create({ data: survey1 })
                 await prisma.game.create({ data: game })
@@ -309,6 +333,7 @@ describe("Game", () => {
             afterAll(async () => {
                 await prisma.survey.deleteMany({ where: { id: survey1.id } })
                 await prisma.user.deleteMany({ where: { id: user.id } })
+                await prisma.course.delete({where: {id: course.id}})
             })
 
             it("should delete the survey", async () => {
@@ -368,6 +393,7 @@ describe("Game", () => {
     describe("Get game by id", () => {
         describe("there are at least one game", () => {
             beforeAll(async () => {
+                await prisma.course.create({data: course})
                 await prisma.user.create({ data: user })
                 await prisma.survey.create({ data: survey1 })
                 await prisma.game.create({ data: game })
@@ -376,6 +402,7 @@ describe("Game", () => {
                 await prisma.game.deleteMany({ where: { host_id: user.id } })
                 await prisma.survey.deleteMany({ where: { id: survey1.id } })
                 await prisma.user.deleteMany({ where: { id: user.id } })
+                await prisma.course.delete({where: {id: course.id}})
             })
 
             it("should retrive the game with the id given", async () => {
@@ -460,6 +487,7 @@ describe("Game", () => {
                 id: 2,
                 host_id: 1,
                 survey_id: 2,
+                course_id: 2,
                 state: state.started,
                 point_type: point_type.standard,
                 type: game_type.online,
@@ -469,19 +497,20 @@ describe("Game", () => {
                 id: 3,
                 host_id: 1,
                 survey_id: 3,
+                course_id: 3,
                 state: state.closed,
                 point_type: point_type.standard,
                 type: game_type.online,
                 are_questions_visible: true
             }
             const course1: Prisma.courseUncheckedCreateInput = {
-                id: 1,
-                name: "courseTest",
+                id: 2,
+                name: "testCourse2",
                 description: "courseDescriptionTest",
             }
             const course2: Prisma.courseUncheckedCreateInput = {
-                id: 2,
-                name: "courseTest1",
+                id: 3,
+                name: "testCourse3",
                 description: "courseDescriptionTest",
             }
             const courseSurvey1: Prisma.courseSurveyUncheckedCreateInput = {
@@ -498,17 +527,17 @@ describe("Game", () => {
             }
             beforeAll(async () => {
                 await prisma.user.create({ data: user })
-                await prisma.course.createMany({ data: [course1, course2] })
+                await prisma.course.createMany({ data: [course1, course2, course] })
                 await prisma.survey.createMany({ data: [survey1, survey2, survey3] })
                 await prisma.courseSurvey.createMany({ data: [courseSurvey1, courseSurvey2, courseSurvey3] })
                 await prisma.game.createMany({ data: [game, game2, game3] })
             })
             afterAll(async () => {
                 await prisma.courseSurvey.deleteMany({ where: { AND: [{ course_id: course1.id }, { course_id: course2.id }] } })
-                await prisma.course.deleteMany({ where: { name: { startsWith: "courseTest" } } })
                 await prisma.game.deleteMany({ where: { are_questions_visible: true } })
                 await prisma.survey.deleteMany({ where: { title: { startsWith: "test" } } })
                 await prisma.user.delete({ where: { id: user.id } })
+                await prisma.course.deleteMany({ where: { name: { startsWith: "testCourse" } } })
             })
             it("should return all the games open or started from the courses given and not the closed one", async () => {
                 const req = {
@@ -535,20 +564,6 @@ describe("Game", () => {
                             questionsSurvey: [],
                             title: survey1.title,
                             user_creator_id: survey1.user_creator_id
-                        }
-                    },
-                    {
-                        id: game2.id,
-                        host_id: game2.host_id,
-                        survey_id: game2.survey_id,
-                        state: game2.state,
-                        point_type: game2.point_type,
-                        are_questions_visible: game2.are_questions_visible,
-                        survey: {
-                            id: survey2.id,
-                            questionsSurvey: [],
-                            title: survey2.title,
-                            user_creator_id: survey2.user_creator_id
                         }
                     }
                 ])
@@ -610,6 +625,7 @@ describe("Game", () => {
                 role: role.student,
             }
             beforeAll(async () => {
+                await prisma.course.create({data: course})
                 await prisma.user.createMany({ data: [user, user2] })
                 await prisma.question.create({ data: question })
                 await prisma.answer.create({ data: answer })
@@ -623,6 +639,7 @@ describe("Game", () => {
                 await prisma.survey.delete({ where: { id: survey1.id } })
                 await prisma.question.delete({ where: { id: question.id } })
                 await prisma.user.deleteMany({ where: { username: { startsWith: "test" } } })
+                await prisma.course.delete({where: {id: course.id}})
             })
             it("should create the results correctly", async () => {
                 const req = {
@@ -745,7 +762,7 @@ describe("Game", () => {
                 }
                 await createResults(req, res)
                 expect(res.status).toHaveBeenCalledWith(500)
-                expect(res.json).toHaveBeenCalledWith({ message: "Tiene que haber al menos un resutlado" })
+                expect(res.json).toHaveBeenCalledWith({ message: "Tiene que haber al menos un resultado" })
             })
         })
     })
@@ -776,7 +793,10 @@ describe("Game", () => {
             let gameResult: Prisma.gameResultUncheckedCreateInput = {
                 user_id: user.id!,
                 game_id: game.id!,
-                score: 10
+                score: 10,
+                total_questions: 2,
+                correct_questions: 1,
+                wrong_questions: 1
             }
             let answerResult: Prisma.answerResultUncheckedCreateInput = {
                 user_id: user.id!,
@@ -787,6 +807,7 @@ describe("Game", () => {
                 answered: true
             }
             beforeAll(async () => {
+                await prisma.course.create({data: course})
                 await prisma.user.createMany({ data: [user, user2] })
                 await prisma.question.create({ data: question })
                 await prisma.answer.create({ data: answer })
@@ -802,6 +823,7 @@ describe("Game", () => {
                 await prisma.survey.delete({ where: { id: survey1.id } })
                 await prisma.question.delete({ where: { id: question.id } })
                 await prisma.user.deleteMany({ where: { username: { startsWith: "test" } } })
+                await prisma.course.delete({where: { id: course.id}})
             })
             it("should retrive the results with the user id given", async () => {
                 const res = {
@@ -819,6 +841,9 @@ describe("Game", () => {
                     game_id: game.id,
                     user_id: user.id,
                     score: 10,
+                    total_questions: 2,
+                    wrong_questions: 1,
+                    correct_questions: 1,
                     answer_results: [{
                         answer_id: answer.id,
                         answered: answerResult.answered,
@@ -827,25 +852,13 @@ describe("Game", () => {
                         question_index: answerResult.question_index,
                         short_answer: null,
                         user_id: user.id,
-                        answer: {
-                            id: answer.id,
-                            is_correct: answer.is_correct,
-                            question_id: question.id,
-                            description: answer.description
-                        },
                     }],
                     game: {
-                        are_questions_visible: game.are_questions_visible,
-                        host_id: game.host_id,
-                        id: game.id,
-                        point_type: game.point_type,
-                        state: game.state,
+                        course: {
+                            name: "testCourse"
+                        },
                         survey: {
-                            id: survey1.id,
-                            questionsSurvey: [],
-                            resource: null,
                             title: survey1.title,
-                            user_creator_id: user.id
                         }
                     }
                 }])
@@ -912,4 +925,5 @@ describe("Game", () => {
 
         })
     })
+    
 })

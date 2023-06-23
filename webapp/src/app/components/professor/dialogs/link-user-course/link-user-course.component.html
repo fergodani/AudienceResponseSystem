@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>{{"PROFESSOR.STUDENT_COURSE_DIALOG.STUDENT_LIST" | translate}}</h1>
+<div mat-dialog-content>
+    <app-user-list [isSelecting]="true" [usersAdded]="usersAdded" (userToAdd)="addUser($event)"></app-user-list>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">{{"PROFESSOR.STUDENT_COURSE_DIALOG.CANCEL" | translate}}</button>
+    <button mat-button [mat-dialog-close]="users">{{"PROFESSOR.STUDENT_COURSE_DIALOG.ACCEPT" | translate}}</button>
+</div>

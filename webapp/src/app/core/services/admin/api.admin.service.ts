@@ -33,8 +33,8 @@ export class ApiService {
     return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 
-  createUser(user: User): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/user/create`, user)
+  createUser(user: User): Observable<Message> {
+    return this.http.post<Message>(`${this.apiUrl}/user/create`, user)
       .pipe(
         catchError(this.handleError)
       );
@@ -75,8 +75,8 @@ export class ApiService {
       )
   }
 
-  deleteUser(id: number): Observable<unknown> {
-    return this.http.delete(`${this.apiUrl}/user/${id}`)
+  deleteUser(id: number): Observable<Message> {
+    return this.http.delete<Message>(`${this.apiUrl}/user/${id}`)
       .pipe(
         catchError(this.handleError)
       )
@@ -89,9 +89,9 @@ export class ApiService {
       )
   }
 
-  updateUser(user: User): Observable<User> {
+  updateUser(user: User): Observable<Message> {
     console.log(user)
-    return this.http.put<User>(`${this.apiUrl}/user`, user)
+    return this.http.put<Message>(`${this.apiUrl}/user`, user)
       .pipe(
         catchError(this.handleError)
       )

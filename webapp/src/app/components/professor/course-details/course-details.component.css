@@ -1,0 +1,87 @@
+.courseImageContainer {
+  max-width: 400px;
+  overflow: hidden;
+}
+
+.imageContainer {
+  max-width: 100px;
+  overflow: hidden;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+
+}
+
+.contenido {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 3em;
+  height: 90%;
+  margin-bottom: 5em;
+}
+
+.encabezado {
+  display: flex;
+  gap: 5em;
+  flex-direction: row;
+  align-items: center;
+}
+
+h5 {
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 50em;
+}
+
+a {
+  background-image: linear-gradient(to right,
+  #4184d5,
+  #4184d5 50%,
+      #000 50%);
+  background-size: 200% 100%;
+  background-position: -100%;
+  display: inline-block;
+  padding: 5px 0;
+  position: relative;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+a:before {
+  content: '';
+  background: #4184d5;
+  display: block;
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  transition: all 0.3s ease-in-out;
+}
+
+a:hover {
+  background-position: 0;
+ }
+
+.botones {
+  min-width: fit-content;
+}
+
+.resumen {
+  border-bottom: solid #474747 3px;
+  border-top: solid #474747 3px;
+}
+
+@media (max-width: 768px) {
+  .contenido {
+    flex-direction: column;
+  }
+
+  .encabezado {
+    flex-direction: column;
+  }
+}

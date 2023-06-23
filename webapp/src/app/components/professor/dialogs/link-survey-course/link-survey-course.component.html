@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>{{"PROFESSOR.SURVEY_COURSE_DIALOG.SURVEY_LIST" | translate }}</h1>
+<div mat-dialog-content>
+    <app-survey-list [isSelecting]="true" [surveysAdded]="surveysAdded" (surveyToAdd)="addSurvey($event)"></app-survey-list>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">{{"PROFESSOR.SURVEY_COURSE_DIALOG.CANCEL" | translate }}</button>
+    <button mat-button [mat-dialog-close]="surveys">{{"PROFESSOR.SURVEY_COURSE_DIALOG.ACCEPT" | translate }}</button>
+</div>

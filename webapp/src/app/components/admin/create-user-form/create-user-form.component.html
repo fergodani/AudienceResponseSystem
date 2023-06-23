@@ -1,0 +1,22 @@
+<div class="d-flex m-3 flex-column justify-content-center">
+    <h1 class="fs-1 p-3">{{"ADMIN.CREATE_USER.CREATE_NEW_USER" | translate}}</h1>
+    <form class="form-group w-50" [formGroup]="createUserForm" (ngSubmit)="onUserSubmit()">
+        <div class="mb-3">
+            <label for="username">{{"ADMIN.CREATE_USER.USER_NAME" | translate}} </label>
+            <input class="form-control" id="username" type="text" formControlName="username">
+        </div>
+        <div class="mb-3">
+            <label for="role">{{"ADMIN.CREATE_USER.USER_ROLE" | translate}} </label>
+            <select class="form-control" id="role" formControlName="role">
+                <option selected [ngValue]="roles[0]">{{"ADMIN.CREATE_USER.STUDENT_ROLE" | translate}}</option>
+                <option [ngValue]="roles[1]">{{"ADMIN.CREATE_USER.PROFESSOR_ROLE" | translate}}</option>
+            </select>
+        </div>
+        <div class="mb-3" *ngIf="!isLoading">
+            <input class="form-control" type="submit" value="{{'ADMIN.CREATE_USER.ACCEPT' | translate}}">
+        </div>
+        <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </form>
+</div>
