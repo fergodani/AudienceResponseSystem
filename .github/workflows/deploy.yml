@@ -7,6 +7,22 @@ on:
         branches:
             - main
 jobs:
+    unit-test-webapp:
+        runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            node-version: [18.x]
+        defaults:
+            run:
+                working-directory: webapp
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                node-version: ${{ matrix.node-version }}
+            - run: npm ci --legacy-peer-deps
+            - run: npm run test:prod
+    
     unit-test-restapo:
         runs-on: ubuntu-latest
         env:
