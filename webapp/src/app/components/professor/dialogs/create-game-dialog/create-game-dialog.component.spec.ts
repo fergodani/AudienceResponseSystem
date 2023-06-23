@@ -12,8 +12,8 @@ describe('CreateGameDialogComponent', () => {
   let component: CreateGameDialogComponent;
   let fixture: ComponentFixture<CreateGameDialogComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [CreateGameDialogComponent],
       providers: [
@@ -24,9 +24,6 @@ describe('CreateGameDialogComponent', () => {
       ],
       teardown: {destroyAfterEach: false}
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(CreateGameDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

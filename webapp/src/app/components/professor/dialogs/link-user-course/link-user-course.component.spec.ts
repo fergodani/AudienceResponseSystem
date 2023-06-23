@@ -13,8 +13,8 @@ describe('LinkUserCourseComponent', () => {
   let component: LinkUserCourseComponent;
   let fixture: ComponentFixture<LinkUserCourseComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [LinkUserCourseComponent, UserListComponent],
       providers: [
@@ -25,9 +25,6 @@ describe('LinkUserCourseComponent', () => {
       ],
       teardown: {destroyAfterEach: false}
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(LinkUserCourseComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

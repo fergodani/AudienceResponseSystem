@@ -12,11 +12,11 @@ import { ActivatedRoute } from '@angular/router';
 describe('GameDetailsComponent', () => {
   let component: GameDetailsComponent;
   let fixture: ComponentFixture<GameDetailsComponent>;
-
-  beforeEach(async () => {
+  
+  beforeEach(() => {
     let paramMap = new Map<number, string>()
     paramMap.set(1, "1")
-    await TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [GameDetailsComponent],
       providers: [
@@ -29,9 +29,6 @@ describe('GameDetailsComponent', () => {
       ],
       teardown: {destroyAfterEach: false}
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(GameDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

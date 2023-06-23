@@ -10,10 +10,10 @@ describe('UpdateUserFormComponent', () => {
   let component: UpdateUserFormComponent;
   let fixture: ComponentFixture<UpdateUserFormComponent>;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     let paramMap = new Map<number, string>()
     paramMap.set(2, "2")
-    await TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [UpdateUserFormComponent],
       providers: [
@@ -23,9 +23,6 @@ describe('UpdateUserFormComponent', () => {
         }
       ]
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(UpdateUserFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

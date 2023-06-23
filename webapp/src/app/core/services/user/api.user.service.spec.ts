@@ -6,8 +6,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 describe('ApiUserService', () => {
   let service: ApiStudentService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
         { provide: ApiStudentService, ApiStudentService},

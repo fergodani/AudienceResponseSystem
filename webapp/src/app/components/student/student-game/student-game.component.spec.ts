@@ -12,10 +12,10 @@ describe('StudentGameComponent', () => {
   let component: StudentGameComponent;
   let fixture: ComponentFixture<StudentGameComponent>;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     let paramMap = new Map<string, string>()
     paramMap.set("id", "1")
-    await TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [StudentGameComponent],
       providers: [
@@ -26,9 +26,6 @@ describe('StudentGameComponent', () => {
         }
       ]
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(StudentGameComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

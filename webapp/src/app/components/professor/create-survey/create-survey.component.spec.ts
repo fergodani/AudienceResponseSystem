@@ -14,8 +14,8 @@ describe('CreateSurveyComponent', () => {
   let component: CreateSurveyComponent;
   let fixture: ComponentFixture<CreateSurveyComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [CreateSurveyComponent, QuestionListComponent],
       providers: [
@@ -24,9 +24,6 @@ describe('CreateSurveyComponent', () => {
       ],
       teardown: {destroyAfterEach: false}
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(CreateSurveyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

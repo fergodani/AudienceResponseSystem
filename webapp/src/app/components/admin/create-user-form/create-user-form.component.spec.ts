@@ -8,18 +8,15 @@ import { of } from 'rxjs';
 describe('CreateUserFormComponent', () => {
   let component: CreateUserFormComponent;
   let fixture: ComponentFixture<CreateUserFormComponent>;
-  
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: imports ,
       declarations: [CreateUserFormComponent],
       providers: [
         { provide: ApiService, useClass: ApiServiceStub}
       ]
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(CreateUserFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

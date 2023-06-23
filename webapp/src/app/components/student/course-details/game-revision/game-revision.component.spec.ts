@@ -14,8 +14,8 @@ describe('GameRevisionComponent', () => {
   let component: GameRevisionComponent;
   let fixture: ComponentFixture<GameRevisionComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [GameRevisionComponent],
       providers: [
@@ -25,9 +25,6 @@ describe('GameRevisionComponent', () => {
         { provide: ApiAuthService, useClass: AuthServiceStub }
       ]
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(GameRevisionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

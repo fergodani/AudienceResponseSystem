@@ -12,8 +12,8 @@ describe('StudentHomeComponent', () => {
   let component: StudentHomeComponent;
   let fixture: ComponentFixture<StudentHomeComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [StudentHomeComponent],
       providers: [
@@ -22,9 +22,6 @@ describe('StudentHomeComponent', () => {
         { provide: ApiAuthService, useClass: AuthServiceStub }
       ]
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(StudentHomeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

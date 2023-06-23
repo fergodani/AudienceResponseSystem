@@ -11,8 +11,8 @@ describe('AnswersComponent', () => {
   let component: AnswersComponent;
   let fixture: ComponentFixture<AnswersComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [AnswersComponent],
       providers: [
@@ -21,9 +21,6 @@ describe('AnswersComponent', () => {
       ],
       teardown: {destroyAfterEach: false}
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(AnswersComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

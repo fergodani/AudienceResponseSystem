@@ -8,18 +8,15 @@ import { CreateCourseFormComponent } from './create-course-form.component';
 describe('CreateCourseFormComponent', () => {
   let component: CreateCourseFormComponent;
   let fixture: ComponentFixture<CreateCourseFormComponent>;
-  
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: imports ,
       declarations: [CreateCourseFormComponent],
       providers: [
         { provide: ApiService, useClass: ApiServiceStub}
       ]
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(CreateCourseFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

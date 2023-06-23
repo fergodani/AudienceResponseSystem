@@ -7,8 +7,8 @@ import { SocketioServiceStub } from '../services/stubs/socketio.service.mock';
 describe('SocketioService', () => {
   let service: SocketioService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
         { provide: SocketioService, useClass: SocketioServiceStub},

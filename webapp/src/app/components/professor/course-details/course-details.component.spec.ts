@@ -6,7 +6,6 @@ import { ApiProfessorService } from '@app/core/services/professor/api.professor.
 import { AuthServiceStub } from '@app/core/services/stubs/api.auth.service.mock';
 import { ApiProfessorServiceStub } from '@app/core/services/stubs/api.professor.service.mock';
 import { imports } from '@app/core/services/stubs/imports';
-import { CreateSurveyComponent } from '../create-survey/create-survey.component';
 import { ApiService } from '@app/core/services/admin/api.admin.service';
 import { ApiServiceStub } from '@app/core/services/stubs/api.admin.service.mock';
 
@@ -14,8 +13,8 @@ describe('CourseDetailsComponent', () => {
   let component: CourseProfessorDetailsComponent;
   let fixture: ComponentFixture<CourseProfessorDetailsComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [CourseProfessorDetailsComponent],
       providers: [
@@ -25,9 +24,6 @@ describe('CourseDetailsComponent', () => {
       ],
       teardown: {destroyAfterEach: false}
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(CourseProfessorDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -8,18 +8,15 @@ import { ApiProfessorService } from '@app/core/services/professor/api.professor.
 import { AuthServiceStub } from '@app/core/services/stubs/api.auth.service.mock';
 import { ApiProfessorServiceStub } from '@app/core/services/stubs/api.professor.service.mock';
 import { imports } from '@app/core/services/stubs/imports';
-import { of } from 'rxjs';
 import { Answer } from '@app/core/models/answer.model';
 import { AnswersComponent } from './answers/answers.component';
 
 describe('CreateQuestionComponent', () => {
   let component: CreateQuestionComponent;
-  let answerComponent: AnswersComponent;
   let fixture: ComponentFixture<CreateQuestionComponent>;
-  let fixtureAnswers: ComponentFixture<AnswersComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [CreateQuestionComponent, AnswersComponent],
       providers: [
@@ -28,9 +25,6 @@ describe('CreateQuestionComponent', () => {
       ],
       teardown: {destroyAfterEach: false}
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(CreateQuestionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

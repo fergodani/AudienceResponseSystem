@@ -14,9 +14,9 @@ import { By } from '@angular/platform-browser';
 describe('CourseStudentDetailsComponent', () => {
   let component: CourseStudentDetailsComponent;
   let fixture: ComponentFixture<CourseStudentDetailsComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [CourseStudentDetailsComponent],
       providers: [
@@ -26,9 +26,6 @@ describe('CourseStudentDetailsComponent', () => {
         { provide: ApiAuthService, useClass: AuthServiceStub }
       ]
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(CourseStudentDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -18,8 +18,8 @@ describe('QuestionListComponent', () => {
   let component: QuestionListComponent;
   let fixture: ComponentFixture<QuestionListComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [QuestionListComponent],
       providers: [
@@ -29,9 +29,6 @@ describe('QuestionListComponent', () => {
         { provide: ApiAuthService, useClass: AuthServiceStub }
       ]
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(QuestionListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

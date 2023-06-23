@@ -7,8 +7,8 @@ import { AuthServiceStub } from '../stubs/api.auth.service.mock';
 describe('ApiLoginService', () => {
   let service: ApiAuthService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
         { provide: ApiAuthService, useClass: AuthServiceStub},

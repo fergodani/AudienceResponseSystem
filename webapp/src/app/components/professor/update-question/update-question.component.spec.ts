@@ -10,10 +10,10 @@ describe('UpdateQuestionComponent', () => {
   let component: UpdateQuestionComponent;
   let fixture: ComponentFixture<UpdateQuestionComponent>;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     let paramMap = new Map<number, string>()
     paramMap.set(1, "1")
-    await TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       imports: imports,
       declarations: [UpdateQuestionComponent],
       providers: [
@@ -23,9 +23,6 @@ describe('UpdateQuestionComponent', () => {
         }
       ]
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(UpdateQuestionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

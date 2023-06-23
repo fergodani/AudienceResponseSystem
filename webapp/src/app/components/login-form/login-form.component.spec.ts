@@ -11,18 +11,15 @@ import { Router } from '@angular/router';
 describe('LoginFormComponent', () => {
   let component: LoginFormComponent;
   let fixture: ComponentFixture<LoginFormComponent>;
-  
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: imports ,
       declarations: [LoginFormComponent],
       providers: [
         { provide: ApiAuthService, useClass: AuthServiceStub}
       ]
     }).compileComponents()
-  })
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(LoginFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
