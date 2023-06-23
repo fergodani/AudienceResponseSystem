@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { User } from '../../models/user.model';
 import { Course, QuestionCourse, SurveyCourse, UserCourse } from '../../models/course.model';
 import { Message } from '@app/core/models/message.model';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-
-  apiUrl = "http://localhost:5000/api"
   users: User[] = []
 
   // TODO: pasar la url a un .env
@@ -34,56 +33,56 @@ export class ApiService {
   }
 
   createUser(user: User): Observable<Message> {
-    return this.http.post<Message>(`${this.apiUrl}/user/create`, user)
+    return this.http.post<Message>(`${environment.apiUrl}/user/create`, user)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   createCourse(course: Course): Observable<Course> {
-    return this.http.post<Course>(`${this.apiUrl}/course`, course)
+    return this.http.post<Course>(`${environment.apiUrl}/course`, course)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/user`)
+    return this.http.get<User[]>(`${environment.apiUrl}/user`)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   getUser(id: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/user/${id}`)
+    return this.http.get<User>(`${environment.apiUrl}/user/${id}`)
       .pipe(
         catchError(this.handleError)
       )
   }
 
   getCourses(): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.apiUrl}/course`)
+    return this.http.get<Course[]>(`${environment.apiUrl}/course`)
       .pipe(
         catchError(this.handleError)
       );
   }
 
   getCourse(id: number): Observable<Course> {
-    return this.http.get<Course>(`${this.apiUrl}/course/${id}`)
+    return this.http.get<Course>(`${environment.apiUrl}/course/${id}`)
       .pipe(
         catchError(this.handleError)
       )
   }
 
   deleteUser(id: number): Observable<Message> {
-    return this.http.delete<Message>(`${this.apiUrl}/user/${id}`)
+    return this.http.delete<Message>(`${environment.apiUrl}/user/${id}`)
       .pipe(
         catchError(this.handleError)
       )
   }
 
   deleteCourse(id: number): Observable<unknown> {
-    return this.http.delete(`${this.apiUrl}/course/${id}`)
+    return this.http.delete(`${environment.apiUrl}/course/${id}`)
       .pipe(
         catchError(this.handleError)
       )
@@ -91,49 +90,49 @@ export class ApiService {
 
   updateUser(user: User): Observable<Message> {
     console.log(user)
-    return this.http.put<Message>(`${this.apiUrl}/user`, user)
+    return this.http.put<Message>(`${environment.apiUrl}/user`, user)
       .pipe(
         catchError(this.handleError)
       )
   }
 
   updateCourse(course: Course): Observable<Course> {
-    return this.http.put<Course>(`${this.apiUrl}/course`, course)
+    return this.http.put<Course>(`${environment.apiUrl}/course`, course)
       .pipe(
         catchError(this.handleError)
       )
   }
 
   uploadUserFile(formData: FormData): Observable<Message> {
-    return this.http.post<Message>(`${this.apiUrl}/user/file`, formData)
+    return this.http.post<Message>(`${environment.apiUrl}/user/file`, formData)
       .pipe(
         catchError(this.handleError)
       )
   }
   
   uploadCourseFile(formData: FormData): Observable<unknown> {
-    return this.http.post<unknown>(`${this.apiUrl}/course/file`, formData)
+    return this.http.post<unknown>(`${environment.apiUrl}/course/file`, formData)
       .pipe(
         catchError(this.handleError)
       )
   }
 
   addUserToCourse(userCourse: UserCourse): Observable<unknown> {
-    return this.http.post<UserCourse>(`${this.apiUrl}/course/addUser`, userCourse)
+    return this.http.post<UserCourse>(`${environment.apiUrl}/course/addUser`, userCourse)
     .pipe(
       catchError(this.handleError)
     )
   }
 
   addSurveyToCourse(surveyCourse: SurveyCourse): Observable<unknown> {
-    return this.http.post<SurveyCourse>(`${this.apiUrl}/course/addSurvey`, surveyCourse)
+    return this.http.post<SurveyCourse>(`${environment.apiUrl}/course/addSurvey`, surveyCourse)
     .pipe(
       catchError(this.handleError)
     )
   }
 
   addQuestionToCourse(questionCourse: QuestionCourse): Observable<Message> {
-    return this.http.post<Message>(`${this.apiUrl}/course/addQuestion`, questionCourse)
+    return this.http.post<Message>(`${environment.apiUrl}/course/addQuestion`, questionCourse)
     .pipe(
       catchError(this.handleError)
     )

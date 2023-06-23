@@ -7,6 +7,7 @@ import { equals, User, UserResult } from '../models/user.model';
 import { ApiAuthService } from '../services/auth/api.auth.service';
 import { ApiProfessorService } from '../services/professor/api.professor.service';
 import { SocketOptions } from 'socket.io-client';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +52,7 @@ export class SocketioService {
         token: this.authService.userValue?.token
       }
     }
-    this.socket = io('http://localhost:5000', socketOptions);
+    this.socket = io(environment.apiUrl, socketOptions);
   }
 
   createGame(game_id: number, courseId: number) {

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, map, retry } from 'rxjs/operators';
-import { Token, User } from '../../models/user.model';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { User } from '../../models/user.model';
 import { Router } from '@angular/router';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -21,10 +22,8 @@ export class ApiAuthService {
     this.user = this.userSubject.asObservable();
   }
 
-  apiUrl = "http://localhost:5000/api"
-
   login(user: User) {
-    return this.http.post<User>(`${this.apiUrl}/user/login`, user)
+    return this.http.post<User>(`${environment.apiUrl}/user/login`, user)
     .pipe(
       map(user => {
         localStorage.setItem('user', JSON.stringify(user));
