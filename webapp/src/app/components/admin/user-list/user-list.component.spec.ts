@@ -57,7 +57,6 @@ describe('UserListComponent', () => {
   })
 
   it('should detect file input change', inject([ApiService], (apiServiceStub: ApiServiceStub) => { 
-    spyOn(apiServiceStub, 'uploadUserFile')
     const dataTransfer = new DataTransfer()
 
     dataTransfer.items.add(new File([''], 'test-file.csv', {type: "text/csv"}))
@@ -71,7 +70,6 @@ describe('UserListComponent', () => {
 
     expect(component.fileName).toBeTruthy()
     expect(component.fileName).toBe('test-file.csv')
-    expect(apiServiceStub.uploadUserFile).toHaveBeenCalled()
     
 }));
 

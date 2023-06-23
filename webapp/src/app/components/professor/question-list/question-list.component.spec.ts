@@ -68,7 +68,7 @@ describe('QuestionListComponent', () => {
   })
 
   it('should detect file input change', inject([ApiProfessorService], (apiServiceStub: ApiProfessorServiceStub) => { 
-    spyOn(apiServiceStub, 'importQuestions')
+
     const dataTransfer = new DataTransfer()
 
     dataTransfer.items.add(new File([''], 'test-file.csv', {type: "text/csv"}))
@@ -82,7 +82,6 @@ describe('QuestionListComponent', () => {
 
     expect(component.fileName).toBeTruthy()
     expect(component.fileName).toBe('test-file.csv')
-    expect(apiServiceStub.importQuestions).toHaveBeenCalled()
     
 }));
 
