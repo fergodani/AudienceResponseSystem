@@ -23,7 +23,6 @@ import { UpdateQuestionComponent } from './components/professor/update-question/
 import { UpdateSurveyComponent } from './components/professor/update-survey/update-survey.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component';
 import { CourseStudentDetailsComponent } from './components/student/course-details/course-details.component';
-import { TestComponent } from './test/test.component';
 import { GameDetailsComponent } from './components/professor/course-details/game-details/game-details.component';
 import { GameRevisionComponent } from './components/student/course-details/game-revision/game-revision.component';
 
@@ -173,10 +172,6 @@ const routes: Routes = [
     component: UserListComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Admin]}
-  },
-  {
-    path: 'test', 
-    component: TestComponent,
   },
   {
     path: '**', component: ErrorPageComponent 
