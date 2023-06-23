@@ -10,7 +10,7 @@ describe('ApiUserService', () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        { provide: ApiStudentService},
+        { provide: ApiStudentService, ApiStudentService},
       ]
     }).compileComponents()
     service = TestBed.inject(ApiStudentService);
