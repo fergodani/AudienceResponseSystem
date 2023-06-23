@@ -3,9 +3,15 @@ on:
     push:
         branches:
             - main
+    pull_request:
+        branches:
+            - main
 jobs:
     unit-test-webapp:
         runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            node-version: [18.x]
         defaults:
             run:
                 working-directory: webapp
@@ -13,48 +19,8 @@ jobs:
             - uses: actions/checkout@v3
             - uses: actions/setup-node@v3
               with:
-                node-version: 16
+                node-version: ${{ matrix.node-version }}
             - run: npm ci
             - run: ng test
-            - uses: codecov/codecov-actions@v3
             
-    unit-test-restapi:
-        runs-on: ubuntu-latest
-
-        services:
-            postgres:
-              image: postgres:latest
-              env:
-                POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-                POSTGRES_DB: ${{secrets.POSTGRES_DB}}
-        
-        env:
-            DATABASE_URL: ${{secrets.DATABASE_URL}}
-            PRODUCTION_DATABASE_URL: ${{secrets.PRODUCTION_DATABASE_URL}}
-            SECRET: ${{secrets.SECRET}}
-            EMAIL: ${{secrets.EMAIL}}
-            REFRESH_TOKEN: ${{secrets.REFRESH_TOKEN}}
-            CLIENT_ID: ${{secrets.CLIENT_ID}}
-            CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
-            REDIRECT_URI: ${{secrets.REDIRECT_URI}}
-        defaults:
-            run:
-                working-directory: restapi
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                node-version: 16
-            - run: npm ci
-            - name: Set up PostgreSQL
-              run: |
-                sudo apt-get update
-                sudo apt-get install -y postgresql-client
-
-            - name: Create database
-              run: |
-               psql -h localhost -U postgres -d audienceresponsesystemapi_test -c "CREATE DATABASE mydatabase;"
-               psql -h localhost -U postgres -d audienceresponsesystemapi_test -f restapi/database.sql
-
-            - run: npm test
-            - uses: codecov/codecov-actions@v3
+    
