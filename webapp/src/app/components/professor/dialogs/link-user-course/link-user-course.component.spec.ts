@@ -8,6 +8,8 @@ import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 import { AuthServiceStub } from '@app/core/services/stubs/api.auth.service.mock';
 import { ApiProfessorServiceStub } from '@app/core/services/stubs/api.professor.service.mock';
+import { ApiService } from '@app/core/services/admin/api.admin.service';
+import { ApiServiceStub } from '@app/core/services/stubs/api.admin.service.mock';
 
 describe('LinkUserCourseComponent', () => {
   let component: LinkUserCourseComponent;
@@ -19,7 +21,8 @@ describe('LinkUserCourseComponent', () => {
       declarations: [LinkUserCourseComponent, UserListComponent],
       providers: [
         { provide: ApiProfessorService, useClass: ApiProfessorServiceStub},
-        { provide: ApiAuthService, useClass: AuthServiceStub},
+        { provide: ApiAuthService, useClass: AuthServiceStub},     
+        { provide: ApiService, useClass: ApiServiceStub },
         {provide: MatDialogRef, useValue: {}},
         { provide: MAT_DIALOG_DATA, useValue: [] }
       ],

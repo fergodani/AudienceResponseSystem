@@ -49,7 +49,7 @@ export class ApiService {
   }
 
   getUsers(): Observable<User[]> {
-    console.log("getUsers")
+    console.log("getUsersQue si eh")
     return this.http.get<User[]>(`${environment.apiUrl}/user`)
       .pipe(
         catchError(this.handleError)

@@ -5,6 +5,8 @@ import { ApiProfessorService } from '@app/core/services/professor/api.professor.
 import { ApiProfessorServiceStub } from '@app/core/services/stubs/api.professor.service.mock';
 import { imports } from '@app/core/services/stubs/imports';
 import { ActivatedRoute } from '@angular/router';
+import { ApiService } from '@app/core/services/admin/api.admin.service';
+import { ApiServiceStub } from '@app/core/services/stubs/api.admin.service.mock';
 
 describe('HostGameComponent', () => {
   let component: HostGameComponent;
