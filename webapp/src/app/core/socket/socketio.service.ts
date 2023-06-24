@@ -52,7 +52,7 @@ export class SocketioService {
         token: this.authService.userValue?.token
       }
     }
-    this.socket = io(environment.apiUrl, socketOptions);
+    this.socket = io(environment.socketUrl, socketOptions);
   }
 
   createGame(game_id: number, courseId: number) {

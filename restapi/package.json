@@ -29,6 +29,7 @@
     "fast-csv": "^4.3.6",
     "form-data": "^4.0.0",
     "generate-password": "^1.7.0",
+    "has-proto": "^1.0.1",
     "jest": "^29.5.0",
     "jsonwebtoken": "^9.0.0",
     "mock-express-request": "^0.2.2",
