@@ -23,7 +23,7 @@ jobs:
             - run: npm ci --legacy-peer-deps
             - run: npm run test:prod
     
-    unit-test-restapo:
+    unit-test-restapi:
         runs-on: ubuntu-latest
         env:
             PRODUCTION_DATABASE_URL: ${{secrets.PRODUCTION_DATABASE_URL }}
@@ -64,7 +64,20 @@ jobs:
             - run: npm ci --legacy-peer-deps
             - run: npm run migrateDb
             - run: npm test
-
-
+    run_pull:
+        name: run pull
+        runs-on: ubuntu-latest
+        needs: [unit-test-webapp, unit-test-restapi]
+        
+        steps:
+        - name: install ssh keys
+          run: |
+            install -m 600 -D /dev/null ~/.ssh/id_rsa
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+            ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+        - name: connect and pull
+          run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && exit"
+        - name: cleanup
+          run: rm -rf ~/.ssh
             
     
