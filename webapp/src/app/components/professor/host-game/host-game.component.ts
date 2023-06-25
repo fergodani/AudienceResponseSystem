@@ -105,6 +105,7 @@ export class HostGameComponent implements OnInit {
         this.value = (valueAux/seconds) * 100;
       } else {
         clearInterval(interval);
+        this.value = 0;
         this.displayQuestion();
       }
     }, 1000)
@@ -149,17 +150,18 @@ export class HostGameComponent implements OnInit {
       this.correctAnswers = this.actualQuestion.answers.filter((a: Answer) => a.is_correct)
       this.gameSession.state = GameSessionState.is_question_screen
       this.socketService.socket.emit('start_question_time', this.gameSession, () => {
-        this.gameSession.question_index++
         this.startQuestionCountdown(this.timeLeft);
       })
   }
 
   nextQuestion() {
-    if (this.gameSession.question_index == this.gameSession.question_list.length) {
+    this.gameSession.question_index++;
+    if (this.gameSession.question_index >= this.gameSession.question_list.length) {
       this.gameSession.state = GameSessionState.is_finished
       this.socketService.socket.emit('finish_game', this.gameSession);
       this.socketService.closeGame(this.gameSession.user_results, this.gameSession.game);
     } else {
+      this.actualQuestion = this.gameSession.question_list[this.gameSession.question_index]
       this.gameSession.state = GameSessionState.is_preview_screen
       this.socketService.socket.emit("question_preview", this.gameSession, () => {
         this.timeLeft = 5;

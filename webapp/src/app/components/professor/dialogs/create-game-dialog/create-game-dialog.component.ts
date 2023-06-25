@@ -48,6 +48,7 @@ export class CreateGameDialogComponent {
     if (this.createGameForm.invalid) {
       return;
     }
+    console.log(this.createGameForm.value.areQuestionsVisible!)
     const pointType = this.getPointType(this.createGameForm.value.pointType!);
     const game = new Game(
       this.authService.userValue!.id,

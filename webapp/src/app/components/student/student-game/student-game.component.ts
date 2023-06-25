@@ -1,5 +1,5 @@
 import { Component, OnInit, Type, HostListener } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Answer, AnswerResult } from '@app/core/models/answer.model';
 import { GameSession, GameSessionState, PointsType } from '@app/core/models/game.model';
@@ -35,7 +35,9 @@ export class StudentGameComponent implements OnInit {
   lastScore: number = 0;
   haveAnswered: boolean = false;
   isResultScreen = false
-  shortQuestionForm = new FormControl('');
+  shortQuestionForm = new FormGroup({
+    shortQuestion: new FormControl(),
+  })
 
   questionType = Type;
 
@@ -157,7 +159,7 @@ export class StudentGameComponent implements OnInit {
 
   checkShortAnswer() {
     this.haveAnswered = true;
-    const answer = this.shortQuestionForm.value!;
+    const answer = this.shortQuestionForm.value.shortQuestion ?? "";
     let isCorrect = false;
     this.actualQuestion.answers.forEach((a) => {
       if (answer === a.description) {
@@ -182,9 +184,6 @@ export class StudentGameComponent implements OnInit {
   }
 
   calculatePoints(isCorrect: boolean) {
-    //TODO: mirar si hay más de una respuesta correcta
-    //TODO: tener en cuenta el tipo de puntuación (estándar, doble, sin puntos)
-
     // https://support.kahoot.com/hc/es/articles/115002303908-C%C3%B3mo-funcionan-los-puntos
     // 1. Divide el tiempo de respuesta por el temporizador de pregunta
     // 2. Divide ese valor entre 2

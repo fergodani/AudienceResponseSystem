@@ -37,6 +37,7 @@
     "multiparty": "^4.2.3",
     "node-mocks-http": "^1.12.2",
     "nodemailer": "^6.9.3",
+    "nodemon": "^2.0.22",
     "npm-check": "^6.0.1",
     "pg": "^8.11.0",
     "prisma-erd-generator": "^1.6.2",

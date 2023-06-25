@@ -124,8 +124,10 @@ const getOpenOrStartedGamesByCourses = async (req: Request<{}, {}, {}, CoursesId
 
 const createGame = async (req: Request, res: Response): Promise<Response> => {
     try {
+        
         const { host_id, survey_id, course_id, type, state, are_questions_visible, point_type } = req.body;
-        if (!host_id || !survey_id || !type || !state || !are_questions_visible || !point_type || !course_id) {
+
+        if (!host_id || !survey_id || !type || !state || are_questions_visible == undefined || !point_type || !course_id) {
             return res.status(500).json({ message: "Se deben proporcionar todos los parámetros" })
         }
 

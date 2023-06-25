@@ -40,9 +40,9 @@
         <div class=" d-flex justify-content-center  align-items-center bg-primary short mb-5">
             <h3 class="text-center text-white ps-2 pe-2">{{"STUDENT.GAME.WRITE_ANSWER" | translate}}</h3>
         </div>
-        <mat-form-field  class="example-form">
+        <mat-form-field  class="example-form" [formGroup]="shortQuestionForm">
             <mat-label>{{"STUDENT.GAME.ANSWER" | translate}}</mat-label>
-            <input matInput  />
+            <input matInput formControlName="shortQuestion" />
         </mat-form-field>
         <button id="button-short" mat-raised-button class="bg-primary text-white w-50" (click)="checkShortAnswer()">{{"STUDENT.GAME.ACCEPT" | translate}}</button>
     </form>
