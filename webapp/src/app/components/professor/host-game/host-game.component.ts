@@ -67,11 +67,11 @@ export class HostGameComponent implements OnInit {
       this.gameSession = gameSession
     });
     this.socketService.socket.on('get-answer-from-player', (data: UserResult) => {
-      const index = this.gameSession.user_results.findIndex(u => u.user_id === data.user_id)
+      const index = this.gameSession.user_results.findIndex(u => u.user_id == data.user_id)
       if (index >= 0)
         this.gameSession.user_results[index] = data
-      else
-        this.gameSession.user_results[0] = data
+      else 
+        this.gameSession.user_results.push(data)
       console.log(this.gameSession)
     })
   }
@@ -138,8 +138,8 @@ export class HostGameComponent implements OnInit {
 
   displayCurrentLeaderboard() {
     this.gameSession.users.sort((a, b) => {
-      const scoreA = this.gameSession.user_results.find(u => u.user_id === a.id)?.score
-      const scoreB = this.gameSession.user_results.find(u => u.user_id === b.id)?.score
+      const scoreA = this.gameSession.user_results.find(u => u.user_id == a.id)?.score
+      const scoreB = this.gameSession.user_results.find(u => u.user_id == b.id)?.score
       return scoreB! - scoreA!
     })
   }

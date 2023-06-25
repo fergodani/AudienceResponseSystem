@@ -537,7 +537,8 @@ const getGameResultByUserAndGame = async (req: Request, res: Response): Promise<
                     select: {
                         question_id: true,
                         answer: true,
-                        answered: true
+                        answered: true,
+                        short_answer: true
                     }
                 },
                 game: {

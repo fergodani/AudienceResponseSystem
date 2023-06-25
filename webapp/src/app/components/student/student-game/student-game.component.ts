@@ -63,14 +63,10 @@ export class StudentGameComponent implements OnInit {
     this.socketService.socket.emit('join_game', this.authService.userValue, id, (gameSession: GameSession) => {
       if (gameSession) {
         this.gameSession = gameSession
-        this.result.game_id = gameSession.game.id!
-        if (this.gameSession.state == this.gameSessionState.is_question_screen) {
-          this.haveAnswered = true
-          const result = this.gameSession.user_results.find(u => u.user_id == this.authService.userValue!.id)
-          if (result != undefined)
-            this.result = result
-        }
-
+        this.result.game_id = this.gameSession.game.id!;
+        const index = this.gameSession.user_results.findIndex(u => u.user_id == this.authService.userValue?.id)
+        if(index >= 0)
+          this.result = this.gameSession.user_results[index]
       } else {
         this.isError = true
         this.errorMessage = "Ha ocurrido un error"
@@ -177,7 +173,8 @@ export class StudentGameComponent implements OnInit {
       question_id: this.actualQuestion.id,
       question_index: this.gameSession.question_index,
       short_answer: answer,
-      answered: true
+      answered: true,
+      is_correct: isCorrect
     }
     this.result.answer_results.push(answerResult)
     this.socketService.socket.emit('send_answer', this.gameSession.game.id, this.result);

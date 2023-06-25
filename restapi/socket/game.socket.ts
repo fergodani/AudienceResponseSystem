@@ -84,8 +84,6 @@ export default (io: Server) => {
         });
 
         socket.on(Constants.DISCONNECT, () => {
-            // TODO Mirar si se desconecta un usuario que sea host de un juego que esté en proceso
-            // Aquí sería un buen método para eliminar el juego también
             const sessionArray = Array.from(gameSessions.values())
             const sessionDisconnected = sessionArray.find((s) => s.socket_id === socket.id)
             if (sessionDisconnected) {
