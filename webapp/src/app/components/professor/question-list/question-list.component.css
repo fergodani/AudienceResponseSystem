@@ -16,9 +16,8 @@
 }
 
 h5 {
+  width: fit-content;
   white-space: nowrap;
-  overflow: scroll;
-  max-width: 50em;
 }
 
 .spinner{ 

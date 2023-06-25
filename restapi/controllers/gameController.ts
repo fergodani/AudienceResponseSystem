@@ -461,7 +461,7 @@ const getGamesResultsByUserAndCourse = async (req: Request, res: Response): Prom
         const course = await prisma.course.findUnique({ where: { id: Number(req.params.course_id) } })
         if (!course)
             return res.status(404).json({ message: "El curso especificado no existe" })
-        console.log("hola cai")
+
         const result = await prisma.gameResult.findMany({
             where: {
                 AND: [

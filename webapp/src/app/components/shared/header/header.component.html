@@ -6,30 +6,21 @@
 		<button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">&#9776;</button>
 		<div [ngbCollapse]="isMenuCollapsed" class="collapse navbar-collapse">
 			<ul class="navbar-nav d-flex align-items-center gap-2 me-auto mb-2 mb-lg-0">
-				<li class="nav-item">
-					<a class="nav-item nav-link fs-6 active text-white" href="/" (click)="isMenuCollapsed = true"
-						*ngIf="isStudent">{{"HEADER.HOME" | translate}}</a>
+				<li class="nav-item" *ngIf="isStudent">
+					<button mat-button class="nav-item nav-link active fs-6 text-white" (click)="navigate('/')">{{"HEADER.HOME" | translate}}</button>
 				</li>
-				<li class="nav-item">
-					<a class="nav-item nav-link fs-6 text-white" href="/users" (click)="isMenuCollapsed = true"
-						*ngIf="isAdmin">{{"HEADER.USERS" | translate}}</a>
+				<li class="nav-item" *ngIf="isAdmin">
+					<button mat-button class="nav-item nav-link active fs-6 text-white" (click)="navigate('/users')">{{"HEADER.USERS" | translate}}</button>
 				</li>
-				<li class="nav-item">
-					<a class="nav-item nav-link fs-6 text-white" href="/courses" (click)="isMenuCollapsed = true"
-						*ngIf="isAdmin">{{"HEADER.COURSES" | translate}}</a>
+				<li class="nav-item" *ngIf="isAdmin">
+					<button mat-button class="nav-item nav-link active fs-6 text-white" (click)="navigate('/courses')">{{"HEADER.COURSES" | translate}}</button>
 				</li>
-				<li class="nav-item active">
-					<a class="nav-item nav-link active fs-6 text-white" href="/library" (click)="isMenuCollapsed = true"
-						*ngIf="isProfessor">{{"HEADER.LIBRARY" | translate}}</a>
+				<li class="nav-item active" *ngIf="isProfessor">
+					<button mat-button class="nav-item nav-link active fs-6 text-white" (click)="navigate('/library')">{{"HEADER.LIBRARY" | translate}}</button>
 				</li>
 				<li class="nav-item" *ngIf="isStudent">
-					<a class="nav-item nav-link fs-6 text-white" href="/student/profile"
-						(click)="isMenuCollapsed = true">{{"HEADER.PROFILE" | translate}}</a>
+					<button mat-button class="nav-item nav-link active fs-6 text-white" (click)="navigate('/student/profile')">{{"HEADER.PROFILE" | translate}}</button>
 				</li>
-				<li class="nav-item">
-					<a class="nav-item nav-link fs-6 text-white" href="/test" (click)="isMenuCollapsed = true">Test</a>
-				</li>
-
 			</ul>
 			<div class="nav-item d-flex gap-2 align-items-center justify-content-center">
 

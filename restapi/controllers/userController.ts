@@ -58,7 +58,7 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
         const usernameUpperCase = username.toUpperCase()
         const existingUser = await prisma.user.findUnique({
             where: {
-                username: username,
+                username: usernameUpperCase,
             },
         })
 
@@ -70,11 +70,13 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
             length: 10,
             numbers: true
         })
+        if(req.body.password)
+            password = req.body.password
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(password, salt);
         let savedUser: Prisma.userCreateInput
         savedUser = {
-            username: username,
+            username: usernameUpperCase,
             password: hash,
             role: role,
         }
@@ -119,9 +121,10 @@ async function sendEmail(username: string, password: string) {
 
 const login = async (req: Request, res: Response): Promise<Response> => {
     try {
+        const usernameUpperCase = req.body.username.toUpperCase()
         const user = await prisma.user.findFirst({
             where: {
-                username: req.body.username,
+                username: usernameUpperCase,
             },
         })
         

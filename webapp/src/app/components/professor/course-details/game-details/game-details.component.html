@@ -6,7 +6,7 @@
 <button mat-raised-button class="ms-3 mb-3 mt-3" (click)="backToCourse()">
   {{"PROFESSOR.GAME_DETAILS.GO_BACK" | translate}}<mat-icon>keyboard_backspace</mat-icon> 
 </button>
-<div class="me-3 ms-3">
+<div class="me-3 ms-3 table-responsive">
     <table mat-table [dataSource]="results" class="mat-elevation-z2">
         <caption>{{"PROFESSOR.GAME_DETAILS.CAPTION" | translate}}</caption>
       <ng-container matColumnDef="user">

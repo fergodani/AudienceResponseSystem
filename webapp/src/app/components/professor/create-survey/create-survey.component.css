@@ -8,14 +8,10 @@ mat-drawer-container {
 }
 
 .list {
-  width: 90%;
-  max-width: 100%;
   border: solid 1px #ccc;
   min-height: 60px;
-  display: block;
   background: white;
   border-radius: 4px;
-  overflow: hidden;
 }
 
 .box {
@@ -55,8 +51,8 @@ mat-drawer-container {
 }
 
 .image-box {
-  width: 300px;
-  height: 300px;
+  max-width: 300px;
+  height: auto;
   min-height: 300px;
   max-height: auto;
   border: solid 1px #ccc;
@@ -93,7 +89,6 @@ mat-drawer-container {
 }
 
 .imageContainer {
-  max-width: 400px;
   overflow: hidden;
 }
 
@@ -107,6 +102,7 @@ img {
   top: 50%;
   right: 0px;
   width: auto;
+  z-index: 100;
 }
 .example-headers-align .mat-expansion-panel-header-description {
   justify-content: space-between;
@@ -114,7 +110,24 @@ img {
 }
 
 h5 {
+  width: fit-content;
   white-space: nowrap;
-  overflow: scroll;
-  max-width: 50em;
+}
+
+.main {
+  flex-wrap: nowrap;
+}
+
+@media (max-width: 1100px) {
+  .answers-button {
+   bottom: 0;
+  }
+
+  .main {
+    flex-wrap: wrap;
+  }
+
+  .image-box {
+    width: 300px;
+  }
 }

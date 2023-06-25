@@ -27,7 +27,8 @@ export class HeaderComponent implements OnInit{
 
   constructor(
     private authService: ApiAuthService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private router: Router
     ) {
     this.authService.user.subscribe(user => this.user = user)
     this.translateService.setDefaultLang(this.selectedLanguage);
@@ -58,6 +59,11 @@ export class HeaderComponent implements OnInit{
 
   changeLanguage(language: any) {
     this.translateService.use(language);
+  }
+
+  async navigate(url: string) {
+    this.isMenuCollapsed = true
+    this.router.navigate([url])
   }
 
 }

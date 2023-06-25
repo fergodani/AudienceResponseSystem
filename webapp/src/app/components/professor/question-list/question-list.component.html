@@ -7,7 +7,7 @@
     <mat-expansion-panel class="m-1" *ngFor="let question of questions">
         <mat-expansion-panel-header>
             <mat-panel-title class="d-inline-block d-flex">
-                <h5 class="overflow-auto">
+                <h5>
                     {{ question.description }}
                 </h5>
             </mat-panel-title>
@@ -42,10 +42,10 @@
     </div>
 </div>
 <div class="mb-5" *ngIf="isSelecting">
-    <div class="d-flex gap-5 justify-content-between align-items-center" *ngFor="let question of questions">
+    <div class="d-flex gap-5 justify-content-between flex-wrap align-items-center" *ngFor="let question of questions">
         <div class="border m-2 d-flex flex-row">
             <div class="d-flex flex-column ps-2">
-                <h5 class="overflow-auto">{{ question.description }}</h5>
+                <h5>{{ question.description }}</h5>
             </div>
             <button mat-mini-fab color="primary" class="upload-btn ms-3" (click)="addQuestionToCourse(question)"
                 *ngIf="isSelecting && !isInclude(question)">
@@ -56,9 +56,9 @@
 </div>
 <div class="mb-5" *ngIf="isCreatingSurvey">
     <div class="d-flex gap-5 justify-content-between align-items-center" *ngFor="let question of questions">
-        <div class="border m-2 d-flex flex-row">
+        <div class="border m-2 d-flex flex-row flex-wrap">
             <div class="d-flex flex-column ps-2">
-                <h5 class="overflow-auto">{{ question.description }}</h5>
+                <h5>{{ question.description }}</h5>
             </div>
             <button mat-mini-fab color="primary" class="upload-btn ms-3" (click)="addQuestionToSurvey(question)"
                 *ngIf="isCreatingSurvey">

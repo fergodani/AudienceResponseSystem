@@ -1,7 +1,7 @@
 <div class="home">
-    <div class="w-auto">
+    <div class="w-100">
         <h2>{{ 'STUDENT.HOME.MY_COURSES' | translate }}</h2>
-        <h2 *ngIf="courses.length == 0">{{ 'STUDENT.HOME.ANY_COURSES' | translate }}</h2>
+        <p *ngIf="courses.length == 0">{{ 'STUDENT.HOME.ANY_COURSES' | translate }}</p>
         <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
             <span class="visually-hidden">Loading...</span>
         </div>
@@ -12,14 +12,14 @@
             </div>
         </div>
     </div>
-    <div class="w-auto d-flex flex-column">
+    <div class="w-100">
         <h2>{{ 'STUDENT.HOME.OPEN_SURVEYS' | translate }}</h2>
         <div class="spinner-border text-primary" role="status" *ngIf="isLoadingGames">
             <span class="visually-hidden">Loading...</span>
         </div>
         <p *ngIf="games.length == 0 && !isLoadingGames">{{ 'STUDENT.HOME.WAITING_FOR_SURVEYS' | translate }}</p>
-        <div class="d-flex d-flex flex-column ps-2  w-100 gap-2 mb-5">
-            <div class="d-flex flex-column ps-2 w-100 gap-2 game" *ngFor="let game of games">
+        <div class="d-flex flex-column w-100 gap-2 mb-5">
+            <div class="d-flex flex-column w-100 gap-2 game" *ngFor="let game of games">
                 <h2><a [routerLink]="['/game/join', game.id]">{{ game.survey!.title }}</a></h2>
             </div>
         </div>

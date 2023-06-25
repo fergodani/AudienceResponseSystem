@@ -6,14 +6,14 @@
         </div>
     </mat-drawer>
     <mat-drawer-content>
-        <div class="d-flex flex-row  bd-highlight flex-wrap h-100">
+        <div class="d-flex flex-row justify-content-center h-100 main">
             <div class="card">
                 <div class="card-body d-flex flex-column align-items-center">
                     <div class="image-box">
                         <div class="imageContainer">
                             <img [src]="resourceFile" *ngIf="resourceFile != ''" alt="Question image source" />
                         </div>
-                        <p *ngIf="resourceFile == ''">{{ 'PROFESSOR.CREATE_SURVEY.ATTACH_RESOURCE' | translate }}</p>
+                        <p class="ms-1 me-1" *ngIf="resourceFile == ''">{{ 'PROFESSOR.CREATE_SURVEY.ATTACH_RESOURCE' | translate }}</p>
                         <input id="file" type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
 
                         <div class="d-flex gap-2">
@@ -43,14 +43,14 @@
                     </div>
                 </div>
             </div>
-            <div class="flex-fill bd-highlight w-75 mb-5">
-                <button class="answers-button" mat-button (click)="drawer.toggle()">
+            <div class="d-flex flex-column mb-5 me-1 ms-1 w-100">
+                <button mat-raised-button class="answers-button" mat-button (click)="drawer.toggle()">
                     <mat-icon *ngIf="!drawer.opened">keyboard_arrow_left</mat-icon>
                     <mat-icon *ngIf="drawer.opened">keyboard_arrow_right</mat-icon>
                 </button>
                 <h2 class="m-2">{{ 'PROFESSOR.CREATE_SURVEY.QUESTIONS' | translate }} ({{ questionsAdded.length }})</h2>
-                <mat-accordion class="example-headers-align" multi>
-                    <div cdkDropList class="list m-3" (cdkDropListDropped)="drop($event)">
+                <mat-accordion class="example-headers-align w-100" multi>
+                    <div cdkDropList class="list mb-5 ms-2 me-2" (cdkDropListDropped)="drop($event)">
                         <mat-expansion-panel class="p-2" hideToggle
                             *ngFor="let question of questionsAdded; let indexOfElement=index" cdkDrag>
                             <mat-expansion-panel-header>
@@ -59,7 +59,7 @@
 
                                 </mat-panel-title>
                                 <mat-panel-description class="msg-header-description">
-                                    <h5 class="overflow-auto">{{ question.description }}</h5>
+                                    <h5>{{ question.description }}</h5>
                                 </mat-panel-description>
                             </mat-expansion-panel-header>
 
