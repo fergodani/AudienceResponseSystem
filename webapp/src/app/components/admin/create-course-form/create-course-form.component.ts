@@ -29,6 +29,9 @@ export class CreateCourseFormComponent {
     const newCourse = new Course(name!, description!);
     this.apiService
     .createCourse(newCourse)
-    .subscribe(msg => alert("Curso creado"));
+    .subscribe(msg =>{ 
+      alert("Curso creado")
+      this.router.navigate(["/courses"])
+  });
   }
 }

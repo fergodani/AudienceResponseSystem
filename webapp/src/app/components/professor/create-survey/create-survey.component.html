@@ -1,5 +1,5 @@
-<mat-drawer-container class="example-container" [hasBackdrop]="false">
-    <mat-drawer class="w-75" #drawer position="end" mode="push" [disableClose]="false">
+<mat-drawer-container class="example-container" [hasBackdrop]="true">
+    <mat-drawer class="w-75" #drawer position="start" mode="push" [disableClose]="false" >
         <h2 class="ps-3 pt-3 pe-3">{{ 'PROFESSOR.CREATE_SURVEY.QUESTIONS' | translate }}</h2>
         <div class="d-flex flex-row m-3">
             <app-question-list [isCreatingSurvey]="true" (questionToAdd)="addQuestion($event)"></app-question-list>
@@ -34,6 +34,11 @@
                         </mat-form-field>
                         <button class="m-3" mat-raised-button (click)="onSurveySubmit()">{{
                             'PROFESSOR.CREATE_SURVEY.SAVE' | translate }}</button>
+                            <button mat-raised-button class="answers-button" mat-button (click)="drawer.toggle()">
+                                Añadir preguntas
+                                <mat-icon *ngIf="!drawer.opened">keyboard_arrow_left</mat-icon>
+                                <mat-icon *ngIf="drawer.opened">keyboard_arrow_right</mat-icon>
+                            </button>
                             <div class="alert alert-danger" role="alert" *ngIf="isTitleError">
                                 {{"PROFESSOR.CREATE_SURVEY.INVALID_TITLE" | translate}}
                             </div>
@@ -44,10 +49,6 @@
                 </div>
             </div>
             <div class="d-flex flex-column mb-5 me-1 ms-1 w-100">
-                <button mat-raised-button class="answers-button" mat-button (click)="drawer.toggle()">
-                    <mat-icon *ngIf="!drawer.opened">keyboard_arrow_left</mat-icon>
-                    <mat-icon *ngIf="drawer.opened">keyboard_arrow_right</mat-icon>
-                </button>
                 <h2 class="m-2">{{ 'PROFESSOR.CREATE_SURVEY.QUESTIONS' | translate }} ({{ questionsAdded.length }})</h2>
                 <mat-accordion class="example-headers-align w-100" multi>
                     <div cdkDropList class="list mb-5 ms-2 me-2" (cdkDropListDropped)="drop($event)">
