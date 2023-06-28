@@ -5,7 +5,6 @@ import prisma from '../prisma/prismaClient';
 
 const getSurveys = async (req: Request, res: Response): Promise<Response> => {
     try {
-        // igual no es necesario que busque las respuestas, o si
         let result = await prisma.survey.findMany({
             select: {
                 id: true,

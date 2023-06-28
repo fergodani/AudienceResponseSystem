@@ -851,6 +851,7 @@ describe("Game", () => {
                         question_id: question.id,
                         question_index: answerResult.question_index,
                         short_answer: null,
+                        is_correct: null,
                         user_id: user.id,
                     }],
                     game: {
