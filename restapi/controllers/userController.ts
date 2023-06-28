@@ -179,21 +179,23 @@ const updateUser = async (req: Request, res: Response): Promise<Response> => {
         }
         const newUsername = username != "" ? username : user.username;
         const newRole = role != "" ? role : user.role;
+        const newPassword = password != undefined ? password : ""
         const salt = await bcrypt.genSalt();
-        const hash = await bcrypt.hash(password, salt);
+        const hash = await bcrypt.hash(newPassword, salt);
         await prisma.user.update({
             where: {
                 id: Number(id),
             },
             data: {
-                username: newUsername,
-                password: password != '' ? hash : undefined,
+                username: newUsername.toUpperCase(),
+                password: newPassword != '' ? hash : undefined,
                 role: newRole
             }
         })
         return res.status(200).json({ message: "Usuario modificado correctamente" })
 
     } catch (error) {
+        console.log(error)
         return res.status(500).json({ message: "Ha ocurrido un error al modificar el usuario" })
     }
 }

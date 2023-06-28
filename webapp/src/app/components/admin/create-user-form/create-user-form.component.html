@@ -13,7 +13,7 @@
             </select>
         </div>
         <div class="mb-3" *ngIf="!isLoading">
-            <input class="form-control" type="submit" value="{{'ADMIN.CREATE_USER.ACCEPT' | translate}}">
+            <input id="submit" class="form-control" type="submit" value="{{'ADMIN.CREATE_USER.ACCEPT' | translate}}">
         </div>
         <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
             <span class="visually-hidden">Loading...</span>

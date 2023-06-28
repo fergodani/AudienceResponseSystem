@@ -7,7 +7,7 @@
         </div>
         <div class="d-flex flex-column w-100 gap-2" *ngIf="!isLoading">
             <div class="d-flex flex-column w-100 gap-1 course" *ngFor="let course of courses">
-                <h2><a id="course" [routerLink]="['/student/course/details', course.id]">{{ course.name}}</a></h2>
+                <h2><a id="{{course.name}}" [routerLink]="['/student/course/details', course.id]">{{ course.name}}</a></h2>
                 <small class="">{{ course.description }}</small>
             </div>
         </div>
@@ -20,7 +20,7 @@
         <p *ngIf="games.length == 0 && !isLoadingGames">{{ 'STUDENT.HOME.WAITING_FOR_SURVEYS' | translate }}</p>
         <div class="d-flex flex-column w-100 gap-2 mb-5">
             <div class="d-flex flex-column w-100 gap-2 game" *ngFor="let game of games">
-                <h2><a [routerLink]="['/game/join', game.id]">{{ game.survey!.title }}</a></h2>
+                <h2><a id="play{{game.survey!.title}}" [routerLink]="['/game/join', game.id]">{{ game.survey!.title }}</a></h2>
             </div>
         </div>
     </div>

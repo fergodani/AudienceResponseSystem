@@ -7,9 +7,9 @@
 <div class="revision" *ngIf="!isLoading">
     <div class="contenido">
         <div class="resumen">
-            <p>{{ 'STUDENT.GAME_REVISION.CORRECT_QUESTIONS' | translate }} {{result.correct_questions}}</p>
-            <p>{{ 'STUDENT.GAME_REVISION.WRONG_QUESTIONS' | translate }} {{result.wrong_questions}}</p>
-            <p>{{ 'STUDENT.GAME_REVISION.UNANSWERED_QUESTIONS' | translate }} {{result.total_questions! -
+            <p id="correct_questions">{{ 'STUDENT.GAME_REVISION.CORRECT_QUESTIONS' | translate }} {{result.correct_questions}}</p>
+            <p id="wrong_questions">{{ 'STUDENT.GAME_REVISION.WRONG_QUESTIONS' | translate }} {{result.wrong_questions}}</p>
+            <p id="unanswered_questions">{{ 'STUDENT.GAME_REVISION.UNANSWERED_QUESTIONS' | translate }} {{result.total_questions! -
                 result.wrong_questions! -
                 result.correct_questions!}}
             </p>

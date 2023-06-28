@@ -13,10 +13,10 @@
 					<button mat-button class="nav-item nav-link active fs-6 text-white" (click)="navigate('/users')">{{"HEADER.USERS" | translate}}</button>
 				</li>
 				<li class="nav-item" *ngIf="isAdmin">
-					<button mat-button class="nav-item nav-link active fs-6 text-white" (click)="navigate('/courses')">{{"HEADER.COURSES" | translate}}</button>
+					<button id="courses" mat-button class="nav-item nav-link active fs-6 text-white" (click)="navigate('/courses')">{{"HEADER.COURSES" | translate}}</button>
 				</li>
 				<li class="nav-item active" *ngIf="isProfessor">
-					<button mat-button class="nav-item nav-link active fs-6 text-white" (click)="navigate('/library')">{{"HEADER.LIBRARY" | translate}}</button>
+					<button id="library" mat-button class="nav-item nav-link active fs-6 text-white" (click)="navigate('/library')">{{"HEADER.LIBRARY" | translate}}</button>
 				</li>
 				<li class="nav-item" *ngIf="isStudent">
 					<button mat-button class="nav-item nav-link active fs-6 text-white" (click)="navigate('/student/profile')">{{"HEADER.PROFILE" | translate}}</button>

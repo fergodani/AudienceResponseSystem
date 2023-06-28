@@ -1,22 +1,24 @@
 <div class="d-flex flex-column">
 
-        <div class="row" *ngIf="type == types.multioption || type == types.true_false">
+    <div class="row" *ngIf="type == types.multioption || type == types.true_false">
         <div class="col d-flex justify-content-center" [formGroup]="answer1FormGroup">
             <mat-form-field>
                 <mat-label>{{"PROFESSOR.CREATE_QUESTION.ANSWER" | translate}}</mat-label>
-                <textarea  matInput formControlName="description"></textarea>
+                <textarea id="answer1" matInput formControlName="description"></textarea>
             </mat-form-field>
-            <mat-checkbox (change)="changeCheck($event.checked, answersType.answer1)" formControlName="checked"></mat-checkbox>
+            <mat-checkbox (change)="changeCheck($event.checked, answersType.answer1)"
+                formControlName="checked"></mat-checkbox>
         </div>
         <div class="col d-flex justify-content-center" [formGroup]="answer2FormGroup">
             <mat-form-field>
                 <mat-label>{{"PROFESSOR.CREATE_QUESTION.ANSWER" | translate}}</mat-label>
-                <textarea matInput formControlName="description"></textarea>
+                <textarea id="answer2" matInput formControlName="description"></textarea>
             </mat-form-field>
-            <mat-checkbox (change)="changeCheck($event.checked, answersType.answer2)" formControlName="checked"></mat-checkbox>
+            <mat-checkbox (change)="changeCheck($event.checked, answersType.answer2)"
+                formControlName="checked"></mat-checkbox>
         </div>
     </div>
-    
+
     <div class="row" *ngIf="type == types.multioption">
         <div class="col d-flex justify-content-center" [formGroup]="answer3FormGroup">
             <mat-form-field>
@@ -45,7 +47,7 @@
             <div class="d-flex flex-row gap-2 flex-wrap">
                 <mat-form-field>
                     <mat-label>{{"PROFESSOR.CREATE_QUESTION.ANSWER" | translate}}</mat-label>
-                    <textarea matInput formControlName="answer2"></textarea>
+                    <textarea id="answer2" matInput formControlName="answer2"></textarea>
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>{{"PROFESSOR.CREATE_QUESTION.ANSWER" | translate}}</mat-label>
@@ -58,6 +60,8 @@
             </div>
         </div>
     </div>
-    <button class="mb-5 ms-2 me-2" mat-raised-button (click)="submitAnswers()" *ngIf="answersToEdit.length == 0">{{"PROFESSOR.CREATE_QUESTION.CREATE_QUESTION" | translate}}</button>
-    <button class="mb-5 ms-2 me-2" mat-raised-button (click)="updateAnswers()" *ngIf="answersToEdit.length != 0">{{"PROFESSOR.CREATE_QUESTION.UPDATE_QUESTION" | translate}}</button>
+    <button id="submitCreate" class="mb-5 ms-2 me-2" mat-raised-button (click)="submitAnswers()"
+        *ngIf="answersToEdit.length == 0">{{"PROFESSOR.CREATE_QUESTION.CREATE_QUESTION" | translate}}</button>
+    <button id="submitUpdate" class="mb-5 ms-2 me-2" mat-raised-button (click)="updateAnswers()"
+        *ngIf="answersToEdit.length != 0">{{"PROFESSOR.CREATE_QUESTION.UPDATE_QUESTION" | translate}}</button>
 </div>

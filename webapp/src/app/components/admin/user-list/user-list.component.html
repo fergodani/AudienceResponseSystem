@@ -4,7 +4,7 @@
         <span class="visually-hidden">Loading...</span>
     </div>
     <div class="d-flex flex-row gap-3" *ngIf="isAdmin">
-        <button type="button" class="btn btn-dark w-25" (click)="onCreateUser()">{{"ADMIN.USER_LIST.NEW_USER" |
+        <button id="createUser" type="button" class="btn btn-dark w-25" (click)="onCreateUser()">{{"ADMIN.USER_LIST.NEW_USER" |
             translate }}</button>
         <div class="alig-self-center">
             <label for="fileUpload">{{"ADMIN.USER_LIST.IMPORT_USER" | translate }} </label>
@@ -23,13 +23,13 @@
     <div class="mb-5 d-flex flex-column gap-2 bg-light">
         <div class="border d-flex flex-row gap-5 justify-content-between align-items-center" *ngFor="let user of users">
             <div class="d-flex flex-column ps-2">
-                <h2><a [routerLink]="['/users/update', user.id]">{{ user.username}}</a></h2>
+                <h2><a id="{{user.username}}" [routerLink]="['/users/update', user.id]">{{ user.username}}</a></h2>
                 <small class="fs-6">{{ user.role }}</small>
             </div>
 
-            <button type="button" class="btn btn-danger me-3" (click)="onDeleteUser(user.id)"
+            <button id="delete{{user.username}}" type="button" class="btn btn-danger me-3" (click)="onDeleteUser(user.id)"
                 *ngIf="isAdmin">{{"ADMIN.USER_LIST.DELETE" | translate }}</button>
-            <button mat-mini-fab color="primary" class="upload-btn flex-shrink-1 ms-3" (click)="addUserToCourse(user)"
+            <button id="add{{user.username}}" mat-mini-fab color="primary" class="upload-btn flex-shrink-1 ms-3" (click)="addUserToCourse(user)"
                 *ngIf="isSelecting && !isInclude(user)">
                 <mat-icon>library_add</mat-icon>
             </button>

@@ -6,7 +6,7 @@
     </div>
 
     <p *ngIf="gameSession.users.length == 0">Esperando usuarios...</p>
-    <button mat-button (click)="startGame()" *ngIf="gameSession.users.length != 0">{{"PROFESSOR.HOST_GAME.START" | translate}}</button>
+    <button id="start" mat-button (click)="startGame()" *ngIf="gameSession.users.length != 0">{{"PROFESSOR.HOST_GAME.START" | translate}}</button>
 </div>
 
 <!-- QUESTION PREVIEW -->
@@ -77,7 +77,7 @@
         <h2>2º {{ gameSession.users[1].username}}</h2>
         <h2 *ngIf="gameSession.users.length >= 3">3º {{ gameSession.users[2].username}}</h2>
     </div>
-    <button mat-raised-button (click)="nextQuestion()">{{"PROFESSOR.HOST_GAME.NEXT" | translate}}</button>
+    <button id="next" mat-raised-button (click)="nextQuestion()">{{"PROFESSOR.HOST_GAME.NEXT" | translate}}</button>
 </div>
 
 <!-- GAME FINISHED -->

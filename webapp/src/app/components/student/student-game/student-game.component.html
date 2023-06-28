@@ -18,7 +18,7 @@
         </div>
     </div>
     <div class="grid-container">
-        <button mat-button class="grid-item bg-primary text-center text-white"
+        <button id="answer" mat-button class="grid-item bg-primary text-center text-white"
             *ngIf="actualQuestion.type == 'multioption' || actualQuestion.type == 'true_false'"
             (click)="checkAnswer(actualQuestion.answers[0].id!)">{{
             actualQuestion.answers[0].description }}</button>
@@ -70,7 +70,7 @@
 <!-- END SCREEN -->
 <div *ngIf="gameSession.state == gameSessionState.is_finished">
     <h1>{{"STUDENT.GAME.GAME_FINISHED" | translate}}</h1>
-    <button mat-raised-button (click)="leaveGame()">Salir</button>
+    <button id="finish" mat-raised-button (click)="leaveGame()">Salir</button>
 </div>
 
 <!-- PREVIEW SCREEN -->

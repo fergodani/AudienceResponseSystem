@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Message } from '@app/core/models/message.model';
 import { User } from 'src/app/core/models/user.model';
 import { ApiService } from 'src/app/core/services/admin/api.admin.service';
@@ -12,7 +12,11 @@ import { ApiService } from 'src/app/core/services/admin/api.admin.service';
 })
 export class UpdateUserFormComponent implements OnInit {
 
-  constructor(private apiService: ApiService, private actRoute: ActivatedRoute) {}
+  constructor(
+    private apiService: ApiService,
+    private actRoute: ActivatedRoute,
+    private router: Router
+    ) {}
 
   ngOnInit(): void {
     const id = this.actRoute.snapshot.paramMap.get('id');
@@ -43,7 +47,10 @@ export class UpdateUserFormComponent implements OnInit {
     this.user.role =  this.translate(this.updateUserForm.value.role ?? this.user.role)
     this.apiService
     .updateUser(this.user)
-    .subscribe((msg: Message) => alert(msg.message))
+    .subscribe((msg: Message) =>{
+      alert(msg.message)
+      this.router.navigate(["/users"])
+    })
   }
 
   translate(data: string): string {

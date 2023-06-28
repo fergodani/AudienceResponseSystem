@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Message } from '@app/core/models/message.model';
 import { Course } from 'src/app/core/models/course.model';
 import { ApiService } from 'src/app/core/services/admin/api.admin.service';
@@ -12,7 +12,11 @@ import { ApiService } from 'src/app/core/services/admin/api.admin.service';
 })
 export class UpdateCourseFormComponent implements OnInit{
   
-  constructor(private apiService: ApiService, private actRoute: ActivatedRoute) {}
+  constructor(
+    private apiService: ApiService, 
+    private actRoute: ActivatedRoute,
+    private router: Router
+    ) {}
 
   ngOnInit(): void {
     const id = this.actRoute.snapshot.paramMap.get('id');
@@ -37,7 +41,10 @@ export class UpdateCourseFormComponent implements OnInit{
     this.course.description = this.updateCourseForm.value.description != "" ? this.updateCourseForm.value.description! : this.course.description;
     this.apiService
     .updateCourse(this.course)
-    .subscribe( (msg: Message) => alert(msg.message))
+    .subscribe( (msg: Message) =>{
+      alert(msg.message)
+      this.router.navigate(["/courses"])
+    })
   }
 
 }

@@ -32,9 +32,9 @@
                             <mat-label>{{ "PROFESSOR.CREATE_SURVEY.TITLE" | translate }}</mat-label>
                             <input id="title" matInput [formControl]="title">
                         </mat-form-field>
-                        <button class="m-3" mat-raised-button (click)="onSurveySubmit()">{{
+                        <button id="submit" class="m-3" mat-raised-button (click)="onSurveySubmit()">{{
                             'PROFESSOR.CREATE_SURVEY.SAVE' | translate }}</button>
-                            <button mat-raised-button class="answers-button" mat-button (click)="drawer.toggle()">
+                            <button id="addQuestions" mat-raised-button class="answers-button" mat-button (click)="drawer.toggle()">
                                 Añadir preguntas
                                 <mat-icon *ngIf="!drawer.opened">keyboard_arrow_left</mat-icon>
                                 <mat-icon *ngIf="drawer.opened">keyboard_arrow_right</mat-icon>

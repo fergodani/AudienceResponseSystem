@@ -4,7 +4,7 @@
         <span class="visually-hidden">Loading...</span>
     </div>
     <div class="d-flex flex-row gap-3" *ngIf="isAdmin">
-        <button type="button" class="btn btn-dark w-25" (click)="onCreateCourse()">{{"ADMIN.COURSE_LIST.NEW_COURSE" |
+        <button id="createCourse" type="button" class="btn btn-dark w-25" (click)="onCreateCourse()">{{"ADMIN.COURSE_LIST.NEW_COURSE" |
             translate }}</button>
         <div class="alig-self-center">
             <label for="fileUpload">{{"ADMIN.COURSE_LIST.IMPORT_COURSE" | translate }} </label>
@@ -24,11 +24,11 @@
         <div class="border d-flex flex-row gap-5 justify-content-between align-items-center"
             *ngFor="let course of courses">
             <div class="d-flex flex-column ps-2 w-100">
-                <h2 *ngIf="isAdmin"><a [routerLink]="['/courses/update', course.id]">{{ course.name}}</a></h2>
-                <h2 *ngIf="isProfessor"><a [routerLink]="['/course/details', course.id]">{{ course.name}}</a></h2>
+                <h2 *ngIf="isAdmin"><a id="{{course.name}}" [routerLink]="['/courses/update', course.id]">{{ course.name}}</a></h2>
+                <h2 *ngIf="isProfessor"><a id="{{course.name}}" [routerLink]="['/course/details', course.id]">{{ course.name}}</a></h2>
                 <small class="fs-6 pb-2">{{ course.description }}</small>
             </div>
-            <button type="button" class="btn btn-danger me-3" (click)="onDeleteCourse(course.id)"
+            <button id="delete{{course.name}}" type="button" class="btn btn-danger me-3" (click)="onDeleteCourse(course.id)"
                 *ngIf="isAdmin">{{"ADMIN.COURSE_LIST.DELETE" | translate }}</button>
         </div>
     </div>
