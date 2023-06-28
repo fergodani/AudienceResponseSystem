@@ -15,7 +15,8 @@ describe('CreateCourseFormComponent', () => {
       declarations: [CreateCourseFormComponent],
       providers: [
         { provide: ApiService, useClass: ApiServiceStub}
-      ]
+      ],
+      teardown: {destroyAfterEach: false}
     }).compileComponents()
     fixture = TestBed.createComponent(CreateCourseFormComponent);
     component = fixture.componentInstance;

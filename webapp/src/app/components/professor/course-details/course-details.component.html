@@ -27,9 +27,9 @@
             aria-label="Font Style">
             <mat-button-toggle [checked]="true" class="fs-5 "
                 (click)="changeState(stateType.surveys)">{{"PROFESSOR.COURSE_DETAILS.SURVEYS" | translate }}</mat-button-toggle>
-            <mat-button-toggle class="fs-5" (click)="changeState(stateType.questions)">{{"PROFESSOR.COURSE_DETAILS.QUESTIONS" | translate }}</mat-button-toggle>
-            <mat-button-toggle class="fs-5" (click)="changeState(stateType.users)">{{"PROFESSOR.COURSE_DETAILS.STUDENTS" | translate }}</mat-button-toggle>
-            <mat-button-toggle class="fs-5" (click)="changeState(stateType.games)">{{"PROFESSOR.COURSE_DETAILS.GAMES" | translate }}</mat-button-toggle>
+            <mat-button-toggle id="questions" class="fs-5" (click)="changeState(stateType.questions)">{{"PROFESSOR.COURSE_DETAILS.QUESTIONS" | translate }}</mat-button-toggle>
+            <mat-button-toggle id="users" class="fs-5" (click)="changeState(stateType.users)">{{"PROFESSOR.COURSE_DETAILS.STUDENTS" | translate }}</mat-button-toggle>
+            <mat-button-toggle id="games" class="fs-5" (click)="changeState(stateType.games)">{{"PROFESSOR.COURSE_DETAILS.GAMES" | translate }}</mat-button-toggle>
         </mat-button-toggle-group>
 
         <div class="w-100">

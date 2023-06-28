@@ -101,7 +101,7 @@ export class CreateSurveyComponent implements OnInit{
     if (!this.isEditing){
       this.apiProfessorService
       .createSurvey(survey)
-      .subscribe(() => alert("Cuestionario creado"))
+      .subscribe((msg: Message) => alert(msg.message))
     }else {
       survey.id = this.surveyToEdit?.id
       this.apiProfessorService

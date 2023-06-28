@@ -30,7 +30,7 @@ describe('LinkQuestionCourseComponent', () => {
     fixture.detectChanges();
   })
 
-  it('should create', () => {
+  it('should create with question list component', () => {
     expect(component).toBeTruthy();
   });
 });

@@ -14,7 +14,7 @@ export class AuthServiceStub {
     role: 'admin'
   }
 
-  private userSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(this.user2);
+  public userSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(this.user2);
   public userObservable: Observable<User | null> = this.userSubject.asObservable();
 
   login(user: User) {

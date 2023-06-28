@@ -83,7 +83,7 @@
 <!-- GAME FINISHED -->
 <div *ngIf="gameSession.state == gameSessionState.is_finished">
     <h1>{{"PROFESSOR.HOST_GAME.GAME_FINISHED" | translate}}</h1>
-    <button mat-raised-button (click)="leaveGame()">{{"PROFESSOR.HOST_GAME.LEAVE" | translate}}</button>
+    <button id="finish" mat-raised-button (click)="leaveGame()">{{"PROFESSOR.HOST_GAME.LEAVE" | translate}}</button>
 </div>
 
 <div *ngIf="isError" class="alert alert-danger mt-3 mb-0">{{errorMessage}}</div>

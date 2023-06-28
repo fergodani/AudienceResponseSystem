@@ -20,4 +20,9 @@ describe('FooterComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it("should contain author's name", () => {
+    let compiled = fixture.debugElement
+    expect(compiled.nativeElement.innerHTML).toContain("Daniel Ferreira Gómez");
+  })
 });

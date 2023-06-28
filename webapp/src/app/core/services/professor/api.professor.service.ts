@@ -58,8 +58,8 @@ export class ApiProfessorService {
     )
   }
 
-  createSurvey(survey: Survey): Observable<Survey> {
-    return this.http.post<Survey>(`${environment.apiUrl}/survey`, survey)
+  createSurvey(survey: Survey): Observable<Message> {
+    return this.http.post<Message>(`${environment.apiUrl}/survey`, survey)
     .pipe(
       catchError(this.handleError)
     )
@@ -122,8 +122,8 @@ export class ApiProfessorService {
     )
   }
 
-  createUserResults(userResults: UserResult[]): Observable<unknown> {
-    return this.http.post(`${environment.apiUrl}/game/results`, userResults)
+  createUserResults(userResults: UserResult[]): Observable<Message> {
+    return this.http.post<Message>(`${environment.apiUrl}/game/results`, userResults)
     .pipe(
       catchError(this.handleError)
     )

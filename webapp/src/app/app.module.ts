@@ -10,7 +10,6 @@ import { CreateUserFormComponent } from './components/admin/create-user-form/cre
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ApiService } from './core/services/admin/api.admin.service';
 import { CreateCourseFormComponent } from './components/admin/create-course-form/create-course-form.component';
 import { UserListComponent } from './components/admin/user-list/user-list.component';
 import { CourseListComponent } from './components/admin/course-list/course-list.component';

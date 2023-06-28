@@ -18,7 +18,6 @@ export class CreateGameDialogComponent {
     private router: Router,
     public dialogRef: MatDialogRef<CreateGameDialogComponent>,
     private apiProfessorService: ApiProfessorService,
-    private socketService: SocketioService,
     private authService: ApiAuthService,
     @Inject(MAT_DIALOG_DATA) public data: Data,
   ) {
@@ -64,9 +63,9 @@ export class CreateGameDialogComponent {
       .createGame(game)
       .subscribe(game => {
         (async () => {
-          //this.socketService.setupSocketConnection()
           this.isLoading = false
           this.dialogRef.close();
+          console.log(this.data)
           await this.router.navigate(["/course", this.data.course_id, 'game', game.id])
         })()
       })

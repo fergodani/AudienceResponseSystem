@@ -88,7 +88,7 @@ export class CourseProfessorDetailsComponent {
     }
     this.apiService
       .addUserToCourse(userToCourse)
-      .subscribe(msg => alert("Usuario/s añadidos"))
+      .subscribe((msg: Message) => alert(msg.message))
   }
 
   openSurveyDialog(): void {
@@ -112,7 +112,7 @@ export class CourseProfessorDetailsComponent {
     }
     this.apiService
       .addSurveyToCourse(surveyToCourse)
-      .subscribe(msg => alert("Cuestionario/s añadido/s"))
+      .subscribe((msg: Message) => alert(msg.message))
   }
 
   openQuestionDialog(): void {

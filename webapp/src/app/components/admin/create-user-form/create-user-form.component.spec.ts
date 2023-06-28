@@ -15,7 +15,8 @@ describe('CreateUserFormComponent', () => {
       declarations: [CreateUserFormComponent],
       providers: [
         { provide: ApiService, useClass: ApiServiceStub}
-      ]
+      ],
+      teardown: {destroyAfterEach: false}
     }).compileComponents()
     fixture = TestBed.createComponent(CreateUserFormComponent);
     component = fixture.componentInstance;

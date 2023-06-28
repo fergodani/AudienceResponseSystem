@@ -40,9 +40,9 @@ export class ApiService {
       );
   }
 
-  createCourse(course: Course): Observable<Course> {
+  createCourse(course: Course): Observable<Message> {
     console.log("createCourse")
-    return this.http.post<Course>(`${environment.apiUrl}/course`, course)
+    return this.http.post<Message>(`${environment.apiUrl}/course`, course)
       .pipe(
         catchError(this.handleError)
       );
@@ -104,9 +104,9 @@ export class ApiService {
       )
   }
 
-  updateCourse(course: Course): Observable<Course> {
+  updateCourse(course: Course): Observable<Message> {
     console.log("updateCourse")
-    return this.http.put<Course>(`${environment.apiUrl}/course`, course)
+    return this.http.put<Message>(`${environment.apiUrl}/course`, course)
       .pipe(
         catchError(this.handleError)
       )
@@ -128,17 +128,17 @@ export class ApiService {
       )
   }
 
-  addUserToCourse(userCourse: UserCourse): Observable<unknown> {
+  addUserToCourse(userCourse: UserCourse): Observable<Message> {
     console.log("addUserToCourse")
-    return this.http.post<UserCourse>(`${environment.apiUrl}/course/addUser`, userCourse)
+    return this.http.post<Message>(`${environment.apiUrl}/course/addUser`, userCourse)
     .pipe(
       catchError(this.handleError)
     )
   }
 
-  addSurveyToCourse(surveyCourse: SurveyCourse): Observable<unknown> {
+  addSurveyToCourse(surveyCourse: SurveyCourse): Observable<Message> {
     console.log("addSurveyToCourse")
-    return this.http.post<SurveyCourse>(`${environment.apiUrl}/course/addSurvey`, surveyCourse)
+    return this.http.post<Message>(`${environment.apiUrl}/course/addSurvey`, surveyCourse)
     .pipe(
       catchError(this.handleError)
     )

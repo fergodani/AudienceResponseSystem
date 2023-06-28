@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Message } from '@app/core/models/message.model';
 import { Course } from 'src/app/core/models/course.model';
 import { ApiService } from 'src/app/core/services/admin/api.admin.service';
 
@@ -36,7 +37,7 @@ export class UpdateCourseFormComponent implements OnInit{
     this.course.description = this.updateCourseForm.value.description != "" ? this.updateCourseForm.value.description! : this.course.description;
     this.apiService
     .updateCourse(this.course)
-    .subscribe( it => alert('Curso actualizado'))
+    .subscribe( (msg: Message) => alert(msg.message))
   }
 
 }

@@ -33,7 +33,7 @@ describe('LinkUserCourseComponent', () => {
     fixture.detectChanges();
   })
 
-  it('should create', () => {
+  it('should create with user list component', () => {
     expect(component).toBeTruthy();
   });
 });

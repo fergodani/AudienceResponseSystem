@@ -21,21 +21,21 @@ const {
 
 let savedUser1: Prisma.userUncheckedCreateInput = {
     id: 1,
-    username: "test",
+    username: "TEST",
     password: "test",
     role: role.student,
 }
 
 let savedUser2: Prisma.userUncheckedCreateInput = {
     id: 2,
-    username: "tes1",
+    username: "TEST2",
     password: "test",
     role: role.professor,
 }
 
 let savedUser3: Prisma.userUncheckedCreateInput = {
     id: 3,
-    username: "test2",
+    username: "TEST3",
     password: "test",
     role: role.professor,
 }
@@ -61,17 +61,17 @@ describe("Users", () => {
                 sinon.default.assert.calledWith(res.json, [
                     {
                         id: 1,
-                        username: "test",
+                        username: "TEST",
                         role: role.student
                     },
                     {
                         id: 2,
-                        username: "tes1",
+                        username: "TEST2",
                         role: role.professor
                     },
                     {
                         id: 3,
-                        username: "test2",
+                        username: "TEST3",
                         role: role.professor
                     }
                 ]);
@@ -117,7 +117,7 @@ describe("Users", () => {
                 sinon.default.assert.calledWith(res.json,
                     {
                         id: 1,
-                        username: "test",
+                        username: "TEST",
                         role: role.student
                     });
             })
@@ -143,7 +143,7 @@ describe("Users", () => {
     describe("Create user", () => {
         describe("With valid input data", () => {
             afterEach(async () => {
-                await prisma.user.deleteMany({ where: { username: "test" } })
+                await prisma.user.deleteMany({ where: { username: {startsWith: "TEST" }} })
             })
             it("User created successfully", async () => {
                 const req = {
@@ -160,7 +160,7 @@ describe("Users", () => {
                 await createUser(req, res);
                 expect(res.status).toHaveBeenCalledWith(200);
                 expect(res.json).toHaveBeenCalledWith({ message: "Usuario creado correctamente" });
-                const userCreated = await prisma.user.findFirst({ where: { username: "test" } })
+                const userCreated = await prisma.user.findFirst({ where: { username: "TEST" } })
                 expect(userCreated).not.toBeNull()
             });
 
@@ -180,7 +180,7 @@ describe("Users", () => {
                     await createUser(req, res);
                     const user = await prisma.user.findFirst({
                         where: {
-                            username: "test"
+                            username: "TEST"
                         }
                     });
                     expect(user!!.password).not.toBe("testpassword");
@@ -202,7 +202,7 @@ describe("Users", () => {
                 await createUser(req, res);
                 const user = await prisma.user.findFirst({
                     where: {
-                        username: "test"
+                        username: "TEST"
                     }
                 });
                 expect(user!!.role).toBe(role.professor);
@@ -281,7 +281,7 @@ describe("Users", () => {
     describe("Login", () => {
         const user = {
             id: 1,
-            username: "testuser",
+            username: "TESTUSER",
             password: "",
             role: role.student
         };
@@ -291,7 +291,7 @@ describe("Users", () => {
             await prisma.user.create({ data: user })
         })
         afterAll(async () => {
-            await prisma.user.deleteMany({ where: { username: "testuser" } })
+            await prisma.user.deleteMany({ where: { username: "TESTUSER" } })
         })
         describe("Success", () => {
             it("when valid credentials", async () => {

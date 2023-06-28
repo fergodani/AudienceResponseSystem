@@ -30,7 +30,7 @@ describe('LinkSurveyCourseComponent', () => {
     fixture.detectChanges();
   })
 
-  it('should create', () => {
+  it('should create with survey list component', () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Message } from '@app/core/models/message.model';
 import { Course } from 'src/app/core/models/course.model';
 import { ApiService } from 'src/app/core/services/admin/api.admin.service';
 
@@ -29,8 +30,8 @@ export class CreateCourseFormComponent {
     const newCourse = new Course(name!, description!);
     this.apiService
     .createCourse(newCourse)
-    .subscribe(msg =>{ 
-      alert("Curso creado")
+    .subscribe((msg: Message) =>{ 
+      alert(msg.message)
       this.router.navigate(["/courses"])
   });
   }

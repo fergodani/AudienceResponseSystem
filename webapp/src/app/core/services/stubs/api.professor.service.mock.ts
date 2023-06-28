@@ -1,3 +1,4 @@
+import { Game } from "@app/core/models/game.model";
 import { Survey } from "@app/core/models/survey.model";
 import { of } from "rxjs";
 
@@ -66,19 +67,35 @@ export class ApiProfessorServiceStub {
     }
 
     getUsersByCourse() {
-        return of([])
+        return of([{username: "user1", rol: "student"}, {username: "user2", rol: "student"}])
     }
 
     getSurveysByCourse() {
-        return of([])
-    }
-
-    getQuestionsByCourse() {
-        return of([])
+        return of([
+            {
+                title: "survey1",
+            },
+            {
+                title: "survey2",
+            }
+        ])
     }
 
     getGamesByCourse() {
-        return of([])
+        return of([
+            {
+               id: 1,
+               survey: {
+                title: "game1"
+               } 
+            },
+            {
+                id: 2,
+                survey: {
+                 title: "game2"
+                } 
+             }
+        ])
     }
 
     getGameResultByGame() {
@@ -86,10 +103,66 @@ export class ApiProfessorServiceStub {
     }
 
     getGameResultsByGame() {
-        return of([])
+        return of([
+            {
+                user: { username: "testUser1"},
+                score: 1000,
+                correct_questions: 2,
+                wrong_questions: 2,
+                total_questions: 4,
+            },
+            {
+                user: { username: "testUser2"},
+                score: 2000,
+                correct_questions: 3,
+                wrong_questions: 0,
+                total_questions: 4,
+            }
+        ])
     }
 
     getGameById() {
-        return of()
+        return of({id: 1})
+    }
+
+    createGame(game: Game) {
+        return of({id: 1})
+    }
+
+    updateGame() {
+        return of({})
+    }
+
+    getQuestionsByCourse(courseId: number){
+        return of([
+            {
+                id: 1,
+                description: "question 1",
+                answers: [
+                    {
+                        description: "answer 1 1",
+                        is_correct: true
+                    },
+                    {
+                        description: "answer 1 2",
+                        is_correct: false
+                    }
+                ]
+            },
+            {
+                id: 2,
+                description: "question 2",
+                answers: [
+                    {
+                        description: "answer 2 1",
+                        is_correct: true
+                    },
+                    {
+                        description: "answer 2 2",
+                        is_correct: false
+                    }
+                ]
+            }
+        ])
     }
 }

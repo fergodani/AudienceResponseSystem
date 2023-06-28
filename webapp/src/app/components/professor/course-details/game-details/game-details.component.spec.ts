@@ -37,4 +37,19 @@ describe('GameDetailsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should fetch user results', () => {
+    expect(component.results.length).toBe(2)
+  })
+
+  it('should show user results', () => {
+    const compiled = fixture.debugElement;
+    expect(compiled.nativeElement.innerHTML).toContain("testUser1");
+    expect(compiled.nativeElement.innerHTML).toContain("testUser2");
+    expect(compiled.nativeElement.innerHTML).toContain(1000);
+    expect(compiled.nativeElement.innerHTML).toContain(2000);
+    expect(compiled.nativeElement.innerHTML).toContain(3);
+    expect(compiled.nativeElement.innerHTML).toContain(0);
+    expect(compiled.nativeElement.innerHTML).toContain(4);
+  })
 });
