@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, inject } from '@angular/core/testing';
 
 import { StudentGameComponent } from './student-game.component';
-import { SocketioService } from '@app/core/socket/socketio.service';
+import { SocketioService } from '@app/core/services/socket/socketio.service';
 import { SocketioServiceStub } from '@app/core/services/stubs/socketio.service.mock';
 import { imports } from '@app/core/services/stubs/imports';
 import { ActivatedRoute, Router } from '@angular/router';

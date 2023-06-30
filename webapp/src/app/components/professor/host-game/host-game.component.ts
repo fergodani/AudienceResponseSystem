@@ -7,7 +7,7 @@ import { Question, QuestionSurvey } from '@app/core/models/question.model';
 import { User, UserResult } from '@app/core/models/user.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
-import { SocketioService } from '@app/core/socket/socketio.service';
+import { SocketioService } from '@app/core/services/socket/socketio.service';
 import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 

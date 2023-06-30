@@ -6,7 +6,7 @@ import { GameSession, GameSessionState, PointsType } from '@app/core/models/game
 import { Question } from '@app/core/models/question.model';
 import { UserResult } from '@app/core/models/user.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
-import { SocketioService } from '@app/core/socket/socketio.service';
+import { SocketioService } from '@app/core/services/socket/socketio.service';
 
 const STANDARD_POINTS = 1000;
 

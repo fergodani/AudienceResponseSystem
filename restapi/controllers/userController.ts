@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Prisma } from '@prisma/client'
+import { Prisma, role } from '@prisma/client'
 import multiparty = require('multiparty');
 import { parseFile } from 'fast-csv'
 import { Role, User } from '../models/user.model';
@@ -19,6 +19,7 @@ oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 const getUsers = async (req: Request, res: Response): Promise<Response> => {
     try {
         let result = await prisma.user.findMany({
+
             select: {
                 id: true,
                 username: true,

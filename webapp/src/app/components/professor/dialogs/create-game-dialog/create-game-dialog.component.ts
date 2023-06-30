@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Game, GameState, GameType, PointsType } from '@app/core/models/game.model';
 import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
-import { SocketioService } from '@app/core/socket/socketio.service';
+import { SocketioService } from '@app/core/services/socket/socketio.service';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 
 @Component({

@@ -4,7 +4,7 @@ import { CreateGameDialogComponent } from './create-game-dialog.component';
 import { imports } from '@app/core/services/stubs/imports';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { AuthServiceStub } from '@app/core/services/stubs/api.auth.service.mock';
-import { SocketioService } from '@app/core/socket/socketio.service';
+import { SocketioService } from '@app/core/services/socket/socketio.service';
 import { SocketioServiceStub } from '@app/core/services/stubs/socketio.service.mock';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from '@app/core/services/admin/api.admin.service';

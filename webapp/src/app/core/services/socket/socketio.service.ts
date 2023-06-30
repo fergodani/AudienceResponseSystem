@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { io } from 'socket.io-client';
-import { Course } from '../models/course.model';
-import { Game, GameState } from '../models/game.model';
-import { equals, User, UserResult } from '../models/user.model';
-import { ApiAuthService } from '../services/auth/api.auth.service';
-import { ApiProfessorService } from '../services/professor/api.professor.service';
+import { Course } from '../../models/course.model';
+import { Game, GameState } from '../../models/game.model';
+import { equals, User, UserResult } from '../../models/user.model';
+import { ApiAuthService } from '../auth/api.auth.service';
+import { ApiProfessorService } from '../professor/api.professor.service';
 import { SocketOptions } from 'socket.io-client';
 import { environment } from '@environments/environment';
 

@@ -5,7 +5,7 @@ import { ApiProfessorServiceStub } from '@app/core/services/stubs/api.professor.
 import { imports } from '@app/core/services/stubs/imports';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GameSessionState} from '@app/core/models/game.model';
-import { SocketioService } from '@app/core/socket/socketio.service';
+import { SocketioService } from '@app/core/services/socket/socketio.service';
 import { SocketioServiceStub } from '@app/core/services/stubs/socketio.service.mock';
 
 describe('HostGameComponent', () => {

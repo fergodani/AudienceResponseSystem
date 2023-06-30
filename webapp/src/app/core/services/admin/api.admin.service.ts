@@ -13,9 +13,6 @@ import { environment } from '@environments/environment';
 export class ApiService {
   users: User[] = []
 
-  // TODO: pasar la url a un .env
-  // TODO: usar httpOptions para establecer header
-
   constructor(private http: HttpClient) { }
 
   private handleError(error: HttpErrorResponse) {

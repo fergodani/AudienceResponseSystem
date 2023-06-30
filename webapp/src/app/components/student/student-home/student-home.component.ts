@@ -5,7 +5,7 @@ import { Survey } from '@app/core/models/survey.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 import { ApiStudentService } from '@app/core/services/user/api.user.service';
-import { SocketioService } from '@app/core/socket/socketio.service';
+import { SocketioService } from '@app/core/services/socket/socketio.service';
 import { TranslateService } from '@ngx-translate/core';
 import { isEmpty } from 'rxjs';
 
