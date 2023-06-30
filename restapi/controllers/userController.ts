@@ -19,7 +19,11 @@ oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 const getUsers = async (req: Request, res: Response): Promise<Response> => {
     try {
         let result = await prisma.user.findMany({
-
+            where: {
+                NOT: {
+                    role: role.admin
+                }
+            },
             select: {
                 id: true,
                 username: true,
