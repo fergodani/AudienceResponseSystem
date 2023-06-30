@@ -64,7 +64,7 @@ const getSurveysByUser = async (req: Request, res: Response): Promise<Response> 
     }
 }
 
-const getSurveysById = async (req: Request, res: Response): Promise<Response> => {
+const getSurveyById = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
             return res.status(400).json({ message: "Debe proporcionar un ID de cuestionario válido" })
@@ -258,6 +258,19 @@ const deleteSurvey = async (req: Request, res: Response): Promise<Response> => {
 
 const deleteSurveyFromCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
+        if (!req.params.survey_id) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de pregunta válido" })
+        }
+        if (!req.params.course_id) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de curso válido" })
+        }
+        const course = await prisma.course.findUnique({ where: { id: Number(req.params.course_id) } })
+        if (!course)
+            return res.status(404).json({ message: "El curso especificado no existe" })
+        const survey = await prisma.survey.findUnique({ where: { id: Number(req.params.survey_id) } })
+        if (!survey)
+            return res.status(404).json({ message: "El cuestionario especificado no existe" })
+        
         await prisma.courseSurvey.delete({
             where: {
                 survey_id_course_id: {
@@ -278,7 +291,7 @@ module.exports = {
     getSurveysByUser,
     createSurvey,
     getSurveysByCourse,
-    getSurveysById,
+    getSurveyById,
     updateSurvey,
     deleteSurvey,
     deleteSurveyFromCourse

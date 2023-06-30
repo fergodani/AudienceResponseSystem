@@ -423,6 +423,18 @@ const getQuestionsByCourse = async (req: Request, res: Response): Promise<Respon
 
 const deleteQuestionFromCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
+        if (!req.params.question_id) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de pregunta válido" })
+        }
+        if (!req.params.course_id) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de curso válido" })
+        }
+        const question = await prisma.question.findUnique({ where: { id: Number(req.params.question_id) } })
+        if (!question)
+            return res.status(404).json({ message: "La pregunta especificada no existe" })
+        const course = await prisma.course.findUnique({ where: { id: Number(req.params.course_id) } })
+        if (!course)
+            return res.status(404).json({ message: "El curso especificado no existe" })
         await prisma.courseQuestion.delete({
             where: {
                 question_id_course_id: {

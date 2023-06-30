@@ -52,7 +52,6 @@ export class SurveyListComponent implements OnInit{
   }
 
   deleteSurvey(survey: Survey) {
-    console.log(survey)
     this.apiProfessorService
     .deleteSurvey(survey.id!)
     .subscribe((msg: Message) => {

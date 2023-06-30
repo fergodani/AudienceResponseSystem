@@ -9,6 +9,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:e2e": "npx testcafe 'chrome --allow-insecure-localhost' --hostname",
+    "test:accessibility": "pally-ci",
     "test:prod": "ng test --browsers=ChromeHeadless --watch=false --progress=true"
   },
   "private": true,
@@ -37,6 +38,7 @@
     "buffer": "^6.0.3",
     "jwt-decode": "^3.1.2",
     "ng-mocks": "^14.11.0",
+    "pa11y-ci": "^3.0.1",
     "rxjs": "~7.8.1",
     "socket.io-client": "^4.7.0",
     "testcafe": "^3.0.0",

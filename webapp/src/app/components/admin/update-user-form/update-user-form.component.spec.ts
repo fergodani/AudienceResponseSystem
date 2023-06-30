@@ -21,7 +21,8 @@ describe('UpdateUserFormComponent', () => {
         {
           provide: ActivatedRoute, useValue: { snapshot: { paramMap } }
         }
-      ]
+      ],
+      teardown: {destroyAfterEach: false} 
     }).compileComponents()
     fixture = TestBed.createComponent(UpdateUserFormComponent);
     component = fixture.componentInstance;

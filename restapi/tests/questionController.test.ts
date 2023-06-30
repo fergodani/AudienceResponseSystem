@@ -215,7 +215,7 @@ describe("Questions", () => {
             })
         })
         describe("There are no questions", () => {
-            it("should retrive null", async () => {
+            it("should retrive an empty array", async () => {
                 const res = {
                     status: jest.fn().mockReturnThis(),
                     json: jest.fn()
@@ -1376,7 +1376,7 @@ describe("Questions", () => {
                 await prisma.user.deleteMany({ where: { id: 1 } })
                 await prisma.course.deleteMany({ where: { id: 1 } })
             })
-            describe("User belongs to course", () => {
+            describe("Question belongs to course", () => {
                 beforeEach(async () => {
                     await prisma.courseQuestion.create({ data: courseQuestion1 })
                 })
@@ -1406,13 +1406,38 @@ describe("Questions", () => {
                 expect(res.status).toHaveBeenCalledWith(500);
                 expect(res.json).toHaveBeenCalledWith({ message: "Ha ocurrido un error al eliminar la pregunta del curso" });
             })
-            it("should return 500 if course id is not a number", async () => {
-                const req = { params: { course_id: "not_a_number", question_id: "1" } };
+            it("should return 404 if question does not exist", async () => {
+                const req = { params:{ course_id: 1, question_id: question1.id } };
                 const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
                 await deleteQuestionFromCourse(req, res);
-                expect(res.status).toHaveBeenCalledWith(500);
-                expect(res.json).toHaveBeenCalledWith({ message: "Ha ocurrido un error al eliminar la pregunta del curso" });
+                expect(res.status).toHaveBeenCalledWith(404);
+                expect(res.json).toHaveBeenCalledWith({ message: "La pregunta especificada no existe" });
             });
+
+            describe("Question exists", () => {
+                beforeAll(async () => {
+                    await prisma.user.create({ data: user })
+                    await prisma.question.create({data: question1})
+                })
+                afterAll(async () => {
+                    await prisma.question.delete({where: {id: question1.id}})
+                    await prisma.user.deleteMany({ where: { id: 1 } })
+                })
+                it("should return 500 if course id is not a number", async () => {
+                    const req = { params: { course_id: "not_a_number", question_id: question1.id } };
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await deleteQuestionFromCourse(req, res);
+                    expect(res.status).toHaveBeenCalledWith(500);
+                    expect(res.json).toHaveBeenCalledWith({ message: "Ha ocurrido un error al eliminar la pregunta del curso" });
+                });
+                it("should return 404 if course does not exist", async () => {
+                    const req = { params:{ course_id: 1, question_id: question1.id } };
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await deleteQuestionFromCourse(req, res);
+                    expect(res.status).toHaveBeenCalledWith(404);
+                    expect(res.json).toHaveBeenCalledWith({ message: "El curso especificado no existe" });
+                });
+            })
         })
     })
 

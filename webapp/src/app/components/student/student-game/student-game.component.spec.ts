@@ -40,10 +40,6 @@ describe('StudentGameComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('should show wait room', () => {
     expect(compiled.nativeElement.innerHTML).toContain("STUDENT.GAME.LOOK_AT_YOUR_NAME");
   });

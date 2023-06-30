@@ -39,18 +39,25 @@ export class ApiProfessorServiceStub {
     getSurveysByUser(userId: number) {
         return of([
             {
+                id: 1,
                 title: "TitleTest1",
             },
             {
+                id: 2,
                 title: "TitleTest2",
             },
             {
+                id: 3,
                 title: "TitleTest3",
             }
         ])
     }
 
     deleteQuestion(questionId: number) {
+        return of({message: "Test"})
+    }
+
+    deleteSurvey(questionId: number) {
         return of({message: "Test"})
     }
 

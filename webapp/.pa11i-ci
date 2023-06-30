@@ -1,0 +1,10 @@
+{
+  "defaults": {
+    "timeout": 5000
+  },
+  "urls": [
+    "https://localhost:4200/",
+    "https://localhost:4200/library",
+    "https://localhost:4200/course/details"  
+  ]
+}

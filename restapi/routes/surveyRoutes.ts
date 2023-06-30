@@ -6,7 +6,7 @@ const {
     createSurvey,
     getSurveysByUser,
     getSurveysByCourse,
-    getSurveysById,
+    getSurveyById,
     updateSurvey,
     deleteSurvey,
     deleteSurveyFromCourse
@@ -16,7 +16,7 @@ api.get("/", getSurveys)
 
 api.get("/user/:id", getSurveysByUser)
 
-api.get("/:id", getSurveysById)
+api.get("/:id", getSurveyById)
 
 api.get("/courses/:id", getSurveysByCourse)
 

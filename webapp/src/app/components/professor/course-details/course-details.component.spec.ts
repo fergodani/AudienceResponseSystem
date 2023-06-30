@@ -33,7 +33,7 @@ describe('CourseProfessorDetailsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it("should fetch course, users, answers, students and games played", () => {
+  it("should fetch course, users, questions, students and games played", () => {
     expect(component.course).not.toBeNull()
     expect(component.course.name).toBe("testCourse")
     expect(component.course.description).toBe("testDescription")

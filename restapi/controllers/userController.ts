@@ -344,6 +344,18 @@ const changePassword = async (req: Request, res: Response): Promise<Response> =>
 
 const deleteUserFromCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
+        if (!req.params.user_id) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de usuario válido" })
+        }
+        if (!req.params.course_id) {
+            return res.status(400).json({ message: "Debe proporcionar un ID de curso válido" })
+        }
+        const user = await prisma.user.findUnique({ where: { id: Number(req.params.user_id) } })
+        if (!user)
+            return res.status(404).json({ message: "El usuario especificado no existe" })
+        const course = await prisma.course.findUnique({ where: { id: Number(req.params.course_id) } })
+        if (!course)
+            return res.status(404).json({ message: "El curso especificado no existe" })
         await prisma.userCourse.delete({
             where: {
                 user_id_course_id: {

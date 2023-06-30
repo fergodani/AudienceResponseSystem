@@ -6,7 +6,7 @@ const {
     createSurvey,
     getSurveysByUser,
     getSurveysByCourse,
-    getSurveysById,
+    getSurveyById,
     updateSurvey,
     deleteSurvey,
     deleteSurveyFromCourse
@@ -187,7 +187,7 @@ describe("Surveys", () => {
         })
     })
 
-    describe("Get surveys by id", () => {
+    describe("Get survey by id", () => {
         describe("there are at least one survey", () => {
             beforeEach(async () => {
                 await prisma.user.createMany({ data: [user, user2] })
@@ -209,7 +209,7 @@ describe("Surveys", () => {
                         id: 1
                     }
                 }
-                await getSurveysById(req, res)
+                await getSurveyById(req, res)
                 expect(res.status).toHaveBeenCalledWith(200)
                 expect(res.json).toHaveBeenCalledWith({
                     id: survey1.id,
@@ -231,7 +231,7 @@ describe("Surveys", () => {
                         id: 1
                     }
                 }
-                await getSurveysById(req, res)
+                await getSurveyById(req, res)
                 expect(res.status).toHaveBeenCalledWith(200)
                 expect(res.json).toHaveBeenCalledWith(null)
             })
@@ -241,7 +241,7 @@ describe("Surveys", () => {
                 it("with no id", async () => {
                     const mockReq = { params: {} };
                     const mockRes = { status: jest.fn().mockReturnThis(), json: jest.fn() };
-                    await getSurveysById(mockReq, mockRes);
+                    await getSurveyById(mockReq, mockRes);
                     expect(mockRes.status).toHaveBeenCalledWith(400);
                     expect(mockRes.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de cuestionario válido" });
                 });
@@ -249,7 +249,7 @@ describe("Surveys", () => {
                 it("with invalid id", async () => {
                     const mockReq = { params: { id: "invalid" } };
                     const mockRes = { status: jest.fn().mockReturnThis(), json: jest.fn() };
-                    await getSurveysById(mockReq, mockRes);
+                    await getSurveyById(mockReq, mockRes);
                     expect(mockRes.status).toHaveBeenCalledWith(400);
                     expect(mockRes.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de cuestionario válido" });
                 });
@@ -725,20 +725,42 @@ describe("Surveys", () => {
             })
         })
         describe("With invalid parameters", () => {
-            it("should return 500 if question id is not a number", async () => {
-                const req = { params: { course_id: "1", survey_id: "not_a_number" } };
-                const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
-                await deleteSurveyFromCourse(req, res);
-                expect(res.status).toHaveBeenCalledWith(500);
-                expect(res.json).toHaveBeenCalledWith({ message: "Ha ocurrido un error al eliminar el cuestionario del curso" });
-            })
             it("should return 500 if course id is not a number", async () => {
-                const req = { params: { course_id: "not_a_number", question_id: "1" } };
+                const req = { params: { course_id: "not_a_number", survey_id: "1" } };
                 const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
                 await deleteSurveyFromCourse(req, res);
                 expect(res.status).toHaveBeenCalledWith(500);
                 expect(res.json).toHaveBeenCalledWith({ message: "Ha ocurrido un error al eliminar el cuestionario del curso" });
             });
+            it("should return 404 if course does not exist", async () => {
+                const req = { params:{ course_id: 1, survey_id: survey1.id } };
+                const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                await deleteSurveyFromCourse(req, res);
+                expect(res.status).toHaveBeenCalledWith(404);
+                expect(res.json).toHaveBeenCalledWith({ message: "El curso especificado no existe" });
+            });
+            describe("Course does exists", () => {
+                beforeAll(async () => {
+                    await prisma.course.create({data: course})
+                })
+                afterAll(async () => {
+                    await prisma.course.delete({where: {id: course.id}})
+                })
+                it("should return 404 if survey does not exist", async () => {
+                    const req = { params:{ course_id: 1, survey_id: survey1.id } };
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await deleteSurveyFromCourse(req, res);
+                    expect(res.status).toHaveBeenCalledWith(404);
+                    expect(res.json).toHaveBeenCalledWith({ message: "El cuestionario especificado no existe" });
+                });
+                it("should return 500 if survey id is not a number", async () => {
+                    const req = { params: { course_id: "1", survey_id: "not_a_number" } };
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await deleteSurveyFromCourse(req, res);
+                    expect(res.status).toHaveBeenCalledWith(500);
+                    expect(res.json).toHaveBeenCalledWith({ message: "Ha ocurrido un error al eliminar el cuestionario del curso" });
+                })
+            })
         })
     })
 })

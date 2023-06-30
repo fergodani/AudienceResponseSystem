@@ -8,7 +8,11 @@ const {
     createResults,
     getGamesResultsByUser,
     getGameById,
-    deleteGame
+    deleteGame,
+    getGamesByCourse,
+    getGameResultByUserAndGame,
+    getGamesResultsByUserAndCourse,
+    getGameResultsByGame
 } = require('../controllers/gameController')
 
 let user: Prisma.userUncheckedCreateInput = {
@@ -37,13 +41,23 @@ let game: Prisma.gameUncheckedCreateInput = {
     type: game_type.online,
     are_questions_visible: true
 }
+let game2: Prisma.gameUncheckedCreateInput = {
+    id: 2,
+    host_id: 1,
+    survey_id: 1,
+    course_id: course.id!,
+    state: state.created,
+    point_type: point_type.standard,
+    type: game_type.online,
+    are_questions_visible: true
+}
 
 describe("Game", () => {
     describe("Create game", () => {
         describe("With valid input data", () => {
             describe("User host and survey attached exists", () => {
                 beforeAll(async () => {
-                    await prisma.course.create({data: course})
+                    await prisma.course.create({ data: course })
                     await prisma.user.create({ data: user })
                     await prisma.survey.create({ data: survey1 })
                 })
@@ -51,7 +65,7 @@ describe("Game", () => {
                     await prisma.game.deleteMany({ where: { host_id: user.id } })
                     await prisma.survey.deleteMany({ where: { id: survey1.id } })
                     await prisma.user.deleteMany({ where: { id: user.id } })
-                    await prisma.course.delete({where: { id: course.id}})
+                    await prisma.course.delete({ where: { id: course.id } })
                 })
                 it("game created successfully", async () => {
                     const req = {
@@ -210,7 +224,7 @@ describe("Game", () => {
     describe("Update state", () => {
         describe("Game exists", () => {
             beforeAll(async () => {
-                await prisma.course.create({data: course})
+                await prisma.course.create({ data: course })
                 await prisma.user.create({ data: user })
                 await prisma.survey.create({ data: survey1 })
                 await prisma.game.create({ data: game })
@@ -219,7 +233,7 @@ describe("Game", () => {
                 await prisma.game.deleteMany({ where: { host_id: user.id } })
                 await prisma.survey.deleteMany({ where: { id: survey1.id } })
                 await prisma.user.deleteMany({ where: { id: user.id } })
-                await prisma.course.delete({where: { id: course.id}})
+                await prisma.course.delete({ where: { id: course.id } })
             })
             it("should update state", async () => {
                 const req = {
@@ -325,7 +339,7 @@ describe("Game", () => {
     describe("Delete game", () => {
         describe("Exists game", () => {
             beforeAll(async () => {
-                await prisma.course.create({data: course})
+                await prisma.course.create({ data: course })
                 await prisma.user.create({ data: user })
                 await prisma.survey.create({ data: survey1 })
                 await prisma.game.create({ data: game })
@@ -333,10 +347,10 @@ describe("Game", () => {
             afterAll(async () => {
                 await prisma.survey.deleteMany({ where: { id: survey1.id } })
                 await prisma.user.deleteMany({ where: { id: user.id } })
-                await prisma.course.delete({where: {id: course.id}})
+                await prisma.course.delete({ where: { id: course.id } })
             })
 
-            it("should delete the survey", async () => {
+            it("should delete the game", async () => {
                 const req = { params: { id: 1 } };
                 const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
                 await deleteGame(req, res);
@@ -393,7 +407,7 @@ describe("Game", () => {
     describe("Get game by id", () => {
         describe("there are at least one game", () => {
             beforeAll(async () => {
-                await prisma.course.create({data: course})
+                await prisma.course.create({ data: course })
                 await prisma.user.create({ data: user })
                 await prisma.survey.create({ data: survey1 })
                 await prisma.game.create({ data: game })
@@ -402,7 +416,7 @@ describe("Game", () => {
                 await prisma.game.deleteMany({ where: { host_id: user.id } })
                 await prisma.survey.deleteMany({ where: { id: survey1.id } })
                 await prisma.user.deleteMany({ where: { id: user.id } })
-                await prisma.course.delete({where: {id: course.id}})
+                await prisma.course.delete({ where: { id: course.id } })
             })
 
             it("should retrive the game with the id given", async () => {
@@ -625,7 +639,7 @@ describe("Game", () => {
                 role: role.student,
             }
             beforeAll(async () => {
-                await prisma.course.create({data: course})
+                await prisma.course.create({ data: course })
                 await prisma.user.createMany({ data: [user, user2] })
                 await prisma.question.create({ data: question })
                 await prisma.answer.create({ data: answer })
@@ -639,7 +653,7 @@ describe("Game", () => {
                 await prisma.survey.delete({ where: { id: survey1.id } })
                 await prisma.question.delete({ where: { id: question.id } })
                 await prisma.user.deleteMany({ where: { username: { startsWith: "test" } } })
-                await prisma.course.delete({where: {id: course.id}})
+                await prisma.course.delete({ where: { id: course.id } })
             })
             it("should create the results correctly", async () => {
                 const req = {
@@ -807,7 +821,7 @@ describe("Game", () => {
                 answered: true
             }
             beforeAll(async () => {
-                await prisma.course.create({data: course})
+                await prisma.course.create({ data: course })
                 await prisma.user.createMany({ data: [user, user2] })
                 await prisma.question.create({ data: question })
                 await prisma.answer.create({ data: answer })
@@ -823,7 +837,7 @@ describe("Game", () => {
                 await prisma.survey.delete({ where: { id: survey1.id } })
                 await prisma.question.delete({ where: { id: question.id } })
                 await prisma.user.deleteMany({ where: { username: { startsWith: "test" } } })
-                await prisma.course.delete({where: { id: course.id}})
+                await prisma.course.delete({ where: { id: course.id } })
             })
             it("should retrive the results with the user id given", async () => {
                 const res = {
@@ -926,5 +940,831 @@ describe("Game", () => {
 
         })
     })
-    
+
+    describe("Get games by course", () => {
+        describe("there are at least one game", () => {
+            let date1: Date
+            let date2: Date
+            beforeAll(async () => {
+                await prisma.course.create({ data: course })
+                await prisma.user.create({ data: user })
+                await prisma.survey.create({ data: survey1 })
+                date1 = (await prisma.game.create({data: game})).created_at!
+                date2 = (await prisma.game.create({data: game2})).created_at!
+            })
+            afterAll(async () => {
+                await prisma.game.deleteMany({ where: { host_id: user.id } })
+                await prisma.survey.deleteMany({ where: { id: survey1.id } })
+                await prisma.user.deleteMany({ where: { id: user.id } })
+                await prisma.course.delete({ where: { id: course.id } })
+            })
+
+            it("should retrive the games with the course id given", async () => {
+                const res = {
+                    status: jest.fn().mockReturnThis(),
+                    json: jest.fn()
+                }
+                const req = {
+                    params: {
+                        id: course.id
+                    }
+                }
+                await getGamesByCourse(req, res)
+                expect(res.status).toHaveBeenCalledWith(200)
+                expect(res.json).toHaveBeenCalledWith([
+                    {
+                        id: game.id,
+                        created_at: date1,
+                        survey: {
+                            title: survey1.title,
+                        }
+                    },
+                    {
+                        id: game2.id,
+                        created_at: date2,
+                        survey: {
+                            title: survey1.title,
+                        }
+                    },
+
+                ])
+            })
+        })
+        describe("There are no games", () => {
+            beforeEach(async () => {
+                await prisma.course.create({data: course})
+            })
+            afterEach(async () => {
+                await prisma.course.delete({where: {id: course.id}})
+            })
+            it("should retrive an empty array", async () => {
+                const res = {
+                    status: jest.fn().mockReturnThis(),
+                    json: jest.fn()
+                }
+                const req = {
+                    params: {
+                        id: course.id
+                    }
+                }
+                await getGamesByCourse(req, res)
+                expect(res.status).toHaveBeenCalledWith(200)
+                expect(res.json).toHaveBeenCalledWith([])
+            })
+        })
+        describe("When providing an invalid id", () => {
+            describe("Should return 400", () => {
+                it("with no id", async () => {
+                    const mockReq = { params: {} };
+                    const mockRes = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGamesByCourse(mockReq, mockRes);
+                    expect(mockRes.status).toHaveBeenCalledWith(400);
+                    expect(mockRes.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de curso válido" });
+                });
+
+                it("with invalid id", async () => {
+                    const mockReq = { params: { id: "invalid" } };
+                    const mockRes = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGamesByCourse(mockReq, mockRes);
+                    expect(mockRes.status).toHaveBeenCalledWith(400);
+                    expect(mockRes.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de curso válido" });
+                });
+            })
+            it("should return 404 if course does not exists", async () => {
+                const mockReq = { params: { id: 999 } };
+                const mockRes = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                await getGamesByCourse(mockReq, mockRes);
+                expect(mockRes.status).toHaveBeenCalledWith(404);
+                expect(mockRes.json).toHaveBeenCalledWith({ message: "El curso especificado no existe" });
+            })
+
+        })
+
+    })
+
+    describe("Get game result by user and game", () => {
+        let user2: Prisma.userUncheckedCreateInput = {
+            id: 2,
+            username: "test2",
+            password: "test",
+            role: role.student,
+        }
+        let question: Prisma.questionUncheckedCreateInput = {
+            id: 1,
+            description: "test1",
+            subject: "test1",
+            type: type.multioption,
+            answer_time: 5,
+            user_creator_id: 1,
+            resource: null,
+        }
+        let answer: Prisma.answerUncheckedCreateInput = {
+            id: 1,
+            question_id: question.id!,
+            description: "test",
+            is_correct: true
+        }
+        let gameResult: Prisma.gameResultUncheckedCreateInput = {
+            user_id: user.id!,
+            game_id: game.id!,
+            score: 10,
+            total_questions: 2,
+            correct_questions: 1,
+            wrong_questions: 1
+        }
+        let gameResult2: Prisma.gameResultUncheckedCreateInput = {
+            user_id: user2.id!,
+            game_id: game.id!,
+            score: 10,
+            total_questions: 2,
+            correct_questions: 1,
+            wrong_questions: 1
+        }
+        let answerResult: Prisma.answerResultUncheckedCreateInput = {
+            user_id: user.id!,
+            game_id: game.id!,
+            answer_id: answer.id!,
+            question_id: question.id!,
+            question_index: 1,
+            answered: true
+        }
+        let answerResult2: Prisma.answerResultUncheckedCreateInput = {
+            user_id: user2.id!,
+            game_id: game.id!,
+            answer_id: answer.id!,
+            question_id: question.id!,
+            question_index: 1,
+            answered: true
+        }
+        describe("The result exists", () => {
+            beforeAll(async () => {
+                await prisma.course.create({ data: course })
+                await prisma.user.createMany({ data: [user, user2] })
+                await prisma.question.create({ data: question })
+                await prisma.answer.create({ data: answer })
+                await prisma.survey.create({ data: survey1 })
+                await prisma.game.create({ data: game })
+                await prisma.gameResult.createMany({ data: [gameResult, gameResult2] })
+                await prisma.answerResult.createMany({ data: [answerResult, answerResult2] })
+            })
+            afterAll(async () => {
+                await prisma.answerResult.deleteMany({ where: { game_id: game.id } })
+                await prisma.gameResult.deleteMany({ where: { game_id: game.id } })
+                await prisma.game.delete({ where: { id: game.id } })
+                await prisma.survey.delete({ where: { id: survey1.id } })
+                await prisma.question.delete({ where: { id: question.id } })
+                await prisma.user.deleteMany({ where: { username: { startsWith: "test" } } })
+                await prisma.course.delete({ where: { id: course.id } })
+            })
+            it("should retrive the results with the game and user id given", async () => {
+                const res = {
+                    status: jest.fn().mockReturnThis(),
+                    json: jest.fn()
+                }
+                const req = {
+                    params: {
+                        game_id: game.id,
+                        user_id: user.id
+                    }
+                }
+                await getGameResultByUserAndGame(req, res)
+                expect(res.status).toHaveBeenCalledWith(200)
+                expect(res.json).toHaveBeenCalledWith(
+                    {
+                    game_id: game.id,
+                    score: 10,
+                    total_questions: 2,
+                    wrong_questions: 1,
+                    correct_questions: 1,
+                    user_id: user.id,
+                    answer_results: [{
+                        answered: answerResult.answered,
+                        question_id: question.id,
+                        short_answer: null,
+                        answer
+                    }],
+                    game: {
+                        survey: {
+                            title: survey1.title,
+                            questionsSurvey: []
+                        },
+                        course_id: course.id
+                    }
+                })
+            })
+        })
+        describe("The result does not exist", () => {
+            beforeAll(async () => {
+                await prisma.course.create({ data: course })
+                await prisma.user.createMany({ data: [user] })
+                await prisma.question.create({ data: question })
+                await prisma.answer.create({ data: answer })
+                await prisma.survey.create({ data: survey1 })
+                await prisma.game.create({ data: game })
+            })
+            afterAll(async () => {
+                await prisma.game.delete({ where: { id: game.id } })
+                await prisma.survey.delete({ where: { id: survey1.id } })
+                await prisma.question.delete({ where: { id: question.id } })
+                await prisma.user.deleteMany({ where: { username: { startsWith: "test" } } })
+                await prisma.course.delete({ where: { id: course.id } })
+            })
+            it("should retrive null", async () => {
+                const res = {
+                    status: jest.fn().mockReturnThis(),
+                    json: jest.fn()
+                }
+                const req = {
+                    params: {
+                        game_id: game.id,
+                        user_id: user.id
+                    }
+                }
+                await getGameResultByUserAndGame(req, res)
+                expect(res.status).toHaveBeenCalledWith(200)
+                expect(res.json).toHaveBeenCalledWith(null)
+            })
+        })
+        describe("When providing an invalid game id", () => {
+            describe("Should return error", () => {
+                it("400 with no id", async () => {
+                    const req = {
+                        params: {user_id: user.id}
+                    }
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGameResultByUserAndGame(req, res);
+                    expect(res.status).toHaveBeenCalledWith(400);
+                    expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de juego válido" });
+                });
+
+                it("400 with invalid id", async () => {
+                    const req = {
+                        params: {
+                            game_id: "invalid",
+                            user_id: user.id
+                        }
+                    }
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGameResultByUserAndGame(req, res);
+                    expect(res.status).toHaveBeenCalledWith(400);
+                    expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de juego válido" });
+                });
+                describe("User exists", () => {
+                    beforeAll(async () => {
+                        await prisma.user.create({data: user})
+                    })
+                    afterAll(async () => {
+                        await prisma.user.delete({where: { id: user.id}})
+                    })
+                    it("404 if game not exists", async () => {
+                        const req = {
+                            params: {
+                                game_id: 1,
+                                user_id: user.id
+                            }
+                        }
+                        const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                        await getGameResultByUserAndGame(req, res);
+                        expect(res.status).toHaveBeenCalledWith(404);
+                        expect(res.json).toHaveBeenCalledWith({ message: "El juego especificado no existe" });
+                    });
+                })
+                
+            })
+
+        })
+        describe("When providing an invalid user id", () => {
+            beforeAll(async () => {
+                game.host_id = user2.id!
+                question.user_creator_id = user2.id!
+                survey1.user_creator_id = user2.id!
+                await prisma.course.create({ data: course })
+                await prisma.user.create({ data: user2 })
+                await prisma.question.create({ data: question })
+                await prisma.answer.create({ data: answer })
+                await prisma.survey.create({ data: survey1 })
+                await prisma.game.create({data: game})
+            })
+            afterAll(async () => {
+                await prisma.game.delete({ where: { id: game.id } })
+                await prisma.survey.delete({ where: { id: survey1.id } })
+                await prisma.question.delete({ where: { id: question.id } })
+                await prisma.user.deleteMany({ where: { username: { startsWith: "test" } } })
+                await prisma.course.delete({ where: { id: course.id } })
+                game.host_id = user.id!
+                survey1.user_creator_id = user.id!
+            })
+            describe("Should return error", () => {
+                it("400 with no id", async () => {
+                    const req = {
+                        params: {
+                            game_id: 1
+                        }
+                    }
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGameResultByUserAndGame(req, res);
+                    expect(res.status).toHaveBeenCalledWith(400);
+                    expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de usuario válido" });
+                });
+
+                it("400 with invalid id", async () => {
+                    const req = {
+                        params: {
+                            user_id: "invalid",
+                            game_id: game.id
+                        }
+                    }
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGameResultByUserAndGame(req, res);
+                    expect(res.status).toHaveBeenCalledWith(400);
+                    expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de usuario válido" });
+                });
+
+                it("404 if user not exists", async () => {
+                    const req = {
+                        params: {
+                            game_id: game.id,
+                            user_id: user.id
+                        }
+                    }
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGameResultByUserAndGame(req, res);
+                    expect(res.status).toHaveBeenCalledWith(404);
+                    expect(res.json).toHaveBeenCalledWith({ message: "El usuario especificado no existe" });
+                });
+            })
+
+        })
+    })
+
+    describe("Get game results by game", () => {
+        let user2: Prisma.userUncheckedCreateInput = {
+            id: 2,
+            username: "test2",
+            password: "test",
+            role: role.student,
+        }
+        let question: Prisma.questionUncheckedCreateInput = {
+            id: 1,
+            description: "test1",
+            subject: "test1",
+            type: type.multioption,
+            answer_time: 5,
+            user_creator_id: 1,
+            resource: null,
+        }
+        let answer: Prisma.answerUncheckedCreateInput = {
+            id: 1,
+            question_id: question.id!,
+            description: "test",
+            is_correct: true
+        }
+        let gameResult: Prisma.gameResultUncheckedCreateInput = {
+            user_id: user.id!,
+            game_id: game.id!,
+            score: 10,
+            total_questions: 2,
+            correct_questions: 1,
+            wrong_questions: 1
+        }
+        let gameResult2: Prisma.gameResultUncheckedCreateInput = {
+            user_id: user2.id!,
+            game_id: game.id!,
+            score: 10,
+            total_questions: 2,
+            correct_questions: 1,
+            wrong_questions: 1
+        }
+        let answerResult: Prisma.answerResultUncheckedCreateInput = {
+            user_id: user.id!,
+            game_id: game.id!,
+            answer_id: answer.id!,
+            question_id: question.id!,
+            question_index: 1,
+            answered: true
+        }
+        let answerResult2: Prisma.answerResultUncheckedCreateInput = {
+            user_id: user2.id!,
+            game_id: game.id!,
+            answer_id: answer.id!,
+            question_id: question.id!,
+            question_index: 1,
+            answered: true
+        }
+        describe("there are at least one result", () => {
+            beforeAll(async () => {
+                await prisma.course.create({ data: course })
+                await prisma.user.createMany({ data: [user, user2] })
+                await prisma.question.create({ data: question })
+                await prisma.answer.create({ data: answer })
+                await prisma.survey.create({ data: survey1 })
+                await prisma.game.create({ data: game })
+                await prisma.gameResult.createMany({ data: [gameResult, gameResult2] })
+                await prisma.answerResult.createMany({ data: [answerResult, answerResult2] })
+            })
+            afterAll(async () => {
+                await prisma.answerResult.deleteMany({ where: { game_id: game.id } })
+                await prisma.gameResult.deleteMany({ where: { game_id: game.id } })
+                await prisma.game.delete({ where: { id: game.id } })
+                await prisma.survey.delete({ where: { id: survey1.id } })
+                await prisma.question.delete({ where: { id: question.id } })
+                await prisma.user.deleteMany({ where: { username: { startsWith: "test" } } })
+                await prisma.course.delete({ where: { id: course.id } })
+            })
+            it("should retrive the results with the game id given", async () => {
+                const res = {
+                    status: jest.fn().mockReturnThis(),
+                    json: jest.fn()
+                }
+                const req = {
+                    params: {
+                        game_id: 1
+                    }
+                }
+                await getGameResultsByGame(req, res)
+                expect(res.status).toHaveBeenCalledWith(200)
+                expect(res.json).toHaveBeenCalledWith([
+                    {
+                    game_id: game.id,
+                    score: 10,
+                    total_questions: 2,
+                    wrong_questions: 1,
+                    correct_questions: 1,
+                    user: {
+                        username: user.username
+                    },
+                    answer_results: [{
+                        answer_id: answer.id,
+                        answered: answerResult.answered,
+                        game_id: game.id,
+                        question_id: question.id,
+                        question_index: answerResult.question_index,
+                        short_answer: null,
+                        is_correct: null,
+                        user_id: user.id,
+                    }],
+                    game: {
+                        survey: {
+                            title: survey1.title,
+                        },
+                        course_id: course.id
+                    }
+                },
+                {
+                    game_id: game.id,
+                    score: 10,
+                    total_questions: 2,
+                    wrong_questions: 1,
+                    correct_questions: 1,
+                    user: {
+                        username: user2.username
+                    },
+                    answer_results: [{
+                        answer_id: answer.id,
+                        answered: answerResult.answered,
+                        game_id: game.id,
+                        question_id: question.id,
+                        question_index: answerResult.question_index,
+                        short_answer: null,
+                        is_correct: null,
+                        user_id: user2.id,
+                    }],
+                    game: {
+                        survey: {
+                            title: survey1.title,
+                        },
+                        course_id: course.id
+                    }
+                }
+            ])
+            })
+        })
+        describe("There are no results", () => {
+            beforeAll(async () => {
+                await prisma.course.create({ data: course })
+                await prisma.user.createMany({ data: [user] })
+                await prisma.question.create({ data: question })
+                await prisma.answer.create({ data: answer })
+                await prisma.survey.create({ data: survey1 })
+                await prisma.game.create({ data: game })
+            })
+            afterAll(async () => {
+                await prisma.game.delete({ where: { id: game.id } })
+                await prisma.survey.delete({ where: { id: survey1.id } })
+                await prisma.question.delete({ where: { id: question.id } })
+                await prisma.user.deleteMany({ where: { username: { startsWith: "test" } } })
+                await prisma.course.delete({ where: { id: course.id } })
+            })
+            it("should retrive an empty array", async () => {
+                const res = {
+                    status: jest.fn().mockReturnThis(),
+                    json: jest.fn()
+                }
+                const req = {
+                    params: {
+                        game_id: 1
+                    }
+                }
+                await getGameResultsByGame(req, res)
+                expect(res.status).toHaveBeenCalledWith(200)
+                expect(res.json).toHaveBeenCalledWith([])
+            })
+        })
+        describe("When providing an invalid game id", () => {
+            describe("Should return error", () => {
+                it("400 with no id", async () => {
+                    const req = {
+                        params: {}
+                    }
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGameResultsByGame(req, res);
+                    expect(res.status).toHaveBeenCalledWith(400);
+                    expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de juego válido" });
+                });
+
+                it("400 with invalid id", async () => {
+                    const req = {
+                        params: {
+                            game_id: "invalid"
+                        }
+                    }
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGameResultsByGame(req, res);
+                    expect(res.status).toHaveBeenCalledWith(400);
+                    expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de juego válido" });
+                });
+
+                it("404 if game not exists", async () => {
+                    const req = {
+                        params: {
+                            game_id: 1
+                        }
+                    }
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGameResultsByGame(req, res);
+                    expect(res.status).toHaveBeenCalledWith(404);
+                    expect(res.json).toHaveBeenCalledWith({ message: "El juego especificado no existe" });
+                });
+            })
+
+        })
+    })
+
+    describe("Get game results by user and course", () => {
+        let user2: Prisma.userUncheckedCreateInput = {
+            id: 2,
+            username: "test2",
+            password: "test",
+            role: role.student,
+        }
+        let question: Prisma.questionUncheckedCreateInput = {
+            id: 1,
+            description: "test1",
+            subject: "test1",
+            type: type.multioption,
+            answer_time: 5,
+            user_creator_id: 1,
+            resource: null,
+        }
+        let answer: Prisma.answerUncheckedCreateInput = {
+            id: 1,
+            question_id: question.id!,
+            description: "test",
+            is_correct: true
+        }
+        let gameResult: Prisma.gameResultUncheckedCreateInput = {
+            user_id: user.id!,
+            game_id: game.id!,
+            score: 10,
+            total_questions: 2,
+            correct_questions: 1,
+            wrong_questions: 1
+        }
+        let gameResult2: Prisma.gameResultUncheckedCreateInput = {
+            user_id: user2.id!,
+            game_id: game.id!,
+            score: 10,
+            total_questions: 2,
+            correct_questions: 1,
+            wrong_questions: 1
+        }
+        let answerResult: Prisma.answerResultUncheckedCreateInput = {
+            user_id: user.id!,
+            game_id: game.id!,
+            answer_id: answer.id!,
+            question_id: question.id!,
+            question_index: 1,
+            answered: true
+        }
+        let answerResult2: Prisma.answerResultUncheckedCreateInput = {
+            user_id: user2.id!,
+            game_id: game.id!,
+            answer_id: answer.id!,
+            question_id: question.id!,
+            question_index: 1,
+            answered: true
+        }
+        describe("The are at least one result", () => {
+            beforeAll(async () => {
+                await prisma.course.create({ data: course })
+                await prisma.user.createMany({ data: [user, user2] })
+                await prisma.question.create({ data: question })
+                await prisma.answer.create({ data: answer })
+                await prisma.survey.create({ data: survey1 })
+                await prisma.game.create({ data: game })
+                await prisma.gameResult.createMany({ data: [gameResult, gameResult2] })
+                await prisma.answerResult.createMany({ data: [answerResult, answerResult2] })
+            })
+            afterAll(async () => {
+                await prisma.answerResult.deleteMany({ where: { game_id: game.id } })
+                await prisma.gameResult.deleteMany({ where: { game_id: game.id } })
+                await prisma.game.delete({ where: { id: game.id } })
+                await prisma.survey.delete({ where: { id: survey1.id } })
+                await prisma.question.delete({ where: { id: question.id } })
+                await prisma.user.deleteMany({ where: { username: { startsWith: "test" } } })
+                await prisma.course.delete({ where: { id: course.id } })
+            })
+            it("should retrive the results with the course and user id given", async () => {
+                const res = {
+                    status: jest.fn().mockReturnThis(),
+                    json: jest.fn()
+                }
+                const req = {
+                    params: {
+                        course_id: course.id,
+                        user_id: user.id
+                    }
+                }
+                await getGamesResultsByUserAndCourse(req, res)
+                expect(res.status).toHaveBeenCalledWith(200)
+                expect(res.json).toHaveBeenCalledWith([
+                    {
+                    game_id: game.id,
+                    score: 10,
+                    total_questions: 2,
+                    wrong_questions: 1,
+                    correct_questions: 1,
+                    user_id: user.id,
+                    answer_results: [{
+                        answer_id: answer.id,
+                        game_id: game.id,
+                        is_correct: null,
+                        answered: answerResult.answered,
+                        question_id: question.id,
+                        question_index: answerResult.question_index,
+                        short_answer: null,
+                        user_id: user.id
+                    }],
+                    game: {
+                        survey: {
+                            title: survey1.title
+                        }
+                    }
+                }])
+            })
+        })
+        describe("There is no results", () => {
+            beforeAll(async () => {
+                await prisma.course.create({ data: course })
+                await prisma.user.createMany({ data: [user] })
+                await prisma.question.create({ data: question })
+                await prisma.answer.create({ data: answer })
+                await prisma.survey.create({ data: survey1 })
+                await prisma.game.create({ data: game })
+            })
+            afterAll(async () => {
+                await prisma.game.delete({ where: { id: game.id } })
+                await prisma.survey.delete({ where: { id: survey1.id } })
+                await prisma.question.delete({ where: { id: question.id } })
+                await prisma.user.deleteMany({ where: { username: { startsWith: "test" } } })
+                await prisma.course.delete({ where: { id: course.id } })
+            })
+            it("should retrive an empty array", async () => {
+                const res = {
+                    status: jest.fn().mockReturnThis(),
+                    json: jest.fn()
+                }
+                const req = {
+                    params: {
+                        course_id: course.id,
+                        user_id: user.id
+                    }
+                }
+                await getGamesResultsByUserAndCourse(req, res)
+                expect(res.status).toHaveBeenCalledWith(200)
+                expect(res.json).toHaveBeenCalledWith([])
+            })
+        })
+        describe("When providing an invalid course id", () => {
+            describe("Should return error", () => {
+                it("400 with no id", async () => {
+                    const req = {
+                        params: {user_id: user.id}
+                    }
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGamesResultsByUserAndCourse(req, res);
+                    expect(res.status).toHaveBeenCalledWith(400);
+                    expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de curso válido" });
+                });
+
+                it("400 with invalid id", async () => {
+                    const req = {
+                        params: {
+                            course_id: "invalid",
+                            user_id: user.id
+                        }
+                    }
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGamesResultsByUserAndCourse(req, res);
+                    expect(res.status).toHaveBeenCalledWith(400);
+                    expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de curso válido" });
+                });
+                describe("User exists", () => {
+                    beforeAll(async () => {
+                        await prisma.user.create({data: user})
+                    })
+                    afterAll(async () => {
+                        await prisma.user.delete({where: { id: user.id}})
+                    })
+                    it("404 if course not exists", async () => {
+                        const req = {
+                            params: {
+                                course_id: 1,
+                                user_id: user.id
+                            }
+                        }
+                        const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                        await getGamesResultsByUserAndCourse(req, res);
+                        expect(res.status).toHaveBeenCalledWith(404);
+                        expect(res.json).toHaveBeenCalledWith({ message: "El curso especificado no existe" });
+                    });
+                })
+                
+            })
+
+        })
+        describe("When providing an invalid user id", () => {
+            beforeAll(async () => {
+                game.host_id = user2.id!
+                question.user_creator_id = user2.id!
+                survey1.user_creator_id = user2.id!
+                await prisma.course.create({ data: course })
+                await prisma.user.create({ data: user2 })
+                await prisma.question.create({ data: question })
+                await prisma.answer.create({ data: answer })
+                await prisma.survey.create({ data: survey1 })
+                await prisma.game.create({data: game})
+            })
+            afterAll(async () => {
+                await prisma.game.delete({ where: { id: game.id } })
+                await prisma.survey.delete({ where: { id: survey1.id } })
+                await prisma.question.delete({ where: { id: question.id } })
+                await prisma.user.deleteMany({ where: { username: { startsWith: "test" } } })
+                await prisma.course.delete({ where: { id: course.id } })
+                game.host_id = user.id!
+                survey1.user_creator_id = user.id!
+            })
+            describe("Should return error", () => {
+                it("400 with no id", async () => {
+                    const req = {
+                        params: {
+                            course_id: 1
+                        }
+                    }
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGamesResultsByUserAndCourse(req, res);
+                    expect(res.status).toHaveBeenCalledWith(400);
+                    expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de usuario válido" });
+                });
+
+                it("400 with invalid id", async () => {
+                    const req = {
+                        params: {
+                            user_id: "invalid",
+                            course_id: course.id
+                        }
+                    }
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGamesResultsByUserAndCourse(req, res);
+                    expect(res.status).toHaveBeenCalledWith(400);
+                    expect(res.json).toHaveBeenCalledWith({ message: "Debe proporcionar un ID de usuario válido" });
+                });
+
+                it("404 if user not exists", async () => {
+                    const req = {
+                        params: {
+                            course_id: game.id,
+                            user_id: user.id
+                        }
+                    }
+                    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+                    await getGamesResultsByUserAndCourse(req, res);
+                    expect(res.status).toHaveBeenCalledWith(404);
+                    expect(res.json).toHaveBeenCalledWith({ message: "El usuario especificado no existe" });
+                });
+            })
+
+        })
+    })
+
 })
