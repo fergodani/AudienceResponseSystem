@@ -50,6 +50,8 @@ export class HostGameComponent implements OnInit {
 
   questionType = Type;
 
+  totalUserAnswers = 0
+
   @Input() courseId: number = 0;
 
   ngOnInit() {
@@ -67,6 +69,8 @@ export class HostGameComponent implements OnInit {
       this.gameSession = gameSession
     });
     this.socketService.socket.on('get-answer-from-player', (data: UserResult) => {
+      this.totalUserAnswers++;
+      console.log(this.totalUserAnswers)
       const index = this.gameSession.user_results.findIndex(u => u.user_id == data.user_id)
       if (index >= 0)
         this.gameSession.user_results[index] = data
@@ -155,6 +159,7 @@ export class HostGameComponent implements OnInit {
   }
 
   nextQuestion() {
+    this.totalUserAnswers = 0;
     this.gameSession.question_index++;
     if (this.gameSession.question_index >= this.gameSession.question_list.length) {
       this.gameSession.state = GameSessionState.is_finished

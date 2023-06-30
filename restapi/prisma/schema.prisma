@@ -34,6 +34,7 @@ model course {
   name           String           @unique @db.VarChar
   description    String           @db.VarChar
   created_at     DateTime?        @default(now()) @db.Timestamp(3)
+  image       String?
   UserCourse     UserCourse[]
   courseQuestion courseQuestion[]
   courseSurvey   courseSurvey[]
@@ -108,7 +109,7 @@ model game {
   are_questions_visible Boolean?
   game_result           gameResult[]
   created_at            DateTime?    @default(now()) @db.Timestamp(3)
-  date                  DateTime?    @db.Timestamp(6)
+  date                  DateTime?    @db.Timestamp(3)
   user                  user?        @relation(fields: [host_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   survey                survey?      @relation(fields: [survey_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   course                course?      @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)

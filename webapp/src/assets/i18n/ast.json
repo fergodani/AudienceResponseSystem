@@ -10,7 +10,8 @@
             "CREATE_NEW_COURSE": "Crear nuevu cursu",
             "COURSE_NAME": "Nome del cursu",
             "DESCRIPTION": "Descripción:",
-            "ACCEPT": "Aceptar"
+            "ACCEPT": "Aceptar",
+            "ATTACH_IMAGE": "Añadir imagen"
         },
         "USER_LIST": {
             "USER_LIST": "Llista d'usuarios",
@@ -48,7 +49,7 @@
             "QUESTION_TYPE": "Tipu d'entruga",
             "TIME_LIMIT": "Tiempu llende",
             "QUESTION": "Entruga",
-            "ATTACH_RESOURCE": "Incorpora un recursu",
+            "ATTACH_RESOURCE": "Incorpora una imagen",
             "ANSWER": "Respuesta",
             "OTHER_ANSWERS_ACCEPTED": "Otres entrugues aceptaes",
             "CREATE_QUESTION": "Crear entruga",
@@ -63,7 +64,7 @@
         },
         "CREATE_SURVEY": {
             "QUESTIONS": "Entrugues",
-            "ATTACH_RESOURCE": "Incorpora un recursu",
+            "ATTACH_RESOURCE": "Incorpora una imagen",
             "TITLE": "Títulu",
             "SAVE": "Guardar",
             "DELETE": "Esaniciar",

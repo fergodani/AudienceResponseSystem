@@ -12,7 +12,8 @@ export class Course {
 
     id: number = 0;
     name: string='';
-    description: string=''
+    description: string='';
+    image?: string;
 }
 
 export interface UserCourse {

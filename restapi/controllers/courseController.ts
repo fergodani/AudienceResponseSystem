@@ -36,7 +36,8 @@ const getCourse = async (req: Request, res: Response): Promise<Response> => {
             select: {
                 id: true,
                 name: true,
-                description: true
+                description: true,
+                image: true
             }
         })
         return res.status(200).json(result)
@@ -47,7 +48,7 @@ const getCourse = async (req: Request, res: Response): Promise<Response> => {
 
 const createCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const { name, description } = req.body
+        const { name, description, image } = req.body
         const existingCourse = await prisma.course.findFirst({
             where: {
                 name: name,
@@ -60,6 +61,7 @@ const createCourse = async (req: Request, res: Response): Promise<Response> => {
         savedCourse = {
             name: name,
             description: description,
+            image: image
         }
         await prisma.course.create({ data: savedCourse })
         return res.status(200).json({ message: "El curso ha sido creado correctamente" })
@@ -70,7 +72,7 @@ const createCourse = async (req: Request, res: Response): Promise<Response> => {
 
 const updateCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const { id, name, description } = req.body
+        const { id, name, description, image } = req.body
         const course = await prisma.course.findFirst({
             where: {
                 id: Number(id),
@@ -81,13 +83,15 @@ const updateCourse = async (req: Request, res: Response): Promise<Response> => {
         }
         const newName = name != "" ? name : course.name;
         const newDescription = description != "" ? description : course.description;
+        const newImage = image != "" ? image : course.image
         await prisma.course.update({
             where: {
                 id: Number(id),
             },
             data: {
                 name: newName,
-                description: newDescription
+                description: newDescription,
+                image: newImage
             }
         })
         return res.status(200).json({ message: "El curso ha sido modificado correctamente" })

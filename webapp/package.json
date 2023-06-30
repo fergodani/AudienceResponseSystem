@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "local_start": "ng serve --ssl --ssl-cert '../restapi/certificate/certificate.crt.pem' --ssl-key '../restapi/certificate/privateKey.key.pem'",
+    "local_start": "ng serve --ssl --ssl-cert '../restapi/certificate/certificate.crt' --ssl-key '../restapi/certificate/privateKey.key'",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

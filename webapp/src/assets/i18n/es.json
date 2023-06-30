@@ -10,7 +10,8 @@
             "CREATE_NEW_COURSE": "Crear nuevo curso",
             "COURSE_NAME": "Nombre del curso:",
             "DESCRIPTION": "Descripción:",
-            "ACCEPT": "Aceptar"
+            "ACCEPT": "Aceptar",
+            "ATTACH_IMAGE": "Añadir imagen"
         },
         "USER_LIST": {
             "USER_LIST": "Lista de usuarios",
@@ -48,7 +49,7 @@
             "QUESTION_TYPE": "Tipo de pregunta",
             "TIME_LIMIT": "Tiempo límite",
             "QUESTION": "Pregunta",
-            "ATTACH_RESOURCE": "Incorpora un recurso",
+            "ATTACH_RESOURCE": "Incorpora un imagen",
             "ANSWER": "Respuesta",
             "OTHER_ANSWERS_ACCEPTED": "Otras preguntas aceptadas",
             "CREATE_QUESTION": "Crear pregunta",
@@ -63,7 +64,7 @@
         },
         "CREATE_SURVEY": {
             "QUESTIONS": "Preguntas",
-            "ATTACH_RESOURCE": "Incorpora un recurso",
+            "ATTACH_RESOURCE": "Incorpora una imagen",
             "TITLE": "Título",
             "SAVE": "Guardar",
             "DELETE": "Eliminar",

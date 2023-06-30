@@ -1,7 +1,7 @@
 <div class="d-flex flex-column gap-4 mt-3">
     <div class="encabezado">
         <div class="courseImageContainer ms-4 me-4">
-            <img src="../../../../assets/default-placeholder.png" alt="Imagen curso" />
+            <img [src]="course.image != '' ? course.image : '../../../assets/default-placeholder.png'" alt="Imagen curso" />
         </div>
         <div class="d-flex flex-column ms-2 me-2">
             <h2 class="fs-1 fw-bold">{{ course.name }}</h2>

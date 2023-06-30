@@ -15,7 +15,7 @@
   "dependencies": {
     "@json2csv/node": "^7.0.1",
     "@json2csv/plainjs": "^7.0.1",
-    "@prisma/client": "^4.16.1",
+    "@prisma/client": "^4.16.2",
     "@types/form-data": "^2.5.0",
     "@types/multiparty": "^0.0.33",
     "bcrypt": "^5.1.0",
@@ -58,7 +58,7 @@
     "@types/supertest": "^2.0.12",
     "googleapis": "^118.0.0",
     "json2csv": "^6.0.0-alpha.2",
-    "prisma": "^4.16.1",
+    "prisma": "^4.16.2",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "ts-sinon": "^2.0.2",

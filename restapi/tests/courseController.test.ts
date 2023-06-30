@@ -21,17 +21,20 @@ const {
 let course1: Prisma.courseUncheckedCreateInput = {
     id: 1,
     name: "test1",
-    description: "test1"
+    description: "test1",
+    image: ''
 }
 let course2: Prisma.courseUncheckedCreateInput = {
     id: 2,
     name: "test2",
-    description: "test2"
+    description: "test2",
+    image: ''
 }
 let course3: Prisma.courseUncheckedCreateInput = {
     id: 3,
     name: "test3",
-    description: "test3"
+    description: "test3",
+    image: ''
 }
 
 describe("Courses", () => {

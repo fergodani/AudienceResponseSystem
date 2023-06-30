@@ -10,7 +10,8 @@
             "CREATE_NEW_COURSE": "Create new course",
             "COURSE_NAME": "Course's name:",
             "DESCRIPTION": "Description:",
-            "ACCEPT": "Accept"
+            "ACCEPT": "Accept",
+            "ATTACH_IMAGE": "Attach image"
         },
         "USER_LIST": {
             "USER_LIST": "Users list",
@@ -48,7 +49,7 @@
             "QUESTION_TYPE": "Question type",
             "TIME_LIMIT": "Time limit",
             "QUESTION": "Questions",
-            "ATTACH_RESOURCE": "Attach resource",
+            "ATTACH_RESOURCE": "Attach image",
             "ANSWER": "Answer",
             "OTHER_ANSWERS_ACCEPTED": "Other questions accepted",
             "CREATE_QUESTION": "Create question",
@@ -63,7 +64,7 @@
         },
         "CREATE_SURVEY": {
             "QUESTIONS": "Questions",
-            "ATTACH_RESOURCE": "Attach resource",
+            "ATTACH_RESOURCE": "Attach image",
             "TITLE": "Title",
             "SAVE": "Save",
             "DELETE": "Delete",

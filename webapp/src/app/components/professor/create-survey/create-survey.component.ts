@@ -19,14 +19,12 @@ export class CreateSurveyComponent implements OnInit{
   constructor(
     private authService: ApiAuthService,
     private apiProfessorService: ApiProfessorService,
-    private router: Router,
-    private translateService: TranslateService
+    private router: Router
     ) {}
 
   ngOnInit(): void {
     if (this.surveyToEdit != undefined) {
       this.title.patchValue(this.surveyToEdit.title)
-      //console.log(this.surveyToEdit)
       this.surveyToEdit.questionsSurvey.forEach((qS) => {
         this.questionsAdded.push(qS.question)
       })
@@ -46,7 +44,6 @@ export class CreateSurveyComponent implements OnInit{
   @Input() surveyToEdit: Survey | undefined
 
   addQuestion(questionToAdd: Question) {
-    //if (!this.questionsAdded.includes(questionToAdd))
       this.questionsAdded.push(questionToAdd);
   }
 
