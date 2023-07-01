@@ -37,10 +37,12 @@ export class CourseListComponent implements OnInit {
   }
 
   onDeleteCourse(id: number) {
-    this.courses = this.courses.filter(course => course.id != id)
-    this.apiService
-      .deleteCourse(id)
-      .subscribe()
+    if (confirm("Seguro que quieres eliminar el curso")) {
+      this.courses = this.courses.filter(course => course.id != id)
+      this.apiService
+        .deleteCourse(id)
+        .subscribe()
+    }
   }
 
   onFileSelected(event: Event) {

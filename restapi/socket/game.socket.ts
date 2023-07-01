@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
-import { Game, GameSession, GameSessionState, GameState } from "../models/game.model";
-import { User, UserResult } from "../models/user.model";
+import { Game, GameSession, GameSessionState } from "../models/game.model";
+import { UserResult } from "../models/user.model";
 import { Constants } from './constants'
 import { Question, QuestionSurvey } from "../models/question.model";
 
@@ -17,7 +17,6 @@ export default (io: Server) => {
 
         socket.on(Constants.CREATE_GAME, (newGame: Game, courseId: string, callback) => {
             console.log("Creando juego...")
-            // unirse al juego con el game id
             if (newGame) {
                 socket.join(newGame.id + '')
                 let questionList: Question[] = []
@@ -65,14 +64,14 @@ export default (io: Server) => {
             socket.to(gameSession.game.id  + '').emit('host-start-question-timer', gameSession);
         });
 
-        socket.on("finish_question", (gameSession: GameSession, cb) => {
+        socket.on(Constants.FINISH_QUESTION, (gameSession: GameSession, cb) => {
             cb()
             console.log("Finishing question...")
             gameSessions.set(gameSession.game.id + '', gameSession)
             socket.to(gameSession.game.id + '').emit("finish_question", gameSession)
         })
 
-        socket.on("show_score", (gameSession: GameSession, cb) => {
+        socket.on(Constants.SHOW_SCORE, (gameSession: GameSession, cb) => {
             cb()
             console.log("Showing score...")
             socket.to(gameSession.game.id + '').emit('show_score', gameSession)
@@ -103,7 +102,7 @@ export default (io: Server) => {
             socket.to(gameSession.game.id + '').emit('finish_game', gameSession);
         })
 
-        socket.on('leave_game', (id) => {
+        socket.on(Constants.LEAVE_GAME, (id) => {
             socket.leave(id + '');
         })
     });

@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="d-flex justify-content-center " *ngIf="type == types.short" [formGroup]="shortAnswersFormGroup">
-        <div class="d-flex flex-column w-50 align-items-center gap-1">
+        <div class="d-flex flex-column  align-items-center gap-1">
             <mat-form-field>
                 <mat-label>{{"PROFESSOR.CREATE_QUESTION.ANSWER" | translate}}</mat-label>
                 <textarea matInput formControlName="answer1"></textarea>
@@ -44,7 +44,7 @@
             <mat-card class="mb-2">
                 <mat-card-content>{{"PROFESSOR.CREATE_QUESTION.OTHER_ANSWERS_ACCEPTED" | translate}}</mat-card-content>
             </mat-card>
-            <div class="d-flex flex-row gap-2 flex-wrap">
+            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-center">
                 <mat-form-field>
                     <mat-label>{{"PROFESSOR.CREATE_QUESTION.ANSWER" | translate}}</mat-label>
                     <textarea id="answer2" matInput formControlName="answer2"></textarea>

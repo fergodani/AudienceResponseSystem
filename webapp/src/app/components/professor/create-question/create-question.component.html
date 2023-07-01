@@ -11,13 +11,13 @@
             </mat-select>
         </mat-form-field>
         <mat-form-field class="m-3" appearance="fill">
-            <mat-label>{{"PROFESSOR.CREATE_QUESTION.TIME_LIMIT" | translate}}</mat-label>
+            <mat-label>{{"PROFESSOR.CREATE_QUESTION.TIME_LIMIT" | translate}} (s)</mat-label>
             <input id="time" matInput type="number" formControlName="limitTime" name="given-name">
         </mat-form-field>
     </mat-drawer>
     <mat-drawer-content>
         <div>
-            <button id="options" class="m-3" mat-raised-button (click)="drawer.toggle()">{{"PROFESSOR.CREATE_QUESTION.OPTIONS" |
+            <button id="options" class="m-3 " mat-raised-button color="primary" (click)="drawer.toggle()">{{"PROFESSOR.CREATE_QUESTION.OPTIONS" |
                 translate}}</button>
             <div class="d-flex flex-column align-items-center gap-4" [formGroup]="createQuestionForm">
                 <mat-form-field class="w-50">

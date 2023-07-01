@@ -16,6 +16,13 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 
+/**
+ * @api {get} /user/ Get all users
+ * @apiName getUsers
+ * @apiGroup User
+ * @apiDescription Get all users except the admin.
+ * @apiSuccess (200) {Object[]} users An array of users.
+ */
 const getUsers = async (req: Request, res: Response): Promise<Response> => {
     try {
         let result = await prisma.user.findMany({
@@ -36,6 +43,18 @@ const getUsers = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {get} /user/:id Get user
+ * @apiName getUser
+ * @apiParam {Number} id User id
+ * @apiGroup User
+ * @apiDescription Get the user with the id provided
+ * @apiSuccess (200) {String} id Id of the user.
+ * @apiSuccess (200) {String} username Username of the user.
+ * @apiSuccess (200) {String} role Role of the user.
+ * @apiError (400) InvalidId You must provide a valid id.
+ * @apiError (500) Error Prisma error.
+ */
 const getUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -57,6 +76,18 @@ const getUser = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {post} /user/create Create user
+ * @apiName createUser()
+ * @apiBody {String} username Username of the user
+ * @apiBody {String} role Role of the user
+ * @apiGroup User
+ * @apiDescription Create a new user
+ * @apiUse SendEmail
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (404) UserAlreadyExists The user already exists.
+ * @apiError (500) Error Prisma error.
+ */
 const createUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { username, role } = req.body;
@@ -94,6 +125,11 @@ const createUser = async (req: Request, res: Response): Promise<Response> => {
     }
 };
 
+/**
+ * @apiDefine SendEmail
+ * @apiName sendEmail()
+ * @apiDescription Sends credentials to the new user.
+ */
 async function sendEmail(username: string, password: string) {
     try {
     const accessToken = await oAuth2Client.getAccessToken()
@@ -124,6 +160,20 @@ async function sendEmail(username: string, password: string) {
     }
 }
 
+/**
+ * @api {post} /user/login Login
+ * @apiName login()
+ * @apiBody {String} username Username of the user
+ * @apiBody {String} password Password of the user
+ * @apiGroup User
+ * @apiDescription Login a user
+ * @apiSuccess (200) {Number} id Id of the user.
+ * @apiSuccess (200) {String} username Username of the user.
+ * @apiSuccess (200) {String} role Role of the user.
+ * @apiSuccess (200) {String} token Token of the user.
+ * @apiError (400) InvalidCredential Invalid user or password.
+ * @apiError (500) Error Prisma error.
+ */
 const login = async (req: Request, res: Response): Promise<Response> => {
     try {
         const usernameUpperCase = req.body.username.toUpperCase()
@@ -147,7 +197,6 @@ const login = async (req: Request, res: Response): Promise<Response> => {
         return res.status(200).json({
             id: userId,
             username: user.username,
-            password: user.password,
             role: user.role,
             roleType: getRole(user.role),
             token
@@ -171,6 +220,19 @@ function getRole(role: string): Role {
     }
 }
 
+/**
+ * @api {put} /user UpdateUser
+ * @apiName updateUser()
+ * @apiBody {Number} id Id of the user
+ * @apiBody {String} username Username of the user
+ * @apiBody {String} password Password of the user
+ * @apiBody {String} role Role of the user
+ * @apiGroup User
+ * @apiDescription Update a user
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (404) UserNotFound The user does not exists.
+ * @apiError (500) Error Prisma error.
+ */
 const updateUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { id, username, password, role } = req.body;
@@ -184,7 +246,7 @@ const updateUser = async (req: Request, res: Response): Promise<Response> => {
         }
         const newUsername = username != "" ? username : user.username;
         const newRole = role != "" ? role : user.role;
-        const newPassword = password != undefined ? password : ""
+        const newPassword = password ?? ""
         const salt = await bcrypt.genSalt();
         const hash = await bcrypt.hash(newPassword, salt);
         await prisma.user.update({
@@ -205,6 +267,17 @@ const updateUser = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {delete} /user/:id DeleteUser
+ * @apiName deleteUser()
+ * @apiParam {Number} id Id of the user.
+ * @apiGroup User
+ * @apiDescription Delete a user
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (400) InvalidId The user id must be valid.
+ * @apiError (404) UserNotFound The user does not exists.
+ * @apiError (500) Error Prisma error.
+ */
 const deleteUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -230,6 +303,17 @@ const deleteUser = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {post} /user/file ImportUsers
+ * @apiName importUsers()
+ * @apiBody {Object} FormData FormData with the csv.
+ * @apiGroup User
+ * @apiDescription Import users using a csv.
+ * @apiUse AddUsers
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (500) Error Prisma error.
+ * @apiError (500) EmptyFile The file cannot be empty.
+ */
 const importUsers = async (req: Request, res: Response) => {
     return new Promise(function (resolve, reject) {
         const form = new multiparty.Form();
@@ -258,11 +342,19 @@ const importUsers = async (req: Request, res: Response) => {
 
 }
 
+/**
+ * @apiDefine AddUsers
+ * @apiName AddUsers()
+ * @apiDescription Create all the users given.
+ */
 async function addUsers(res: Response, users: User[]) {
     try {
-        // TODO: generar contraseña aleatoria
+        let password = passGenerator.generate({
+            length: 10,
+            numbers: true
+        })
         const salt = await bcrypt.genSalt();
-        const hash = await bcrypt.hash("3456g243bv5", salt);
+        const hash = await bcrypt.hash(password, salt);
         let usersPrisma: Prisma.userCreateInput[] = []
         let hasMissingFields = false
         users.forEach(user => {
@@ -287,6 +379,16 @@ async function addUsers(res: Response, users: User[]) {
     }
 }
 
+/**
+ * @api {get} /user/courses/:id GetUsersByCourse
+ * @apiName getUsersByCourse()
+ * @apiParam {Number} id The id of the course.
+ * @apiGroup User
+ * @apiDescription Get all course's users.
+ * @apiSuccess (200) {Object[]} users An array with the users retrieved.
+ * @apiError (400) InvalidId You must provide a course valid id.
+ * @apiError (500) Error Prisma error.
+ */
 const getUsersByCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -313,6 +415,17 @@ const getUsersByCourse = async (req: Request, res: Response): Promise<Response> 
     }
 }
 
+/**
+ * @api {put} /user/password/:id ChangePassword
+ * @apiName changePassword()
+ * @apiParam {Number} id The id of the user.
+ * @apiGroup User
+ * @apiDescription Change the password of the user given.
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (404) UserNotFound The user does not exists.
+ * @apiError (400) InvalidCredentials The credentials are invalid.
+ * @apiError (500) Error Prisma error.
+ */
 const changePassword = async (req: Request, res: Response): Promise<Response> => {
     try {
         const user = await prisma.user.findFirst({
@@ -347,6 +460,20 @@ const changePassword = async (req: Request, res: Response): Promise<Response> =>
     }
 }
 
+/**
+ * @api {delete} /user/:user_id/course/:course_id DeleteUserFromCourse
+ * @apiName deleteUserFromCourse()
+ * @apiParam {Number} user_id The id of the user.
+ * @apiParam {Number} course_id The id of the course.
+ * @apiGroup User
+ * @apiDescription Deletes a user from course.
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (400) InvalidUserId Invalid user id.
+ * @apiError (400) InvalidCourseId Invalid course id.
+ * @apiError (404) UserNotFound The user does not exists.
+ * @apiError (404) CourseNotFound The course does not exists.
+ * @apiError (500) Error Prisma error.
+ */
 const deleteUserFromCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.user_id) {

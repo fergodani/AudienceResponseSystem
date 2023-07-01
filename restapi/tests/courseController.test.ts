@@ -687,7 +687,7 @@ describe("Courses", () => {
             })
             afterAll(async () => {
                 await prisma.courseQuestion.deleteMany({ where: { course_id: 1 } })
-                await prisma.question.deleteMany({ where: { description: {startsWith: "test"}} })
+                await prisma.question.deleteMany({ where: { description: { startsWith: "test" } } })
                 await prisma.course.deleteMany({ where: { id: 1 } })
                 await prisma.user.deleteMany({ where: { id: 1 } })
             })
@@ -737,7 +737,7 @@ describe("Courses", () => {
                 })
                 afterAll(async () => {
                     await prisma.question.deleteMany({ where: { description: { startsWith: "test" } } })
-                    await prisma.user.deleteMany({ where: { id: 1 }})
+                    await prisma.user.deleteMany({ where: { id: 1 } })
                 })
                 it("should return an error", async () => {
                     const req = {
@@ -825,7 +825,7 @@ describe("Courses", () => {
                 })
                 afterEach(async () => {
                     await prisma.user.deleteMany({ where: { id: 1 } })
-                    await prisma.course.deleteMany({ where: { name: {startsWith: "test"} } })
+                    await prisma.course.deleteMany({ where: { name: { startsWith: "test" } } })
                     await prisma.userCourse.deleteMany({ where: { user_id: 1 } })
                 })
                 it("should retrieve all user's courses giving user id", async () => {
@@ -838,7 +838,17 @@ describe("Courses", () => {
                     };
                     await getCoursesByUser(req, res)
                     expect(res.status).toHaveBeenCalledWith(200);
-                    expect(res.json).toHaveBeenCalledWith([course1, course2]);
+                    expect(res.json).toHaveBeenCalledWith([
+                        {
+                            id: course1.id,
+                            description: course1.description,
+                            name: course1.name
+                        },
+                        {
+                            id: course2.id,
+                            description: course2.description,
+                            name: course2.name
+                        }]);
                 })
             })
 

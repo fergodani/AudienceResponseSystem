@@ -10,20 +10,20 @@ import { ApiProfessorService } from '@app/core/services/professor/api.professor.
   templateUrl: './survey-list.component.html',
   styleUrls: ['./survey-list.component.css']
 })
-export class SurveyListComponent implements OnInit{
+export class SurveyListComponent implements OnInit {
 
   constructor(
     private apiProfessorService: ApiProfessorService,
     private authService: ApiAuthService,
     private route: Router
-  ){
-    
+  ) {
+
   }
   ngOnInit(): void {
     this.isLoading = true;
     this.apiProfessorService
-    .getSurveysByUser(this.authService.userValue!.id)
-    .subscribe(surveys => {this.surveys = surveys; this.isLoading = false})
+      .getSurveysByUser(this.authService.userValue!.id)
+      .subscribe(surveys => { this.surveys = surveys; this.isLoading = false })
   }
 
   isLoading: boolean = false;
@@ -42,22 +42,24 @@ export class SurveyListComponent implements OnInit{
     this.surveysAdded.push(survey);
   }
 
-  isInclude(survey: Survey){
+  isInclude(survey: Survey) {
     let value = false
-    this.surveysAdded.forEach( surveyToCompare => {
-      if(equals(survey, surveyToCompare))
+    this.surveysAdded.forEach(surveyToCompare => {
+      if (equals(survey, surveyToCompare))
         value = true;
     })
     return value;
   }
 
   deleteSurvey(survey: Survey) {
-    this.apiProfessorService
-    .deleteSurvey(survey.id!)
-    .subscribe((msg: Message) => {
-      alert(msg.message)
-      this.surveys = this.surveys.filter((s) => s.id != survey.id)
-    })
+    if (confirm("Seguro que quieres eliminar el cuestionario")) {
+      this.apiProfessorService
+        .deleteSurvey(survey.id!)
+        .subscribe((msg: Message) => {
+          alert(msg.message)
+          this.surveys = this.surveys.filter((s) => s.id != survey.id)
+        })
+    }
   }
 
 }

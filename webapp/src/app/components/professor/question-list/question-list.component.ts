@@ -52,30 +52,32 @@ export class QuestionListComponent implements OnInit {
       const formData: FormData = new FormData();
       formData.append('file', file, file.name);
       this.apiProfessorService
-      .importQuestions(formData, this.authService.userValue!!.id)
-      .subscribe((msg: Message) => alert(msg.message))
+        .importQuestions(formData, this.authService.userValue!!.id)
+        .subscribe((msg: Message) => alert(msg.message))
     }
   }
 
   exportQuestions() {
     this.apiProfessorService
-    .exportQuestions(this.authService.userValue!.id)
-    .subscribe(data =>this.downloadFile(data))
+      .exportQuestions(this.authService.userValue!.id)
+      .subscribe(data => this.downloadFile(data))
   }
 
   downloadFile(data: any) {
-    const blob = new Blob([data], { type: 'text/csv'})
+    const blob = new Blob([data], { type: 'text/csv' })
     const url = window.URL.createObjectURL(blob)
     window.open(url)
   }
 
   deleteQuestion(question: Question) {
-    this.apiProfessorService
-    .deleteQuestion(question.id)
-    .subscribe((msg: Message) => {
-      alert(msg.message)
-      this.questions = this.questions.filter((q) => q.id != question.id)
-    })
+    if (confirm("Seguro que quieres eliminar la pregunta")) {
+      this.apiProfessorService
+        .deleteQuestion(question.id)
+        .subscribe((msg: Message) => {
+          alert(msg.message)
+          this.questions = this.questions.filter((q) => q.id != question.id)
+        })
+    }
   }
 
   addQuestionToCourse(question: Question) {
@@ -83,10 +85,10 @@ export class QuestionListComponent implements OnInit {
     this.questionsAdded.push(question)
   }
 
-  isInclude(question: Question){
+  isInclude(question: Question) {
     let value = false
-    this.questionsAdded.forEach( questionToCompare => {
-      if(equals(question, questionToCompare))
+    this.questionsAdded.forEach(questionToCompare => {
+      if (equals(question, questionToCompare))
         value = true;
     })
     return value;

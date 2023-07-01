@@ -4,7 +4,8 @@
             "COURSE_LIST": "Lista de cursos",
             "DELETE": "Eliminar",
             "NEW_COURSE": "Nuevo curso",
-            "IMPORT_COURSE": "Importar cursos:"
+            "IMPORT_COURSE": "Importar cursos:",
+            "SURE_DELETE": "¿Estás seguro de que quiere eliminar el curso?"
         },
         "CREATE_COURSE": {
             "CREATE_NEW_COURSE": "Crear nuevo curso",
@@ -17,7 +18,8 @@
             "USER_LIST": "Lista de usuarios",
             "DELETE": "Eliminar",
             "NEW_USER": "Nuevo usuario",
-            "IMPORT_USER": "Importar usuarios:"
+            "IMPORT_USER": "Importar usuarios:",
+            "SURE_DELETE": "¿Estás seguro de que quiere eliminar el usuario?"
         },
         "CREATE_USER": {
             "CREATE_NEW_USER": "Crear nuevo usuario",
@@ -39,17 +41,19 @@
             "DELETE": "Eliminar",
             "NEW_QUESTION": "Nueva pregunta",
             "IMPORT": "Importar",
-            "EXPORT": "Exportar"
+            "EXPORT": "Exportar",
+            "SURE_DELETE": "¿Estás seguro de que quiere eliminar la pregunta?"
         },
         "SURVEY_LIST": {
-            "NEW_SURVEY": "Nuevo cuestionario"
+            "NEW_SURVEY": "Nuevo cuestionario",
+            "SURE_DELETE": "¿Estás seguro de que quiere eliminar el cuestionario?"
         },
         "CREATE_QUESTION": {
             "OPTIONS": "Opciones",
             "QUESTION_TYPE": "Tipo de pregunta",
             "TIME_LIMIT": "Tiempo límite",
             "QUESTION": "Pregunta",
-            "ATTACH_RESOURCE": "Incorpora un imagen",
+            "ATTACH_RESOURCE": "Incorpora una imagen",
             "ANSWER": "Respuesta",
             "OTHER_ANSWERS_ACCEPTED": "Otras preguntas aceptadas",
             "CREATE_QUESTION": "Crear pregunta",
@@ -81,7 +85,10 @@
             "DELETE_FROM_COURSE": "Eliminar",
             "ADD_QUESTIONS": "Añadir preguntas",
             "ADD_STUDENTS": "Añadir alumnos",
-            "LAST_SURVEYS_PLAYED": "Últimos cuestionarios jugados"
+            "LAST_SURVEYS_PLAYED": "Últimos cuestionarios jugados",
+            "SURE_DELETE_SURVEY": "¿Estás seguro de que quiere eliminar el cuestionario del curso?",
+            "SURE_DELETE_USER": "¿Estás seguro de que quiere eliminar el usuario del curso?",
+            "SURE_DELETE_QUESTION": "¿Estás seguro de que quiere eliminar la pregunta del curso?"
         },
         "GAME_DETAILS": {
             "STUDENT": "Alumno",

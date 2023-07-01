@@ -10,7 +10,8 @@
     "test": "ng test",
     "test:e2e": "npx testcafe 'chrome --allow-insecure-localhost' --hostname",
     "test:accessibility": "pally-ci",
-    "test:prod": "ng test --browsers=ChromeHeadless --watch=false --progress=true"
+    "test:prod": "ng test --browsers=ChromeHeadless --watch=false --progress=true",
+    "docs": "npx compodoc -p .\tsconfig.doc.json -d docs"
   },
   "private": true,
   "dependencies": {

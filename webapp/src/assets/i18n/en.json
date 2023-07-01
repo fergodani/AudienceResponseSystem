@@ -4,7 +4,8 @@
             "COURSE_LIST": "Course list",
             "DELETE": "Delete",
             "NEW_COURSE": "New course",
-            "IMPORT_COURSE": "Import courses:"
+            "IMPORT_COURSE": "Import courses:",
+            "SURE_DELETE": "Are you sure you want to delete the course?"
         },
         "CREATE_COURSE": {
             "CREATE_NEW_COURSE": "Create new course",
@@ -17,7 +18,8 @@
             "USER_LIST": "Users list",
             "DELETE": "Delete",
             "NEW_USER": "New user",
-            "IMPORT_USER": "Import users:"
+            "IMPORT_USER": "Import users:",
+            "SURE_DELETE": "Are you sure you want to delete the user?"
         },
         "CREATE_USER": {
             "CREATE_NEW_USER": "Create new user",
@@ -39,10 +41,12 @@
             "DELETE": "Delete",
             "NEW_QUESTION": "New question",
             "IMPORT": "Import",
-            "EXPORT": "Export"
+            "EXPORT": "Export",
+            "SURE_DELETE": "Are you sure you want to delete the question?"
         },
         "SURVEY_LIST": {
-            "NEW_SURVEY": "New survey"
+            "NEW_SURVEY": "New survey",
+            "SURE_DELETE": "Are you sure you want to delete the survey?"
         },
         "CREATE_QUESTION": {
             "OPTIONS": "Options",
@@ -81,7 +85,10 @@
             "DELETE_FROM_COURSE": "Delete",
             "ADD_QUESTIONS": "Add questions",
             "ADD_STUDENTS": "Add students",
-            "LAST_SURVEYS_PLAYED": "Last surveys played"
+            "LAST_SURVEYS_PLAYED": "Last surveys played",
+            "SURE_DELETE_SURVEY?": "Are you sure you want to delete the survey from course?",
+            "SURE_DELETE_USER": "Are you sure you want to delete the user from course?",
+            "SURE_DELETE_QUESTION": "Are you sure you want to delete the question from course?"
         },
         "GAME_DETAILS": {
             "STUDENT": "Student",

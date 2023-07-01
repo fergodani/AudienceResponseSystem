@@ -37,9 +37,14 @@ export class CreateCourseFormComponent {
     newCourse.image = this.resourceFile;
     this.apiService
       .createCourse(newCourse)
-      .subscribe((msg: Message) => {
-        alert(msg.message)
-        this.router.navigate(["/courses"])
+      .subscribe({
+        next: (msg: Message) => {
+          alert(msg.message)
+          this.router.navigate(["/courses"])
+        },
+        error: (msg) => {
+          alert(msg)
+        }
       });
   }
 

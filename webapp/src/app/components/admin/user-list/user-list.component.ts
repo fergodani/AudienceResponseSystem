@@ -13,11 +13,11 @@ import { ApiService } from 'src/app/core/services/admin/api.admin.service';
 export class UserListComponent implements OnInit {
 
   constructor(
-    private apiService: ApiService, 
+    private apiService: ApiService,
     private router: Router,
     private authService: ApiAuthService) {
-      this.authService.user.subscribe(user => this.user = user)
-     }
+    this.authService.user.subscribe(user => this.user = user)
+  }
 
   users: User[] = []
   fileName: string = ''
@@ -28,12 +28,12 @@ export class UserListComponent implements OnInit {
   @Input() isSelecting: boolean = false;
   @Input() usersAdded: User[] = [];
   @Output() userToAdd = new EventEmitter<User>;
-  
+
 
   ngOnInit(): void {
     this.apiService
       .getUsers()
-      .subscribe(users => {this.apiService.users = this.users = users; this.isLoading = false})
+      .subscribe(users => { this.apiService.users = this.users = users; this.isLoading = false })
   }
 
   async onCreateUser() {
@@ -41,10 +41,13 @@ export class UserListComponent implements OnInit {
   }
 
   onDeleteUser(id: number) {
-    this.users = this.users.filter( user =>  user.id != id)
-    this.apiService
-    .deleteUser(id)
-    .subscribe((msg: Message) => {alert(msg.message)})
+    if (confirm("Seguro que quieres eliminar el usuario")) {
+      this.users = this.users.filter(user => user.id != id)
+      this.apiService
+        .deleteUser(id)
+        .subscribe((msg: Message) => { alert(msg.message) })
+    }
+
   }
 
   onFileSelected(event: Event) {
@@ -55,8 +58,8 @@ export class UserListComponent implements OnInit {
       const formData: FormData = new FormData();
       formData.append('file', file, file.name);
       this.apiService
-      .uploadUserFile(formData)
-      .subscribe((msg: Message) => alert(msg.message))
+        .uploadUserFile(formData)
+        .subscribe((msg: Message) => alert(msg.message))
     }
   }
 
@@ -73,10 +76,10 @@ export class UserListComponent implements OnInit {
     this.usersAdded.push(user);
   }
 
-  isInclude(user: User){
+  isInclude(user: User) {
     let value = false
-    this.usersAdded.forEach( userToCompare => {
-      if(equals(user, userToCompare))
+    this.usersAdded.forEach(userToCompare => {
+      if (equals(user, userToCompare))
         value = true;
     })
     return value;

@@ -8,13 +8,21 @@ import { Survey } from '../models/survey.model';
 import { Question } from '../models/question.model';
 import prisma from '../prisma/prismaClient';
 
+/**
+ * @api {get} /course/ Get all courses
+ * @apiName getCourses
+ * @apiGroup Course
+ * @apiDescription Get all courses
+ * @apiSuccess (200) {Object[]} users An array of courses.
+ */
 const getCourses = async (req: Request, res: Response): Promise<Response> => {
     try {
         let result = await prisma.course.findMany({
             select: {
                 id: true,
                 name: true,
-                description: true
+                description: true,
+                image: true
             }
         });
         return res.status(200).json(result)
@@ -24,6 +32,19 @@ const getCourses = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {get} /course/:id Get course
+ * @apiName getCourse
+ * @apiParam {Number} id Course id
+ * @apiGroup Course
+ * @apiDescription Get the course with the id provided
+ * @apiSuccess (200) {String} id Id of the user.
+ * @apiSuccess (200) {String} name Name of the course.
+ * @apiSuccess (200) {String} description Description of the course.
+ * @apiSuccess (200) {String} image Image of the course.
+ * @apiError (400) InvalidId You must provide a valid id.
+ * @apiError (500) Error Prisma error.
+ */
 const getCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -46,6 +67,18 @@ const getCourse = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {post} /course/create Create course
+ * @apiName createCourse()
+ * @apiBody {String} name Name of the course
+ * @apiBody {String} description Description of the course
+ * @apiBody {String} image Image of the course
+ * @apiGroup Course
+ * @apiDescription Create a new course
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (404) CourseAlreadyExists The course already exists.
+ * @apiError (500) Error Prisma error.
+ */
 const createCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { name, description, image } = req.body
@@ -70,6 +103,19 @@ const createCourse = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {put} /course UpdateCourse
+ * @apiName updateCourse()
+ * @apiBody {Number} id Id of the course
+ * @apiBody {String} name Name of the course
+ * @apiBody {String} description Description of the course
+ * @apiBody {String} image Image of the course
+ * @apiGroup Course
+ * @apiDescription Update a course
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (404) CourseNotFound The course does not exists.
+ * @apiError (500) Error Prisma error.
+ */
 const updateCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { id, name, description, image } = req.body
@@ -100,6 +146,17 @@ const updateCourse = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {delete} /course/:id DeleteUser
+ * @apiName deleteCourse()
+ * @apiParam {Number} id Id of the course.
+ * @apiGroup Course
+ * @apiDescription Delete a course
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (400) InvalidId The course id must be valid.
+ * @apiError (404) CourseNotFound The course does not exists.
+ * @apiError (500) Error Prisma error.
+ */
 const deleteCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -124,6 +181,17 @@ const deleteCourse = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {post} /course/file ImportCourse
+ * @apiName importCourses()
+ * @apiBody {Object} FormData FormData with the csv.
+ * @apiGroup Course
+ * @apiDescription Import course using a csv.
+ * @apiUse AddCourses
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (500) Error Prisma error.
+ * @apiError (500) EmptyFile The file cannot be empty.
+ */
 const importCourses = async (req: Request, res: Response): Promise<Response> => {
     return new Promise(function (resolve, reject) {
         const form = new multiparty.Form();
@@ -150,6 +218,11 @@ const importCourses = async (req: Request, res: Response): Promise<Response> => 
     })
 }
 
+/**
+ * @apiDefine AddCourses
+ * @apiName AddCourses()
+ * @apiDescription Create all the courses given.
+ */
 async function addCourses(res: Response, courses: Course[]) {
     try {
         let coursesPrisma: Prisma.courseCreateInput[] = []
@@ -173,6 +246,19 @@ async function addCourses(res: Response, courses: Course[]) {
     }
 }
 
+/**
+ * @api {post} /course/addUser AddUsers
+ * @apiName addUsers()
+ * @apiBody {Number} course_id The id of the course.
+ * @apiBody {Object[]} users The array of users to add.
+ * @apiGroup Course
+ * @apiDescription Add users to the course.
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (404) CourseNotFound The course does not exists.
+ * @apiError (404) UsersNotFound Not all users exists.
+ * @apiError (500) AtLeastOneUser Users array cannot be empty.
+ * @apiError (500) Error Prisma error.
+ */
 const addUsers = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { course_id, users } = req.body;
@@ -195,6 +281,19 @@ const addUsers = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {post} /course/addSurveys AddSurveys
+ * @apiName addSurveys()
+ * @apiBody {Number} course_id The id of the course.
+ * @apiBody {Object[]} surveys The array of surveys to add.
+ * @apiGroup Course
+ * @apiDescription Add surveys to the course.
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (404) CourseNotFound The course does not exists.
+ * @apiError (404) SurveyNotFound Not all surveys exists.
+ * @apiError (500) AtLeastOneQuestion Surveys array cannot be empty.
+ * @apiError (500) Error Prisma error.
+ */
 const addSurveys = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { course_id, surveys } = req.body;
@@ -217,6 +316,19 @@ const addSurveys = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {post} /course/addQuestions AddQuestions
+ * @apiName addQuestions()
+ * @apiBody {Number} course_id The id of the course.
+ * @apiBody {Object[]} question The array of question to add.
+ * @apiGroup Course
+ * @apiDescription Add questions to the course.
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (404) CourseNotFound The course does not exists.
+ * @apiError (404) QuestionNotFound Not all questions exists.
+ * @apiError (500) AtLeastOneQuestion Questions array cannot be empty.
+ * @apiError (500) Error Prisma error.
+ */
 const addQuestions = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { course_id, questions } = req.body;
@@ -240,6 +352,16 @@ const addQuestions = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {get} /course/user/:id GetCoursesByUser
+ * @apiName getCoursesByUser()
+ * @apiParam {Number} id The id of the user.
+ * @apiGroup Course
+ * @apiDescription Get all user's course.
+ * @apiSuccess (200) {Object[]} courses An array with the courses retrieved.
+ * @apiError (400) InvalidId You must provide a user valid id.
+ * @apiError (500) Error Prisma error.
+ */
 const getCoursesByUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {

@@ -46,10 +46,16 @@ export class CreateUserFormComponent {
     const newUser = new User(username!, role!);
     this.apiService
     .createUser(newUser)
-    .subscribe( (msg: Message) => {
-      alert(msg.message); 
-      this.isLoading = false;
-      this.router.navigate(["/users"])
+    .subscribe({
+      next: (msg: Message) => {
+        alert(msg.message); 
+        this.isLoading = false;
+        this.router.navigate(["/users"])
+      },
+      error: (msg) => {
+        alert(msg)
+        this.isLoading = false;
+      }
     });
   }
 }

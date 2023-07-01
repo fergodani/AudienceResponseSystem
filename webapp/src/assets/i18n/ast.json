@@ -4,7 +4,8 @@
             "COURSE_LIST": "Llista de cursos",
             "DELETE": "Esaniciar",
             "NEW_COURSE": "Nuevu cursu",
-            "IMPORT_COURSE": "Importar cursos:"
+            "IMPORT_COURSE": "Importar cursos:",
+            "SURE_DELETE": "¿Estás seguro de que quiere eliminar el curso?"
         },
         "CREATE_COURSE": {
             "CREATE_NEW_COURSE": "Crear nuevu cursu",
@@ -17,7 +18,8 @@
             "USER_LIST": "Llista d'usuarios",
             "DELETE": "Esaniciar",
             "NEW_USER": "Nuevu usuariu",
-            "IMPORT_USER": "Importar usuarios:"
+            "IMPORT_USER": "Importar usuarios:",
+            "SURE_DELETE": "¿Estás seguro de que quiere eliminar el curso?"
         },
         "CREATE_USER": {
             "CREATE_NEW_USER": "Crear nuevu usuariu",
@@ -39,10 +41,12 @@
             "DELETE": "Esaniciar",
             "NEW_QUESTION": "Nueva entruga",
             "IMPORT": "Importar",
-            "EXPORT": "Exportar"
+            "EXPORT": "Exportar",
+            "SURE_DELETE": "¿Estás seguro de que quiere eliminar el curso?"
         },
         "SURVEY_LIST": {
-            "NEW_SURVEY": "Nuevu cuestionariu"
+            "NEW_SURVEY": "Nuevu cuestionariu",
+            "SURE_DELETE": "¿Estás seguro de que quiere eliminar el curso?"
         },
         "CREATE_QUESTION": {
             "OPTIONS": "Opciones",
@@ -81,7 +85,10 @@
             "DELETE_FROM_COURSE": "Esaniciar",
             "ADD_QUESTIONS": "Añedir entrugues",
             "ADD_STUDENTS": "Añedir alumnos",
-            "LAST_SURVEYS_PLAYED": "Últimos cuestionarios xugaos"
+            "LAST_SURVEYS_PLAYED": "Últimos cuestionarios xugaos",
+            "SURE_DELETE_SURVEY": "¿Estás seguro de que quiere eliminar el cuestionario del curso?",
+            "SURE_DELETE_USER": "¿Estás seguro de que quiere eliminar el usuario del curso?",
+            "SURE_DELETE_QUESTION": "¿Estás seguro de que quiere eliminar la pregunta del curso?"
         },
         "GAME_DETAILS": {
             "STUDENT": "Alumno",
