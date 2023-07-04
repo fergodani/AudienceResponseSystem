@@ -33,7 +33,7 @@ describe('StudentHomeComponent', () => {
 
   it('should fetch courses on initialization', () => {
     expect(component.courses.length).toBeGreaterThan(0);
-    expect(component.isLoading).toBe(false);
+    expect(component.isLoadingCourses).toBe(false);
   });
 
   it("should show the courses", () => {
@@ -46,7 +46,7 @@ describe('StudentHomeComponent', () => {
 
   it('should fetch open games on initialization', () => {
     expect(component.games.length).toBe(2);
-    expect(component.isLoading).toBe(false);
+    expect(component.isLoadingCourses).toBe(false);
   });
 
   it("should show the opened games", () => {
