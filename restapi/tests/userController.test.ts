@@ -526,7 +526,7 @@ describe("Users", () => {
     describe("Import users", () => {
         describe("Valid csv file", () => {
             afterEach(async () => {
-                await prisma.user.deleteMany({ where: { username: { startsWith: "testuser" } } })
+                await prisma.user.deleteMany({ where: { username: { startsWith: "TESTUSER" } } })
             })
             it("File is uploaded and users are successfully created", async () => {
                 const formData = new FormData();
@@ -548,13 +548,13 @@ describe("Users", () => {
                 await importUsers(req, res)
                 expect(res.status).toHaveBeenCalledWith(200)
                 expect(res.json).toHaveBeenCalledWith({ message: "Usuarios creados correctamente" })
-                const usersCreated = await prisma.user.findMany({ where: { username: { startsWith: "testuser" } } })
+                const usersCreated = await prisma.user.findMany({ where: { username: { startsWith: "TESTUSER" } } })
                 expect(usersCreated.length).toBe(3)
-                expect(usersCreated[0].username).toBe("testuser1")
+                expect(usersCreated[0].username).toBe("TESTUSER1")
                 expect(usersCreated[0].role).toBe(role.student)
-                expect(usersCreated[1].username).toBe("testuser2")
+                expect(usersCreated[1].username).toBe("TESTUSER2")
                 expect(usersCreated[1].role).toBe(role.student)
-                expect(usersCreated[2].username).toBe("testuser3")
+                expect(usersCreated[2].username).toBe("TESTUSER3")
                 expect(usersCreated[2].role).toBe(role.professor)
             })
         })
