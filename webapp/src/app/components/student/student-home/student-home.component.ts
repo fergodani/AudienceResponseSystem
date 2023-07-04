@@ -1,27 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Course } from '@app/core/models/course.model';
 import { Game } from '@app/core/models/game.model';
-import { Survey } from '@app/core/models/survey.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
-import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 import { ApiStudentService } from '@app/core/services/user/api.user.service';
 import { SocketioService } from '@app/core/services/socket/socketio.service';
-import { TranslateService } from '@ngx-translate/core';
-import { isEmpty } from 'rxjs';
 
 @Component({
   selector: 'app-student-home',
   templateUrl: './student-home.component.html',
   styleUrls: ['./student-home.component.css']
 })
-export class StudentHomeComponent {
-  selectedLanguage = 'es';
+export class StudentHomeComponent implements OnInit {
   constructor(
     private apiStudentService: ApiStudentService,
-    private apiProfessorService: ApiProfessorService,
     private socketService: SocketioService,
     private authService: ApiAuthService
   ) {
+  }
+
+  ngOnInit(): void {
     this.isLoading = true;
     this.apiStudentService
       .getCoursesByUser(this.authService.userValue!.id)
@@ -32,8 +29,9 @@ export class StudentHomeComponent {
           this.connectToSocket(courses);
         }
       })
-
   }
+
+  
 
   connectToSocket(courses: Course[]) {
     this.isLoadingGames = true;
@@ -48,7 +46,6 @@ export class StudentHomeComponent {
     this.socketService.joinSocketCourses(courses)
     this.socketService.waitForSurveys();
     this.socketService.newGame.subscribe((game: Game) => {
-        console.log(game)
         this.games.push(game)
     })
   }

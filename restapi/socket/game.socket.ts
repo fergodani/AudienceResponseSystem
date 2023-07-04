@@ -94,7 +94,14 @@ export default (io: Server) => {
         });
 
         socket.on(Constants.JOIN_SOCKET_COURSE, (courseIds: string[]) => {
-            socket.join(courseIds)
+            courseIds.forEach(id => {
+                if(!socket.rooms.has(id)){
+                    console.log("Joining to room: " + id)
+                    socket.join(courseIds)
+                }
+            })
+            
+            
         })
 
         socket.on(Constants.FINISH_GAME, (gameSession: GameSession) => {

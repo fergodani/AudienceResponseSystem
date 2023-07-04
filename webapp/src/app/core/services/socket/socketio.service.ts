@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { io } from 'socket.io-client';
 import { Course } from '../../models/course.model';
 import { Game, GameState } from '../../models/game.model';
-import { equals, User, UserResult } from '../../models/user.model';
+import { User, UserResult } from '../../models/user.model';
 import { ApiAuthService } from '../auth/api.auth.service';
 import { ApiProfessorService } from '../professor/api.professor.service';
 import { SocketOptions } from 'socket.io-client';
@@ -52,8 +52,9 @@ export class SocketioService {
         token: this.authService.userValue?.token
       }
     }
-    if(!this.socket || !this.socket.connected)
+    if(this.socket == undefined || !this.socket.connected){
       this.socket = io(environment.socketUrl, socketOptions);
+    }
   }
 
   createGame(game_id: number, courseId: number) {
@@ -80,24 +81,26 @@ export class SocketioService {
   sendUser(id: string) {
     this.socket.emit('join_game', this.authService.userValue, id)
     this.socket.on('move_to_survey', (game: Game) => {
-      console.log(game)
       this.gameSubject.next(game);
     })
   }
 
   waitForSurveys() {
-    this.socket.on('wait_for_surveys', (data: Game) => {
-      console.log(data)
-      this.newGameSubject.next(data)
-    })
+    if(!this.isListening('wait_for_surveys')){
+      this.socket.on('wait_for_surveys', (data: Game) => {
+        this.newGameSubject.next(data)
+      })
+    }
   }
 
   joinSocketCourses(courses: Course[]) {
     let coursesIds = courses.map(course => course.id + '')
     this.socket.emit('join_socket_course', coursesIds)
-    this.socket.on('move_to_survey', (game: Game) => {
-      console.log("moving to survey")
-      this.gameSubject.next(game);
-    })
+  }
+
+  // Verificar si existe una función de escucha para un evento específico
+  private isListening(event: string): boolean {
+    const listeners = this.socket.listeners(event);
+    return listeners.length > 0;
   }
 }

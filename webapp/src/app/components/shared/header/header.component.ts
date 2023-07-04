@@ -10,7 +10,7 @@ import { ApiAuthService } from 'src/app/core/services/auth/api.auth.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit{
+export class HeaderComponent implements OnInit {
 
   user: User | null = <User | null>{};
   isMenuCollapsed = true;
@@ -23,21 +23,21 @@ export class HeaderComponent implements OnInit{
   selectLanguageForm = new FormGroup({
     selectLanguage: new FormControl(this.languages[0])
   })
-  
+
 
   constructor(
     private authService: ApiAuthService,
     private translateService: TranslateService,
     private router: Router
-    ) {
+  ) {
     this.authService.user.subscribe(user => this.user = user)
     this.translateService.setDefaultLang(this.selectedLanguage);
-      this.translateService.use(this.selectedLanguage);
-    
+    this.translateService.use(this.selectedLanguage);
+
   }
   ngOnInit(): void {
     this.selectLanguageForm.get('selectLanguage')?.valueChanges
-    .subscribe(language => this.changeLanguage(language))
+      .subscribe(language => this.changeLanguage(language))
   }
 
   get isAdmin() {
@@ -53,8 +53,10 @@ export class HeaderComponent implements OnInit{
   }
 
   logout() {
-    this.authService.logout();
-    this.isMenuCollapsed = true;
+    if (confirm("Seguro que quieres cerrar sesión")) {
+      this.authService.logout();
+      this.isMenuCollapsed = true;
+    }
   }
 
   changeLanguage(language: any) {

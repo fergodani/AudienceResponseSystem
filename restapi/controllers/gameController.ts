@@ -57,7 +57,6 @@ const getGameById = async (req: Request, res: Response): Promise<Response> => {
         })
         return res.status(200).json(result)
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: "Ha ocurrido un error al obtener el juego" })
     }
 }
@@ -144,7 +143,6 @@ const getOpenOrStartedGamesByCourses = async (req: Request<{}, {}, {}, CoursesId
         })
         return res.status(200).json(result)
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: "Ha ocurrido un error al obtener los juegos" })
     }
 }
@@ -235,7 +233,6 @@ const createGame = async (req: Request, res: Response): Promise<Response> => {
 
         return res.status(200).json(gameSaved)
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: "Ha ocurrido un error al crear el juego" })
     }
 }
@@ -300,7 +297,6 @@ const updateState = async (req: Request, res: Response): Promise<Response> => {
 
         return res.status(200).json(updateGame)
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: "Ha ocurrido un error al actualizar el juego" })
     }
 }
@@ -452,7 +448,6 @@ const getGamesResultsByUser = async (req: Request, res: Response): Promise<Respo
                 }
             }
         })
-        console.log(result)
         return res.status(200).json(result)
     } catch (error) {
         console.log(error)
@@ -614,7 +609,6 @@ const getGamesResultsByUserAndCourse = async (req: Request, res: Response): Prom
                 }
             }
         })
-        console.log(result)
         return res.status(200).json(result)
     } catch (error) {
         console.log(error)
