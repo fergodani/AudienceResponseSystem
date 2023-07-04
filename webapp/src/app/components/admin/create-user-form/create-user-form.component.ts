@@ -33,6 +33,7 @@ export class CreateUserFormComponent {
     ]),
   })
   isLoading = false
+  errorMessage = ''
 
   onUserSubmit() {
     if(this.createUserForm.get("username")?.invalid || this.createUserForm.get("role")?.invalid ) {
@@ -53,7 +54,7 @@ export class CreateUserFormComponent {
         this.router.navigate(["/users"])
       },
       error: (msg) => {
-        alert(msg)
+        this.errorMessage = msg
         this.isLoading = false;
       }
     });

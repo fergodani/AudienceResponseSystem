@@ -159,6 +159,7 @@
             "CHANGE_PASSWORD": "Modify password",
             "ACTUAL_PASSWORD": "Actual password",
             "NEW_PASSWORD": "New password",
+            "CONFIRM_PASSWORD": "Confirm password",
             "LAST_GAMES": "Last surveys played",
             "SCORE": "Score:"
         },

@@ -90,6 +90,7 @@ export class CreateQuestionComponent implements OnInit{
       this.isRequiredFieldsError = true;
       return
     } else if (!this.checkAtLeastOneCorrect(answers)) {
+      console.log(answers)
       this.isCorrectAnswerError = true;
       return
     }else if(question.answer_time < 5) {

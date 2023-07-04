@@ -3,6 +3,13 @@ import { Prisma } from '@prisma/client'
 import { Question, QuestionSurvey } from '../models/question.model';
 import prisma from '../prisma/prismaClient';
 
+/**
+ * @api {get} /survey/ Get all surveys
+ * @apiName getSurveys
+ * @apiGroup Survey
+ * @apiDescription Get all surveys.
+ * @apiSuccess (200) {Object[]} users An array of surveys.
+ */
 const getSurveys = async (req: Request, res: Response): Promise<Response> => {
     try {
         let result = await prisma.survey.findMany({
@@ -27,7 +34,20 @@ const getSurveys = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
-// Cuestionarios dado su creador
+/**
+ * @api {get} /survey/user/:id Get user's surveys
+ * @apiName getSurveysByUser
+ * @apiParam {Number} id User id
+ * @apiGroup Survey
+ * @apiDescription Get the surveys of the user provided.
+ * @apiSuccess (200) {String} id Id of the question.
+ * @apiSuccess (200) {String} title Title of the question.
+ * @apiSuccess (200) {String} resource Resource of the question.
+ * @apiSuccess (200) {Object[]} questionsSurvey Questions of the survey.
+ * @apiSuccess (200) {Number} user_creator_id Id of the creator of the question.
+ * @apiError (400) InvalidId You must provide a valid id.
+ * @apiError (500) Error Prisma error.
+ */
 const getSurveysByUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -64,6 +84,20 @@ const getSurveysByUser = async (req: Request, res: Response): Promise<Response> 
     }
 }
 
+/**
+ * @api {get} /survey/:id Get survey by id
+ * @apiName getSurveyById
+ * @apiParam {Number} id Survey id
+ * @apiGroup Survey
+ * @apiDescription Get the survey giving its id.
+ * @apiSuccess (200) {String} id Id of the question.
+ * @apiSuccess (200) {String} title Title of the question.
+ * @apiSuccess (200) {String} resource Resource of the question.
+ * @apiSuccess (200) {Object[]} questionsSurvey Questions of the survey.
+ * @apiSuccess (200) {Number} user_creator_id Id of the creator of the question.
+ * @apiError (400) InvalidId You must provide a valid id.
+ * @apiError (500) Error Prisma error.
+ */
 const getSurveyById = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -95,6 +129,21 @@ const getSurveyById = async (req: Request, res: Response): Promise<Response> => 
     }
 }
 
+/**
+ * @api {post} /survey Create survey
+ * @apiName createSurvey()
+ * @apiBody {String} title Title of the survey.
+ * @apiBody {String} resource Resource of the question.
+ * @apiBody {Object[]} questions Questions of the survey.
+ * @apiBody {Number} user_creator_id Id of the creator of the question.
+ * @apiGroup Survey
+ * @apiDescription Create a new survey
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (404) UserNotFound The user creator does not exists.
+ * @apiError (500) QuestionsMissing You must provide questions.
+ * @apiError (500) FieldMissing You must provide all fields.
+ * @apiError (500) Error Prisma error.
+ */
 const createSurvey = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { title, user_creator_id, questions, resource } = req.body;
@@ -139,6 +188,16 @@ const createSurvey = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {get} /survey/courses/:id GetSurveysByCourse
+ * @apiName getSurveysByCourse()
+ * @apiParam {Number} id The id of the course.
+ * @apiGroup Survey
+ * @apiDescription Get all course's surveys.
+ * @apiSuccess (200) {Object[]} surveys An array with the surveys retrieved.
+ * @apiError (400) InvalidId You must provide a course valid id.
+ * @apiError (500) Error Prisma error.
+ */
 const getSurveysByCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -175,6 +234,21 @@ const getSurveysByCourse = async (req: Request, res: Response): Promise<Response
     }
 }
 
+/**
+ * @api {put} /survey UpdateUser
+ * @apiName updateSurvey()
+ * @apiBody {String} id Id of the survey.
+ * @apiBody {String} title Title of the survey.
+ * @apiBody {Object[]} questions Questions of the survey.
+ * @apiBody {String} resource Resource of the survey.
+ * @apiGroup Survey
+ * @apiDescription Update a survey
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (404) SurveyNotFound The survey does not exists.
+ * @apiError (500) EmptyQuestion The question must have questions.
+ * @apiError (500) FieldMissing You must provide all requiered fields.
+ * @apiError (500) Error Prisma error.
+ */
 const updateSurvey = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { id, title, questions, resource } = req.body
@@ -235,15 +309,34 @@ const updateSurvey = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {delete} /survey/:id DeleteSurvey
+ * @apiName deleteSurvey()
+ * @apiParam {Number} id Id of the survey.
+ * @apiGroup Survey
+ * @apiDescription Delete a survey
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (400) InvalidId The survey id must be valid.
+ * @apiError (400) SurveyPlayed The survey has been played and it cannot be deleted.
+ * @apiError (404) SurveyNotFound The survey does not exists.
+ * @apiError (500) Error Prisma error.
+ */
 const deleteSurvey = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
             return res.status(400).json({ message: "Debe proporcionar un ID de cuestionario válido" })
         }
-        const survey = await prisma.survey.findFirst({where: { id: Number(req.params.id)}})
+        const survey = await prisma.survey.findFirst({
+            where: { id: Number(req.params.id)},
+            select: {
+                game: true
+            }
+        })
         if(!survey) {
-            res.status(404).json({message: "El cuestionario especificado no existe"})
+            return res.status(404).json({message: "El cuestionario especificado no existe"})
         }
+        if(survey?.game.length > 0)
+            return res.status(400).json({message: "El cuestionario ha sido jugado y no se puede eliminar"})
         await prisma.survey.delete({
             where: {
                 id: Number(req.params.id)
@@ -256,6 +349,20 @@ const deleteSurvey = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {delete} /survey/:survey_id/course/:course_id DeleteSurveyFromCourse
+ * @apiName deleteSurveyFromCourse()
+ * @apiParam {Number} survey_id The id of the survey.
+ * @apiParam {Number} course_id The id of the course.
+ * @apiGroup Survey
+ * @apiDescription Deletes a survey from course.
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (400) InvalidSurveyId Invalid survey id.
+ * @apiError (400) InvalidCourseId Invalid course id.
+ * @apiError (404) SurveyNotFound The question does not exists.
+ * @apiError (404) CourseNotFound The course does not exists.
+ * @apiError (500) Error Prisma error.
+ */
 const deleteSurveyFromCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.survey_id) {

@@ -73,9 +73,14 @@ export class QuestionListComponent implements OnInit {
     if (confirm("Seguro que quieres eliminar la pregunta")) {
       this.apiProfessorService
         .deleteQuestion(question.id)
-        .subscribe((msg: Message) => {
-          alert(msg.message)
-          this.questions = this.questions.filter((q) => q.id != question.id)
+        .subscribe({
+          next: (msg: Message) => {
+            alert(msg.message)
+            this.questions = this.questions.filter((q) => q.id != question.id)
+          },
+          error: (msg: Message) => {
+            alert(msg.message)
+          }
         })
     }
   }

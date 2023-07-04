@@ -1,7 +1,7 @@
 <mat-drawer-container class="example-container">
     <mat-drawer #drawer [formGroup]="createQuestionForm">
         <h2 class="ps-3 pt-3">{{"PROFESSOR.CREATE_QUESTION.OPTIONS" | translate}}</h2>
-        <mat-form-field class="m-3" appearance="fill">
+        <mat-form-field class="m-3" appearance="fill" *ngIf="!isEditing">
             <mat-label>{{"PROFESSOR.CREATE_QUESTION.QUESTION_TYPE" | translate}}</mat-label>
             <mat-select id="typeSelect" formControlName="type">
                 <mat-option selected [value]="types[0]">{{"PROFESSOR.CREATE_QUESTION.MULTIOPTION" |
@@ -28,7 +28,7 @@
                     <div class="imageContainer">
                         <img [src]="resourceFile" *ngIf="resourceFile != ''" alt="Question image source" />
                     </div>
-                    <p *ngIf="resourceFile == ''">{{"PROFESSOR.CREATE_QUESTION.ATTACH_RESOURCE" | translate}}</p>
+                    <label *ngIf="resourceFile == ''" for="file">{{"PROFESSOR.CREATE_QUESTION.ATTACH_RESOURCE" | translate}}</label>
                     <input id="file" type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
 
                     <div class="d-flex gap-2">

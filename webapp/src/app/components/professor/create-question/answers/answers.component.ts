@@ -8,7 +8,9 @@ const MULTIOPTION_ANSWERS = 4;
 
 enum Answers {
   answer1,
-  answer2
+  answer2,
+  answer3,
+  answer4
 }
 
 @Component({
@@ -26,29 +28,36 @@ export class AnswersComponent implements OnChanges, OnInit {
             description: this.answersToEdit[0].description,
             checked: this.answersToEdit[0].is_correct
           })
+          this.answer1FormGroup.get('checked')?.disable()
           this.answer2FormGroup.patchValue({
             description: this.answersToEdit[1].description,
             checked: this.answersToEdit[1].is_correct
           })
+          this.answer2FormGroup.get('checked')?.disable()
           this.answer3FormGroup.patchValue({
             description: this.answersToEdit[2].description,
             checked: this.answersToEdit[2].is_correct
           })
+          this.answer3FormGroup.get('checked')?.disable()
           this.answer4FormGroup.patchValue({
             description: this.answersToEdit[3].description,
             checked: this.answersToEdit[3].is_correct
           })
+          this.answer4FormGroup.get('checked')?.disable()
           break;        
         }
         case Type.true_false: {
+          console.log(this.answer1FormGroup)
           this.answer1FormGroup.patchValue({
             description: this.answersToEdit[0].description,
             checked: this.answersToEdit[0].is_correct
           })
+          this.answer1FormGroup.get('checked')?.disable()
           this.answer2FormGroup.patchValue({
             description: this.answersToEdit[1].description,
             checked: this.answersToEdit[1].is_correct
           })
+          this.answer2FormGroup.get('checked')?.disable()
           break;        
         }
         case Type.short: {
@@ -132,15 +141,31 @@ export class AnswersComponent implements OnChanges, OnInit {
   ])
 
   changeCheck(checked: boolean, answer: Answers){
-    if(this.type != Type.true_false)
+    if(this.type == Type.short)
       return;
     switch(answer) {
       case Answers.answer1: {
-        this.answer2FormGroup.patchValue({checked: !checked});
+        this.answer2FormGroup.patchValue({checked: false});
+        this.answer3FormGroup.patchValue({checked: false});
+        this.answer4FormGroup.patchValue({checked: false});
         break;
       }
       case Answers.answer2: {
-        this.answer1FormGroup.patchValue({checked: !checked});
+        this.answer1FormGroup.patchValue({checked: false});
+        this.answer3FormGroup.patchValue({checked: false});
+        this.answer4FormGroup.patchValue({checked: false});
+        break;
+      }
+      case Answers.answer3: {
+        this.answer1FormGroup.patchValue({checked: false});
+        this.answer2FormGroup.patchValue({checked: false});
+        this.answer4FormGroup.patchValue({checked: false});
+        break;
+      }
+      case Answers.answer4: {
+        this.answer1FormGroup.patchValue({checked: false});
+        this.answer2FormGroup.patchValue({checked: false});
+        this.answer3FormGroup.patchValue({checked: false});
         break;
       }
       default: {
@@ -186,19 +211,17 @@ export class AnswersComponent implements OnChanges, OnInit {
   }
 
   updateAnswers() {
-    let answers: Answer[] = []
     switch(this.type) {
       case Type.multioption: {
         for(let i = 0; i < MULTIOPTION_ANSWERS; i++){
           this.answersToEdit[i].description = this.questionFormArray.controls[i].value.description!;
-          this.answersToEdit[i].is_correct = this.questionFormArray.controls[i].value.checked!;
         }
         break;        
       }
       case Type.true_false: {
+        console.log(this.questionFormArray.controls)
         for(let i = 0; i < TRUE_FALSE_ANSWERS; i++){
           this.answersToEdit[i].description = this.questionFormArray.controls[i].value.description!;
-          this.answersToEdit[i].is_correct = this.questionFormArray.controls[i].value.checked!;
         }
         break;        
       }

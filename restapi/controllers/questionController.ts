@@ -7,6 +7,13 @@ import { parseFile } from 'fast-csv'
 import { Answer } from '../models/answer.model';
 import prisma from '../prisma/prismaClient';
 
+/**
+ * @api {get} /question/ Get all questions
+ * @apiName getQuestions
+ * @apiGroup Question
+ * @apiDescription Get all questions.
+ * @apiSuccess (200) {Object[]} users An array of questions.
+ */
 const getQuestions = async (req: Request, res: Response): Promise<Response> => {
     try {
         let result = await prisma.question.findMany({
@@ -27,6 +34,22 @@ const getQuestions = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {get} /question/user/:id Get user's questions
+ * @apiName getQuestionsByUser
+ * @apiParam {Number} id User id
+ * @apiGroup Question
+ * @apiDescription Get the questions of the user provided.
+ * @apiSuccess (200) {String} id Id of the question.
+ * @apiSuccess (200) {String} description Description of the question.
+ * @apiSuccess (200) {String} subject Subject of the question.
+ * @apiSuccess (200) {String} type Type of the question.
+ * @apiSuccess (200) {Number} answer_time Time of the question.
+ * @apiSuccess (200) {String} resource Resource of the question.
+ * @apiSuccess (200) {Object[]} answers Answers of the question.
+ * @apiSuccess (200) {Number} user_creator_id Id of the creator of the question.
+ * @apiError (500) Error Prisma error.
+ */
 const getQuestionsByUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         let user = await prisma.user.findUnique({
@@ -55,6 +78,22 @@ const getQuestionsByUser = async (req: Request, res: Response): Promise<Response
     }
 }
 
+/**
+ * @api {get} /question/:id Get question by id
+ * @apiName getQuestionById
+ * @apiParam {Number} id Question id
+ * @apiGroup Question
+ * @apiDescription Get the question giving its id.
+ * @apiSuccess (200) {String} id Id of the question.
+ * @apiSuccess (200) {String} description Description of the question.
+ * @apiSuccess (200) {String} subject Subject of the question.
+ * @apiSuccess (200) {String} type Type of the question.
+ * @apiSuccess (200) {Number} answer_time Time of the question.
+ * @apiSuccess (200) {String} resource Resource of the question.
+ * @apiSuccess (200) {Object[]} answers Answers of the question.
+ * @apiSuccess (200) {Number} user_creator_id Id of the creator of the question.
+ * @apiError (500) Error Prisma error.
+ */
 const getQuestionById = async (req: Request, res: Response): Promise<Response> => {
     try {
         let result = await prisma.question.findUnique({
@@ -78,6 +117,31 @@ const getQuestionById = async (req: Request, res: Response): Promise<Response> =
     }
 }
 
+/**
+ * @api {post} /question Create question
+ * @apiName createQuestion()
+ * @apiBody {String} description Description of the question.
+ * @apiBody {String} subject Subject of the question.
+ * @apiBody {String} type Type of the question.
+ * @apiBody {Number} answer_time Time of the question.
+ * @apiBody {String} resource Resource of the question.
+ * @apiBody {Object[]} answers Answers of the question.
+ * @apiBody {Number} user_creator_id Id of the creator of the question.
+ * @apiGroup Question
+ * @apiDescription Create a new question
+ * @apiUser CheckQuestion
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (404) UserNotFound The user creator does not exists.
+ * @apiError (500) AnswersMissing You must provide answers.
+ * @apiError (500) TiemeNotValid You must provide an answer time greater than 5 seconds.
+ * @apiError (500) FieldMissing You must provide all fields.
+ * @apiError (500) OnlyOneCorrect Only one answer must be correct.
+ * @apiError (500) AllAnswersCorrect All the answers must be correct.
+ * @apiError (500) MultioptionQuestionError Multioption questions must have four answers.
+ * @apiError (500) TrueFalseQuestionError True/false questions must have two answers.
+ * @apiError (500) ShortQuestionError Short questions must have at least one answer and not more than four.
+ * @apiError (500) Error Prisma error.
+ */
 const createQuestion = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { description, subject, type, answer_time, answers, resource, user_creator_id } = req.body;
@@ -131,6 +195,11 @@ const createQuestion = async (req: Request, res: Response): Promise<Response> =>
     }
 }
 
+/**
+ * @apiDefine CheckQuestion
+ * @apiName checkQuestion()
+ * @apiDescription Check if the question has a valid format.
+ */
 function checkQuestion(type: type, answers: any, correctAnswers: number): string {
     let message = ''
     switch (type) {
@@ -163,14 +232,33 @@ function checkQuestion(type: type, answers: any, correctAnswers: number): string
     return message
 }
 
+/**
+ * @api {delete} /question/:id DeleteQuestion
+ * @apiName deleteQuestion()
+ * @apiParam {Number} id Id of the question.
+ * @apiGroup Question
+ * @apiDescription Delete a question
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (400) InvalidId The question id must be valid.
+ * @apiError (400) AttachedToSurvey The question is attached to a survey and cannot be deleted.
+ * @apiError (404) QuestionNotFound The question does not exists.
+ * @apiError (500) Error Prisma error.
+ */
 const deleteQuestion = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
             return res.status(400).json({ message: "Debe proporcionar un ID de pregunta válido" })
         }
-        const question = await prisma.question.findUnique({ where: { id: Number(req.params.id) } })
+        const question = await prisma.question.findUnique({ 
+            where: { id: Number(req.params.id) } ,
+            select: {
+                questionsSurvey: true
+            }
+        })
         if (!question)
             return res.status(404).json({ message: "La pregunta especificada no ha sido encontrada" })
+        if(question.questionsSurvey.length > 0)
+            return res.status(400).json({message: "La pregunta está asociada a algún cuestionario y no se puede borrar"})
         await prisma.question.delete({
             where: {
                 id: Number(req.params.id)
@@ -182,6 +270,17 @@ const deleteQuestion = async (req: Request, res: Response): Promise<Response> =>
     }
 }
 
+/**
+ * @api {get} /question/export/:id ExportQuestions
+ * @apiName exportQuestions()
+ * @apiParam {Number} id Id of the user creator.
+ * @apiGroup Question
+ * @apiDescription Export questions
+ * @apiSuccess (200) {String} csv Csv with all the questions.
+ * @apiError (400) InvalidId The user id must be valid.
+ * @apiError (404) UserNotFound The user does not exists.
+ * @apiError (500) Error Prisma error.
+ */
 const exportQuestions = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -243,6 +342,20 @@ const exportQuestions = async (req: Request, res: Response): Promise<Response> =
     }
 }
 
+/**
+ * @api {post} /question/file/:id ImportUsers
+ * @apiName importUsers()
+ * @apiParam {Number} id Id of the user creator.
+ * @apiBody {Object} FormData FormData with the csv.
+ * @apiGroup Question
+ * @apiDescription Import questions using a csv.
+ * @apiUse AddQuestions
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (400) InvalidId The user id is invalid.
+ * @apiError (404) UserNotFound The user does not exist.
+ * @apiError (500) Error Prisma error.
+ * @apiError (500) EmptyFile The file cannot be empty.
+ */
 const importQuestions = async (req: Request, res: Response): Promise<Response> => {
     if (!req.params.id || isNaN(Number(req.params.id))) {
         return res.status(400).json({ message: "Debe proporcionar un ID de usuario válido" })
@@ -274,6 +387,11 @@ const importQuestions = async (req: Request, res: Response): Promise<Response> =
     })
 }
 
+/**
+ * @apiDefine AddQuestions
+ * @apiName AddQuestions()
+ * @apiDescription Create all the questions given.
+ */
 async function addQuestion(res: Response, questions: QuestionCsv[], user_id: number) {
     try {
         let questionsPrisma: Prisma.questionCreateInput[] = []
@@ -331,6 +449,24 @@ async function addQuestion(res: Response, questions: QuestionCsv[], user_id: num
     }
 }
 
+/**
+ * @api {put} /question UpdateUser
+ * @apiName updateQuestion()
+ * @apiBody {String} id Id of the question.
+ * @apiBody {String} description Description of the question.
+ * @apiBody {String} subject Subject of the question.
+ * @apiBody {String} type Type of the question.
+ * @apiBody {Number} answer_time Time of the question.
+ * @apiBody {String} resource Resource of the question.
+ * @apiBody {Object[]} answers Answers of the question.
+ * @apiGroup Question
+ * @apiDescription Update a question
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (404) QuestionNotFound The question does not exists.
+ * @apiError (500) EmptyAnswers The question must have answers.
+ * @apiError (500) BadFormat The question must have a valid format.
+ * @apiError (500) Error Prisma error.
+ */
 const updateQuestion = async (req: Request, res: Response): Promise<Response> => {
     try {
         const { id, description, subject, type, answer_time, answers, resource } = req.body
@@ -391,6 +527,16 @@ const updateQuestion = async (req: Request, res: Response): Promise<Response> =>
     }
 }
 
+/**
+ * @api {get} /question/courses/:id GetQuestionsByCourse
+ * @apiName getQuestionsByCourse()
+ * @apiParam {Number} id The id of the course.
+ * @apiGroup Question
+ * @apiDescription Get all course's questions.
+ * @apiSuccess (200) {Object[]} questions An array with the questions retrieved.
+ * @apiError (400) InvalidId You must provide a course valid id.
+ * @apiError (500) Error Prisma error.
+ */
 const getQuestionsByCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -421,6 +567,20 @@ const getQuestionsByCourse = async (req: Request, res: Response): Promise<Respon
     }
 }
 
+/**
+ * @api {delete} /question/:question_id/course/:course_id DeleteQuestionFromCourse
+ * @apiName deleteQuestionFromCourse()
+ * @apiParam {Number} question_id The id of the question.
+ * @apiParam {Number} course_id The id of the course.
+ * @apiGroup Question
+ * @apiDescription Deletes a question from course.
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (400) InvalidQuestionId Invalid question id.
+ * @apiError (400) InvalidCourseId Invalid course id.
+ * @apiError (404) QuestionNotFound The question does not exists.
+ * @apiError (404) CourseNotFound The course does not exists.
+ * @apiError (500) Error Prisma error.
+ */
 const deleteQuestionFromCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.question_id) {

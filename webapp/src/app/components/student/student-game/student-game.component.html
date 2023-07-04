@@ -14,7 +14,7 @@
         actualQuestion.description }}</h2>
     <div class="image-box mb-2" *ngIf="gameSession.game.are_questions_visible && actualQuestion.resource != ''">
         <div class="imageContainer">
-            <img src="../../assets/testImage.jpg" alt="Question image source" />
+            <img src="../../assets/testImage.jpg" alt="Imagen de la pregunta" />
         </div>
     </div>
     <div class="grid-container">
@@ -30,7 +30,7 @@
             *ngIf="actualQuestion.type == 'multioption'"
             (click)="checkAnswer(actualQuestion.answers[2].id!)">{{
             actualQuestion.answers[2].description }}</button>
-        <button mat-button class="grid-item bg-warning text-center text-white"
+        <button mat-button class="grid-item bg-dark text-center text-white"
             *ngIf="actualQuestion.type == 'multioption'"
             (click)="checkAnswer(actualQuestion.answers[3].id!)">{{
             actualQuestion.answers[3].description }}</button>

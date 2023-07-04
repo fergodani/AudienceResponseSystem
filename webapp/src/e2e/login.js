@@ -25,13 +25,21 @@ test('Professor login succesfull', async t => {
 
 test('Student login succesfull', async t => {
     await t
-        .typeText('#username', 'testuser1')
+        .typeText('#username', 'estudiante')
         .typeText('#password', 'test')
         .click('#submit')
         .expect(Selector('h2').innerText).eql('Mis cursos');
 });
 
-test('Login fail', async t => {
+test('Login fail and user exists', async t => {
+    await t
+        .typeText('#username', 'testuser1')
+        .typeText('#password', 'randomPassword')
+        .click('#submit')
+        .expect(Selector('.alert').innerText).eql('Error: Usuario o contraseña incorrectos');
+});
+
+test('Login fail and user not exists', async t => {
     await t
         .typeText('#username', 'randomUser')
         .typeText('#password', 'randomPassword')

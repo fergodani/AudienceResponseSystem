@@ -15,6 +15,9 @@
         <div class="mb-3" *ngIf="!isLoading">
             <input id="submit" class="form-control" type="submit" value="{{'ADMIN.CREATE_USER.ACCEPT' | translate}}">
         </div>
+        <div class="alert alert-danger" role="alert" *ngIf="errorMessage != ''">
+            {{errorMessage}}
+        </div>
         <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
             <span class="visually-hidden">Loading...</span>
         </div>

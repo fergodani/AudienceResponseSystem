@@ -5,6 +5,22 @@ import { AnswerResult } from '../models/answer.model';
 import { QuestionSurvey } from '../models/question.model';
 import prisma from '../prisma/prismaClient';
 
+/**
+ * @api {get} /game/:id Get game by id
+ * @apiName getGameById
+ * @apiParam {Number} id Game id
+ * @apiGroup Game
+ * @apiDescription Get the game giving its id.
+ * @apiSuccess (200) {String} id Id of the game.
+ * @apiSuccess (200) {String} state State of the game.
+ * @apiSuccess (200) {Boolean} are_quetions_visible If questions are visible.
+ * @apiSuccess (200) {Number} host_id Id of the host.
+ * @apiSuccess (200) {Number} survey_id Id of the survey.
+ * @apiSuccess (200) {String} point_type Point type of the game.
+ * @apiSuccess (200) {Object} survey Survey object of the game.
+ * @apiError (400) InvalidId You must provide a valid id.
+ * @apiError (500) Error Prisma error.
+ */
 const getGameById = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -50,6 +66,17 @@ interface CoursesIds {
     course: string[]
 }
 
+/**
+ * @api {get} /game/course Get open or started games by courses
+ * @apiName getOpenOrStartedGamesByCourses
+ * @apiQuery {Number[]} course Ids of the courses
+ * @apiGroup Game
+ * @apiDescription Get open or started games giving a course.
+ * @apiSuccess (200) {Object[]} games Games retrieved.
+ * @apiError (400) MissingFields You must provide all required fields.
+ * @apiError (500) MissingCourses You must provide at least one course.
+ * @apiError (500) Error Prisma error.
+ */
 const getOpenOrStartedGamesByCourses = async (req: Request<{}, {}, {}, CoursesIds>, res: Response): Promise<Response> => {
     try {
         if (!req.query.course) {
@@ -122,6 +149,25 @@ const getOpenOrStartedGamesByCourses = async (req: Request<{}, {}, {}, CoursesId
     }
 }
 
+/**
+ * @api {post} /game Create game
+ * @apiName createGame()
+ * @apiBody {Number} host_id Id of the host.
+ * @apiBody {Number} survey_id Id of the survey.
+ * @apiBody {Number} course_id Id of the course.
+ * @apiBody {String} type Type of the game.
+ * @apiBody {String} state State of the game.
+ * @apiBody {Boolean} are_questions_visible If questions are visible.
+ * @apiBody {String} point_type Type of the points of the game.
+ * @apiGroup Game
+ * @apiDescription Create a new game
+ * @apiSuccess (200) {Object} game Returns the created game.
+ * @apiError (404) UserNotFound The user host does not exists.
+ * @apiError (404) CourseNotFound The course does not exists.
+ * @apiError (404) SurveyNotFound The survey does not exists.
+ * @apiError (500) FieldMissing You must provide all fields.
+ * @apiError (500) Error Prisma error.
+ */
 const createGame = async (req: Request, res: Response): Promise<Response> => {
     try {
         
@@ -194,9 +240,21 @@ const createGame = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {put} /survey Update state
+ * @apiName updateState()
+ * @apiBody {String} id Id of the game.
+ * @apiBody {String} state State of the game.
+ * @apiGroup Game
+ * @apiDescription Update the state of a game.
+ * @apiSuccess (200) {Object} game Returns the updated game.
+ * @apiError (404) GameNotFound The game does not exists.
+ * @apiError (500) InvalidId The survey id must be valid.
+ * @apiError (500) FieldMissing You must provide all requiered fields.
+ * @apiError (500) Error Prisma error.
+ */
 const updateState = async (req: Request, res: Response): Promise<Response> => {
     try {
-        console.log(req.body)
         if (!req.body.id || isNaN(Number(req.body.id))) {
             return res.status(500).json({ message: "Debe proporcionar un ID de juego válido" })
         }
@@ -247,6 +305,17 @@ const updateState = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+/**
+ * @api {post} /game/results Create game results
+ * @apiName createResults()
+ * @apiBody {Object[]} results Array with the results to create.
+ * @apiGroup Game
+ * @apiUser GetCorrectAndIncorrectAnswers
+ * @apiDescription Create game results.
+ * @apiSuccess (200) {Object} game Returns the created game.
+ * @apiError (500) ResultsMissing You must provide at least one result.
+ * @apiError (500) Error Prisma error.
+ */
 const createResults = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (req.body.length == 0)
@@ -309,7 +378,11 @@ const createResults = async (req: Request, res: Response): Promise<Response> => 
     }
 }
 
-// Devuelve el número de preguntas correctas e incorrectas
+/**
+ * @apiDefine GetCorrectAndIncorrectAnswers
+ * @apiName getCorrectAndIncorrectAnswers()
+ * @apiDescription Return correct and incorrect answers
+ */
 function getCorrectAndIncorrectAnswers(game: any, userResult: UserResult) {
     let correctAnswers = 0;
     let wrongAnswers = 0;
@@ -332,6 +405,17 @@ function getCorrectAndIncorrectAnswers(game: any, userResult: UserResult) {
     }
 }
 
+/**
+ * @api {get} /game/results/:id Get game results by user
+ * @apiName getGamesResultsByUser
+ * @apiParam {Number} id User id
+ * @apiGroup Game
+ * @apiDescription Get the results of the games played by an user.
+ * @apiSuccess (200) {Object[]} results Array with the results.
+ * @apiError (400) InvalidId You must provide a valid id.
+ * @apiError (404) UserNotFound User does not exist.
+ * @apiError (500) Error Prisma error.
+ */
 const getGamesResultsByUser = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -376,7 +460,17 @@ const getGamesResultsByUser = async (req: Request, res: Response): Promise<Respo
     }
 }
 
-// Obtiene los resultados de todos los alumnos de un juego
+/**
+ * @api {get} /game/results/:game_id Get game results by game
+ * @apiName getGameResultsByGame
+ * @apiParam {Number} game_id Game id
+ * @apiGroup Game
+ * @apiDescription Get all the user results of the game provided.
+ * @apiSuccess (200) {Object[]} results Array with the results.
+ * @apiError (400) InvalidId You must provide a valid id.
+ * @apiError (404) GameNotFound Game does not exist.
+ * @apiError (500) Error Prisma error.
+ */
 const getGameResultsByGame = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.game_id || isNaN(Number(req.params.game_id))) {
@@ -419,7 +513,17 @@ const getGameResultsByGame = async (req: Request, res: Response): Promise<Respon
     }
 }
 
-
+/**
+ * @api {get} /game/course/:id Get game by course
+ * @apiName getGamesByCourse
+ * @apiParam {Number} id Course id
+ * @apiGroup Game
+ * @apiDescription Get all the course's games.
+ * @apiSuccess (200) {Object[]} games Array with the games.
+ * @apiError (400) InvalidId You must provide a valid id.
+ * @apiError (404) CourseNotFound Course does not exist.
+ * @apiError (500) Error Prisma error.
+ */
 const getGamesByCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {
@@ -449,6 +553,20 @@ const getGamesByCourse = async (req: Request, res: Response): Promise<Response> 
     }
 }
 
+/**
+ * @api {get} /game/results/user/:user_id/course/:course_id Get game results by user and course
+ * @apiName getGamesResultsByUserAndCourse
+ * @apiParam {Number} user_id User id
+ * @apiParam {Number} course_id Course id
+ * @apiGroup Game
+ * @apiDescription Get all the user results of the course provided.
+ * @apiSuccess (200) {Object[]} results Array with the results.
+ * @apiError (400) InvalidUserId You must provide a valid user id.
+ * @apiError (400) InvalidCourseId You must provide a valid course id.
+ * @apiError (404) UserNotFound User does not exist.
+ * @apiError (404) CourseNotFound Course does not exist.
+ * @apiError (500) Error Prisma error.
+ */
 const getGamesResultsByUserAndCourse = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.user_id || isNaN(Number(req.params.user_id))) {
@@ -504,6 +622,20 @@ const getGamesResultsByUserAndCourse = async (req: Request, res: Response): Prom
     }
 }
 
+/**
+ * @api {get} /game/results/user/:user_id/game/:game_id" Get game result by user and game
+ * @apiName getGameResultByUserAndGame
+ * @apiParam {Number} user_id User id
+ * @apiParam {Number} game_id Game id
+ * @apiGroup Game
+ * @apiDescription Get the user result of the game provided.
+ * @apiSuccess (200) {Object} result Array with the results.
+ * @apiError (400) InvalidUserId You must provide a valid user id.
+ * @apiError (400) InvalidGameId You must provide a valid game id.
+ * @apiError (404) UserNotFound User does not exist.
+ * @apiError (404) GameNotFound Game does not exist.
+ * @apiError (500) Error Prisma error.
+ */
 const getGameResultByUserAndGame = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.user_id || isNaN(Number(req.params.user_id))) {
@@ -563,7 +695,6 @@ const getGameResultByUserAndGame = async (req: Request, res: Response): Promise<
                 }
             }
         })
-        console.log(result)
         return res.status(200).json(result)
     } catch (error) {
         console.log(error)
@@ -571,6 +702,17 @@ const getGameResultByUserAndGame = async (req: Request, res: Response): Promise<
     }
 }
 
+/**
+ * @api {delete} /game/:id DeleteGame
+ * @apiName deleteGame()
+ * @apiParam {Number} id Id of the game.
+ * @apiGroup Game
+ * @apiDescription Delete a game
+ * @apiSuccess (200) {Object} message Success message.
+ * @apiError (400) InvalidId The survey id must be valid.
+ * @apiError (404) GameNotFound The game does not exists.
+ * @apiError (500) Error Prisma error.
+ */
 const deleteGame = async (req: Request, res: Response): Promise<Response> => {
     try {
         if (!req.params.id || isNaN(Number(req.params.id))) {

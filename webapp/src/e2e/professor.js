@@ -1,17 +1,17 @@
 import { Selector } from 'testcafe';
 
+
 fixture('Professor test')
-    .page('https://localhost:4200');
+    .page('https://localhost:4200')
 
 const typeSelect = Selector('#typeSelect');
 
 test('CRUD of questions and surveys', async t => {
-    // Obtener las dimensiones de la pantalla
     const { width, height } = await t.eval(() => ({
         width: window.screen.width,
         height: window.screen.height,
     }));
-    // Establecer el tamaño de la ventana del navegador al tamaño de la pantalla
+
     await t.resizeWindow(width, height);
     await t
         .setNativeDialogHandler(() => true)

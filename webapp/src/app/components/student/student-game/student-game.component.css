@@ -16,9 +16,6 @@
 
 .image-box {
     width: 300px;
-    height: 300px;
-    min-height: 300px;
-    max-height: auto;
     border: solid 1px #ccc;
     color: rgba(0, 0, 0, 0.87);
     display: flex;
@@ -45,7 +42,7 @@
 }
 
 .imageContainer {
-    max-width: 400px;
+    max-width: 300px;
     overflow: hidden;
 }
 

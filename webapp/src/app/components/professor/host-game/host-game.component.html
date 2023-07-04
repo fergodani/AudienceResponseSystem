@@ -41,23 +41,23 @@
     <div class="row gap-2 ms-2 me-2"
         *ngIf="actualQuestion.type == 'multioption' || actualQuestion.type == 'true_false'">
         <div class="col d-flex justify-content-center  align-items-center bg-primary answer ">
-            <h3 class="text-center text-white ">{{ actualQuestion.answers[0].description }}</h3>
+            <p class="text-center text-white h4">{{ actualQuestion.answers[0].description }}</p>
         </div>
         <div class="col d-flex justify-content-center  align-items-center bg-danger answer ">
-            <h3 class="text-center text-white ">{{ actualQuestion.answers[1].description }}</h3>
+            <p class="text-center text-white h4">{{ actualQuestion.answers[1].description }}</p>
         </div>
     </div>
     <div class="row gap-2 ms-2 me-2 mb-5" *ngIf="actualQuestion.type == 'multioption'">
         <div class="col d-flex justify-content-center  align-items-center bg-success answer ">
-            <h3 class="text-center text-white ">{{ actualQuestion.answers[2].description }}</h3>
+            <p class="text-center text-white h4">{{ actualQuestion.answers[2].description }}</p>
         </div>
-        <div class="col d-flex justify-content-center  align-items-center bg-warning answer ">
-            <h3 class="text-center text-white ">{{ actualQuestion.answers[3].description }}</h3>
+        <div class="col d-flex justify-content-center  align-items-center bg-dark answer ">
+            <p class="text-center text-white h4">{{ actualQuestion.answers[3].description }}</p>
         </div>
     </div>
     <div class="row gap-2 ms-2 me-2 mb-5" *ngIf="actualQuestion.type == 'short'">
         <div class="col d-flex justify-content-center  align-items-center bg-primary answer ">
-            <h3 class="text-center text-white ">{{"PROFESSOR.HOST_GAME.WRITE_ANSWER" | translate}}</h3>
+            <p class="text-center text-white h4">{{"PROFESSOR.HOST_GAME.WRITE_ANSWER" | translate}}</p>
         </div>
     </div>
 </div>

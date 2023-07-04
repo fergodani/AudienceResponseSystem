@@ -29,3 +29,7 @@ h5 {
   overflow: hidden;
   background: #fff;
 }
+
+label {
+  display: none;
+}

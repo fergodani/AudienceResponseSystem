@@ -8,8 +8,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "test:e2e": "npx testcafe 'chrome --allow-insecure-localhost' --hostname",
-    "test:accessibility": "pally-ci",
+    "test:e2e": "cd ./src/e2e && npx testcafe 'chrome --allow-insecure-localhost' --hostname localhost admin.js login.js professor.js student.js",
     "test:prod": "ng test --browsers=ChromeHeadless --watch=false --progress=true",
     "docs": "npx compodoc -p .\tsconfig.doc.json -d docs"
   },

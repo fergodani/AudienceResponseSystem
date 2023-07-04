@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from '../../models/user.model';
@@ -13,7 +13,13 @@ import { environment } from '@environments/environment';
 export class ApiService {
   users: User[] = []
 
-  constructor(private http: HttpClient) { }
+  headers = new HttpHeaders()
+
+  constructor(private http: HttpClient) { 
+    this.headers
+    .set('content-type', 'application/json')
+    .set('Access-Control-Allow-Origin', '*');
+  }
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {

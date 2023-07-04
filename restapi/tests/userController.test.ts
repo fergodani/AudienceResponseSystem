@@ -311,7 +311,6 @@ describe("Users", () => {
                 expect(res.json).toHaveBeenCalledWith({
                     id: user.id,
                     username: user.username,
-                    password: '',
                     role: "student",
                     roleType: user.role,
                     token: expect.any(String)

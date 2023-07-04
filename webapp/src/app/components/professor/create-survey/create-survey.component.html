@@ -13,7 +13,7 @@
                         <div class="imageContainer">
                             <img [src]="resourceFile" *ngIf="resourceFile != ''" alt="Question image source" />
                         </div>
-                        <p class="ms-1 me-1" *ngIf="resourceFile == ''">{{ 'PROFESSOR.CREATE_SURVEY.ATTACH_RESOURCE' | translate }}</p>
+                        <label for="file" class="ms-1 me-1" *ngIf="resourceFile == ''">{{ 'PROFESSOR.CREATE_SURVEY.ATTACH_RESOURCE' | translate }}</label>
                         <input id="file" type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
 
                         <div class="d-flex gap-2">

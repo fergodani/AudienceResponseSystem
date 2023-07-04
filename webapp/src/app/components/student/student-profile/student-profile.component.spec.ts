@@ -48,16 +48,19 @@ describe('StudentProfileComponent', () => {
   });
 
   it('username and password fields validity', () => {
-    let username = component.passwordFormGroup.controls['password'];
-    let password = component.passwordFormGroup.controls['passwordBis'];
-    expect(username.valid).toBeFalsy();
+    let password = component.passwordFormGroup.controls['password'];
+    let passwordBis = component.passwordFormGroup.controls['passwordBis'];
+    let passwordConfirm = component.passwordFormGroup.controls['passwordBisConfirm'];
     expect(password.valid).toBeFalsy();
+    expect(passwordBis.valid).toBeFalsy();
+    expect(passwordConfirm.valid).toBeFalsy();
   });
 
   it('submitting correctly with both password', () => { 
     expect(component.passwordFormGroup.valid).toBeFalsy();
     component.passwordFormGroup.controls['password'].setValue("testPassword");
     component.passwordFormGroup.controls['passwordBis'].setValue("newTestPassword");
+    component.passwordFormGroup.controls['passwordBisConfirm'].setValue("newTestPassword");
     expect(component.passwordFormGroup.valid).toBeTruthy();
   });
 });

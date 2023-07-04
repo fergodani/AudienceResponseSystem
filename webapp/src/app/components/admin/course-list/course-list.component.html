@@ -7,7 +7,7 @@
         <button id="createCourse" type="button" class="btn btn-dark w-25" (click)="onCreateCourse()">{{"ADMIN.COURSE_LIST.NEW_COURSE" |
             translate }}</button>
         <div class="alig-self-center">
-            <label for="fileUpload">{{"ADMIN.COURSE_LIST.IMPORT_COURSE" | translate }} </label>
+            <label for="file">{{"ADMIN.COURSE_LIST.IMPORT_COURSE" | translate }} </label>
             <input id="file" type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
 
             <div class="file-upload">
@@ -20,8 +20,8 @@
             </div>
         </div>
     </div>
-    <div class="mb-5 d-flex flex-column gap-3 bg-light">
-        <div class="border d-flex flex-row gap-5 justify-content-between align-items-center"
+    <div class="mb-5 d-flex flex-column gap-3">
+        <div class="border d-flex flex-row gap-5 justify-content-between align-items-center bg-white"
             *ngFor="let course of courses">
             <div class="d-flex flex-column ps-2 w-100">
                 <h2 *ngIf="isAdmin"><a id="{{course.name}}" [routerLink]="['/courses/update', course.id]">{{ course.name}}</a></h2>

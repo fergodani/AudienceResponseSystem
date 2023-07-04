@@ -4,6 +4,20 @@
     </div>
 </div>
 <div class="h-auto ms-3 me-3 mb-5" *ngIf="!isCreatingSurvey && !isSelecting && !isLoading">
+    <button id="createQuestion" class="m-1" mat-raised-button (click)="createNewQuestion()" *ngIf="!isSelecting">{{ 'PROFESSOR.QUESTION_LIST.NEW_QUESTION' | translate }}</button>
+    <div class="pt-2 ps-2 pe-2 mb-3">
+        <label for="file">{{"ADMIN.USER_LIST.IMPORT_USER" | translate }} </label>
+        <input id="file" type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+
+        <div class="file-upload d-flex gap-2">
+            <button mat-raised-button color="primary" class="upload-btn" (click)="fileUpload.click()">
+                {{ 'PROFESSOR.QUESTION_LIST.IMPORT' | translate }} <mat-icon>attach_file</mat-icon>
+            </button>
+            <button mat-raised-button color="primary" class="upload-btn" (click)="exportQuestions()">
+                {{ 'PROFESSOR.QUESTION_LIST.EXPORT' | translate }} <mat-icon>cloud_download</mat-icon>
+            </button>
+        </div>
+    </div>
     <mat-expansion-panel class="m-1" *ngFor="let question of questions">
         <mat-expansion-panel-header >
             <mat-panel-title class="d-inline-block d-flex">
@@ -27,19 +41,6 @@
         <button id="delete{{question.description}}" mat-button type="button" class="btn btn-danger ms-3"
             (click)="deleteQuestion(question)">{{ 'PROFESSOR.QUESTION_LIST.DELETE' | translate }}<mat-icon>delete_forever</mat-icon></button>
     </mat-expansion-panel>
-    <button id="createQuestion" class="m-2" mat-raised-button (click)="createNewQuestion()" *ngIf="!isSelecting">{{ 'PROFESSOR.QUESTION_LIST.NEW_QUESTION' | translate }}</button>
-    <div class="p-2">
-        <input id="file" type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
-
-        <div class="file-upload d-flex gap-2 mb-5">
-            <button mat-raised-button color="primary" class="upload-btn" (click)="fileUpload.click()">
-                {{ 'PROFESSOR.QUESTION_LIST.IMPORT' | translate }} <mat-icon>attach_file</mat-icon>
-            </button>
-            <button mat-raised-button color="primary" class="upload-btn" (click)="exportQuestions()">
-                {{ 'PROFESSOR.QUESTION_LIST.EXPORT' | translate }} <mat-icon>cloud_download</mat-icon>
-            </button>
-        </div>
-    </div>
 </div>
 <div class="mb-5" *ngIf="isSelecting">
     <div class="d-flex gap-5 justify-content-between flex-wrap align-items-center" *ngFor="let question of questions">

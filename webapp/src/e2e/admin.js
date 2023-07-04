@@ -7,6 +7,14 @@ const roleSelect = Selector('#role');
 const roleOption = roleSelect.find('option');
 
 test('CRUD of users', async t => {
+    // Obtener las dimensiones de la pantalla
+    const { width, height } = await t.eval(() => ({
+        width: window.screen.width,
+        height: window.screen.height,
+    }));
+
+    // Establecer el tamaño de la ventana del navegador al tamaño de la pantalla
+    await t.resizeWindow(width, height);
     // Login
     await t
         .typeText('#username', 'admin')
@@ -25,6 +33,17 @@ test('CRUD of users', async t => {
 
     // Vemos que se ha creado correctamente
     await t.expect(Selector('#TESTUSERE2E').innerText).eql('TESTUSERE2E');
+
+    // Volvemos a crear usuario
+    await t
+        .setNativeDialogHandler(() => true)
+        .click("#createUser")
+        .click('#submit') // Al darle nos debería dejar en la misma página
+        .typeText('#username', 'testusere2e')
+        .click('#submit')
+        .expect(Selector('.alert').innerText).eql('Error: El usuario ya existe')
+        .click('#users') // Vamos a la lista de usuarios
+
 
     // Clicamos en el nombre y editamos el nombre
     await t
@@ -68,6 +87,17 @@ test('CRUD of courses', async t => {
         .typeText('#name', 'testCourse')
         .typeText('#description', 'testCourse')
         .click('#submit')
+
+    // Intentamos volver a crearlo
+    await t
+        .setNativeDialogHandler(() => true)
+        .click("#createCourse")
+        .click('#submit') // Deberíamos seguir en la misma página
+        .typeText('#name', 'testCourse')
+        .typeText('#description', 'testCourse')
+        .click('#submit')
+        .expect(Selector('.alert').innerText).eql('Error: Ya existe un curso con ese nombre')
+        .click('#courses') // Vamos a la lista de cursos
 
     // Vemos que se ha creado correctamente
     await t.expect(Selector('#testCourse').innerText).eql('testCourse');

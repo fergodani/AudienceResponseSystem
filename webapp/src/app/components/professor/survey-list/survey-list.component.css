@@ -25,12 +25,6 @@ img {
   flex-wrap: wrap;
   align-content: center;
   gap: 2em;
-  margin-left: 2.5em;
-  margin-right: 2.5em;
-}
-
-.new {
-  margin-left: 2.5em;
 }
 
 @media (max-width: 768px) { 

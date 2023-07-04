@@ -2,7 +2,8 @@
     <span class="visually-hidden">Loading...</span>
 </div>
 <div class="me-3 mb-5">
-    <div class="surveys">
+    <button id="createSurvey" class="mt-2 mb-4 ms-3" mat-raised-button (click)="createNewSurvey()" *ngIf="!isSelecting">{{"PROFESSOR.SURVEY_LIST.NEW_SURVEY" | translate}}</button>
+    <div class="surveys ms-3">
         <mat-card class="example-card pulse" *ngFor="let survey of surveys">
             <mat-card-header>
                 <mat-card-title>{{survey.title}}</mat-card-title>
@@ -28,6 +29,6 @@
         </mat-card>
 
     </div>
-    <button id="createSurvey" class="new mt-3 mb-5" mat-raised-button (click)="createNewSurvey()" *ngIf="!isSelecting">{{"PROFESSOR.SURVEY_LIST.NEW_SURVEY" | translate}}</button>
+    
 
 </div>

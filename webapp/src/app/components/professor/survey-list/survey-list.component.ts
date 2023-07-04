@@ -55,9 +55,14 @@ export class SurveyListComponent implements OnInit {
     if (confirm("Seguro que quieres eliminar el cuestionario")) {
       this.apiProfessorService
         .deleteSurvey(survey.id!)
-        .subscribe((msg: Message) => {
-          alert(msg.message)
-          this.surveys = this.surveys.filter((s) => s.id != survey.id)
+        .subscribe({
+          next: (msg: Message) => {
+            alert(msg.message)
+            this.surveys = this.surveys.filter((s) => s.id != survey.id)
+          },
+          error: (msg: Message) => {
+            alert(msg.message)
+          }
         })
     }
   }

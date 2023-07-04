@@ -6,16 +6,16 @@
                 <mat-label>{{"PROFESSOR.CREATE_QUESTION.ANSWER" | translate}}</mat-label>
                 <textarea id="answer1" matInput formControlName="description"></textarea>
             </mat-form-field>
-            <mat-checkbox (change)="changeCheck($event.checked, answersType.answer1)"
-                formControlName="checked"></mat-checkbox>
+            <mat-checkbox aria-label="" (change)="changeCheck($event.checked, answersType.answer1)"
+                formControlName="checked">¿Correcta?</mat-checkbox>
         </div>
         <div class="col d-flex justify-content-center" [formGroup]="answer2FormGroup">
             <mat-form-field>
                 <mat-label>{{"PROFESSOR.CREATE_QUESTION.ANSWER" | translate}}</mat-label>
                 <textarea id="answer2" matInput formControlName="description"></textarea>
             </mat-form-field>
-            <mat-checkbox (change)="changeCheck($event.checked, answersType.answer2)"
-                formControlName="checked"></mat-checkbox>
+            <mat-checkbox formControlName="checked" (change)="changeCheck($event.checked, answersType.answer2)"
+               >¿Correcta?</mat-checkbox>
         </div>
     </div>
 
@@ -25,14 +25,14 @@
                 <mat-label>{{"PROFESSOR.CREATE_QUESTION.ANSWER" | translate}}</mat-label>
                 <textarea matInput formControlName="description"></textarea>
             </mat-form-field>
-            <mat-checkbox formControlName="checked"></mat-checkbox>
+            <mat-checkbox formControlName="checked" (change)="changeCheck($event.checked, answersType.answer3)">¿Correcta?</mat-checkbox>
         </div>
         <div class="col d-flex justify-content-center" [formGroup]="answer4FormGroup">
             <mat-form-field>
                 <mat-label>{{"PROFESSOR.CREATE_QUESTION.ANSWER" | translate}}</mat-label>
                 <textarea matInput formControlName="description"></textarea>
             </mat-form-field>
-            <mat-checkbox formControlName="checked"></mat-checkbox>
+            <mat-checkbox formControlName="checked" (change)="changeCheck($event.checked, answersType.answer4)">¿Correcta?</mat-checkbox>
         </div>
     </div>
     <div class="d-flex justify-content-center " *ngIf="type == types.short" [formGroup]="shortAnswersFormGroup">

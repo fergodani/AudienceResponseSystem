@@ -23,6 +23,7 @@ export class CreateCourseFormComponent {
 
   fileName: any = '';
   resourceFile: any = '';
+  errorMessage = ''
 
   constructor(private apiService: ApiService, private router: Router) {
   }
@@ -43,7 +44,7 @@ export class CreateCourseFormComponent {
           this.router.navigate(["/courses"])
         },
         error: (msg) => {
-          alert(msg)
+          this.errorMessage = msg
         }
       });
   }

@@ -159,6 +159,7 @@
             "CHANGE_PASSWORD": "Modificar contraseña",
             "ACTUAL_PASSWORD": "Contraseña actua",
             "NEW_PASSWORD": "Contraseña nueva",
+            "CONFIRM_PASSWORD": "Confirmar contraseña",
             "LAST_GAMES": "Últimos cuestionarios xugaos",
             "SCORE": "Puntuación:"
         },

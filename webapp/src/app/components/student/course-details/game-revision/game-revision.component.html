@@ -15,8 +15,8 @@
             </p>
         </div>
         <div class="pregunta" *ngFor="let i of questionIndexes">
-            <h5>{{i + 1}}.</h5>
-            <h5>{{result.game!.survey!.questionsSurvey[i].question.description}}</h5>
+            <h3 class="h5">{{i + 1}}.</h3>
+            <h3 class="h5">{{result.game!.survey!.questionsSurvey[i].question.description}}</h3>
             <div *ngFor="let answer of result.game!.survey!.questionsSurvey[i].question.answers">
                 <div class="d-flex flex-rowalign-items-center">
                     <small class="align-self-center text-break w-75">{{ answer.description }}</small>

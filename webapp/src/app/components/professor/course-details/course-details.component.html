@@ -76,7 +76,7 @@
 
             </div>
             <div *ngIf="state == stateType.users">
-                <button id="dialogUsers" mat-raised-button (click)="openUserDialog()">{{"PROFESSOR.COURSE_DETAILS.ADD_STUDENTS" | translate }}</button>
+                <button id="dialogUsers" class="mb-1" mat-raised-button (click)="openUserDialog()">{{"PROFESSOR.COURSE_DETAILS.ADD_STUDENTS" | translate }}</button>
                 <div class="d-flex flex-column gap-3" *ngFor="let user of users">
                     <div class="d-flex flex-row bg-light align-items-center gap-3 border">
                         <h5 class="mt-3 ps-2">{{ user.username }}</h5>

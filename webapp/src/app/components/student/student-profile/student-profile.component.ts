@@ -40,6 +40,9 @@ export class StudentProfileComponent implements OnInit{
     ]),
     passwordBis: new FormControl('', [
       Validators.required
+    ]),
+    passwordBisConfirm: new FormControl('', [
+      Validators.required
     ])
   })
 
@@ -47,6 +50,10 @@ export class StudentProfileComponent implements OnInit{
     this.error = '';
     if (this.passwordFormGroup.invalid) {
       this.error = 'Por favor, rellene todos los campos';
+      return;
+    }
+    if(this.passwordFormGroup.value.passwordBis != this.passwordFormGroup.value.passwordBisConfirm) {
+      this.error = 'Las contaseñas deben coincidir'
       return;
     }
     const password1 = this.passwordFormGroup.value.password;
