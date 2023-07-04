@@ -10,9 +10,11 @@
 }
 
 .course {
-    background-color: #e3e3e3;
+    max-width: 600px;
+    background-color: #d9d9d9;
     border-radius: 15px;
-    padding: 0.5em;
+    padding-left: 0.5em;
+    padding-bottom: 0.5em;
 }
 
 @media (max-width: 768px) {

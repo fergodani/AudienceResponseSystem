@@ -6,18 +6,19 @@
     </div>
 
     <p *ngIf="gameSession.users.length == 0">Esperando usuarios...</p>
-    <button id="start" mat-button (click)="startGame()" *ngIf="gameSession.users.length != 0">{{"PROFESSOR.HOST_GAME.START" | translate}}</button>
+    <button id="start" mat-button (click)="startGame()"
+        *ngIf="gameSession.users.length != 0">{{"PROFESSOR.HOST_GAME.START" | translate}}</button>
 </div>
 
 <!-- QUESTION PREVIEW -->
 <div class="preview" *ngIf="gameSession.state == gameSessionState.is_preview_screen">
     <h1 class="bg-light">{{ actualQuestion.description }}</h1>
-        <mat-progress-spinner class="example-margin mt-5" mode="determinate" [value]="value">
-        </mat-progress-spinner>
+    <mat-progress-spinner class="example-margin mt-5" mode="determinate" [value]="value">
+    </mat-progress-spinner>
 </div>
 
-<div class="spinner-border text-primary" role="status" *ngIf="isLoading">
-    <span class="visually-hidden">Loading...</span>
+<div class="d-flex justify-content-center">
+    <div class="custom-loader" *ngIf="isLoading"></div>
 </div>
 
 <!-- QUESTION SCREEN -->
@@ -27,7 +28,7 @@
         <div id="timer">
             <h1 class="alternate_font">{{ timeLeft }} </h1>
         </div>
-        
+
         <div class="image-box mb-2" *ngIf="actualQuestion.resource != ''">
             <div class="imageContainer">
                 <img src="../../assets/testImage.jpg" alt="Question image source" />

@@ -88,7 +88,6 @@ export class StudentGameComponent implements OnInit {
     })
     this.socketService.socket.on("finish_question", (gameSession: GameSession) => {
       this.gameSession = gameSession
-      // TODO Si el usuario no ha envíado una respuesta, enviarla aquí una respuesta vacía
       clearInterval(this.interval)
       this.answerTime = 0
       this.lastScore = this.result.score;
@@ -101,7 +100,7 @@ export class StudentGameComponent implements OnInit {
           answered: false
         }
         this.result.answer_results.push(answerResult)
-        this.socketService.socket.emit('send_answer', this.result);
+        this.socketService.socket.emit('send_answer', this.gameSession.game.id, this.result);
 
       }
     })
@@ -187,7 +186,7 @@ export class StudentGameComponent implements OnInit {
     // 3. Resta ese valor a 1
     // 4. Multiplica los puntos posibles por ese valor
     // 5. Redondea al número entero más cercano
-    if (isCorrect) {
+    if (isCorrect && this.gameSession.game.point_type != PointsType.no_points) {
       let points = (1 - ((this.answerTime / this.actualQuestion.answer_time) / 2)) * STANDARD_POINTS;
       if (this.gameSession.game.point_type == PointsType.double)
         points = points * 2;

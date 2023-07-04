@@ -1,7 +1,5 @@
 <div class="d-flex justify-content-center">
-    <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
-        <span class="visually-hidden">Loading...</span>
-    </div>
+    <div class="custom-loader" *ngIf="isLoading"></div>
 </div>
 <div class="h-auto ms-3 me-3 mb-5" *ngIf="!isCreatingSurvey && !isSelecting && !isLoading">
     <button id="createQuestion" class="m-1" mat-raised-button (click)="createNewQuestion()" *ngIf="!isSelecting">{{ 'PROFESSOR.QUESTION_LIST.NEW_QUESTION' | translate }}</button>

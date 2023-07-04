@@ -1,5 +1,5 @@
-<div class="spinner-border text-primary" role="status" *ngIf="isLoading || haveAnswered">
-    <span class="visually-hidden">Loading...</span>
+<div class="d-flex justify-content-center">
+    <div class="custom-loader" *ngIf="isLoading || haveAnswered"></div>
 </div>
 
 <!-- WAITING SCREEN -->
@@ -8,7 +8,7 @@
 </div>
 
 <!-- QUESTION SCREEN -->
-<div class="d-flex flex-column gap-2 align-items-center" *ngIf="gameSession.state == gameSessionState.is_question_screen
+<div class="d-flex flex-column gap-2 align-items-center mt-2" *ngIf="gameSession.state == gameSessionState.is_question_screen
 && !haveAnswered">
     <h2 class="bg-light shadow-sm ps-5 pe-5 text-center" *ngIf="gameSession.game.are_questions_visible">{{
         actualQuestion.description }}</h2>
@@ -49,12 +49,12 @@
 </div>
 
 <!-- RESULT SCREEN -->
-<div class="d-flex flex-column align-items-center justify-content-center"
+<div class="d-flex flex-column align-items-center justify-content-center mt-3"
     *ngIf="gameSession.state == gameSessionState.is_question_result">
-    <div class="p-3 mb-2 bg-success text-white w-90 h-90" *ngIf="actualAnswer!.is_correct && haveAnswered">
+    <div class="p-3 mb-2 bg-success text-white w-90 h-90" *ngIf="haveAnswered && actualAnswer!.is_correct">
         {{"STUDENT.GAME.CORRECT" | translate}}
     </div>
-    <div class="p-3 mb-2 bg-danger text-white w-90 h-90" *ngIf="!actualAnswer!.is_correct && haveAnswered">
+    <div class="p-3 mb-2 bg-danger text-white w-90 h-90" *ngIf="haveAnswered && !actualAnswer!.is_correct">
         {{"STUDENT.GAME.INCORRECT" | translate}}
     </div>
     <div class="p-3 mb-2 bg-secondary text-white w-90 h-90" *ngIf="!haveAnswered">

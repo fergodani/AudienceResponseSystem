@@ -2,21 +2,17 @@
     <div class="w-100">
         <h2>{{ 'STUDENT.HOME.MY_COURSES' | translate }}</h2>
         <p *ngIf="courses.length == 0">{{ 'STUDENT.HOME.ANY_COURSES' | translate }}</p>
-        <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <div class="d-flex flex-column w-100 gap-2" *ngIf="!isLoading">
+        <div class="custom-loader" *ngIf="isLoadingCourses"></div>
+        <div class="d-flex flex-column w-100 gap-2" *ngIf="!isLoadingCourses">
             <div class="d-flex flex-column w-100 gap-1 course" *ngFor="let course of courses">
                 <h2><a id="{{course.name}}" [routerLink]="['/student/course/details', course.id]">{{ course.name}}</a></h2>
                 <small class="">{{ course.description }}</small>
             </div>
         </div>
     </div>
-    <div class="w-100">
+    <div class="w-100 mt-2">
         <h2>{{ 'STUDENT.HOME.OPEN_SURVEYS' | translate }}</h2>
-        <div class="spinner-border text-primary" role="status" *ngIf="isLoadingGames">
-            <span class="visually-hidden">Loading...</span>
-        </div>
+        <div class="custom-loader" *ngIf="isLoadingGames"></div>
         <p *ngIf="games.length == 0 && !isLoadingGames">{{ 'STUDENT.HOME.WAITING_FOR_SURVEYS' | translate }}</p>
         <div class="d-flex flex-column w-100 gap-2 mb-5">
             <div class="d-flex flex-column w-100 gap-2 game" *ngFor="let game of games">

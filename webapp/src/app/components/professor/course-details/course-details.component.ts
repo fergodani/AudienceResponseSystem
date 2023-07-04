@@ -6,7 +6,6 @@ import { Survey } from '@app/core/models/survey.model';
 import { User } from '@app/core/models/user.model';
 import { ApiService } from '@app/core/services/admin/api.admin.service';
 import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
-import { isEmpty } from 'rxjs';
 import { CreateGameDialogComponent } from '../dialogs/create-game-dialog/create-game-dialog.component';
 import { LinkQuestionCourseComponent } from '../dialogs/link-question-course/link-question-course.component';
 import { LinkSurveyCourseComponent } from '../dialogs/link-survey-course/link-survey-course.component';
@@ -35,10 +34,12 @@ export class CourseProfessorDetailsComponent {
     private actRoute: ActivatedRoute,
     public dialog: MatDialog) {
     const id = this.actRoute.snapshot.paramMap.get('id');
+    this.isLoadingCourse = true;
     this.apiService
       .getCourse(Number(id))
       .subscribe(course => {
         this.course = course
+        this.isLoadingCourse = false
         this.apiProfessorService
           .getUsersByCourse(this.course.id)
           .subscribe(users => this.users = users)
@@ -54,6 +55,7 @@ export class CourseProfessorDetailsComponent {
       })
   }
 
+  isLoadingCourse = false
   course: Course = <Course>{};
   users: User[] = [];
   surveys: Survey[] = [];

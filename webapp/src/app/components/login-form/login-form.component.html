@@ -12,8 +12,6 @@
         </mat-form-field>
         <button id="submit" class="mb-3" color="" mat-raised-button (click)="submitUser()">{{ 'LOGIN.ACCEPT' | translate }}</button>
         <div *ngIf="error" class="alert alert-danger m-3">{{error}}</div>
-        <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
-            <span class="visually-hidden">Loading...</span>
-        </div>
+        <div class="custom-loader" *ngIf="isLoading"></div>
     </form>
 </div>

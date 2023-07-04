@@ -1,8 +1,6 @@
 <div class="d-flex flex-column gap-3 p-4 ">
     <h1 class="fs-1" *ngIf="isAdmin">{{"ADMIN.USER_LIST.USER_LIST" | translate }}</h1>
-    <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
-        <span class="visually-hidden">Loading...</span>
-    </div>
+    <div class="custom-loader" *ngIf="isLoading"></div>
     <div class="d-flex flex-row gap-3" *ngIf="isAdmin">
         <button id="createUser" type="button" class="btn btn-dark w-25"
             (click)="onCreateUser()">{{"ADMIN.USER_LIST.NEW_USER" |

@@ -1,6 +1,4 @@
-<div class="spinner-border text-primary" role="status" *ngIf="isLoading">
-  <span class="visually-hidden">Loading...</span>
-</div>
+<div class="custom-loader" *ngIf="isLoading"></div>
 <div class="mt-3 ms-3 mb-4" *ngIf="!isLoading">
   <h1>{{ course.name }}</h1>
   <h2 class="h3">{{ course.description }}</h2>

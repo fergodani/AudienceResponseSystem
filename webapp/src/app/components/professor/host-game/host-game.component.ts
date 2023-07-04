@@ -1,14 +1,13 @@
-import { Component, Input, OnInit, Type, HostListener, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, Type, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AnswerResult } from '@app/core/models/answer.model';
 import { Answer } from '@app/core/models/answer.model';
 import { Game, GameSession, GameSessionState, GameState } from '@app/core/models/game.model';
-import { Question, QuestionSurvey } from '@app/core/models/question.model';
+import { Question } from '@app/core/models/question.model';
 import { User, UserResult } from '@app/core/models/user.model';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 import { SocketioService } from '@app/core/services/socket/socketio.service';
-import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 
 
 @Component({
@@ -24,7 +23,6 @@ export class HostGameComponent implements OnInit {
     .deleteGame(this.gameSession.game.id!)
     .subscribe()
   }
-
 
   constructor(
     private socketService: SocketioService,
@@ -65,8 +63,8 @@ export class HostGameComponent implements OnInit {
           this.gameSession = gameSession
         });
       })
-    this.socketService.socket.on('connectUser', (gameSession: GameSession) => {
-      this.gameSession = gameSession
+    this.socketService.socket.on('connectUser', (newUser: User) => {
+      this.gameSession.users.push(newUser)
     });
     this.socketService.socket.on('get-answer-from-player', (data: UserResult) => {
       this.totalUserAnswers++;

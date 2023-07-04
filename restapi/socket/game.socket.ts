@@ -3,6 +3,8 @@ import { Game, GameSession, GameSessionState } from "../models/game.model";
 import { UserResult } from "../models/user.model";
 import { Constants } from './constants'
 import { Question, QuestionSurvey } from "../models/question.model";
+import { Prisma } from '@prisma/client'
+import prisma from '../prisma/prismaClient';
 
 let gameSessions = new Map<string, GameSession>()
 
@@ -45,10 +47,11 @@ export default (io: Server) => {
         socket.on(Constants.JOIN_GAME, (newUser, id: string, cb) => {
             let user = gameSessions.get(id)?.users.find(student => student.id == newUser.id)
             console.log("User joning...")
-            if (!user)
+            if (!user){
                 gameSessions.get(id)?.users.push(newUser)
+                io.to(id + '').emit('connectUser', newUser)
+            }
             socket.join(id + '')
-            io.to(id + '').emit('connectUser', gameSessions.get(id))
             cb(gameSessions.get(id))
         });
 
@@ -82,10 +85,10 @@ export default (io: Server) => {
             socket.to(id + '').emit("get-answer-from-player", result)
         });
 
-        socket.on(Constants.DISCONNECT, () => {
+        socket.on(Constants.DISCONNECT, async () => {
             const sessionArray = Array.from(gameSessions.values())
             const sessionDisconnected = sessionArray.find((s) => s.socket_id === socket.id)
-            if (sessionDisconnected) {
+            if (sessionDisconnected && sessionDisconnected.state != GameSessionState.is_finished) {
                 console.log("Game Over")
                 sessionDisconnected.state = GameSessionState.is_finished
                 socket.to(sessionDisconnected.game.id + "").emit("finish_game", sessionDisconnected)
@@ -100,8 +103,6 @@ export default (io: Server) => {
                     socket.join(courseIds)
                 }
             })
-            
-            
         })
 
         socket.on(Constants.FINISH_GAME, (gameSession: GameSession) => {

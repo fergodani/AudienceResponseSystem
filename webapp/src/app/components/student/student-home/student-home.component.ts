@@ -19,12 +19,13 @@ export class StudentHomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLoading = true;
+    this.isLoadingCourses = true;
+    this.isLoadingGames = true;
     this.apiStudentService
       .getCoursesByUser(this.authService.userValue!.id)
       .subscribe(courses => {
         this.courses = courses;
-        this.isLoading = false;
+        this.isLoadingCourses = false;
         if (courses.length != 0) {
           this.connectToSocket(courses);
         }
@@ -51,7 +52,7 @@ export class StudentHomeComponent implements OnInit {
   }
 
   courses: Course[] = [];
-  isLoading: boolean = false;
+  isLoadingCourses: boolean = false;
   isLoadingGames: boolean = false;
   games: Game[] = [];
 

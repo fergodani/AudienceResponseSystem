@@ -34,7 +34,7 @@
                         </mat-form-field>
                         <button id="submit" class="m-3" mat-raised-button (click)="onSurveySubmit()">{{
                             'PROFESSOR.CREATE_SURVEY.SAVE' | translate }}</button>
-                            <button id="addQuestions" mat-raised-button class="answers-button" mat-button (click)="drawer.toggle()">
+                            <button *ngIf="!isEditing" id="addQuestions" mat-raised-button class="answers-button" mat-button (click)="drawer.toggle()">
                                 Añadir preguntas
                                 <mat-icon *ngIf="!drawer.opened">keyboard_arrow_left</mat-icon>
                                 <mat-icon *ngIf="drawer.opened">keyboard_arrow_right</mat-icon>
@@ -71,7 +71,7 @@
                                     <mat-icon [ngStyle]="{'color':'red'}" *ngIf="!answer.is_correct">clear</mat-icon>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-danger" (click)="removeQuestion(indexOfElement)">{{
+                            <button *ngIf="!isEditing" type="button" class="btn btn-danger" (click)="removeQuestion(indexOfElement)">{{
                                 'PROFESSOR.CREATE_SURVEY.DELETE' | translate }}</button>
                         </mat-expansion-panel>
                     </div>

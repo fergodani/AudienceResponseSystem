@@ -1,15 +1,16 @@
 <div class="d-flex justify-content-center">
-    <div class="spinner-border text-primary" role="status" *ngIf="isLoading">
-        <span class="visually-hidden">Loading...</span>
-    </div>
+    <div class="custom-loader" *ngIf="isLoading"></div>
 </div>
 <h2 *ngIf="!isLoading">{{ 'STUDENT.GAME_REVISION.SURVEY' | translate }} {{result.game!.survey!.title}}</h2>
 <div class="revision" *ngIf="!isLoading">
     <div class="contenido">
         <div class="resumen">
-            <p id="correct_questions">{{ 'STUDENT.GAME_REVISION.CORRECT_QUESTIONS' | translate }} {{result.correct_questions}}</p>
-            <p id="wrong_questions">{{ 'STUDENT.GAME_REVISION.WRONG_QUESTIONS' | translate }} {{result.wrong_questions}}</p>
-            <p id="unanswered_questions">{{ 'STUDENT.GAME_REVISION.UNANSWERED_QUESTIONS' | translate }} {{result.total_questions! -
+            <p id="correct_questions">{{ 'STUDENT.GAME_REVISION.CORRECT_QUESTIONS' | translate }}
+                {{result.correct_questions}}</p>
+            <p id="wrong_questions">{{ 'STUDENT.GAME_REVISION.WRONG_QUESTIONS' | translate }} {{result.wrong_questions}}
+            </p>
+            <p id="unanswered_questions">{{ 'STUDENT.GAME_REVISION.UNANSWERED_QUESTIONS' | translate }}
+                {{result.total_questions! -
                 result.wrong_questions! -
                 result.correct_questions!}}
             </p>
@@ -28,12 +29,13 @@
                 <div class="respuesta"
                     *ngIf="answerResult.question_id == result.game!.survey!.questionsSurvey[i].question.id">
                     <p>{{ 'STUDENT.GAME_REVISION.YOUR_ANSWER' | translate }}</p>
-                    <p class="align-self-center"
-                        *ngIf="result.game!.survey!.questionsSurvey[i].question.type != 'short'">{{
-                        answerResult.answer!.description }}</p>
-                    <p class="align-self-center"
-                        *ngIf="result.game!.survey!.questionsSurvey[i].question.type == 'short'">{{
-                        answerResult.short_answer }}</p>
+                    <div *ngIf="answerResult.answered">
+                        <p class="align-self-center"
+                            *ngIf="result.game!.survey!.questionsSurvey[i].question.type != 'short'">{{
+                            answerResult.answer!.description }}</p>
+                        <p class="align-self-center"
+                            *ngIf="result.game!.survey!.questionsSurvey[i].question.type == 'short'">{{
+                            answerResult.short_answer }}</p>
                         <div *ngIf="result.game!.survey!.questionsSurvey[i].question.type != 'short'">
                             <mat-icon class="w-auto" [ngStyle]="{'color':'green'}"
                                 *ngIf="answerResult.answer!.is_correct">check</mat-icon>
@@ -49,7 +51,8 @@
                                 *ngIf="!answerResult!.is_correct">clear</mat-icon>
                             <mat-icon class="w-auto bg-secondary" [ngStyle]="{'color':'grey'}"
                                 *ngIf="!answerResult.answered">clear</mat-icon>
-                        </div>  
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -62,22 +65,23 @@
             <small class="">{{i + 1}}</small>
             <div class="border-top" *ngFor="let answerResult of result.answer_results">
                 <div *ngIf="answerResult.question_id == result.game!.survey!.questionsSurvey[i].question.id">
-                    <div *ngIf="result.game!.survey!.questionsSurvey[i].question.type != 'short'">
-                        <mat-icon class="w-auto" [ngStyle]="{'color':'green'}"
-                            *ngIf="answerResult.answer!.is_correct">check</mat-icon>
-                        <mat-icon class="w-auto" [ngStyle]="{'color':'red'}"
-                            *ngIf="!answerResult.answer!.is_correct">clear</mat-icon>
-                        <mat-icon class="w-auto bg-secondary" [ngStyle]="{'color':'grey'}"
-                            *ngIf="!answerResult.answered">clear</mat-icon>
+                    <div *ngIf="answerResult.answered">
+                        <div *ngIf="result.game!.survey!.questionsSurvey[i].question.type != 'short'">
+                            <mat-icon class="w-auto" [ngStyle]="{'color':'green'}"
+                                *ngIf="answerResult.answer!.is_correct">check</mat-icon>
+                            <mat-icon class="w-auto" [ngStyle]="{'color':'red'}"
+                                *ngIf="!answerResult.answer!.is_correct">clear</mat-icon>
+
+                        </div>
+                        <div *ngIf="result.game!.survey!.questionsSurvey[i].question.type == 'short'">
+                            <mat-icon class="w-auto" [ngStyle]="{'color':'green'}"
+                                *ngIf="answerResult!.is_correct">check</mat-icon>
+                            <mat-icon class="w-auto" [ngStyle]="{'color':'red'}"
+                                *ngIf="!answerResult!.is_correct">clear</mat-icon>
+                        </div>
                     </div>
-                    <div *ngIf="result.game!.survey!.questionsSurvey[i].question.type == 'short'">
-                        <mat-icon class="w-auto" [ngStyle]="{'color':'green'}"
-                            *ngIf="answerResult!.is_correct">check</mat-icon>
-                        <mat-icon class="w-auto" [ngStyle]="{'color':'red'}"
-                            *ngIf="!answerResult!.is_correct">clear</mat-icon>
-                        <mat-icon class="w-auto bg-secondary" [ngStyle]="{'color':'grey'}"
-                            *ngIf="!answerResult.answered">clear</mat-icon>
-                    </div>
+                    <mat-icon class="w-auto bg-secondary" [ngStyle]="{'color':'white'}"
+                        *ngIf="!answerResult.answered">clear</mat-icon>
                 </div>
             </div>
         </div>
