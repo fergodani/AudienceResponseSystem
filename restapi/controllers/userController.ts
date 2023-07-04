@@ -362,7 +362,7 @@ async function addUsers(res: Response, users: User[]) {
                 hasMissingFields = true
             user.password = hash
             usersPrisma.push({
-                username: user.username,
+                username: user.username.toUpperCase(),
                 password: hash,
                 role: getRole(user.role)
             })
