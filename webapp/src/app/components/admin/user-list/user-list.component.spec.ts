@@ -11,6 +11,7 @@ import { imports } from '@app/core/services/stubs/imports';
 describe('UserListComponent', () => {
   let component: UserListComponent;
   let fixture: ComponentFixture<UserListComponent>;
+  let alerta: jasmine.Spy;
   
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,6 +26,7 @@ describe('UserListComponent', () => {
     fixture = TestBed.createComponent(UserListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    alerta = spyOn(window, 'confirm')
   })
   
   it('should fetch users on initialization', () => {
@@ -49,6 +51,7 @@ describe('UserListComponent', () => {
   }))
 
   it("should delete user", () => {
+    alerta.and.returnValue(true)
     component.onDeleteUser(2)
     expect(component.users.length).toBe(1)
   })

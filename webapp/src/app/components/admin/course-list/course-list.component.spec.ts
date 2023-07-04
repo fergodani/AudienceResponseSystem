@@ -11,6 +11,7 @@ import { imports } from '@app/core/services/stubs/imports';
 describe('CourseListComponent', () => {
   let component: CourseListComponent;
   let fixture: ComponentFixture<CourseListComponent>;
+  let alerta: jasmine.Spy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,6 +26,7 @@ describe('CourseListComponent', () => {
     fixture = TestBed.createComponent(CourseListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    alerta = spyOn(window, 'confirm')
   })
 
   it('should fetch courses on initialization', () => {
@@ -49,6 +51,7 @@ describe('CourseListComponent', () => {
   }))
 
   it("should delete course", () => {
+    alerta.and.returnValue(true)
     component.onDeleteCourse(2)
     expect(component.courses.length).toBe(1)
   })

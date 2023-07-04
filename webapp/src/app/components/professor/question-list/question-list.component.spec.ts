@@ -6,9 +6,7 @@ import { ApiService } from '@app/core/services/admin/api.admin.service';
 import { ApiAuthService } from '@app/core/services/auth/api.auth.service';
 import { ApiServiceStub } from '@app/core/services/stubs/api.admin.service.mock';
 import { AuthServiceStub } from '@app/core/services/stubs/api.auth.service.mock';
-import { ApiStudentServiceStub } from '@app/core/services/stubs/api.student.service.mock';
 import { imports } from '@app/core/services/stubs/imports';
-import { ApiStudentService } from '@app/core/services/user/api.user.service';
 import { ApiProfessorService } from '@app/core/services/professor/api.professor.service';
 import { ApiProfessorServiceStub } from '@app/core/services/stubs/api.professor.service.mock';
 import { By } from '@angular/platform-browser';
@@ -17,6 +15,7 @@ import { Question } from '@app/core/models/question.model';
 describe('QuestionListComponent', () => {
   let component: QuestionListComponent;
   let fixture: ComponentFixture<QuestionListComponent>;
+  let alerta: jasmine.Spy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -32,6 +31,7 @@ describe('QuestionListComponent', () => {
     fixture = TestBed.createComponent(QuestionListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    alerta = spyOn(window, 'confirm')
   })
 
   it('should create', () => {
@@ -60,6 +60,7 @@ describe('QuestionListComponent', () => {
   }))
 
   it("should delete question", () => {
+    alerta.and.returnValue(true)
     component.deleteQuestion({id: 1} as Question)
     expect(component.questions.length).toBe(1)
   })

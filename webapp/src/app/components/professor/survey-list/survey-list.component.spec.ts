@@ -9,12 +9,12 @@ import { ApiServiceStub } from '@app/core/services/stubs/api.admin.service.mock'
 import { AuthServiceStub } from '@app/core/services/stubs/api.auth.service.mock';
 import { ApiProfessorServiceStub } from '@app/core/services/stubs/api.professor.service.mock';
 import { imports } from '@app/core/services/stubs/imports';
-import { Question } from '@app/core/models/question.model';
 import { Survey } from '@app/core/models/survey.model';
 
 describe('SurveyListComponent', () => {
   let component: SurveyListComponent;
   let fixture: ComponentFixture<SurveyListComponent>;
+  let alerta: jasmine.Spy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -30,6 +30,7 @@ describe('SurveyListComponent', () => {
     fixture = TestBed.createComponent(SurveyListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    alerta = spyOn(window, 'confirm')
   })
 
   it('should create', () => {
@@ -55,6 +56,7 @@ describe('SurveyListComponent', () => {
   }))
 
   it("should delete survey", () => {
+    alerta.and.returnValue(true)
     component.deleteSurvey({id: 1} as Survey)
     expect(component.surveys.length).toBe(2)
   })
