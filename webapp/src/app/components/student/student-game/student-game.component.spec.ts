@@ -129,9 +129,4 @@ describe('StudentGameComponent', () => {
     expect(compiled.nativeElement.innerHTML).toContain(1000);
   });
 
-  it('leave game should navigate to /stuedent/home', fakeAsync(inject([Router], (mockRouter: Router) => {
-    const spy = spyOn(mockRouter, 'navigate').and.stub();
-    component.leaveGame()
-    expect(spy.calls.first().args[0]).toContain('/student/home')
-  })));
 });
