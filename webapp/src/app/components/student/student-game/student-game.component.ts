@@ -107,10 +107,11 @@ export class StudentGameComponent implements OnInit {
     this.socketService.socket.on('show_score', (gameSession: GameSession) => {
       this.gameSession = gameSession
     })
-    this.socketService.socket.on("finish_game", (gameSession: GameSession) => {
+    this.socketService.socket.on("finish_game", async (gameSession: GameSession) => {
       console.log(gameSession)
       this.gameSession = gameSession
       this.socketService.socket.emit('leave_game');
+      await this.router.navigate(['/student/home'])
     })
   }
 
@@ -196,7 +197,7 @@ export class StudentGameComponent implements OnInit {
   }
 
   async leaveGame() {
-    await this.router.navigate(['/student/home'])
+    
   }
 
 

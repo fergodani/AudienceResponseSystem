@@ -40,22 +40,43 @@ export class CourseProfessorDetailsComponent {
       .subscribe(course => {
         this.course = course
         this.isLoadingCourse = false
+        this.isLoadingGames = true
+        this.isLoadingSurveys = true
+        this.isLoadingQuestions = true
+        this.isLoadingUsers = true
         this.apiProfessorService
           .getUsersByCourse(this.course.id)
-          .subscribe(users => this.users = users)
+          .subscribe(users =>{ this.users = users; this.isLoadingUsers = false})
         this.apiProfessorService
           .getSurveysByCourse(this.course.id)
-          .subscribe(surveys => { this.surveys = surveys })
+          .subscribe(surveys => { this.surveys = surveys; this.isLoadingSurveys = false })
         this.apiProfessorService
           .getQuestionsByCourse(this.course.id)
-          .subscribe(questions => { this.questions = questions })
+          .subscribe(questions => { this.questions = questions; this.isLoadingQuestions = false })
         this.apiProfessorService
           .getGamesByCourse(this.course.id)
-          .subscribe(games => { this.games = games })
+          .subscribe(games => {
+             this.games = games 
+             this.games.forEach(game => {
+              let date = new Date(game.created_at!)
+              console.log(game.created_at)
+              game.created_at = date.toLocaleDateString('es', {
+                timeZone: 'UTC',
+                hour: '2-digit',
+                minute: 'numeric',
+                hour12: false
+              })
+             })
+             this.isLoadingGames = false
+            })
       })
   }
 
   isLoadingCourse = false
+  isLoadingSurveys = false
+  isLoadingQuestions = false
+  isLoadingUsers = false
+  isLoadingGames = false
   course: Course = <Course>{};
   users: User[] = [];
   surveys: Survey[] = [];

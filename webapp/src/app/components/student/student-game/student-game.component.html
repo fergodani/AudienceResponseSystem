@@ -1,6 +1,3 @@
-<div class="d-flex justify-content-center">
-    <div class="custom-loader" *ngIf="isLoading || haveAnswered"></div>
-</div>
 
 <!-- WAITING SCREEN -->
 <div class="d-flex align-items-center justify-content-center" *ngIf="gameSession.state == gameSessionState.not_started">
@@ -78,4 +75,8 @@
     <div class="question_preview" *ngIf="gameSession.state == gameSessionState.is_preview_screen">
         <h1>{{ timeLeft }}</h1>
     </div>
+</div>
+
+<div class="d-flex justify-content-center">
+    <div class="custom-loader" *ngIf="isLoading || haveAnswered"></div>
 </div>

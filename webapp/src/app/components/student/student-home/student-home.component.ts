@@ -28,6 +28,8 @@ export class StudentHomeComponent implements OnInit {
         this.isLoadingCourses = false;
         if (courses.length != 0) {
           this.connectToSocket(courses);
+        }else {
+          this.isLoadingGames = false
         }
       })
   }

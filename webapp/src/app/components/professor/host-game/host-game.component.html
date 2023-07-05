@@ -42,23 +42,23 @@
     <div class="row gap-2 ms-2 me-2"
         *ngIf="actualQuestion.type == 'multioption' || actualQuestion.type == 'true_false'">
         <div class="col d-flex justify-content-center  align-items-center bg-primary answer ">
-            <p class="text-center text-white h4">{{ actualQuestion.answers[0].description }}</p>
+            <p class="text-center text-white lead">{{ actualQuestion.answers[0].description }}</p>
         </div>
         <div class="col d-flex justify-content-center  align-items-center bg-danger answer ">
-            <p class="text-center text-white h4">{{ actualQuestion.answers[1].description }}</p>
+            <p class="text-center text-white lead">{{ actualQuestion.answers[1].description }}</p>
         </div>
     </div>
     <div class="row gap-2 ms-2 me-2 mb-5" *ngIf="actualQuestion.type == 'multioption'">
         <div class="col d-flex justify-content-center  align-items-center bg-success answer ">
-            <p class="text-center text-white h4">{{ actualQuestion.answers[2].description }}</p>
+            <p class="text-center text-white lead">{{ actualQuestion.answers[2].description }}</p>
         </div>
         <div class="col d-flex justify-content-center  align-items-center bg-dark answer ">
-            <p class="text-center text-white h4">{{ actualQuestion.answers[3].description }}</p>
+            <p class="text-center text-white lead">{{ actualQuestion.answers[3].description }}</p>
         </div>
     </div>
     <div class="row gap-2 ms-2 me-2 mb-5" *ngIf="actualQuestion.type == 'short'">
         <div class="col d-flex justify-content-center  align-items-center bg-primary answer ">
-            <p class="text-center text-white h4">{{"PROFESSOR.HOST_GAME.WRITE_ANSWER" | translate}}</p>
+            <p class="text-center text-white lead">{{"PROFESSOR.HOST_GAME.WRITE_ANSWER" | translate}}</p>
         </div>
     </div>
 </div>
@@ -82,7 +82,7 @@
 </div>
 
 <!-- GAME FINISHED -->
-<div *ngIf="gameSession.state == gameSessionState.is_finished">
+<div class="d-flex flex-column align-items-center" *ngIf="gameSession.state == gameSessionState.is_finished">
     <h1>{{"PROFESSOR.HOST_GAME.GAME_FINISHED" | translate}}</h1>
     <button id="finish" mat-raised-button (click)="leaveGame()">{{"PROFESSOR.HOST_GAME.LEAVE" | translate}}</button>
 </div>

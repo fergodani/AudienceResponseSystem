@@ -55,10 +55,12 @@ export class HostGameComponent implements OnInit {
   ngOnInit() {
     const course_id = this.activatedRoute.snapshot.paramMap.get('course_id');
     const game_id = this.activatedRoute.snapshot.paramMap.get('game_id');
+    this.isLoading = true;
     this.socketService.setupSocketConnection();
     this.apiProfessorService
       .getGameById(Number(game_id))
       .subscribe((game: Game) => {
+        this.isLoading = false
         this.socketService.socket.emit('create_game', game, course_id + '', (gameSession: GameSession) => {
           this.gameSession = gameSession
         });
