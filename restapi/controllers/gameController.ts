@@ -598,15 +598,7 @@ const getGamesResultsByUserAndCourse = async (req: Request, res: Response): Prom
                 wrong_questions: true,
                 user_id: true,
                 game_id: true,
-                answer_results: {
-                    select: {
-                        answer: true,
-                        answered: true,
-                        is_correct: true,
-                        short_answer: true,
-                        answer_id: true
-                    }
-                },
+                answer_results: true,
                 game: {
                     select: {
                         survey: {

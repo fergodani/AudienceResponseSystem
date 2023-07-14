@@ -1141,7 +1141,8 @@ describe("Game", () => {
                         answered: answerResult.answered,
                         question_id: question.id,
                         short_answer: null,
-                        answer
+                        answer,
+                        is_correct: null
                     }],
                     game: {
                         survey: {
