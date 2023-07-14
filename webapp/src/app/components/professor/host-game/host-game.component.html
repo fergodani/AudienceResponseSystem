@@ -31,7 +31,7 @@
 
         <div class="image-box mb-2" *ngIf="actualQuestion.resource != ''">
             <div class="imageContainer">
-                <img src="../../assets/testImage.jpg" alt="Question image source" />
+                <img [src]="actualQuestion.resource" alt="Question image source" />
             </div>
         </div>
         <div class="d-flex flex-column align-items-center justify-content-center">
