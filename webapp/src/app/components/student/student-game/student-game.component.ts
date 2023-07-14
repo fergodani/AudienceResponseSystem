@@ -174,6 +174,7 @@ export class StudentGameComponent implements OnInit {
       question_index: this.gameSession.question_index,
       short_answer: answer,
       answered: true,
+      answer_id: this.actualAnswer.id,
       is_correct: isCorrect
     }
     this.result.answer_results.push(answerResult)

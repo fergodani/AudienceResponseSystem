@@ -13,4 +13,5 @@ export interface AnswerResult {
     short_answer?: string;
     question_index: number;
     answered: boolean;
+    is_correct?: boolean;
 }

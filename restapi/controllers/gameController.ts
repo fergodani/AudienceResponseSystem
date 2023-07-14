@@ -359,7 +359,8 @@ const createResults = async (req: Request, res: Response): Promise<Response> => 
             answer_id: aR.answer_id,
             short_answer: aR.short_answer,
             question_index: aR.question_index,
-            answered: aR.answered
+            answered: aR.answered,
+            is_correct: aR.is_correct
         }))
         await prisma.gameResult.createMany({
             data: userResultsMapped,
@@ -597,7 +598,15 @@ const getGamesResultsByUserAndCourse = async (req: Request, res: Response): Prom
                 wrong_questions: true,
                 user_id: true,
                 game_id: true,
-                answer_results: true,
+                answer_results: {
+                    select: {
+                        answer: true,
+                        answered: true,
+                        is_correct: true,
+                        short_answer: true,
+                        answer_id: true
+                    }
+                },
                 game: {
                     select: {
                         survey: {
@@ -664,7 +673,8 @@ const getGameResultByUserAndGame = async (req: Request, res: Response): Promise<
                         question_id: true,
                         answer: true,
                         answered: true,
-                        short_answer: true
+                        short_answer: true,
+                        is_correct: true
                     }
                 },
                 game: {
