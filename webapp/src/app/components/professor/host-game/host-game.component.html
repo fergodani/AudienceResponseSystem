@@ -75,7 +75,7 @@
 <div class="d-flex flex-column align-items-center" *ngIf="gameSession.state == gameSessionState.is_leaderboard_screen">
     <h1>1º {{ gameSession.users[0].username}}</h1>
     <div class="d-flex flex-row" *ngIf="gameSession.users.length >= 2">
-        <h2>2º {{ gameSession.users[1].username}} </h2>
+        <h2>2º {{ gameSession.users[1].username}}&nbsp;</h2>
         <h2 *ngIf="gameSession.users.length >= 3"> 3º {{ gameSession.users[2].username}}</h2>
     </div>
     <button id="next" mat-raised-button (click)="nextQuestion()">{{"PROFESSOR.HOST_GAME.NEXT" | translate}}</button>
