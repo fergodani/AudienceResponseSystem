@@ -32,6 +32,6 @@ Sistema de cuestionarios en línea que permitirá la creación y gestión, tanto
     - Opciones principales:
         - Cuando se entre a la aplicación, se mostrarán los test que tiene disponibles para contestar. Seleccionará uno de ellos y pasará a participar inmediatamente.
     - Opciones de consulta:
-        - Test realizados.
+        - Test realizados por el alumno.
         - Notas obtenidas.
         - Revisar cuestionarios realizados.
